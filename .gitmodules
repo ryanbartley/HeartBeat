@@ -1,0 +1,3 @@
+[submodule "HeartBeat_Cinder"]
+	path = HeartBeat_Cinder
+	url = https://github.com/ryanbartley/HeartBeat_Cinder.git
