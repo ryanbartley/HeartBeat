@@ -22,6 +22,11 @@ public:
 	
 	static RendererRef create();
 	
+	Renderer( const Renderer & ) = delete;
+	Renderer( Renderer && ) = delete;
+	Renderer& operator=( const Renderer & ) = delete;
+	Renderer& operator=( Renderer && ) = delete;
+	
 	~Renderer() {}
 	
 	const ci::gl::FboRef&		getRenderTarget() const;

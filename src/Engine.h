@@ -24,6 +24,11 @@ public:
 	static EngineRef	get();
 	static void			destroy();
 	
+	Engine( const Engine & ) = delete;
+	Engine( Engine && ) = delete;
+	Engine& operator=( const Engine & ) = delete;
+	Engine& operator=( Engine && ) = delete;
+	
 	~Engine() {}
 	
 	void update();

@@ -125,7 +125,7 @@ void Renderer::setupPresentation()
 	}
 	else {
 		auto app = app::AppBasic::get();
-		Window::Format format;
+		
 		// get the one that's already been created
 		// this one is the default given to us by the
 		// app class
@@ -136,7 +136,17 @@ void Renderer::setupPresentation()
 		
 		// now create another from scratch.
 		
-		mWindows[TOP_PRESENT_TARGET] = app->createWindow();
+		// TODO: Fix this. It's a hack. Need something better like
+		// checking the display id from the config file.
+		DisplayRef secondDisplay;
+		for( auto & display : Display::getDisplays() ) {
+			if ( display != window->getDisplay() )
+				secondDisplay = display;
+		}
+		
+		Window::Format format;
+		format.size( mIndividualProjectorSize ).title( "TOP_PRESENT_TARGET" ).display( secondDisplay );
+		mWindows[TOP_PRESENT_TARGET] = app->createWindow( format );
 	}
 }
 	

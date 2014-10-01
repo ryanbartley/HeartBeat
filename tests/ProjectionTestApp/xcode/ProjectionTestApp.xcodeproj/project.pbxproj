@@ -19,6 +19,9 @@
 		5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
 		693162F4CD7B4EF5B9A3B565 /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = E5E9CD4C4B694A5F80F8ACB8 /* CinderApp.icns */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		B35A4CD619DCAAE300C763C9 /* Kiosk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B35A4CD419DCAAE300C763C9 /* Kiosk.cpp */; };
+		B35A4CD919DCB10900C763C9 /* InfoDisplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B35A4CD719DCB10900C763C9 /* InfoDisplay.cpp */; };
+		B35A4CDC19DCB67E00C763C9 /* SvgManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B35A4CDA19DCB67E00C763C9 /* SvgManager.cpp */; };
 		B3E0914919D9B015006056E0 /* EventManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3E0914119D9B015006056E0 /* EventManager.cpp */; };
 		B3E0914A19D9B015006056E0 /* EventManagerBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3E0914319D9B015006056E0 /* EventManagerBase.cpp */; };
 		B3E0914E19D9B02B006056E0 /* Common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3E0914C19D9B02B006056E0 /* Common.cpp */; };
@@ -45,6 +48,12 @@
 		57C10953444441C7813228D6 /* ProjectionTestApp_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = ProjectionTestApp_Prefix.pch; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* ProjectionTestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ProjectionTestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3605E9A333F4824A14D85A2 /* ProjectionTestAppApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = ProjectionTestAppApp.cpp; path = ../src/ProjectionTestAppApp.cpp; sourceTree = "<group>"; };
+		B35A4CD419DCAAE300C763C9 /* Kiosk.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Kiosk.cpp; sourceTree = "<group>"; };
+		B35A4CD519DCAAE300C763C9 /* Kiosk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Kiosk.h; sourceTree = "<group>"; };
+		B35A4CD719DCB10900C763C9 /* InfoDisplay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InfoDisplay.cpp; sourceTree = "<group>"; };
+		B35A4CD819DCB10900C763C9 /* InfoDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoDisplay.h; sourceTree = "<group>"; };
+		B35A4CDA19DCB67E00C763C9 /* SvgManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SvgManager.cpp; sourceTree = "<group>"; };
+		B35A4CDB19DCB67E00C763C9 /* SvgManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SvgManager.h; sourceTree = "<group>"; };
 		B3E0914019D9B015006056E0 /* BaseEventData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseEventData.h; sourceTree = "<group>"; };
 		B3E0914119D9B015006056E0 /* EventManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EventManager.cpp; sourceTree = "<group>"; };
 		B3E0914219D9B015006056E0 /* EventManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventManager.h; sourceTree = "<group>"; };
@@ -185,6 +194,12 @@
 				B3E0915319D9BF59006056E0 /* Renderer.h */,
 				B3E0915519D9D5D7006056E0 /* Engine.cpp */,
 				B3E0915619D9D5D7006056E0 /* Engine.h */,
+				B35A4CD419DCAAE300C763C9 /* Kiosk.cpp */,
+				B35A4CD519DCAAE300C763C9 /* Kiosk.h */,
+				B35A4CD719DCB10900C763C9 /* InfoDisplay.cpp */,
+				B35A4CD819DCB10900C763C9 /* InfoDisplay.h */,
+				B35A4CDA19DCB67E00C763C9 /* SvgManager.cpp */,
+				B35A4CDB19DCB67E00C763C9 /* SvgManager.h */,
 			);
 			name = src;
 			path = ../../../src;
@@ -266,10 +281,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B35A4CDC19DCB67E00C763C9 /* SvgManager.cpp in Sources */,
 				B3E0914A19D9B015006056E0 /* EventManagerBase.cpp in Sources */,
 				B3E0914919D9B015006056E0 /* EventManager.cpp in Sources */,
 				B3E0915419D9BF59006056E0 /* Renderer.cpp in Sources */,
+				B35A4CD619DCAAE300C763C9 /* Kiosk.cpp in Sources */,
 				B3E0914E19D9B02B006056E0 /* Common.cpp in Sources */,
+				B35A4CD919DCB10900C763C9 /* InfoDisplay.cpp in Sources */,
 				B3E0915719D9D5D7006056E0 /* Engine.cpp in Sources */,
 				23F8A0B774C4440486EDF46C /* ProjectionTestAppApp.cpp in Sources */,
 				B3E0915119D9B0C5006056E0 /* JsonManager.cpp in Sources */,

@@ -21,6 +21,11 @@ public:
 	static JsonManagerRef get();
 	static void destroy();
 	
+	JsonManager( const JsonManager & ) = delete;
+	JsonManager( JsonManager && ) = delete;
+	JsonManager& operator=( const JsonManager & ) = delete;
+	JsonManager& operator=( JsonManager && ) = delete;
+	
 	~JsonManager() {}
 	
 	const ci::JsonTree& getRoot() { return mRoot["root"]; }
