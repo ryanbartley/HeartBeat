@@ -8,7 +8,6 @@
 
 #include "JsonManager.h"
 #include "cinder/Log.h"
-#include "Common.h"
 
 using namespace ci;
 using namespace ci::app;

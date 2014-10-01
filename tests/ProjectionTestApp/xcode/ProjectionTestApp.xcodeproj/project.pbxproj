@@ -23,7 +23,7 @@
 		B3E0914A19D9B015006056E0 /* EventManagerBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3E0914319D9B015006056E0 /* EventManagerBase.cpp */; };
 		B3E0914E19D9B02B006056E0 /* Common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3E0914C19D9B02B006056E0 /* Common.cpp */; };
 		B3E0915119D9B0C5006056E0 /* JsonManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3E0914F19D9B0C5006056E0 /* JsonManager.cpp */; };
-		B3E0915419D9BF59006056E0 /* ScreenRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3E0915219D9BF59006056E0 /* ScreenRenderer.cpp */; };
+		B3E0915419D9BF59006056E0 /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3E0915219D9BF59006056E0 /* Renderer.cpp */; };
 		B3E0915719D9D5D7006056E0 /* Engine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3E0915519D9D5D7006056E0 /* Engine.cpp */; };
 /* End PBXBuildFile section */
 
@@ -55,8 +55,8 @@
 		B3E0914D19D9B02B006056E0 /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
 		B3E0914F19D9B0C5006056E0 /* JsonManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JsonManager.cpp; sourceTree = "<group>"; };
 		B3E0915019D9B0C5006056E0 /* JsonManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JsonManager.h; sourceTree = "<group>"; };
-		B3E0915219D9BF59006056E0 /* ScreenRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScreenRenderer.cpp; sourceTree = "<group>"; };
-		B3E0915319D9BF59006056E0 /* ScreenRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScreenRenderer.h; sourceTree = "<group>"; };
+		B3E0915219D9BF59006056E0 /* Renderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Renderer.cpp; sourceTree = "<group>"; };
+		B3E0915319D9BF59006056E0 /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
 		B3E0915519D9D5D7006056E0 /* Engine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Engine.cpp; sourceTree = "<group>"; };
 		B3E0915619D9D5D7006056E0 /* Engine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Engine.h; sourceTree = "<group>"; };
 		E5E9CD4C4B694A5F80F8ACB8 /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CinderApp.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; };
@@ -181,8 +181,8 @@
 				B3E0914D19D9B02B006056E0 /* Common.h */,
 				B3E0914F19D9B0C5006056E0 /* JsonManager.cpp */,
 				B3E0915019D9B0C5006056E0 /* JsonManager.h */,
-				B3E0915219D9BF59006056E0 /* ScreenRenderer.cpp */,
-				B3E0915319D9BF59006056E0 /* ScreenRenderer.h */,
+				B3E0915219D9BF59006056E0 /* Renderer.cpp */,
+				B3E0915319D9BF59006056E0 /* Renderer.h */,
 				B3E0915519D9D5D7006056E0 /* Engine.cpp */,
 				B3E0915619D9D5D7006056E0 /* Engine.h */,
 			);
@@ -268,7 +268,7 @@
 			files = (
 				B3E0914A19D9B015006056E0 /* EventManagerBase.cpp in Sources */,
 				B3E0914919D9B015006056E0 /* EventManager.cpp in Sources */,
-				B3E0915419D9BF59006056E0 /* ScreenRenderer.cpp in Sources */,
+				B3E0915419D9BF59006056E0 /* Renderer.cpp in Sources */,
 				B3E0914E19D9B02B006056E0 /* Common.cpp in Sources */,
 				B3E0915719D9D5D7006056E0 /* Engine.cpp in Sources */,
 				23F8A0B774C4440486EDF46C /* ProjectionTestAppApp.cpp in Sources */,

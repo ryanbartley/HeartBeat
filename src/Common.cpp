@@ -22,7 +22,11 @@ ci::DataSourceRef getFileContents( const std::string &fileName )
 	auto path = cinder::app::getAppPath() / ".." / ".." / ".."
 				/ ".." / ".." / ".." / "resources" / fileName;
 	try {
+#ifdef DEBUG
 		ret = ci::loadFile( path );
+#else
+		ret = loadResource( fileName );
+#endif
 		
 	} catch ( std::exception &e ) {
 		CI_LOG_E( e.what() << " PATH: " << path );

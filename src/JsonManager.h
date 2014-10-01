@@ -8,12 +8,11 @@
 
 #pragma once
 
+#include "Common.h"
+
 #include "cinder/Json.h"
 
 namespace heartbeat {
-	
-using JsonManagerRef = std::shared_ptr<class JsonManager>;
-using JsonManagerWeak = std::shared_ptr<class JsonManager>;
 	
 class JsonManager {
 public:

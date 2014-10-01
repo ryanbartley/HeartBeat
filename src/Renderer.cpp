@@ -6,7 +6,7 @@
 //
 //
 
-#include "ScreenRenderer.h"
+#include "Renderer.h"
 #include "JsonManager.h"
 #include "cinder/Log.h"
 #include "cinder/gl/GlslProg.h"
@@ -19,27 +19,29 @@ using namespace std;
 
 namespace heartbeat {
 	
-const uint32_t RENDER_TARGET = 0;
-const uint32_t BOTTOM_PRESENT_TARGET = 1;
-const uint32_t TOP_PRESENT_TARGET = 2;
 
-ScreenRenderer::ScreenRenderer()
+const uint32_t BOTTOM_PRESENT_TARGET = 0;
+const uint32_t TOP_PRESENT_TARGET = 1;
+const uint32_t RENDER_TARGET = 2;
+
+Renderer::Renderer()
 : mEdgeWidth( 0.0f ), mStencilImageUpdated( false )
 {
 }
 	
-ScreenRendererRef ScreenRenderer::create()
+RendererRef Renderer::create()
 {
-	return ScreenRendererRef( new ScreenRenderer() );
+	return RendererRef( new Renderer() );
 }
 
-void ScreenRenderer::initialize()
+void Renderer::initialize()
 {
 	try {
 		
 		auto screenAttribs = JsonManager::get()->getRoot()["screenRender"];
 		
 		try {
+			// Grabs the image to stencil with.
 			auto imageStencilFileName = screenAttribs["imageStencil"].getValue();
 			setImageStencil( imageStencilFileName );
 		}
@@ -48,18 +50,21 @@ void ScreenRenderer::initialize()
 		}
 		
 		try {
+			// Writes whether the coordinates should be written to the screen as half size
 			auto halfSize = screenAttribs["halfSize"].getValue<bool>();
-			setHalfSize( halfSize );
+			setIsHalfSize( halfSize );
 		} catch ( JsonTree::ExcChildNotFound &ex ) {
 			CI_LOG_W( "No halfSize child found, setting default - true" );
-			setHalfSize( true );
+			setIsHalfSize( true );
 		}
 		
 		try {
+			// Individual Projector size in pixels
 			auto individuals = screenAttribs["individualProjectorSize"].getChildren();
 			auto individualIt = individuals.begin();
 			ci::vec2 individualSize( (*individualIt++).getValue<float>(), (*individualIt).getValue<float>() );
 			
+			// Uses half size
 			if ( mIsHalfSized )
 				individualSize = individualSize / 2.0f;
 			
@@ -74,6 +79,17 @@ void ScreenRenderer::initialize()
 			
 			setIndividualProjectorSize( individualSize );
 		}
+		
+		try {
+			mIsSplitWindow = screenAttribs["splitWindow"].getValue<bool>();
+		}
+		catch (ci::JsonTree::ExcChildNotFound &ex) {
+			CI_LOG_W("No splitWindow child found, setting default - false");
+			mIsSplitWindow = false;
+		}
+		
+		// Now that I have the individual Projector Size,
+		setupPresentation();
 		
 		try {
 			auto numPixelOverlap = screenAttribs["numPixelOverlap"].getValue<uint32_t>();
@@ -93,7 +109,6 @@ void ScreenRenderer::initialize()
 			setNumPixelOverlap( numPixelOverlap );
 		}
 		
-		app::App::get()->setWindowSize( ivec2( mIndividualProjectorSize.x, mIndividualProjectorSize.y * 2 ) );
 		setupFbos();
 		setupGlsl();
 		
@@ -103,31 +118,53 @@ void ScreenRenderer::initialize()
 	}
 }
 	
-void ScreenRenderer::setTotalRenderSize( const ci::vec2 &totalSize )
+void Renderer::setupPresentation()
+{
+	if( ! mIsSplitWindow ) {
+		app::App::get()->setWindowSize( ivec2( mIndividualProjectorSize.x, mIndividualProjectorSize.y * 2 ) );
+	}
+	else {
+		auto app = app::AppBasic::get();
+		Window::Format format;
+		// get the one that's already been created
+		// this one is the default given to us by the
+		// app class
+		auto window = app->getWindow();
+		window->setSize( mIndividualProjectorSize );
+		window->setTitle( "BOTTOM_PRESENT_TARGET" );
+		mWindows[BOTTOM_PRESENT_TARGET] = window;
+		
+		// now create another from scratch.
+		
+		mWindows[TOP_PRESENT_TARGET] = app->createWindow();
+	}
+}
+	
+void Renderer::setTargetRenderSize( const ci::vec2 &totalSize )
 {
 	mTotalRenderSize = totalSize;
 }
 	
-void ScreenRenderer::setIndividualProjectorSize( const ci::vec2 &individualSize )
+void Renderer::setIndividualProjectorSize( const ci::vec2 &individualSize )
 {
 	mIndividualProjectorSize = individualSize;
 }
 	
-void ScreenRenderer::setNumPixelOverlap( uint32_t numPixelOverlap )
+void Renderer::setNumPixelOverlap( uint32_t numPixelOverlap )
 {
 	if( numPixelOverlap == mNumPixelOverlap ) return;
 	
 	mNumPixelOverlap = numPixelOverlap;
 	
-	mEdgeWidth = mNumPixelOverlap / mIndividualProjectorSize.y;
+	setEdgeBlendWidth( (mNumPixelOverlap / mIndividualProjectorSize.y) * 2.0f );
 	
 	auto halfTotal = (mIndividualProjectorSize.y - mNumPixelOverlap);
 	ci::vec2 totalSize( mIndividualProjectorSize.x, halfTotal * 2.0f );
 	
-	setTotalRenderSize( totalSize );
+	setTargetRenderSize( totalSize );
 }
 	
-void ScreenRenderer::setupFbos()
+void Renderer::setupFbos()
 {
 	auto fboFormat = gl::Fbo::Format().depthBuffer().stencilBuffer().samples( 4 );
 	
@@ -139,7 +176,7 @@ void ScreenRenderer::setupFbos()
 	CI_LOG_V("Setup right target");
 }
 	
-void ScreenRenderer::setupGlsl()
+void Renderer::setupGlsl()
 {
 	try {
 		auto glsl = gl::GlslProg::create( gl::GlslProg::Format()
@@ -163,7 +200,7 @@ void ScreenRenderer::setupGlsl()
 	
 }
 	
-void ScreenRenderer::setImageStencil( const std::string &fileName )
+void Renderer::setImageStencil( const std::string &fileName )
 {
 	auto image = loadImage( getFileContents( fileName ) );
 	mImageStencil = gl::Texture2d::create( image );
@@ -171,29 +208,29 @@ void ScreenRenderer::setImageStencil( const std::string &fileName )
 	mStencilImageUpdated = true;
 }
 	
-void ScreenRenderer::setEdgePercentages( float width )
+void Renderer::setEdgeBlendWidth( float width )
 {
 	if( width == mEdgeWidth ) return;
 	
 	mEdgeWidth = width;
 }
 	
-const gl::FboRef& ScreenRenderer::getRenderTarget()
+const gl::FboRef& Renderer::getRenderTarget() const
 {
 	return mFbos[RENDER_TARGET];
 }
 	
-const gl::FboRef& ScreenRenderer::getBottomPresentationTarget()
+const gl::FboRef& Renderer::getBottomPresentationTarget() const
 {
 	return mFbos[BOTTOM_PRESENT_TARGET];
 }
 	
-const gl::FboRef& ScreenRenderer::getTopPresentationTarget()
+const gl::FboRef& Renderer::getTopPresentationTarget() const
 {
 	return mFbos[TOP_PRESENT_TARGET];
 }
 	
-void ScreenRenderer::stencilTargetRenderFbo()
+void Renderer::stencilTargetRenderFbo()
 {
 	if( ! mStencilImageUpdated ) return;
 	
@@ -245,7 +282,7 @@ void ScreenRenderer::stencilTargetRenderFbo()
 	mStencilImageUpdated = false;
 }
 	
-void ScreenRenderer::beginFrame()
+void Renderer::beginFrame()
 {
 	// Setup stencil area
 	mFbos[RENDER_TARGET]->bindFramebuffer();
@@ -257,7 +294,7 @@ void ScreenRenderer::beginFrame()
 	stencilTargetRenderFbo();
 }
 	
-void ScreenRenderer::endFrame()
+void Renderer::endFrame()
 {
 	auto ctx = gl::context();
 	ctx->popViewport();
@@ -266,15 +303,15 @@ void ScreenRenderer::endFrame()
 	mFbos[RENDER_TARGET]->unbindFramebuffer();
 }
 	
-void ScreenRenderer::presentRender()
+void Renderer::presentRender()
 {
-	renderToPresent( BOTTOM_PRESENT_TARGET );
-	renderToPresent( TOP_PRESENT_TARGET );
+	renderToPresentTarget( BOTTOM_PRESENT_TARGET );
+	renderToPresentTarget( TOP_PRESENT_TARGET );
 	
 	renderToWindow();
 }
 	
-void ScreenRenderer::renderToPresent( uint32_t target )
+void Renderer::renderToPresentTarget( uint32_t target )
 {
 	auto & fbo = mFbos[target];
 	auto texture = mFbos[RENDER_TARGET]->getColorTexture();
@@ -291,16 +328,17 @@ void ScreenRenderer::renderToPresent( uint32_t target )
 	gl::setMatricesWindow( mIndividualProjectorSize, false );
 	
 	if( target == BOTTOM_PRESENT_TARGET ) {
-		auto offset = 340.0f;
-		gl::drawSolidRect( Rectf( ivec2( 0, - offset ),
-								 ivec2(texture->getSize().x, texture->getSize().y - offset ) ) );
+		auto offset = mIndividualProjectorSize.y - mNumPixelOverlap * 2;
+		auto offsetBottomLeft = vec2( 0, -offset );
+		auto offsetUpperRight = vec2( mTotalRenderSize.x, mTotalRenderSize.y - offset );
+		gl::drawSolidRect( Rectf( offsetBottomLeft, offsetUpperRight ) );
 	}
 	else if( target == TOP_PRESENT_TARGET ) {
-		gl::drawSolidRect( Rectf( vec2( 0 ), vec2( texture->getSize() ) ) );
+		gl::drawSolidRect( Rectf( vec2( 0 ), vec2( mTotalRenderSize ) ) );
 	}
 }
 	
-void ScreenRenderer::renderToWindow()
+void Renderer::renderToWindow()
 {
 	gl::clear();
 	gl::ScopedViewport scopeView( vec2( 0 ), getWindowSize() );
@@ -308,6 +346,7 @@ void ScreenRenderer::renderToWindow()
 	gl::setMatricesWindow( getWindowSize() );
 	gl::ScopedGlslProg	  scopeGlsl( mEdgeBlendGlsl );
 	
+	// This is the bottom Presentation Target using the edge Width on the top
 	mEdgeBlendGlsl->uniform( "edges", vec4( 0.0, mEdgeWidth, 0.0, 0.0 ) );
 	{
 		auto tex = getBottomPresentationTarget()->getColorTexture();
@@ -316,6 +355,7 @@ void ScreenRenderer::renderToWindow()
 		gl::drawSolidRect( Rectf( vec2( 0 ), tex->getSize() ) );
 	}
 	
+	// This is the top Presentation Target using the edge Width on the bottom
 	mEdgeBlendGlsl->uniform( "edges", vec4( 0.0, 0.0, 0.0, mEdgeWidth ) );
 	{
 		auto tex = getTopPresentationTarget()->getColorTexture();

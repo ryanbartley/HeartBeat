@@ -2,19 +2,12 @@
 	"root" : {
 		"screenRender" : {
 			"imageStencil" : "TableLayout.png",
-			"edgePercentages" : [
-				0.2,
-				0.0,
-				0.0,
-				0.0
-			], 
 			"individualProjectorSize" : [
 				1920,
 				1080
 			],
 			"numPixelOverlap" : 200,
 			"halfSize" : true
-		},
-		"somethingElse" : 0
+		}
 	}
 }
