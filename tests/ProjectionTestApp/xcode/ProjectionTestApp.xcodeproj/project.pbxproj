@@ -14,14 +14,17 @@
 		00B784B40FF439BC000DE1D7 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B00FF439BC000DE1D7 /* AudioToolbox.framework */; };
 		00B784B50FF439BC000DE1D7 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B10FF439BC000DE1D7 /* AudioUnit.framework */; };
 		00B784B60FF439BC000DE1D7 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B20FF439BC000DE1D7 /* CoreAudio.framework */; };
-		1DDF11C86B6C4224AA36E9FE /* TestProjectApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D15E54782BA46E1B54FEC46 /* TestProjectApp.cpp */; };
+		23F8A0B774C4440486EDF46C /* ProjectionTestAppApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3605E9A333F4824A14D85A2 /* ProjectionTestAppApp.cpp */; };
 		5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
 		5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
+		693162F4CD7B4EF5B9A3B565 /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = E5E9CD4C4B694A5F80F8ACB8 /* CinderApp.icns */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		B3CF705419D5C95C00C52107 /* EventManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3CF704F19D5C95C00C52107 /* EventManager.cpp */; };
-		B3CF705519D5C95C00C52107 /* EventManagerBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3CF705119D5C95C00C52107 /* EventManagerBase.cpp */; };
-		B3CF705919D610F100C52107 /* SerialImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3CF705719D610F100C52107 /* SerialImpl.cpp */; };
-		EBB05D38980549E3AD3CF9DD /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = 1C7F1A2B265E46638E1F7279 /* CinderApp.icns */; };
+		B3E0914919D9B015006056E0 /* EventManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3E0914119D9B015006056E0 /* EventManager.cpp */; };
+		B3E0914A19D9B015006056E0 /* EventManagerBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3E0914319D9B015006056E0 /* EventManagerBase.cpp */; };
+		B3E0914E19D9B02B006056E0 /* Common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3E0914C19D9B02B006056E0 /* Common.cpp */; };
+		B3E0915119D9B0C5006056E0 /* JsonManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3E0914F19D9B0C5006056E0 /* JsonManager.cpp */; };
+		B3E0915419D9BF59006056E0 /* ScreenRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3E0915219D9BF59006056E0 /* ScreenRenderer.cpp */; };
+		B3E0915719D9D5D7006056E0 /* Engine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3E0915519D9D5D7006056E0 /* Engine.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,24 +36,30 @@
 		00B784B10FF439BC000DE1D7 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		00B784B20FF439BC000DE1D7 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
-		1C7F1A2B265E46638E1F7279 /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CinderApp.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; };
+		14B5E79AB52B46EEA3DE6AAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
-		52632A9FA6BE4C8CA8A59436 /* Resources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Resources.h; path = ../include/Resources.h; sourceTree = "<group>"; };
+		4C5C4E65CD8E417F8D93DDA2 /* Resources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Resources.h; path = ../include/Resources.h; sourceTree = "<group>"; };
 		5323E6B10EAFCA74003A9687 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
 		5323E6B50EAFCA7E003A9687 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
-		6D15E54782BA46E1B54FEC46 /* TestProjectApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = TestProjectApp.cpp; path = ../src/TestProjectApp.cpp; sourceTree = "<group>"; };
-		87E5F5BD67EF4BD692A6EB08 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8D1107320486CEB800E47090 /* TestProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		B3CF704E19D5C95C00C52107 /* BaseEventData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseEventData.h; sourceTree = "<group>"; };
-		B3CF704F19D5C95C00C52107 /* EventManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EventManager.cpp; sourceTree = "<group>"; };
-		B3CF705019D5C95C00C52107 /* EventManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventManager.h; sourceTree = "<group>"; };
-		B3CF705119D5C95C00C52107 /* EventManagerBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EventManagerBase.cpp; sourceTree = "<group>"; };
-		B3CF705219D5C95C00C52107 /* EventManagerBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventManagerBase.h; sourceTree = "<group>"; };
-		B3CF705319D5C95C00C52107 /* FastDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FastDelegate.h; sourceTree = "<group>"; };
-		B3CF705719D610F100C52107 /* SerialImpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SerialImpl.cpp; sourceTree = "<group>"; };
-		B3CF705819D610F100C52107 /* SerialImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SerialImpl.h; sourceTree = "<group>"; };
-		E750E8B933EA476087A3D628 /* TestProject_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = TestProject_Prefix.pch; sourceTree = "<group>"; };
+		57C10953444441C7813228D6 /* ProjectionTestApp_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = ProjectionTestApp_Prefix.pch; sourceTree = "<group>"; };
+		8D1107320486CEB800E47090 /* ProjectionTestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ProjectionTestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A3605E9A333F4824A14D85A2 /* ProjectionTestAppApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = ProjectionTestAppApp.cpp; path = ../src/ProjectionTestAppApp.cpp; sourceTree = "<group>"; };
+		B3E0914019D9B015006056E0 /* BaseEventData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseEventData.h; sourceTree = "<group>"; };
+		B3E0914119D9B015006056E0 /* EventManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EventManager.cpp; sourceTree = "<group>"; };
+		B3E0914219D9B015006056E0 /* EventManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventManager.h; sourceTree = "<group>"; };
+		B3E0914319D9B015006056E0 /* EventManagerBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EventManagerBase.cpp; sourceTree = "<group>"; };
+		B3E0914419D9B015006056E0 /* EventManagerBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventManagerBase.h; sourceTree = "<group>"; };
+		B3E0914519D9B015006056E0 /* FastDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FastDelegate.h; sourceTree = "<group>"; };
+		B3E0914C19D9B02B006056E0 /* Common.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Common.cpp; sourceTree = "<group>"; };
+		B3E0914D19D9B02B006056E0 /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
+		B3E0914F19D9B0C5006056E0 /* JsonManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JsonManager.cpp; sourceTree = "<group>"; };
+		B3E0915019D9B0C5006056E0 /* JsonManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JsonManager.h; sourceTree = "<group>"; };
+		B3E0915219D9BF59006056E0 /* ScreenRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScreenRenderer.cpp; sourceTree = "<group>"; };
+		B3E0915319D9BF59006056E0 /* ScreenRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScreenRenderer.h; sourceTree = "<group>"; };
+		B3E0915519D9D5D7006056E0 /* Engine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Engine.cpp; sourceTree = "<group>"; };
+		B3E0915619D9D5D7006056E0 /* Engine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Engine.h; sourceTree = "<group>"; };
+		E5E9CD4C4B694A5F80F8ACB8 /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CinderApp.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,7 +86,7 @@
 		01B97315FEAEA392516A2CEA /* Blocks */ = {
 			isa = PBXGroup;
 			children = (
-				B3CF704C19D5C95C00C52107 /* src */,
+				B3E0913E19D9B015006056E0 /* src */,
 			);
 			name = Blocks;
 			sourceTree = "<group>";
@@ -85,7 +94,7 @@
 		080E96DDFE201D6D7F000001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				6D15E54782BA46E1B54FEC46 /* TestProjectApp.cpp */,
+				A3605E9A333F4824A14D85A2 /* ProjectionTestAppApp.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -119,12 +128,12 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8D1107320486CEB800E47090 /* TestProject.app */,
+				8D1107320486CEB800E47090 /* ProjectionTestApp.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		29B97314FDCFA39411CA2CEA /* TestProject */ = {
+		29B97314FDCFA39411CA2CEA /* ProjectionTestApp */ = {
 			isa = PBXGroup;
 			children = (
 				01B97315FEAEA392516A2CEA /* Blocks */,
@@ -134,14 +143,14 @@
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
-			name = TestProject;
+			name = ProjectionTestApp;
 			sourceTree = "<group>";
 		};
 		29B97315FDCFA39411CA2CEA /* Headers */ = {
 			isa = PBXGroup;
 			children = (
-				52632A9FA6BE4C8CA8A59436 /* Resources.h */,
-				E750E8B933EA476087A3D628 /* TestProject_Prefix.pch */,
+				4C5C4E65CD8E417F8D93DDA2 /* Resources.h */,
+				57C10953444441C7813228D6 /* ProjectionTestApp_Prefix.pch */,
 			);
 			name = Headers;
 			sourceTree = "<group>";
@@ -149,8 +158,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				1C7F1A2B265E46638E1F7279 /* CinderApp.icns */,
-				87E5F5BD67EF4BD692A6EB08 /* Info.plist */,
+				E5E9CD4C4B694A5F80F8ACB8 /* CinderApp.icns */,
+				14B5E79AB52B46EEA3DE6AAA /* Info.plist */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -164,44 +173,42 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		B3CF704C19D5C95C00C52107 /* src */ = {
+		B3E0913E19D9B015006056E0 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				B3CF705619D610F100C52107 /* Serial */,
-				B3CF704D19D5C95C00C52107 /* Event */,
+				B3E0913F19D9B015006056E0 /* Event */,
+				B3E0914C19D9B02B006056E0 /* Common.cpp */,
+				B3E0914D19D9B02B006056E0 /* Common.h */,
+				B3E0914F19D9B0C5006056E0 /* JsonManager.cpp */,
+				B3E0915019D9B0C5006056E0 /* JsonManager.h */,
+				B3E0915219D9BF59006056E0 /* ScreenRenderer.cpp */,
+				B3E0915319D9BF59006056E0 /* ScreenRenderer.h */,
+				B3E0915519D9D5D7006056E0 /* Engine.cpp */,
+				B3E0915619D9D5D7006056E0 /* Engine.h */,
 			);
 			name = src;
 			path = ../../../src;
 			sourceTree = "<group>";
 		};
-		B3CF704D19D5C95C00C52107 /* Event */ = {
+		B3E0913F19D9B015006056E0 /* Event */ = {
 			isa = PBXGroup;
 			children = (
-				B3CF704E19D5C95C00C52107 /* BaseEventData.h */,
-				B3CF704F19D5C95C00C52107 /* EventManager.cpp */,
-				B3CF705019D5C95C00C52107 /* EventManager.h */,
-				B3CF705119D5C95C00C52107 /* EventManagerBase.cpp */,
-				B3CF705219D5C95C00C52107 /* EventManagerBase.h */,
-				B3CF705319D5C95C00C52107 /* FastDelegate.h */,
+				B3E0914019D9B015006056E0 /* BaseEventData.h */,
+				B3E0914119D9B015006056E0 /* EventManager.cpp */,
+				B3E0914219D9B015006056E0 /* EventManager.h */,
+				B3E0914319D9B015006056E0 /* EventManagerBase.cpp */,
+				B3E0914419D9B015006056E0 /* EventManagerBase.h */,
+				B3E0914519D9B015006056E0 /* FastDelegate.h */,
 			);
 			path = Event;
-			sourceTree = "<group>";
-		};
-		B3CF705619D610F100C52107 /* Serial */ = {
-			isa = PBXGroup;
-			children = (
-				B3CF705719D610F100C52107 /* SerialImpl.cpp */,
-				B3CF705819D610F100C52107 /* SerialImpl.h */,
-			);
-			path = Serial;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8D1107260486CEB800E47090 /* TestProject */ = {
+		8D1107260486CEB800E47090 /* ProjectionTestApp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "TestProject" */;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "ProjectionTestApp" */;
 			buildPhases = (
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
@@ -211,10 +218,10 @@
 			);
 			dependencies = (
 			);
-			name = TestProject;
+			name = ProjectionTestApp;
 			productInstallPath = "$(HOME)/Applications";
-			productName = TestProject;
-			productReference = 8D1107320486CEB800E47090 /* TestProject.app */;
+			productName = ProjectionTestApp;
+			productReference = 8D1107320486CEB800E47090 /* ProjectionTestApp.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -224,7 +231,7 @@
 			isa = PBXProject;
 			attributes = {
 			};
-			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "TestProject" */;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "ProjectionTestApp" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -234,11 +241,11 @@
 				French,
 				German,
 			);
-			mainGroup = 29B97314FDCFA39411CA2CEA /* TestProject */;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* ProjectionTestApp */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8D1107260486CEB800E47090 /* TestProject */,
+				8D1107260486CEB800E47090 /* ProjectionTestApp */,
 			);
 		};
 /* End PBXProject section */
@@ -248,7 +255,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EBB05D38980549E3AD3CF9DD /* CinderApp.icns in Resources */,
+				693162F4CD7B4EF5B9A3B565 /* CinderApp.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,10 +266,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B3CF705519D5C95C00C52107 /* EventManagerBase.cpp in Sources */,
-				B3CF705919D610F100C52107 /* SerialImpl.cpp in Sources */,
-				B3CF705419D5C95C00C52107 /* EventManager.cpp in Sources */,
-				1DDF11C86B6C4224AA36E9FE /* TestProjectApp.cpp in Sources */,
+				B3E0914A19D9B015006056E0 /* EventManagerBase.cpp in Sources */,
+				B3E0914919D9B015006056E0 /* EventManager.cpp in Sources */,
+				B3E0915419D9BF59006056E0 /* ScreenRenderer.cpp in Sources */,
+				B3E0914E19D9B02B006056E0 /* Common.cpp in Sources */,
+				B3E0915719D9D5D7006056E0 /* Engine.cpp in Sources */,
+				23F8A0B774C4440486EDF46C /* ProjectionTestAppApp.cpp in Sources */,
+				B3E0915119D9B0C5006056E0 /* JsonManager.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,7 +289,7 @@
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = TestProject_Prefix.pch;
+				GCC_PREFIX_HEADER = ProjectionTestApp_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -288,7 +298,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				OTHER_LDFLAGS = "\"$(CINDER_PATH)/lib/libcinder_d.a\"";
-				PRODUCT_NAME = TestProject;
+				PRODUCT_NAME = ProjectionTestApp;
 				SYMROOT = ./build;
 				WRAPPER_EXTENSION = app;
 			};
@@ -305,7 +315,7 @@
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = TestProject_Prefix.pch;
+				GCC_PREFIX_HEADER = ProjectionTestApp_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"NDEBUG=1",
 					"$(inherited)",
@@ -314,7 +324,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				OTHER_LDFLAGS = "\"$(CINDER_PATH)/lib/libcinder.a\"";
-				PRODUCT_NAME = TestProject;
+				PRODUCT_NAME = ProjectionTestApp;
 				STRIP_INSTALLED_PRODUCT = YES;
 				SYMROOT = ./build;
 				WRAPPER_EXTENSION = app;
@@ -358,7 +368,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "TestProject" */ = {
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "ProjectionTestApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4B08A954540054247B /* Debug */,
@@ -367,7 +377,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "TestProject" */ = {
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "ProjectionTestApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,
