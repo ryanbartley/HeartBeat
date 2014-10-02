@@ -9,10 +9,11 @@
 #pragma once
 
 #include "EventManagerBase.h"
+#include "Common.h"
 #include <boost/signals2/signal.hpp>
 #include <deque>
 
-namespace ignite {
+namespace heartbeat {
 	
 constexpr auto NUM_QUEUES = 2u;
 	
@@ -22,7 +23,9 @@ class EventManager : public EventManagerBase {
 	using EventQueue		= std::deque<EventDataRef>;
 	
 public:
-	explicit EventManager( const std::string &name, bool setAsGlobal );
+	
+	static EventManagerRef create( const std::string &name, bool setAsGlobal );
+	
 	virtual ~EventManager();
 	
 	virtual bool addListener( const EventListenerDelegate &eventDelegate, const EventType &type ) override;
@@ -32,9 +35,11 @@ public:
 	virtual bool queueEvent( const EventDataRef &event ) override;
 	virtual bool abortEvent( const EventType &type, bool allOfType = false ) override;
 	
-	virtual bool update( uint64_t maxMillis = kINFINITE );
+	virtual bool update( uint64_t maxMillis = kINFINITE ) override;
 
 private:
+	explicit EventManager( const std::string &name, bool setAsGlobal );
+	
 	EventListenerMap					mEventListeners;
 	std::array<EventQueue, NUM_QUEUES>  mQueues;
 	uint32_t							mActiveQueue;

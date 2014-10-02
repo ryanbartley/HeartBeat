@@ -8,7 +8,6 @@
 
 #pragma once
 
-#include "cinder/svg/SvgGl.h"
 
 namespace heartbeat {
 	
@@ -34,7 +33,7 @@ public:
 private:
 	InfoDisplay();
 	
-	void setOrientation( const ci::Quatf &orientation );
+	void setOrientation( const ci::quat &orientation );
 	void setScale( const ci::vec3 &scale );
 	void setPosition( const ci::vec3 &scale );
 	void setBoundingBox( const ci::Rectf &bounding );

@@ -12,7 +12,7 @@
 #include "FastDelegate.h"
 #include <boost/signals2/signal.hpp>
 
-namespace ignite {
+namespace heartbeat {
 	
 using EventType				= uint64_t;
 using EventListenerDelegate = delegate<void (EventDataRef)>;
@@ -57,7 +57,7 @@ public:
 	//
 	// returns true if all messages ready for processing were completed, false
 	// otherwise (e.g. timeout).
-	virtual bool VTickVUpdate( unsigned long maxMillis = kINFINITE ) = 0;
+	virtual bool update( uint64_t maxMillis = kINFINITE ) = 0;
 	
 	// Getter for the main global event manager. This is the event manager that
 	// is used by the majority of the engine, though you are free to define your

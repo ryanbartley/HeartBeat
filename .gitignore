@@ -7,6 +7,16 @@ project.xcworkspace
 xcuserdata/
 *.xccheckout
 .DS_Store
+teensy/*.o
+teensy/*.elf
+teensy/*.lst
+teensy/*.eep
+teensy/*.lss
+teensy/*.hex
+teensy/*.lst
+teensy/*.map
+teensy/*.sym
+teensy/.dep/
 
 build/
 lib/libcinder*.a

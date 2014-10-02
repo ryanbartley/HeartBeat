@@ -9,7 +9,7 @@
 #include "EventManagerBase.h"
 #include "cinder/Log.h"
 
-namespace ignite {
+namespace heartbeat {
 	
 static EventManagerBase* kEventManager = nullptr;
 	

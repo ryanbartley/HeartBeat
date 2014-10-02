@@ -7,7 +7,13 @@
 				1080
 			],
 			"numPixelOverlap" : 200,
-			"halfSize" : true
+			"splitWindow" : true,
+			"halfSize" : false
+		},
+		"hid" : {
+			"top" : -1,
+			"middle" : -1,
+			"bottom" : -1
 		}
 	}
 }

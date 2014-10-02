@@ -12,6 +12,7 @@
 #include "cinder/gl/GlslProg.h"
 #include "cinder/gl/Shader.h"
 #include "cinder/gl/Context.h"
+#include "Engine.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -121,7 +122,13 @@ void Renderer::initialize()
 void Renderer::setupPresentation()
 {
 	if( ! mIsSplitWindow ) {
-		app::App::get()->setWindowSize( ivec2( mIndividualProjectorSize.x, mIndividualProjectorSize.y * 2 ) );
+		auto app = app::App::get();
+		app->setWindowSize( ivec2( mIndividualProjectorSize.x, mIndividualProjectorSize.y * 2 ) );
+		auto engine = Engine::get();
+		mDrawSignals.push_back( app->getWindow()->connectDraw( &Engine::preDraw, engine.get() ) );
+		mDrawSignals.push_back( app->getWindow()->connectDraw( &Engine::draw, engine.get() ) );
+		mDrawSignals.push_back( app->getWindow()->connectDraw( &Engine::postDraw, engine.get() ) );
+		mDrawSignals.push_back( app->getWindow()->connectPostDraw( &Renderer::renderToSingleWindow, this ) );
 	}
 	else {
 		auto app = app::AppBasic::get();
@@ -132,6 +139,15 @@ void Renderer::setupPresentation()
 		auto window = app->getWindow();
 		window->setSize( mIndividualProjectorSize );
 		window->setTitle( "BOTTOM_PRESENT_TARGET" );
+		window->setAlwaysOnTop();
+		
+		// Hook up the engine draw methods to the "main window"
+		auto engine = Engine::get();
+		mDrawSignals.push_back( window->connectDraw( &Engine::preDraw, engine.get() ) );
+		mDrawSignals.push_back( window->connectDraw( &Engine::draw, engine.get() ) );
+		mDrawSignals.push_back( window->connectDraw( &Engine::postDraw, engine.get() ) );
+		mDrawSignals.push_back( window->connectPostDraw( &Renderer::renderToBottomWindow, this ) );
+		window->setUserData( this );
 		mWindows[BOTTOM_PRESENT_TARGET] = window;
 		
 		// now create another from scratch.
@@ -146,7 +162,18 @@ void Renderer::setupPresentation()
 		
 		Window::Format format;
 		format.size( mIndividualProjectorSize ).title( "TOP_PRESENT_TARGET" ).display( secondDisplay );
-		mWindows[TOP_PRESENT_TARGET] = app->createWindow( format );
+		window = app->createWindow( format );
+		
+		mDrawSignals.push_back( window->connectPostDraw( &Renderer::renderToTopWindow, this ) );
+		window->setUserData( this );
+		mWindows[TOP_PRESENT_TARGET] = window;
+		
+		if( ! mIsHalfSized ) {
+//			mWindows[TOP_PRESENT_TARGET]->setFullScreen();
+			mWindows[TOP_PRESENT_TARGET]->setBorderless();
+//			mWindows[BOTTOM_PRESENT_TARGET]->setFullScreen();
+			mWindows[BOTTOM_PRESENT_TARGET]->setBorderless();
+		}
 	}
 }
 	
@@ -308,7 +335,6 @@ void Renderer::endFrame()
 {
 	auto ctx = gl::context();
 	ctx->popViewport();
-	
 	gl::disable( GL_STENCIL_TEST );
 	mFbos[RENDER_TARGET]->unbindFramebuffer();
 }
@@ -317,8 +343,6 @@ void Renderer::presentRender()
 {
 	renderToPresentTarget( BOTTOM_PRESENT_TARGET );
 	renderToPresentTarget( TOP_PRESENT_TARGET );
-	
-	renderToWindow();
 }
 	
 void Renderer::renderToPresentTarget( uint32_t target )
@@ -338,6 +362,7 @@ void Renderer::renderToPresentTarget( uint32_t target )
 	gl::setMatricesWindow( mIndividualProjectorSize, false );
 	
 	if( target == BOTTOM_PRESENT_TARGET ) {
+		
 		auto offset = mIndividualProjectorSize.y - mNumPixelOverlap * 2;
 		auto offsetBottomLeft = vec2( 0, -offset );
 		auto offsetUpperRight = vec2( mTotalRenderSize.x, mTotalRenderSize.y - offset );
@@ -348,32 +373,91 @@ void Renderer::renderToPresentTarget( uint32_t target )
 	}
 }
 	
-void Renderer::renderToWindow()
+void Renderer::renderToSingleWindow()
 {
-	gl::clear();
-	gl::ScopedViewport scopeView( vec2( 0 ), getWindowSize() );
-	gl::ScopedMatrices scopeMat;
-	gl::setMatricesWindow( getWindowSize() );
-	gl::ScopedGlslProg	  scopeGlsl( mEdgeBlendGlsl );
-	
-	// This is the bottom Presentation Target using the edge Width on the top
-	mEdgeBlendGlsl->uniform( "edges", vec4( 0.0, mEdgeWidth, 0.0, 0.0 ) );
-	{
-		auto tex = getBottomPresentationTarget()->getColorTexture();
-		gl::ScopedTextureBind scopeTex( tex );
-
-		gl::drawSolidRect( Rectf( vec2( 0 ), tex->getSize() ) );
-	}
-	
-	// This is the top Presentation Target using the edge Width on the bottom
-	mEdgeBlendGlsl->uniform( "edges", vec4( 0.0, 0.0, 0.0, mEdgeWidth ) );
-	{
-		auto tex = getTopPresentationTarget()->getColorTexture();
+	cout << "I'm calling single window" << endl;
+	if( ! mIsSplitWindow ) {
+		cout << "I'm about to draw single window" << endl;
+		gl::clear();
+		gl::ScopedViewport scopeView( vec2( 0 ), getWindowSize() );
+		gl::ScopedMatrices scopeMat;
+		gl::setMatricesWindow( getWindowSize() );
+		gl::ScopedGlslProg	  scopeGlsl( mEdgeBlendGlsl );
 		
-		gl::ScopedModelMatrix scopeMat;
-		gl::ScopedTextureBind scopeTex( tex );
-		gl::translate( vec2( 0, getWindowHeight() ) / 2.0f );
-		gl::drawSolidRect( Rectf( vec2( 0 ), tex->getSize() ) );
+		// This is the bottom Presentation Target using the edge Width on the top
+		mEdgeBlendGlsl->uniform( "edges", vec4( 0.0, mEdgeWidth, 0.0, 0.0 ) );
+		{
+			auto tex = getBottomPresentationTarget()->getColorTexture();
+			gl::ScopedTextureBind scopeTex( tex );
+			
+			gl::drawSolidRect( Rectf( vec2( 0 ), tex->getSize() ) );
+		}
+		
+		// This is the top Presentation Target using the edge Width on the bottom
+		mEdgeBlendGlsl->uniform( "edges", vec4( 0.0, 0.0, 0.0, mEdgeWidth ) );
+		{
+			auto tex = getTopPresentationTarget()->getColorTexture();
+			
+			gl::ScopedModelMatrix scopeMat;
+			gl::ScopedTextureBind scopeTex( tex );
+			gl::translate( vec2( 0, getWindowHeight() ) / 2.0f );
+			gl::drawSolidRect( Rectf( vec2( 0 ), tex->getSize() ) );
+		}
+	}
+	else {
+		CI_LOG_E("Calling single Window Render, when mIsSplit is true");
+	}
+}
+	
+void Renderer::renderToTopWindow()
+{
+	auto window = mWindows[TOP_PRESENT_TARGET];
+	if( mIsSplitWindow && window ) {
+		auto renderer = window->getUserData<Renderer>();
+		cout << "I'm in TOP" << endl;
+		gl::clear();
+		gl::ScopedViewport scopeView( vec2( 0 ), window->getSize() );
+		gl::ScopedMatrices scopeMat;
+		gl::setMatricesWindow( window->getSize() );
+		gl::ScopedGlslProg	  scopeGlsl( renderer->mEdgeBlendGlsl );
+		
+		// This is the top Presentation Target using the edge Width on the bottom
+		renderer->mEdgeBlendGlsl->uniform( "edges", vec4( 0.0, 0.0, 0.0, renderer->mEdgeWidth ) );
+		{
+			auto tex = renderer->getTopPresentationTarget()->getColorTexture();
+			gl::ScopedTextureBind scopeTex( tex );
+			
+			gl::drawSolidRect( Rectf( vec2( 0 ), tex->getSize() ) );
+		}
+	}
+	else {
+		CI_LOG_E("Trying to render to seperate window, when mIsSplit is false");
+	}
+}
+
+void Renderer::renderToBottomWindow()
+{
+	auto window = mWindows[BOTTOM_PRESENT_TARGET];
+	if( mIsSplitWindow && window ) {
+		auto renderer = window->getUserData<Renderer>();
+		cout << "I'm in BOTTOM" << endl;
+		gl::clear();
+		gl::ScopedViewport scopeView( vec2( 0 ), window->getSize() );
+		gl::ScopedMatrices scopeMat;
+		gl::setMatricesWindow( window->getSize() );
+		gl::ScopedGlslProg	  scopeGlsl( renderer->mEdgeBlendGlsl );
+		
+		// This is the bottom Presentation Target using the edge Width on the top
+		renderer->mEdgeBlendGlsl->uniform( "edges", vec4( 0.0, renderer->mEdgeWidth, 0.0, 0.0 ) );
+		{
+			auto tex = renderer->getBottomPresentationTarget()->getColorTexture();
+			gl::ScopedTextureBind scopeTex( tex );
+			
+			gl::drawSolidRect( Rectf( vec2( 0 ), tex->getSize() ) );
+		}
+	}
+	else {
+		CI_LOG_E("Trying to render to seperate window, when mIsSplit is false");
 	}
 }
 	

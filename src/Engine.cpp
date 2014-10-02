@@ -27,8 +27,8 @@ EngineRef Engine::create()
 {
 	if( ! sEngineInitialized ) {
 		sEngine = EngineRef( new Engine() );
-		sEngine->initialize();
 		sEngineInitialized = true;
+		sEngine->initialize();
 		return sEngine;
 	}
 	else
@@ -53,16 +53,18 @@ void Engine::destroy()
 	
 void Engine::initialize()
 {
+	mEventManager = heartbeat::EventManager::create( "Global", true );
 	mJsonManager = heartbeat::JsonManager::create( "test.json" );
 	mRenderer = heartbeat::Renderer::create();
 	mRenderer->initialize();
+	
+	mHidCommManager = heartbeat::HidCommManager::create();
+	mHidCommManager->initialize();
 	
 	auto app = app::App::get();
 	
 	mConnections.push_back( app->getSignalUpdate().connect( std::bind( &Engine::update, this ) ) );
 	mConnections.push_back( app->getWindow()->connectKeyDown( &Engine::keyDown, this ) );
-	mConnections.push_back( app->getWindow()->connectDraw( &Engine::preDraw, this ) );
-	mConnections.push_back( app->getWindow()->connectPostDraw( &Engine::postDraw, this ) );
 }
 	
 void Engine::keyDown( ci::app::KeyEvent event )
@@ -75,20 +77,52 @@ void Engine::keyDown( ci::app::KeyEvent event )
 	
 void Engine::update()
 {
-	
+	for( auto & kiosk : mKiosks ) {
+		
+	}
 }
 	
 void Engine::preDraw()
 {
 	mRenderer->beginFrame();
+}
 	
+void Engine::draw()
+{
+	cout << "I'm in draw" << endl;
 	
+	CameraPersp		mCamera;
+	
+	auto aspect = getRenderer()->getTotalRenderSize();
+	
+	mCamera.setPerspective( 60.0f, aspect.x / aspect.y , .01f, 1000.0f );
+	mCamera.lookAt( vec3( 0, 0, 6 ), vec3( 0 ) );
+	
+	{
+		gl::ScopedMatrices scopeMat;
+		gl::setMatricesWindow( getRenderer()->getTotalRenderSize() );
+		gl::color( 1, 0, 0 );
+		gl::drawSolidRect( Rectf( vec2( 0 ), getRenderer()->getTotalRenderSize() ) );
+	}
+	{
+		gl::enableDepthRead();
+		gl::enableDepthWrite();
+		
+		static float rotation = 0.0f;
+		gl::ScopedMatrices scopeMat;
+		gl::setMatrices( mCamera );
+		gl::color( 1, 1, 1 );
+		gl::multModelMatrix( rotate( rotation += 0.01f, vec3( 0, 1, 0 ) ) );
+		gl::drawColorCube( vec3( 0 ), vec3( 4 ) );
+		
+		gl::disableDepthRead();
+		gl::disableDepthWrite();
+	}
 }
 	
 void Engine::postDraw()
 {
 	mRenderer->endFrame();
-	
 	mRenderer->presentRender();
 }
 

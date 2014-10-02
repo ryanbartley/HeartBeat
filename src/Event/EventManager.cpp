@@ -12,12 +12,17 @@
 using namespace ci;
 using namespace std;
 
-namespace ignite {
+namespace heartbeat {
 	
 EventManager::EventManager( const std::string &name, bool setAsGlobal )
 : EventManagerBase( name, setAsGlobal ), mActiveQueue( 0 )
 {
 	
+}
+	
+EventManagerRef EventManager::create( const std::string &name, bool setAsGlobal )
+{
+	return EventManagerRef( new EventManager( name, setAsGlobal ) );
 }
 	
 EventManager::~EventManager()

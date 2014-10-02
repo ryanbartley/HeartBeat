@@ -17,7 +17,7 @@ namespace heartbeat {
 static JsonManagerRef sJsonManager = nullptr;
 static bool sJsonManagerInitialized = false;
 	
-JsonManagerWeak	JsonManager::get() {
+JsonManagerRef	JsonManager::get() {
 	if( sJsonManagerInitialized ) {
 		return sJsonManager;
 	}

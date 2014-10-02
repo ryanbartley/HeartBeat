@@ -63,17 +63,23 @@ private:
 	//! Render's the Render_Target to the seperate Present_Targets'
 	void renderToPresentTarget( uint32_t target );
 	//! Writes the Present_Targets to the Window
-	void renderToWindow();
+	void renderToSingleWindow();
+	void renderToBottomWindow();
+	void renderToTopWindow();
 	
-	//! 0 - RENDER_TARGET, 1 - BOTTOM_PRESENT_TARGET, 2 - TOP_PRESENT_TARGET
-	std::array<ci::gl::FboRef, 3>		mFbos;
-	std::array<ci::app::WindowRef, 2>	mWindows;
-	ci::gl::Texture2dRef			mImageStencil;
-	ci::gl::GlslProgRef				mEdgeBlendGlsl, mAlphaDiscard;
-	float							mEdgeWidth;
-	uint32_t						mNumPixelOverlap;
-	bool							mStencilImageUpdated, mIsHalfSized, mIsSplitWindow;
-	ci::vec2						mTotalRenderSize, mIndividualProjectorSize;
+	//! 0 - BOTTOM_PRESENT_TARGET, 1 - TOP_PRESENT_TARGET, 2 - RENDER_TARGET
+	std::array<ci::gl::FboRef, 3>				mFbos;
+	//! 0 - BOTTOM_PRESENT_TARGET, 1 - TOP_PRESENT_TARGET
+	std::array<ci::app::WindowRef, 2>			mWindows;
+	
+	std::vector<boost::signals2::connection>	mDrawSignals;
+	ci::gl::Texture2dRef						mImageStencil;
+	ci::gl::GlslProgRef							mEdgeBlendGlsl, mAlphaDiscard;
+	ci::vec2									mTotalRenderSize, mIndividualProjectorSize;
+	float										mEdgeWidth;
+	uint32_t									mNumPixelOverlap;
+	bool										mStencilImageUpdated, mIsHalfSized,
+												mIsSplitWindow;
 	
 	friend class Engine;
 };

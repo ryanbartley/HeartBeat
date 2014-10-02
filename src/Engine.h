@@ -12,6 +12,9 @@
 
 #include "JsonManager.h"
 #include "Renderer.h"
+#include "Kiosk.h"
+#include "EventManager.h"
+#include "HidCommManager.h"
 
 #include "cinder/params/Params.h"
 
@@ -33,6 +36,7 @@ public:
 	
 	void update();
 	void preDraw();
+	void draw();
 	void postDraw();
 	
 	void keyDown( ci::app::KeyEvent event );
@@ -47,9 +51,13 @@ private:
 	
 	RendererRef				mRenderer;
 	JsonManagerRef			mJsonManager;
+	EventManagerRef			mEventManager;
+	HidCommManagerRef		mHidCommManager;
+	std::array<KioskRef, 3> mKiosks;
 	ci::params::InterfaceGlRef	mParams;
 	
 	std::vector<boost::signals2::connection> mConnections;
+
 };
 	
 }

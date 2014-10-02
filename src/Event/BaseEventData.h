@@ -10,7 +10,7 @@
 
 #include <strstream>
 
-namespace ignite {
+namespace heartbeat {
 	
 using EventType		= uint64_t;
 using EventDataRef	= std::shared_ptr<class EventData>;
