@@ -26,7 +26,7 @@ public:
 	JsonManager& operator=( const JsonManager & ) = delete;
 	JsonManager& operator=( JsonManager && ) = delete;
 	
-	~JsonManager() {}
+	~JsonManager();
 	
 	const ci::JsonTree& getRoot() { return mRoot["root"]; }
 	const std::string& getFileName() { return mFileName; }

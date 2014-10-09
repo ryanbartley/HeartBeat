@@ -8,11 +8,10 @@
 
 #pragma once
 
+#include "Common.h"
 #include "InfoDisplay.h"
 
 namespace heartbeat {
-	
-using KioskRef = std::shared_ptr<class Kiosk>;
 	
 class Kiosk {
 public:
@@ -24,7 +23,7 @@ public:
 private:
 	Kiosk();
 	
-	std::array<InfoDisplayRef, 3> mHotSpots;
+	InfoDisplayRef	mHotSpot;
 };
 	
 }

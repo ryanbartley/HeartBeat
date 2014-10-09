@@ -23,7 +23,14 @@ namespace heartbeat {
 	
 const uint8_t HidProtocol::HANDSHAKE = 255;
 	
+const uint32_t HidMessage::MAX_PACKET_SIZE = 64;
+	
 HidCommManager::HidCommManager()
+{
+	
+}
+	
+HidCommManager::~HidCommManager()
 {
 	
 }
@@ -68,8 +75,12 @@ void HidCommManager::initialize()
 			setMiddle( -1 );
 		}
 		
+		int num = 0;
 		for( auto & connection : mConnections ) {
-			openConnections( connection.second );
+			auto & hid = connection.second;
+			hid.mNum = num;
+			openConnections( hid );
+			++num;
 		}
 		
 	} catch ( JsonTree::ExcChildNotFound &ex ) {
@@ -100,14 +111,55 @@ void HidCommManager::openConnections( Hid &hid )
 	// Open up from top to Bottom
 	
 	if( hid.mAddress != -1 ) {
+		
 		int32_t numOpened = rawhid_open( 1, 0x16C0, 0x0480, 0xFFAB, hid.mAddress );
 		if( numOpened == 1 ) {
 			hid.mOpen = true;
+			
+			auto message = HidMessage();
+			
+			message.mBuffer = { HidProtocol::HANDSHAKE };
+			message.mHid = &hid;
+			
+			write( message );
 		}
 			CI_LOG_W("HID " << static_cast<size_t>(hid.mId) << ": could not be opened");
 	}
 	else
 		CI_LOG_W("HID " << static_cast<size_t>(hid.mId) << ": address is -1 and will not be opened");
+}
+	
+void HidCommManager::write( const HidMessage &packet )
+{
+	auto bytesWritten = rawhid_send( packet.mHid->mNum,
+				static_cast<void*>( const_cast<uint8_t*>( packet.mBuffer.data() ) ),
+				packet.mBuffer.size(),
+				10 );
+	if( bytesWritten == -1 )
+		CI_LOG_E("Returned -1 from: " << static_cast<int>(packet.mHid->mId) );
+}
+	
+HidMessage HidCommManager::recv( const Hid *hid )
+{
+	HidMessage ret;
+	// TODO: Figure out if I actually need that much info
+	ret.mBuffer.resize( HidMessage::MAX_PACKET_SIZE );
+	auto bytesRead = rawhid_recv( hid->mNum,
+								 static_cast<void*>( const_cast<uint8_t*>( ret.mBuffer.data() ) ),
+								 ret.mBuffer.size(),
+								 2 );
+	if( bytesRead == -1 )
+		CI_LOG_E("Returned -1 from: " << static_cast<int>(hid->mId) );
+	
+	return ret;
+}
+	
+void HidCommManager::update()
+{
+	for( auto & connection : mConnections ) {
+		auto message = recv( &connection.second );
+		
+	}
 }
 
 	

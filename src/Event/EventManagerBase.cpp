@@ -15,7 +15,7 @@ static EventManagerBase* kEventManager = nullptr;
 	
 EventManagerBase* EventManagerBase::get()
 {
-	CI_ASSERT(kEventManager);
+//	CI_ASSERT(kEventManager);
 	return kEventManager;
 }
 	
@@ -32,9 +32,9 @@ EventManagerBase::EventManagerBase( const std::string &name, bool setAsGlobal )
 	
 EventManagerBase::~EventManagerBase()
 {
-	if ( kEventManager ) {
-		delete kEventManager;
-	}
+//	if ( kEventManager ) {
+//		delete kEventManager;
+//	}
 }
 	
 }

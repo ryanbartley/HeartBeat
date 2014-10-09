@@ -2,6 +2,8 @@
 #include "cinder/app/RendererGl.h"
 #include "cinder/gl/gl.h"
 
+#include "Engine.h"
+
 using namespace ci;
 using namespace ci::app;
 using namespace std;
@@ -12,10 +14,13 @@ class hidTestApp : public AppNative {
 	void mouseDown( MouseEvent event ) override;
 	void update() override;
 	void draw() override;
+	
+	heartbeat::EngineRef mEngine;
 };
 
 void hidTestApp::setup()
 {
+	mEngine = heartbeat::Engine::create();
 }
 
 void hidTestApp::mouseDown( MouseEvent event )

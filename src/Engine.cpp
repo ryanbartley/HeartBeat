@@ -8,6 +8,15 @@
 
 #include "Engine.h"
 #include "cinder/Log.h"
+#include "Urg.h"
+
+#include "JsonManager.h"
+#include "Renderer.h"
+#include "Kiosk.h"
+#include "EventManager.h"
+#include "HidCommManager.h"
+#include "InteractionZones.h"
+#include "Renderable.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -47,6 +56,7 @@ EngineRef Engine::get()
 	
 void Engine::destroy()
 {
+	sEngine->cleanup();
 	sEngine = nullptr;
 	sEngineInitialized = false;
 }
@@ -55,6 +65,7 @@ void Engine::initialize()
 {
 	mEventManager = heartbeat::EventManager::create( "Global", true );
 	mJsonManager = heartbeat::JsonManager::create( "test.json" );
+	
 	mRenderer = heartbeat::Renderer::create();
 	mRenderer->initialize();
 	
@@ -65,6 +76,18 @@ void Engine::initialize()
 	
 	mConnections.push_back( app->getSignalUpdate().connect( std::bind( &Engine::update, this ) ) );
 	mConnections.push_back( app->getWindow()->connectKeyDown( &Engine::keyDown, this ) );
+	mConnections.push_back( app->getSignalShutdown().connect( std::bind( &Engine::cleanup, this ) ) );
+}
+	
+void Engine::cleanup()
+{
+	for( auto & connection : mConnections ) {
+		connection.disconnect();
+	}
+	mRenderer.reset();
+	mJsonManager.reset();
+	mEventManager.reset();
+	mHidCommManager.reset();
 }
 	
 void Engine::keyDown( ci::app::KeyEvent event )
@@ -73,6 +96,17 @@ void Engine::keyDown( ci::app::KeyEvent event )
 	
 	if( event.getChar() == 's' )
 		mRenderer->setupGlsl();
+	
+	if( event.getChar() == ' ') {
+		
+	}
+	
+	if( event.getChar() == 'c' )
+		mInteractionManager->captureBarrier();
+	
+	if( event.getChar() == 'b' )
+		mInteractionManager->writeInteractionZone();
+		
 }
 	
 void Engine::update()
@@ -92,9 +126,7 @@ void Engine::draw()
 	cout << "I'm in draw" << endl;
 	
 	CameraPersp		mCamera;
-	
 	auto aspect = getRenderer()->getTotalRenderSize();
-	
 	mCamera.setPerspective( 60.0f, aspect.x / aspect.y , .01f, 1000.0f );
 	mCamera.lookAt( vec3( 0, 0, 6 ), vec3( 0 ) );
 	
@@ -118,6 +150,11 @@ void Engine::draw()
 		gl::disableDepthRead();
 		gl::disableDepthWrite();
 	}
+	
+	for( auto & renderable : mRenderables ) {
+		renderable->draw();
+	}
+	
 }
 	
 void Engine::postDraw()

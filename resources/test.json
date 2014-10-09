@@ -8,12 +8,45 @@
 			],
 			"numPixelOverlap" : 200,
 			"splitWindow" : true,
-			"halfSize" : false
+			"halfSize" : true
 		},
 		"hid" : {
-			"top" : -1,
-			"middle" : -1,
-			"bottom" : -1
+			// Right now built on 0x0300, 0x0301, 0x0302
+			"top" : 	768, // int for 0x0300
+			"middle" : 	769, // int for 0x0301
+			"bottom" : 	770  // int for 0x0302
+		},
+		"urg" : {
+			"address" : "/dev/tty.usbmodemfa131"
+		},
+		"interactionZones" : {
+			"barrierFile" : "tableData.bin",
+			"runUrg" : true,
+			"scales" : {
+				"table" : 0.85,
+				"dead" : 1.2,
+				"approach" : 1.5,
+				"far" : 1.8
+			},
+			"inBetweenThresh" : 50
+		},
+		"interactionDebug" : {
+			"transformation" : {
+				"scales" : [
+					0.01, 0.01
+				],
+				"rotations" : {
+					// This can either contain "quaternion" : []
+					// or "angle" : degree, axis is vec3( 0, 0, 1 )
+					"angle" : 180
+				},
+				"translations" : {
+					// This can either contain "coordinates" : []
+					// or "center" : boolean
+					"center" : true //,
+					// "coordinates" : [ 0, 0 ]
+				}
+			}
 		}
 	}
 }

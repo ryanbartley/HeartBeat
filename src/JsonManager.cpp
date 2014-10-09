@@ -31,6 +31,11 @@ JsonManager::JsonManager( const std::string &fileName, const DataSourceRef &file
 {
 }
 	
+JsonManager::~JsonManager()
+{
+	CI_LOG_V("JsonManagerDestroyed");
+}
+	
 JsonManagerRef JsonManager::create( const std::string &fileName )
 {
 	auto contents = getFileContents( fileName );

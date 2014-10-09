@@ -10,12 +10,6 @@
 
 #include "Common.h"
 
-#include "JsonManager.h"
-#include "Renderer.h"
-#include "Kiosk.h"
-#include "EventManager.h"
-#include "HidCommManager.h"
-
 #include "cinder/params/Params.h"
 
 namespace heartbeat {
@@ -48,13 +42,18 @@ private:
 	Engine();
 	
 	void initialize();
+	void cleanup();
 	
-	RendererRef				mRenderer;
-	JsonManagerRef			mJsonManager;
-	EventManagerRef			mEventManager;
-	HidCommManagerRef		mHidCommManager;
-	std::array<KioskRef, 3> mKiosks;
+	RendererRef					mRenderer;
+	JsonManagerRef				mJsonManager;
+	EventManagerRef				mEventManager;
+	HidCommManagerRef			mHidCommManager;
+	InteractionZonesRef			mInteractionManager;
+	std::array<KioskRef, 3>		mKiosks;
+	
 	ci::params::InterfaceGlRef	mParams;
+	
+	std::vector<RenderableRef>  mRenderables;
 	
 	std::vector<boost::signals2::connection> mConnections;
 

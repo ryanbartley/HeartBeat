@@ -30,6 +30,22 @@ Renderer::Renderer()
 {
 }
 	
+Renderer::~Renderer()
+{
+	cleanup();
+	CI_LOG_V("Renderer being destroyed");
+}
+	
+void Renderer::cleanup()
+{
+	mWindows[0] = nullptr;
+	mWindows[1] = nullptr;
+	for( auto & connection : mDrawSignals ) {
+		connection.disconnect();
+	}
+	CI_LOG_V("Renderer being cleanedup");
+}
+	
 RendererRef Renderer::create()
 {
 	return RendererRef( new Renderer() );
@@ -89,9 +105,6 @@ void Renderer::initialize()
 			mIsSplitWindow = false;
 		}
 		
-		// Now that I have the individual Projector Size,
-		setupPresentation();
-		
 		try {
 			auto numPixelOverlap = screenAttribs["numPixelOverlap"].getValue<uint32_t>();
 			
@@ -112,6 +125,9 @@ void Renderer::initialize()
 		
 		setupFbos();
 		setupGlsl();
+		
+		// Now that I have the individual Projector Size,
+		setupPresentation();
 		
 	}
 	catch ( JsonTree::ExcChildNotFound &ex ) {
@@ -161,7 +177,7 @@ void Renderer::setupPresentation()
 		}
 		
 		Window::Format format;
-		format.size( mIndividualProjectorSize ).title( "TOP_PRESENT_TARGET" ).display( secondDisplay );
+		format.size( mIndividualProjectorSize ).title( "TOP_PRESENT_TARGET" ).display( secondDisplay ).alwaysOnTop();
 		window = app->createWindow( format );
 		
 		mDrawSignals.push_back( window->connectPostDraw( &Renderer::renderToTopWindow, this ) );
@@ -169,10 +185,8 @@ void Renderer::setupPresentation()
 		mWindows[TOP_PRESENT_TARGET] = window;
 		
 		if( ! mIsHalfSized ) {
-//			mWindows[TOP_PRESENT_TARGET]->setFullScreen();
-			mWindows[TOP_PRESENT_TARGET]->setBorderless();
-//			mWindows[BOTTOM_PRESENT_TARGET]->setFullScreen();
-			mWindows[BOTTOM_PRESENT_TARGET]->setBorderless();
+			mWindows[TOP_PRESENT_TARGET]->setFullScreen();
+			mWindows[BOTTOM_PRESENT_TARGET]->setFullScreen();
 		}
 	}
 }
@@ -413,8 +427,8 @@ void Renderer::renderToTopWindow()
 {
 	auto window = mWindows[TOP_PRESENT_TARGET];
 	if( mIsSplitWindow && window ) {
-		auto renderer = window->getUserData<Renderer>();
 		cout << "I'm in TOP" << endl;
+		auto renderer = window->getUserData<Renderer>();
 		gl::clear();
 		gl::ScopedViewport scopeView( vec2( 0 ), window->getSize() );
 		gl::ScopedMatrices scopeMat;

@@ -14,6 +14,8 @@ using namespace std;
 
 namespace heartbeat {
 	
+boost::hash<std::string> EventManager::HASHER;
+	
 EventManager::EventManager( const std::string &name, bool setAsGlobal )
 : EventManagerBase( name, setAsGlobal ), mActiveQueue( 0 )
 {

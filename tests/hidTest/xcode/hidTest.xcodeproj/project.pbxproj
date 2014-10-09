@@ -30,6 +30,7 @@
 		B35A4CFE19DDAEA900C763C9 /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B35A4CF219DDAEA900C763C9 /* Renderer.cpp */; };
 		B35A4CFF19DDAEA900C763C9 /* SvgManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B35A4CF419DDAEA900C763C9 /* SvgManager.cpp */; };
 		B35A4D0219DDAEFF00C763C9 /* HidCommManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B35A4D0019DDAEFF00C763C9 /* HidCommManager.cpp */; };
+		B35A4D0619DDF12A00C763C9 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B35A4D0519DDF12A00C763C9 /* IOKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -73,6 +74,8 @@
 		B35A4CF519DDAEA900C763C9 /* SvgManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SvgManager.h; sourceTree = "<group>"; };
 		B35A4D0019DDAEFF00C763C9 /* HidCommManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HidCommManager.cpp; sourceTree = "<group>"; };
 		B35A4D0119DDAEFF00C763C9 /* HidCommManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HidCommManager.h; sourceTree = "<group>"; };
+		B35A4D0319DDF04100C763C9 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		B35A4D0519DDF12A00C763C9 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		D8E38CCB940E43B4A19E781F /* hidTestApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = hidTestApp.cpp; path = ../src/hidTestApp.cpp; sourceTree = "<group>"; };
 		EB10CB52B5414560A874B14F /* hidTest_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = hidTest_Prefix.pch; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -82,6 +85,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B35A4D0619DDF12A00C763C9 /* IOKit.framework in Frameworks */,
 				006D720419952D00008149E2 /* AVFoundation.framework in Frameworks */,
 				006D720519952D00008149E2 /* CoreMedia.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
@@ -182,6 +186,8 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B35A4D0519DDF12A00C763C9 /* IOKit.framework */,
+				B35A4D0319DDF04100C763C9 /* CoreFoundation.framework */,
 				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 			);

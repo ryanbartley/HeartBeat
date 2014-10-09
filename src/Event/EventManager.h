@@ -11,6 +11,7 @@
 #include "EventManagerBase.h"
 #include "Common.h"
 #include <boost/signals2/signal.hpp>
+#include <boost/functional/hash.hpp>
 #include <deque>
 
 namespace heartbeat {
@@ -23,6 +24,8 @@ class EventManager : public EventManagerBase {
 	using EventQueue		= std::deque<EventDataRef>;
 	
 public:
+	
+	static boost::hash<std::string> HASHER;
 	
 	static EventManagerRef create( const std::string &name, bool setAsGlobal );
 	

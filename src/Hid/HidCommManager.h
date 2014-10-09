@@ -22,18 +22,21 @@ struct Hid {
 	
 	Hid( HidId hidId, int16_t address )
 	: mId( hidId ), mAddress( address ),
-		mOpen( false )
+		mOpen( false ), mNum( -1 )
 	{}
 	
 	const HidId		mId;
 	const int16_t	mAddress;
+	int				mNum;
 	bool			mOpen;
 };
 	
 struct HidMessage {
+
+	static const uint32_t MAX_PACKET_SIZE;
 	
 	Hid* mHid;
-	std::array<uint8_t, 64> mBuffer;
+	std::vector<uint8_t> mBuffer;
 };
 	
 struct HidProtocol {
@@ -46,6 +49,8 @@ using HidCommManagerRef = std::shared_ptr<class HidCommManager>;
 class HidCommManager {
 public:
 	
+	~HidCommManager();
+	
 	static HidCommManagerRef create();
 	static HidCommManagerRef get();
 	static void destroy();
@@ -53,7 +58,7 @@ public:
 	void update();
 	
 	void write( const HidMessage &packet );
-	HidMessage recv();
+	HidMessage recv( const Hid* hid );
 	
 private:
 	HidCommManager();
