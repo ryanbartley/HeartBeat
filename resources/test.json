@@ -38,7 +38,7 @@
 				"rotations" : {
 					// This can either contain "quaternion" : []
 					// or "angle" : degree, axis is vec3( 0, 0, 1 )
-					"angle" : 180
+					"angle" : 360
 				},
 				"translations" : {
 					// This can either contain "coordinates" : []
@@ -47,6 +47,47 @@
 					// "coordinates" : [ 0, 0 ]
 				}
 			}
+		},
+		"pondAttribs" : {
+			"camera" : {
+				"fov" : 60.0,
+				"near" : 0.01,
+				"far" : 1000.0,
+				"camPos" : [
+					0, 5, 0
+				],
+				"lookAtPos" : [
+					0, 0, 0
+				]
+			},
+			"pondElements" : {
+				"cube" : {
+					"type" : "PrimitivePondElement",
+					"primitive" : "cube",
+					"transformation" : {
+						"scales" : [
+							0.51, 0.51
+						],
+						"rotations" : {
+							// This can either contain "quaternion" : []
+							// or "angle" : degree, axis is vec3( 0, 0, 1 )
+							//"angle" : 0
+						},
+						"translations" : {
+							// This can either contain "coordinates" : []
+							// or "center" : boolean
+							// "center" : true //,
+							"coordinates" : [ 0, 0 ]
+						}
+					}
+				}
+			},
+			"springMesh" : {
+				"numRows" : 50,
+				"numColumns" : 50,
+				"numIterations" : 1
+			}
+
 		}
 	}
 }

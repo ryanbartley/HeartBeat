@@ -9,11 +9,16 @@
 #include "Common.h"
 #include "cinder/Log.h"
 
+
+
 using namespace ci;
 using namespace ci::app;
 using namespace std;
 
 namespace heartbeat {
+	
+boost::hash<std::string> Hash::HASHER;
+	
 boost::filesystem::path& getWorkingResourcePath()
 {
 	// This is dirty but works with the structure.

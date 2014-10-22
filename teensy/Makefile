@@ -41,13 +41,15 @@
 
 
 # Target file name (without extension).
-TARGET = example
+TARGET = blinky
 
 
 # List C source files here. (C dependencies are automatically generated.)
 SRC =	$(TARGET).c \
 	usb_rawhid.c \
-	analog.c
+	analog.c \
+	print.c
+	
 
 
 # MCU name, you MUST set this to match the board you are using
@@ -78,7 +80,7 @@ OBJDIR = .
 
 
 # List C++ source files here. (C dependencies are automatically generated.)
-CPPSRC = 
+CPPSRC = PWMServo.cpp
 
 
 # List Assembler source files here.

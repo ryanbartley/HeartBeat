@@ -8,22 +8,23 @@
 
 #pragma once
 
+#include "Common.h"
 #include <strstream>
 
 namespace heartbeat {
 	
-using EventType		= uint64_t;
-using EventDataRef	= std::shared_ptr<class EventData>;
-	
 class EventData {
 public:
-	explicit EventData( float timestamp = 0.0f ) : mTimeStamp( timestamp ) {}
+	explicit EventData( float timestamp = 0.0f ) : mTimeStamp( timestamp ), mIsHandled( false ) {}
 	virtual ~EventData() {}
 	
 	virtual EventDataRef copy() = 0;
 	virtual const char* getName() = 0;
 	virtual const EventType& getEventType() = 0;
 	float getTimeStamp() { return mTimeStamp; }
+	
+	bool isHandled() { return mIsHandled; }
+	void setIsHandled( bool handled = true ) { mIsHandled = handled; }
 	
 #if defined( DEBUG )
 	virtual void serialize( std::ostrstream &streamOut ) = 0;
@@ -36,6 +37,7 @@ public:
 	
 private:
 	const float mTimeStamp;
+	bool		mIsHandled;
 };
 
 	

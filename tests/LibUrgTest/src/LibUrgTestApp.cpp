@@ -47,6 +47,14 @@ void LibUrgTestApp::keyDown( KeyEvent event )
 		mInteractionZone->captureBarrier();
 		mInteractionDebug->enableZone();
 	}
+	
+	if( event.getChar() == 'd' ) {
+		mInteractionDebug->enableDistance( ! mInteractionDebug->isDistanceEnabled() );
+	}
+	
+	if( event.getChar() == 'z' ) {
+		mInteractionDebug->enableZone( ! mInteractionDebug->isZoneEnabled() );
+	}
 }
 
 void LibUrgTestApp::update()
