@@ -10,7 +10,7 @@
 
 #include "Renderable.h"
 
-#include "Cairo.h"
+//#include "Cairo.h"
 
 #include "Node.h"
 
@@ -41,7 +41,7 @@ public:
 private:
 	InfoDisplay();
 	
-	ci::cairo::SurfaceSvg	mSurface;
+//	ci::cairo::SurfaceSvg	mSurface;
 
 		
 	
