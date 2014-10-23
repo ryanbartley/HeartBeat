@@ -20,15 +20,18 @@ public:
 	
 	virtual ~Node() {}
 	
-	void render();
+	virtual void render() = 0;
 	
+	const ci::svg::Group*	getParentGroup() { return mParent; }
+	const ci::svg::Node&	getChild( const std::string &childId ) { return mParent->getChild( childId ); }
+
 protected:
 	Node( const std::string &group )
-	: mNode( SvgManager::get()->getGroup( group ) )
+	: mParent( SvgManager::get()->getGroup( group ) )
 	{
 	}
 	
-	const ci::svg::Group* mNode;
+	const ci::svg::Group* mParent;
 };
 	
 }

@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [
+	<!ENTITY ns_extend "http://ns.adobe.com/Extensibility/1.0/">
+	<!ENTITY ns_ai "http://ns.adobe.com/AdobeIllustrator/10.0/">
+	<!ENTITY ns_graphs "http://ns.adobe.com/Graphs/1.0/">
+	<!ENTITY ns_vars "http://ns.adobe.com/Variables/1.0/">
+	<!ENTITY ns_imrep "http://ns.adobe.com/ImageReplacement/1.0/">
+	<!ENTITY ns_sfw "http://ns.adobe.com/SaveForWeb/1.0/">
+	<!ENTITY ns_custom "http://ns.adobe.com/GenericCustomNamespace/1.0/">
+	<!ENTITY ns_adobe_xpath "http://ns.adobe.com/XPath/1.0/">
+]>
+<svg version="1.1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="2453.5px"
+	 height="1616.009px" viewBox="0 0 2453.5 1616.009" enable-background="new 0 0 2453.5 1616.009" xml:space="preserve">
+<metadata>
+	<sfw  xmlns="&ns_sfw;">
+		<slices></slices>
+		<sliceSourceBounds  width="16383" height="16383" y="-8498" x="-7795" bottomLeftOrigin="true"></sliceSourceBounds>
+	</sfw>
+</metadata>
+<g id="line" display="none">
+	<g display="inline">
+		<defs>
+			<rect id="SVGID_1_" x="-0.855" y="2.429" width="2448" height="1614.777"/>
+		</defs>
+		<clipPath id="SVGID_2_">
+			<use xlink:href="#SVGID_1_"  overflow="visible"/>
+		</clipPath>
+		<path clip-path="url(#SVGID_2_)" fill="none" stroke="#E80A89" stroke-width="4" stroke-miterlimit="10" d="M1056.007,1603.732
+			c667.989,91.678,1283.821-375.514,1375.499-1043.505c26.552-193.466,6.218-382.558-52.291-555.81H64.85
+			C40.842,75.95,23.14,150.737,12.504,228.233C-79.174,896.222,388.018,1512.057,1056.007,1603.732z"/>
+	</g>
+</g>
+<g id="blue_water">
+	<rect x="2.75" y="1.964" fill="#4C7DBA" width="2448" height="1612.08"/>
+</g>
+<g id="HOME-content">
+	<polyline fill="none" points="1947.311,1139.291 1947.311,1211.472 506.189,1211.472 506.189,1139.291 	"/>
+	
+		<line opacity="0.6" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-miterlimit="10" x1="2045.307" y1="601.122" x2="408.192" y2="601.122"/>
+	<g>
+		<text transform="matrix(1 0 0 1 1132.4614 81.2788)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'Avenir-MediumOblique'" font-size="54.1428">Explo</tspan><tspan x="139.416" y="0" fill="#FFFFFF" font-family="'Avenir-MediumOblique'" font-size="54.1428">r</tspan><tspan x="158.475" y="0" fill="#FFFFFF" font-family="'Avenir-MediumOblique'" font-size="54.1428">e</tspan></text>
+	</g>
+	<g>
+		<path fill="#221F1F" d="M1013.462,139.078"/>
+		<path fill="#221F1F" d="M1018.491,139.606"/>
+		<path fill="#FFFFFF" d="M1055.861,141.774c0,6.38-5.166,11.547-11.547,11.547c-6.378,0-11.546-5.167-11.546-11.547
+			c0-6.371,5.168-11.542,11.546-11.542C1050.695,130.232,1055.861,135.404,1055.861,141.774z"/>
+		<g>
+			<path fill="#82BC00" d="M971.892,164.5c-5.604-13.081,24.864-48.442,56.648-57.79c-43.741,11.449-68.493,50.493-59.128,61.268
+				c7.849,9.04,33.744,4.027,54.288-15.189c-1.13-2.311-1.856-4.854-2.083-7.545C1005.566,162.9,978.471,173.681,971.892,164.5z"/>
+			<path fill="#C5DD8C" d="M1035.478,163.379c-19.417,16.239-35.29,16.743-50.35,16.709c20.972,4.98,40.826-1.139,58.362-15.453
+				c-0.256,0.009-0.517,0.037-0.782,0.037C1040.167,164.673,1037.737,164.203,1035.478,163.379z"/>
+			<path fill="#A5CD51" d="M1026.606,157.232c-9.831,9.082-25.386,18.81-47.676,18.155c19.927,5.748,38.263-3.575,51.665-14.537
+				C1029.118,159.818,1027.778,158.6,1026.606,157.232z"/>
+		</g>
+		<path fill="#FFFFFF" d="M1097.759,118.056h15.674l9.765,55.61h-15.6l-1.418-9.969h-20.934l-6.01,9.969h-16.256L1097.759,118.056z
+			 M1091.253,152.949h13.597l-2.251-20.015h-0.169L1091.253,152.949z"/>
+		<path fill="#FFFFFF" d="M1165.07,137.765c0.665-5.139-2.331-9.269-9.593-9.269c-11.755,0-16.17,12.695-16.17,21.497
+			c0,7.165,2.249,12.617,11.001,12.617c6.509,0,11.51-4.207,12.6-9.813h15.507c-3.335,14.253-12.929,21.729-30.27,21.729
+			c-9.436,0-24.354-4.438-24.354-25.079c0-17.912,11.754-32.868,31.945-32.868c14.93,0,25.021,6.543,24.852,21.186H1165.07z"/>
+		<path fill="#FFFFFF" d="M1233.121,130.518h-17.516l-9.761,43.148h-15.513l9.76-43.148h-17.511l2.668-12.462h50.539
+			L1233.121,130.518z"/>
+		<path fill="#FFFFFF" d="M1241.599,118.062h47.54l-2.836,12.462h-32.025l-1.925,8.878h29.525l-2.5,11.215h-29.524l-2.333,10.592
+			h32.274l-2.839,12.463h-47.699L1241.599,118.062z"/>
+		<path fill="#FFFFFF" d="M1295.531,118.053h21.348l2.837,39.644h0.168l20.516-39.644h21.35l-12.429,55.61h-14.674l11.178-44.16
+			h-0.168l-23.52,44.16h-11.926l-3.501-44.16h-0.167l-8.839,44.16h-14.676L1295.531,118.053z"/>
+		<path fill="#FFFFFF" d="M1368.598,118.056h29.194c10.845,0,19.098,2.57,19.098,14.411c0,8.332-4.247,14.25-13.594,15.497v0.155
+			c4.417,1.014,6.085,3.895,6.085,9.27c0,4.049-0.249,7.165-0.249,10.358c0,1.945,0,4.361,0.922,5.919h-15.604
+			c-0.25-1.09-0.497-2.104-0.497-3.192c0-2.883,0.415-5.843,0.415-9.58c0-4.907-2.25-7.478-7.757-7.478h-10.338l-4.504,20.25
+			h-15.516L1368.598,118.056z M1378.605,142.668h12.342c5.596,0,10.435-1.636,10.435-7.635c0-4.75-4.256-5.762-8.352-5.762h-11.417
+			L1378.605,142.668z"/>
+		<path fill="#FFFFFF" d="M1446.077,118.056h15.684l9.76,55.61h-15.604l-1.416-9.969h-20.936l-5.999,9.969h-16.262L1446.077,118.056
+			z M1439.577,152.949h13.593l-2.254-20.015h-0.167L1439.577,152.949z"/>
+		<path fill="#FFFFFF" d="M1171.847,201.962h5.703l-1.23,4.966h-5.645l-2.964,13.421c-0.108,0.574-0.228,1.044-0.228,1.252
+			c0,1.932,1.506,1.987,2.688,1.987c0.952,0,1.896-0.055,2.847-0.159l-1.338,5.747c-1.627,0.157-3.304,0.262-4.98,0.262
+			c-3.69,0-7.66-1.097-7.549-5.485c0-0.678,0.166-1.62,0.396-2.56l3.242-14.465h-5.206l1.234-4.966h5.084l1.787-8.199h7.945
+			L1171.847,201.962z"/>
+		<path fill="#FFFFFF" d="M1194.793,201.232c7.945,0,13.481,3.656,13.481,11.441c0,9.502-6.32,17.026-16.835,17.026
+			c-8.055,0-13.254-3.918-13.254-11.646C1178.186,208.907,1184.504,201.232,1194.793,201.232z M1191.827,224.109
+			c5.934,0,8.502-6.788,8.502-11.336c0-3.601-1.677-5.953-5.815-5.953c-5.813,0-8.391,6.686-8.391,11.232
+			C1186.124,221.237,1188.083,224.109,1191.827,224.109z"/>
+		<path fill="#FFFFFF" d="M1232.858,211.313c0-3.188-1.855-4.493-5.316-4.493c-6.041,0-8.105,6.792-8.105,11.436
+			c0,3.242,1.449,5.853,5.478,5.853c3.521,0,5.543-2.35,6.436-5.014h7.94c-2.403,6.74-7.443,10.604-14.935,10.604
+			c-8.053,0-12.862-3.71-12.862-11.596c0-9.196,5.92-16.871,16.327-16.871c7.052,0,12.817,2.925,12.985,10.081H1232.858z"/>
+		<path fill="#FFFFFF" d="M1248.632,201.962h7.996l-6.161,27.005h-7.983L1248.632,201.962z M1257.525,197.786h-7.999l1.455-6.114h8
+			L1257.525,197.786z"/>
+		<path fill="#FFFFFF" d="M1266.581,191.672h7.946l-8.501,37.296h-7.947L1266.581,191.672z"/>
+		<path fill="#FFFFFF" d="M1279.834,201.962h8.006l-6.151,27.005h-8.009L1279.834,201.962z M1288.733,197.786h-7.996l1.447-6.114
+			h7.998L1288.733,197.786z"/>
+		<path fill="#FFFFFF" d="M1288.346,223.484l18.118-15.932h-13.932l1.291-5.59h24.274l-1.238,5.486l-18.177,15.931h15.945
+			l-1.282,5.588h-26.238L1288.346,223.484z"/>
+		<path fill="#FFFFFF" d="M1345.787,228.968h-7.603l0.891-3.759h-0.114c-2.579,2.971-5.992,4.491-10.128,4.491
+			c-5.478,0-8.443-2.562-8.443-7.26c0-1.098,0.616-3.711,0.841-4.653l3.573-15.824h7.946l-3.52,15.824
+			c-0.229,0.787-0.505,2.564-0.505,3.295c0,1.616,1.952,2.766,3.803,2.766c4.806,0,7.268-3.759,8.11-7.518l3.245-14.367h7.938
+			L1345.787,228.968z"/>
+		<path fill="#FFFFFF" d="M1359.717,201.962h7.598l-0.892,3.813h0.11c2.404-3.03,5.99-4.543,10.127-4.543
+			c3.464,0,6.318,1.463,6.983,4.701c1.963-2.771,6.103-4.701,9.793-4.701c4.523,0,8.781,2.192,8.781,6.843
+			c0,1.671-0.506,3.396-0.838,5.014l-3.573,15.878h-7.951l3.812-17.08c0.106-0.784,0.216-1.409,0.216-1.934
+			c0-1.62-1.449-2.872-3.461-2.872c-4.256,0-6.659,4.125-7.443,7.418l-3.242,14.467h-8.006l3.809-17.08
+			c0.109-0.784,0.229-1.409,0.229-1.934c0-1.62-1.458-2.872-3.471-2.872c-4.248,0-6.657,4.125-7.442,7.418l-3.242,14.467h-7.938
+			L1359.717,201.962z"/>
+		<path fill="#FFFFFF" d="M1409.547,210.166c1.001-6.793,7.155-8.933,13.702-8.933c5.147,0,12.133,1.046,12.024,7.102
+			c0,1.153-0.282,2.874-0.617,4.546l-2.569,10.861c-0.276,0.944-0.395,2.616-0.395,3.658c0,0.472,0.119,1.099,0.287,1.569h-7.947
+			v-2.663c-2.184,2.297-5.592,3.394-8.841,3.394c-6.319,0-9.394-3.343-9.394-7.104c0-5.17,4.194-8.41,11.072-9.191
+			c7.491-0.838,11.023-0.473,11.023-3.918c0-2.666-3.02-3.292-5.041-3.292c-2.847,0-5.358,1.254-5.865,3.971H1409.547z
+			 M1426.323,216.015c-2.014,1.097-4.413,1.148-6.714,1.306c-3.016,0.314-5.865,0.987-5.865,4.383c0,2.036,2.064,3.032,4.364,3.032
+			c4.914,0,6.539-3.188,7.431-6.11L1426.323,216.015z"/>
+		<path fill="#FFFFFF" d="M1447.129,191.672h7.945l-2.967,13.165h0.117c2.455-2.508,4.744-3.604,8.557-3.604
+			c7.328,0,10.405,5.222,10.405,11.49c0,8.359-5.147,16.977-14.99,16.977c-3.971,0-7.668-1.202-9.065-4.962h-0.11l-0.953,4.231
+			h-7.322L1447.129,191.672z M1448.981,218.416c0,3.289,2.125,5.693,5.756,5.693c5.982,0,8.503-6.634,8.503-11.284
+			c0-3.396-1.568-6.004-5.645-6.004C1451.384,206.821,1448.981,213.613,1448.981,218.416z"/>
+		<text transform="matrix(1 0 0 1 1467.0088 135.0713)" fill="#FFFFFF" font-family="'HelveticaNeue-Roman'" font-size="23.8098">®</text>
+		<path fill="#A5CD51" d="M984.948,165.212c0,0-4.309-2.212,0.751-15.159c0,0,5.99-17.07,37.741-33.385
+			c0,0-32.681,11.214-42.355,34.726C981.085,151.394,974.972,167.87,984.948,165.212z"/>
+		<path fill="#C5DD8C" d="M995.238,162.539c0,0-2.842-6.682,4.301-17.395c0,0,5.457-9.332,18.576-18.274
+			c0,0-20.81,9.643-26.762,25.566C991.354,152.436,987.365,164.159,995.238,162.539z"/>
+	</g>
+	<g>
+		<rect x="419.985" y="623.913" fill="none" width="793.818" height="658.31"/>
+		<text transform="matrix(1.026 0 0 1 419.9844 651.1289)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="36">INDIC</tspan><tspan x="98.675" y="0" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="36" letter-spacing="-2.924">A</tspan><tspan x="120.959" y="0" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="36">TION </tspan><tspan x="0" y="42" fill="#FFFFFF" font-family="'Avenir-Medium'" font-size="30">ACTEMRA is indicated for the t</tspan><tspan x="416.755" y="42" fill="#FFFFFF" font-family="'Avenir-Medium'" font-size="30">r</tspan><tspan x="426.986" y="42" fill="#FFFFFF" font-family="'Avenir-Medium'" font-size="30">eatment of adult  </tspan><tspan x="0" y="78" fill="#FFFFFF" font-family="'Avenir-Medium'" font-size="30">patients with moderately to seve</tspan><tspan x="436.166" y="78" fill="#FFFFFF" font-family="'Avenir-Medium'" font-size="30">r</tspan><tspan x="446.396" y="78" fill="#FFFFFF" font-family="'Avenir-Medium'" font-size="30">ely active rheumatoid </tspan><tspan x="0" y="114" fill="#FFFFFF" font-family="'Avenir-Medium'" font-size="30">arthritis (RA) who have had an inadequate </tspan><tspan x="561.866" y="114" fill="#FFFFFF" font-family="'Avenir-Medium'" font-size="30">r</tspan><tspan x="572.096" y="114" fill="#FFFFFF" font-family="'Avenir-Medium'" font-size="30">esponse  </tspan><tspan x="0" y="150" fill="#FFFFFF" font-family="'Avenir-Medium'" font-size="30">to one or mo</tspan><tspan x="173.459" y="150" fill="#FFFFFF" font-family="'Avenir-Medium'" font-size="30">r</tspan><tspan x="183.689" y="150" fill="#FFFFFF" font-family="'Avenir-Medium'" font-size="30">e Disease-Modifying Anti-Rheumatic  </tspan><tspan x="0" y="186" fill="#FFFFFF" font-family="'Avenir-Medium'" font-size="30">Drugs (DMARDs).</tspan><tspan x="0" y="235.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="36">IMPO</tspan><tspan x="93.743" y="235.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="36" letter-spacing="-0.975">R</tspan><tspan x="115.379" y="235.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="36" letter-spacing="-2.924">T</tspan><tspan x="132.335" y="235.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="36">ANT SAFETY INFORM</tspan><tspan x="500.213" y="235.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="36" letter-spacing="-2.924">A</tspan><tspan x="522.496" y="235.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="36">TION</tspan><tspan x="0" y="277.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">BOXED </tspan><tspan x="112.979" y="277.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30" letter-spacing="-0.975">W</tspan><tspan x="141.328" y="277.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ARNING </tspan><tspan x="0" y="319.2" fill="#FFFFFF" font-family="'Avenir-HeavyOblique'" font-size="30">Serious Infec</tspan><tspan x="175.137" y="319.2" fill="#FFFFFF" font-family="'Avenir-HeavyOblique'" font-size="30">t</tspan><tspan x="186.506" y="319.2" fill="#FFFFFF" font-family="'Avenir-HeavyOblique'" font-size="30">ions</tspan><tspan x="0" y="361.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">Serious infec</tspan><tspan x="174.596" y="361.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</tspan><tspan x="185.966" y="361.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ions lea</tspan><tspan x="289.973" y="361.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">d</tspan><tspan x="308.572" y="361.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ing to hospita</tspan><tspan x="498.918" y="361.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">l</tspan><tspan x="506.418" y="361.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">iza</tspan><tspan x="543.797" y="361.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</tspan><tspan x="555.167" y="361.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ion or dea</tspan><tspan x="695.143" y="361.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</tspan><tspan x="706.513" y="361.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">h, </tspan><tspan x="0" y="397.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">inclu</tspan><tspan x="62.849" y="397.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">d</tspan><tspan x="81.449" y="397.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ing tube</tspan><tspan x="196.616" y="397.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">r</tspan><tspan x="207.416" y="397.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">culosis (TB), bacterial, invasive fungal, </tspan><tspan x="0" y="433.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">viral, and o</tspan><tspan x="152.157" y="433.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</tspan><tspan x="163.526" y="433.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">her opportunis</tspan><tspan x="367.192" y="433.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</tspan><tspan x="378.561" y="433.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ic infec</tspan><tspan x="474.319" y="433.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</tspan><tspan x="485.689" y="433.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ions, have occur</tspan><tspan x="705.914" y="433.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">r</tspan><tspan x="716.714" y="433.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ed  </tspan><tspan x="0" y="469.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">in pa</tspan><tspan x="67.259" y="469.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</tspan><tspan x="78.628" y="469.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ients </tspan><tspan x="152.756" y="469.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">r</tspan><tspan x="163.556" y="469.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">eceiving ACTEMRA. ACTEMRA should not  </tspan><tspan x="0" y="505.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">be administe</tspan><tspan x="177.176" y="505.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">r</tspan><tspan x="187.977" y="505.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ed during an ac</tspan><tspan x="401.392" y="505.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</tspan><tspan x="412.762" y="505.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ive infec</tspan><tspan x="526.52" y="505.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</tspan><tspan x="537.889" y="505.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ion, inclu</tspan><tspan x="660.167" y="505.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">d</tspan><tspan x="678.766" y="505.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ing </tspan><tspan x="0" y="541.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">loca</tspan><tspan x="55.349" y="541.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">l</tspan><tspan x="62.849" y="541.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ized infec</tspan><tspan x="194.066" y="541.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</tspan><tspan x="205.436" y="541.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ions. If a serious infec</tspan><tspan x="499.668" y="541.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</tspan><tspan x="511.038" y="541.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ion develops, </tspan><tspan x="0" y="577.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ACTEMRA should be interrupted un</tspan><tspan x="495.53" y="577.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</tspan><tspan x="506.9" y="577.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">il </tspan><tspan x="530.389" y="577.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</tspan><tspan x="541.759" y="577.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">he infec</tspan><tspan x="649.696" y="577.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</tspan><tspan x="661.066" y="577.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ion  </tspan><tspan x="0" y="613.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">is cont</tspan><tspan x="89.338" y="613.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">r</tspan><tspan x="100.138" y="613.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">o</tspan><tspan x="118.108" y="613.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">l</tspan><tspan x="125.607" y="613.2" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">led.</tspan></text>
+		<rect x="1236.104" y="623.913" fill="none" width="797.411" height="658.31"/>
+		<text transform="matrix(1.026 0 0 1 1236.1035 646.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">Prior to ini</text>
+		<text transform="matrix(1.026 0 0 1 1388.2754 646.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</text>
+		<text transform="matrix(1.026 0 0 1 1400.2783 646.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ia</text>
+		<text transform="matrix(1.026 0 0 1 1424.8096 646.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</text>
+		<text transform="matrix(1.026 0 0 1 1436.8125 646.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ing ACTEMRA, a test for latent TB </text>
+		<text transform="matrix(1.026 0 0 1 1236.1035 682.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">should be perfo</text>
+		<text transform="matrix(1.026 0 0 1 1465.1904 682.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">r</text>
+		<text transform="matrix(1.026 0 0 1 1477.7168 682.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">med. If </text>
+		<text transform="matrix(1.026 0 0 1 1588.2744 682.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</text>
+		<text transform="matrix(1.026 0 0 1 1600.2773 682.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">he test is posi</text>
+		<text transform="matrix(1.026 0 0 1 1799.7246 682.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</text>
+		<text transform="matrix(1.026 0 0 1 1811.7285 682.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ive, t</text>
+		<text transform="matrix(1.026 0 0 1 1883.5664 682.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">r</text>
+		<text transform="matrix(1.026 0 0 1 1894.9844 682.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">eatment </text>
+		<text transform="matrix(1.026 0 0 1 1236.1035 718.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">for TB should be started prior to star</text>
+		<text transform="matrix(1.026 0 0 1 1769.4688 718.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</text>
+		<text transform="matrix(1.026 0 0 1 1781.4717 718.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ing ACTEMRA. </text>
+		<text transform="matrix(1 0 0 1 1236.1035 754.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">A</text>
+		<text transform="matrix(1 0 0 1 1257.7627 754.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">l</text>
+		<text transform="matrix(1 0 0 1 1265.5918 754.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">l pa</text>
+		<text transform="matrix(1 0 0 1 1317.2803 754.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</text>
+		<text transform="matrix(1 0 0 1 1328.9805 754.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ients should be monito</text>
+		<text transform="matrix(1 0 0 1 1651.1143 754.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">r</text>
+		<text transform="matrix(1 0 0 1 1662.2441 754.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ed for ac</text>
+		<text transform="matrix(1 0 0 1 1787.2217 754.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</text>
+		<text transform="matrix(1 0 0 1 1798.9219 754.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ive TB during </text>
+		<text transform="matrix(1 0 0 1 1236.1035 790.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</text>
+		<text transform="matrix(1 0 0 1 1247.7734 790.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">r</text>
+		<text transform="matrix(1 0 0 1 1258.9033 790.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">eatment, even if ini</text>
+		<text transform="matrix(1 0 0 1 1530.0391 790.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</text>
+		<text transform="matrix(1 0 0 1 1541.7393 790.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ial latent TB test is nega</text>
+		<text transform="matrix(1 0 0 1 1880.6416 790.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</text>
+		<text transform="matrix(1 0 0 1 1892.3408 790.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ive. </text>
+		<text transform="matrix(1 0 0 1 1236.1035 832.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">The benefits and risks of t</text>
+		<text transform="matrix(1 0 0 1 1600.4756 832.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">r</text>
+		<text transform="matrix(1 0 0 1 1611.6055 832.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">eatment should be </text>
+		<text transform="matrix(1 0 0 1 1236.1035 868.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">conside</text>
+		<text transform="matrix(1 0 0 1 1343.3213 868.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">r</text>
+		<text transform="matrix(1 0 0 1 1354.4512 868.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ed prior to ini</text>
+		<text transform="matrix(1 0 0 1 1548.3379 868.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</text>
+		<text transform="matrix(1 0 0 1 1560.0381 868.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ia</text>
+		<text transform="matrix(1 0 0 1 1583.9473 868.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</text>
+		<text transform="matrix(1 0 0 1 1595.6465 868.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ing ACTEMRA in pa</text>
+		<text transform="matrix(1 0 0 1 1872.3311 868.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</text>
+		<text transform="matrix(1 0 0 1 1884.0312 868.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ients:</text>
+		<text transform="matrix(1 0 0 1 1236.1035 910.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">• wi</text>
+		<text transform="matrix(1 0 0 1 1291.6631 910.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</text>
+		<text transform="matrix(1 0 0 1 1303.3623 910.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">h ch</text>
+		<text transform="matrix(1 0 0 1 1361.1416 910.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">r</text>
+		<text transform="matrix(1 0 0 1 1372.2725 910.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">onic or </text>
+		<text transform="matrix(1 0 0 1 1477.7812 910.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">r</text>
+		<text transform="matrix(1 0 0 1 1488.9111 910.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ecur</text>
+		<text transform="matrix(1 0 0 1 1549.4805 910.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">r</text>
+		<text transform="matrix(1 0 0 1 1560.6113 910.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ent infec</text>
+		<text transform="matrix(1 0 0 1 1682.8594 910.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</text>
+		<text transform="matrix(1 0 0 1 1694.5586 910.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ion  </text>
+		<text transform="matrix(1 0 0 1 1236.1035 946.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">• who have been exposed to TB  </text>
+		<text transform="matrix(1 0 0 1 1236.1035 982.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">• who have a history of serious or opportunis</text>
+		<text transform="matrix(1 0 0 1 1870.293 982.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</text>
+		<text transform="matrix(1 0 0 1 1881.9922 982.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ic </text>
+		
+			<text transform="matrix(1 0 0 1 1913.1318 982.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30" letter-spacing="-1">	</text>
+		<text transform="matrix(1 0 0 1 1920.1064 982.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">  </text>
+		
+			<text transform="matrix(1 0 0 1 1937.8662 982.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30" letter-spacing="9">	</text>
+		<text transform="matrix(1 0 0 1 1956.1064 982.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">  </text>
+		
+			<text transform="matrix(1 0 0 1 1973.8662 982.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30" letter-spacing="9">	</text>
+		<text transform="matrix(1 0 0 1 1992.1074 982.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">   </text>
+		<text transform="matrix(1 0 0 1 2018.7471 982.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">	</text>
+		<text transform="matrix(1 0 0 1 2028.1074 982.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30"> </text>
+		
+			<text transform="matrix(1 0 0 1 2036.9873 982.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30" letter-spacing="18">	</text>
+		<text transform="matrix(1 0 0 1 1236.1035 1018.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">  </text>
+		
+			<text transform="matrix(1 0 0 1 1253.8633 1018.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30" letter-spacing="-3"> </text>
+		<text transform="matrix(1 0 0 1 1259.1436 1018.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">infec</text>
+		<text transform="matrix(1 0 0 1 1326.4023 1018.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</text>
+		<text transform="matrix(1 0 0 1 1338.1016 1018.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ions </text>
+		<text transform="matrix(1 0 0 1 1236.1035 1054.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">• who have </text>
+		<text transform="matrix(1 0 0 1 1403.2617 1054.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">r</text>
+		<text transform="matrix(1 0 0 1 1414.3916 1054.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">esided or traveled in a</text>
+		<text transform="matrix(1 0 0 1 1730.5254 1054.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">r</text>
+		<text transform="matrix(1 0 0 1 1741.6562 1054.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">eas of endemic TB </text>
+		<text transform="matrix(1 0 0 1 1236.1035 1090.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">  </text>
+		
+			<text transform="matrix(1 0 0 1 1253.8633 1090.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30" letter-spacing="-3"> </text>
+		<text transform="matrix(1 0 0 1 1259.7432 1090.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">or mycoses  </text>
+		<text transform="matrix(1 0 0 1 1236.1035 1126.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">• wi</text>
+		<text transform="matrix(1 0 0 1 1291.6631 1126.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</text>
+		<text transform="matrix(1 0 0 1 1303.3623 1126.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">h underlying con</text>
+		<text transform="matrix(1 0 0 1 1537.8389 1126.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">d</text>
+		<text transform="matrix(1 0 0 1 1556.7686 1126.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">i</text>
+		<text transform="matrix(1 0 0 1 1564.5684 1126.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</text>
+		<text transform="matrix(1 0 0 1 1576.2676 1126.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ions </text>
+		<text transform="matrix(1 0 0 1 1641.7861 1126.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</text>
+		<text transform="matrix(1 0 0 1 1653.4863 1126.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">hat may p</text>
+		<text transform="matrix(1 0 0 1 1792.9238 1126.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">r</text>
+		<text transform="matrix(1 0 0 1 1804.0537 1126.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">e</text>
+		<text transform="matrix(1 0 0 1 1821.2734 1126.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">d</text>
+		<text transform="matrix(1 0 0 1 1840.2031 1126.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ispose </text>
+		<text transform="matrix(1 0 0 1 1937.9404 1126.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</text>
+		<text transform="matrix(1 0 0 1 1949.6396 1126.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">hem </text>
+		<text transform="matrix(1 0 0 1 1236.1035 1162.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">  </text>
+		
+			<text transform="matrix(1 0 0 1 1253.8633 1162.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30" letter-spacing="-3"> </text>
+		<text transform="matrix(1 0 0 1 1259.1436 1162.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">to infec</text>
+		<text transform="matrix(1 0 0 1 1365.252 1162.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</text>
+		<text transform="matrix(1 0 0 1 1376.9512 1162.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ion </text>
+		<text transform="matrix(1 0 0 1 1236.1035 1204.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">Pa</text>
+		<text transform="matrix(1 0 0 1 1270.543 1204.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</text>
+		<text transform="matrix(1 0 0 1 1282.2422 1204.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ients should be closely monito</text>
+		<text transform="matrix(1 0 0 1 1707.7246 1204.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">r</text>
+		<text transform="matrix(1 0 0 1 1718.8555 1204.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ed for signs and </text>
+		<text transform="matrix(1 0 0 1 1236.1035 1240.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">symptoms of infec</text>
+		<text transform="matrix(1 0 0 1 1493.2588 1240.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</text>
+		<text transform="matrix(1 0 0 1 1504.958 1240.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ion during and after t</text>
+		<text transform="matrix(1 0 0 1 1806.6318 1240.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">r</text>
+		<text transform="matrix(1 0 0 1 1817.7627 1240.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">eatment  </text>
+		<text transform="matrix(1 0 0 1 1236.1035 1276.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">wi</text>
+		<text transform="matrix(1 0 0 1 1267.7832 1276.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">t</text>
+		<text transform="matrix(1 0 0 1 1279.4824 1276.5928)" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">h ACTEMRA.</text>
+		<text transform="matrix(1 0 0 1 1460.5596 1276.5928)" fill="#FFFFFF" font-family="'Avenir-Medium'" font-size="30"> </text>
+	</g>
+	<text transform="matrix(1 0 0 1 676.2109 1388.2236)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'Avenir-Medium'" font-size="30">Please see additional Important Safety Information, including </tspan><tspan x="836.872" y="0" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">Boxed </tspan><tspan x="935.72" y="0" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">W</tspan><tspan x="964.399" y="0" fill="#FFFFFF" font-family="'Avenir-Heavy'" font-size="30">ARNING</tspan><tspan x="1084.398" y="0" fill="#FFFFFF" font-family="'Avenir-Medium'" font-size="30">,  </tspan><tspan x="134.863" y="36" fill="#FFFFFF" font-family="'Avenir-Medium'" font-size="30">and see booth </tspan><tspan x="338.891" y="36" fill="#FFFFFF" font-family="'Avenir-Medium'" font-size="30">r</tspan><tspan x="349.451" y="36" fill="#FFFFFF" font-family="'Avenir-Medium'" font-size="30">ep</tspan><tspan x="384.461" y="36" fill="#FFFFFF" font-family="'Avenir-Medium'" font-size="30">r</tspan><tspan x="395.021" y="36" fill="#FFFFFF" font-family="'Avenir-Medium'" font-size="30">esentative for full P</tspan><tspan x="657.818" y="36" fill="#FFFFFF" font-family="'Avenir-Medium'" font-size="30">r</tspan><tspan x="668.378" y="36" fill="#FFFFFF" font-family="'Avenir-Medium'" font-size="30">escribing Information.</tspan></text>
+</g>
+<g id="BUTTON-5">
+	<circle fill="none" stroke="#FFFFFF" stroke-width="4" stroke-miterlimit="10" cx="1881.209" cy="187.924" r="39.377"/>
+	<g>
+		<text transform="matrix(1 0 0 1 1778.7051 278.1196)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'Avenir-Black'" font-size="38.9828">ACTEMRA  </tspan><tspan x="-77.672" y="46.779" fill="#FFFFFF" font-family="'Avenir-Black'" font-size="38.9828">clinical safety study</tspan></text>
+	</g>
+	<text transform="matrix(1 0 0 1 1869.4912 206.2622)" fill="#FFFFFF" font-family="'Avenir-Light'" font-size="45.0629">5</text>
+</g>
+<g id="BUTTON-4">
+	<circle fill="none" stroke="#FFFFFF" stroke-width="4" stroke-miterlimit="10" cx="1568.848" cy="316.209" r="39.377"/>
+	<g>
+		<text transform="matrix(1 0 0 1 1442.1362 407.1689)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'Avenir-Black'" font-size="38.9828">Radiographic  </tspan><tspan x="79.796" y="46.779" fill="#FFFFFF" font-family="'Avenir-Black'" font-size="38.9828">data </tspan></text>
+	</g>
+	<g>
+		<text transform="matrix(1 0 0 1 1555.8428 331.3594)" fill="#FFFFFF" font-family="'Avenir-Light'" font-size="45.0629">4</text>
+	</g>
+</g>
+<g id="BUTTON-3">
+	<circle fill="none" stroke="#FFFFFF" stroke-width="4" stroke-miterlimit="10" cx="1226.75" cy="424.494" r="39.378"/>
+	<g>
+		<text transform="matrix(1 0 0 1 1074.0942 512.5254)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'Avenir-Black'" font-size="38.9828">ACTEMRA SC vs </tspan><tspan x="24.91" y="46.779" fill="#FFFFFF" font-family="'Avenir-Black'" font-size="38.9828">ACTEMRA IV </tspan></text>
+	</g>
+	<g>
+		<text transform="matrix(1 0 0 1 1215.0332 440.5537)" fill="#FFFFFF" font-family="'Avenir-Light'" font-size="45.0629">3</text>
+	</g>
+</g>
+<g id="BUTTON-2">
+	<circle fill="none" stroke="#FFFFFF" stroke-width="4" stroke-miterlimit="10" cx="825.208" cy="316.209" r="39.378"/>
+	<g>
+		<text transform="matrix(1 0 0 1 709.002 406.4053)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'Avenir-Black'" font-size="38.9828">Response in  </tspan><tspan x="-77.925" y="46.779" fill="#FFFFFF" font-family="'Avenir-Black'" font-size="38.9828">TNF-IR &amp; DMARD-IR  </tspan><tspan x="41.126" y="93.559" fill="#FFFFFF" font-family="'Avenir-Black'" font-size="38.9828">patients</tspan></text>
+	</g>
+	<g>
+		<text transform="matrix(1 0 0 1 813.4912 331.3594)" fill="#FFFFFF" font-family="'Avenir-Light'" font-size="45.0629">2</text>
+	</g>
+</g>
+<g id="BUTTON-1">
+	<path fill="none" stroke="#FFFFFF" stroke-width="4" stroke-miterlimit="10" d="M516.095,148.545
+		c-21.747,0-39.378,17.63-39.378,39.378c0,21.747,17.631,39.377,39.378,39.377c21.748,0,39.378-17.63,39.378-39.377
+		C555.473,166.176,537.843,148.545,516.095,148.545z"/>
+	<g>
+		<text transform="matrix(1 0 0 1 413.5908 278.1196)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'Avenir-Black'" font-size="38.9828">ACTEMRA  </tspan><tspan x="-21.245" y="46.779" fill="#FFFFFF" font-family="'Avenir-Black'" font-size="38.9828">monotherapy</tspan></text>
+	</g>
+	<g>
+		<text transform="matrix(1 0 0 1 504.3794 204.9248)" fill="#FFFFFF" font-family="'Avenir-Light'" font-size="45.0629">1</text>
+	</g>
+</g>
+<g id="BUTTON-ISI-active">
+	<path fill="#FFFFFF" d="M1408.548,1516.777h-363.236c-14.852,0-27-12.149-27-27l0,0c0-14.848,12.148-27,27-27h363.236
+		c14.652,0,26.641,11.988,26.641,26.641v0.72C1435.188,1504.79,1423.2,1516.777,1408.548,1516.777z"/>
+	<g>
+		<text transform="matrix(1 0 0 1 1035.2319 1498.8374)"><tspan x="0" y="0" fill="#94348C" font-family="'Avenir-Light'" font-size="30">Important Safety Informa</tspan><tspan x="331.316" y="0" fill="#94348C" font-family="'Avenir-Light'" font-size="30">t</tspan><tspan x="341.335" y="0" fill="#94348C" font-family="'Avenir-Light'" font-size="30">ion</tspan></text>
+	</g>
+</g>
+<g id="BUTTON-ISI-default">
+	<path opacity="0.2" fill="#FFFFFF" d="M1408.548,1516.777h-363.236c-14.852,0-27-12.149-27-27l0,0c0-14.848,12.148-27,27-27
+		h363.236c14.652,0,26.641,11.988,26.641,26.641v0.72C1435.188,1504.79,1423.2,1516.777,1408.548,1516.777z"/>
+	<text transform="matrix(1 0 0 1 1035.2319 1498.8374)"><tspan x="0" y="0" fill="#FFFFFB" font-family="'Avenir-Light'" font-size="30">Important Safety Informa</tspan><tspan x="331.316" y="0" fill="#FFFFFB" font-family="'Avenir-Light'" font-size="30">t</tspan><tspan x="341.336" y="0" fill="#FFFFFB" font-family="'Avenir-Light'" font-size="30">ion</tspan></text>
+</g>
+</svg>

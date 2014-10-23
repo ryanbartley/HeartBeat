@@ -11,10 +11,15 @@
 namespace heartbeat {
 	
 Button::Button( const std::string &name )
-: Node( name ), mState( State::NONACTIVE ), mIsTouched( false )
+: mParent( SvgManager::get()->getGroup( name ) ), mName(name)
 {
 }
-	
+
+ButtonRef Button::create( const std::string &name )
+{
+	return ButtonRef( new Button( name ) );
+}
+
 
 	
 }

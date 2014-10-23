@@ -35,7 +35,8 @@
 		B366298619F41F7800FACB16 /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B366297419F41F7800FACB16 /* Renderer.cpp */; };
 		B366298919F4207100FACB16 /* KioskManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B366298719F4207100FACB16 /* KioskManager.cpp */; };
 		B3B5C18B19F85FF8004BE73E /* Button.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3B5C18919F85FF8004BE73E /* Button.cpp */; };
-		B3B5C18E19F913D4004BE73E /* StaticPage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3B5C18C19F913D4004BE73E /* StaticPage.cpp */; };
+		B3B5C18E19F913D4004BE73E /* Data.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3B5C18C19F913D4004BE73E /* Data.cpp */; };
+		B3B5C19119F960AF004BE73E /* ActivatableButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3B5C18F19F960AF004BE73E /* ActivatableButton.cpp */; };
 		B69F30A36C3044738BCFF082 /* Cairo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0BA037438BD44409245C437 /* Cairo.cpp */; };
 		F8DDC1429C214D2AAB3C0FCE /* SvgTestApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5F37B2C4084B48278F3DE953 /* SvgTestApp.cpp */; };
 /* End PBXBuildFile section */
@@ -106,8 +107,10 @@
 		B366299819F4739700FACB16 /* Node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Node.h; sourceTree = "<group>"; };
 		B3B5C18919F85FF8004BE73E /* Button.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Button.cpp; sourceTree = "<group>"; };
 		B3B5C18A19F85FF8004BE73E /* Button.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Button.h; sourceTree = "<group>"; };
-		B3B5C18C19F913D4004BE73E /* StaticPage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StaticPage.cpp; sourceTree = "<group>"; };
-		B3B5C18D19F913D4004BE73E /* StaticPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticPage.h; sourceTree = "<group>"; };
+		B3B5C18C19F913D4004BE73E /* Data.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Data.cpp; sourceTree = "<group>"; };
+		B3B5C18D19F913D4004BE73E /* Data.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Data.h; sourceTree = "<group>"; };
+		B3B5C18F19F960AF004BE73E /* ActivatableButton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ActivatableButton.cpp; sourceTree = "<group>"; };
+		B3B5C19019F960AF004BE73E /* ActivatableButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivatableButton.h; sourceTree = "<group>"; };
 		C0BA037438BD44409245C437 /* Cairo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = Cairo.cpp; path = ../../../../../clean_cinder/blocks/Cairo/src/Cairo.cpp; sourceTree = "<group>"; };
 		E41182AA85B64CB68B5DC950 /* SvgTest_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = SvgTest_Prefix.pch; sourceTree = "<group>"; };
 		E9F7A89FC8164A5CBEBCF4AB /* Cairo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Cairo.h; path = ../../../../../clean_cinder/blocks/Cairo/include/cinder/cairo/Cairo.h; sourceTree = "<group>"; };
@@ -369,8 +372,10 @@
 				B366299819F4739700FACB16 /* Node.h */,
 				B3B5C18919F85FF8004BE73E /* Button.cpp */,
 				B3B5C18A19F85FF8004BE73E /* Button.h */,
-				B3B5C18C19F913D4004BE73E /* StaticPage.cpp */,
-				B3B5C18D19F913D4004BE73E /* StaticPage.h */,
+				B3B5C18C19F913D4004BE73E /* Data.cpp */,
+				B3B5C18D19F913D4004BE73E /* Data.h */,
+				B3B5C18F19F960AF004BE73E /* ActivatableButton.cpp */,
+				B3B5C19019F960AF004BE73E /* ActivatableButton.h */,
 			);
 			path = Kiosk;
 			sourceTree = "<group>";
@@ -483,10 +488,11 @@
 				B366297C19F41F7800FACB16 /* EventManagerBase.cpp in Sources */,
 				B366297719F41F7800FACB16 /* Common.cpp in Sources */,
 				B366298019F41F7800FACB16 /* InteractionDebugRenderable.cpp in Sources */,
-				B3B5C18E19F913D4004BE73E /* StaticPage.cpp in Sources */,
+				B3B5C18E19F913D4004BE73E /* Data.cpp in Sources */,
 				B3B5C18B19F85FF8004BE73E /* Button.cpp in Sources */,
 				B366298119F41F7800FACB16 /* InteractionEvents.cpp in Sources */,
 				B366297B19F41F7800FACB16 /* EventManager.cpp in Sources */,
+				B3B5C19119F960AF004BE73E /* ActivatableButton.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

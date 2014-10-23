@@ -8,29 +8,32 @@
 
 #pragma once
 
-#include "Node.h"
+#include "Common.h"
+#include "SvgManager.h"
 
 namespace heartbeat {
 	
-class Button : public Node {
+using ButtonId = uint64_t;
+	
+class Button {
 public:
 	
-	enum class State {
-		ACTIVE,
-		NONACTIVE
-	};
+	static ButtonRef create( const std::string &name );
 	
-	inline bool contains( const ci::vec2 &point ) { return mNode->containsPoint( point ); }
+	inline bool contains( const ci::vec2 &point ) { return mParent->containsPoint( point ); }
 	
-	inline void setState( State state ) { mState = state; }
-	inline State getState() { return mState; }
+	inline DataRef	getNavigation() { return mNavigation; }
 	
-private:
+	const std::string& getParentName() const { return mName; }
+	
+protected:
 	Button( const std::string &name );
 	
-	State	mState;
-	bool	mIsTouched;
+	void setNavigation( const DataRef &navigation ) { mNavigation = navigation; }
 	
+	const ci::svg::Group*	mParent;
+	DataRef					mNavigation;
+	std::string				mName;
 };
 	
 }

@@ -8,6 +8,8 @@
 
 #include "SvgManager.h"
 
+#include "JsonManager.h"
+
 #include "cinder/Log.h"
 
 using namespace ci;
@@ -51,6 +53,28 @@ void SvgManager::destroy()
 	CI_LOG_V("Destroying SvgManager");
 	sSvgManager = nullptr;
 	sSvgManagerInitialized = false;
+}
+	
+void SvgManager::initialize()
+{
+	try {
+		auto svgAttribs = JsonManager::get()->getRoot()["svgAttribs"];
+	
+		try {
+			auto fileName = svgAttribs["fileName"].getValue();
+			mDoc = svg::Doc::create( getFileContents( fileName ) );
+		}
+		catch ( const JsonTree::ExcChildNotFound &ex ) {
+			CI_LOG_E("FileName couldn't be found, using default");
+			mDoc = svg::Doc::create( getFileContents( "ACTEMRA_PondCharts_102114.svg" ) );
+		}
+		
+		
+		
+	}
+	catch( const JsonTree::ExcChildNotFound &ex ) {
+		CI_LOG_E(ex.what());
+	}
 }
 	
 }

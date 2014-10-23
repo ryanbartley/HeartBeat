@@ -109,8 +109,7 @@ void main(void)
 			p = vec3(mouse_pos, -30);
 		}
 		else {
-//			float wave = waveHeight( p.x, p.y );
-//			p.z = wave * 1.5;
+
 		}
 	}
 	

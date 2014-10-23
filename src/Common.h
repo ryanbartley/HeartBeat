@@ -32,11 +32,14 @@ using InteractionDebugRenderableRef = std::shared_ptr<class InteractionDebugRend
 using KioskManagerRef = std::shared_ptr<class KioskManager>;
 using SpringMeshRef = std::shared_ptr<class SpringMesh>;
 using PondElementRef = std::shared_ptr<class PondElement>;
-	
-using NodeRef = std::shared_ptr<class Node>;
+
+using ButtonRef		= std::shared_ptr<class Button>;
+using DataRef		= std::shared_ptr<class Data>;
+using OverlayRef	= std::shared_ptr<class Overlay>;
 	
 using EventType		= uint64_t;
 using EventDataRef	= std::shared_ptr<class EventData>;
+	
 
 //! Returns the Resource Path for tests and applications, Note: NOT FOR
 //! USE WITH ci::loadResource.

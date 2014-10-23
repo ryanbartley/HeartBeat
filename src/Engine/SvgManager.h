@@ -29,14 +29,25 @@ public:
 	
 	const ci::svg::Group* getGroup( const std::string &groupId ) { return mDoc->find<ci::svg::Group>( groupId ); }
 	
+	const ci::svg::Node* getNode( const std::string &groupId ) { return mDoc->findNode( groupId ); }
+	const ci::svg::DocRef& getDoc() { return mDoc; }
+	
+	void initialize();
+	
+	ButtonRef	getButton( const std::string &name );
+	DataRef		getData( const std::string &name );
+	
 private:
 	SvgManager(  const std::string &fileName );
 	
-	void initialize();
+	
 	static void destroy();
 	
 	ci::svg::DocRef mDoc;
 	std::string		mFileName;
+	
+	std::map<std::string, ButtonRef>	mButtons;
+	std::map<std::string, DataRef>		mDatas;
 	
 	friend class Engine;
 };
