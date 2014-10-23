@@ -9,23 +9,18 @@
 #pragma once
 
 #include "hid.h"
+#include "Common.h"
 
 namespace heartbeat {
 	
-enum class HidId {
-	TOP_KIOSK = 0,
-	MIDDLE_KIOSK = 1,
-	BOTTOM_KIOSK = 2
-};
-	
 struct Hid {
 	
-	Hid( HidId hidId, int16_t address )
+	Hid( KioskId hidId, int16_t address )
 	: mId( hidId ), mAddress( address ),
 		mOpen( false ), mNum( -1 )
 	{}
 	
-	const HidId		mId;
+	const KioskId	mId;
 	const int16_t	mAddress;
 	int				mNum;
 	bool			mOpen;
@@ -71,7 +66,7 @@ private:
 	void setBottom( int16_t bottomAddress );
 	void setMiddle( int16_t middleAddress );
 	
-	std::map<HidId, Hid> mConnections;
+	std::map<KioskId, Hid> mConnections;
 	
 	friend class Engine;
 };

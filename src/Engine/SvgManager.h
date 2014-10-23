@@ -17,6 +17,8 @@ class SvgManager {
 public:
 	
 	static SvgManagerRef create( const std::string &fileName );
+	static SvgManagerRef get();
+	
 	
 	SvgManager( const SvgManager & ) = delete;
 	SvgManager( SvgManager && ) = delete;
@@ -25,16 +27,18 @@ public:
 	
 	~SvgManager();
 	
-	const ci::svg::Node& getNode( const std::string &nodeId ) { return mDoc->getChild( nodeId ); }
+	const ci::svg::Group* getGroup( const std::string &groupId ) { return mDoc->find<ci::svg::Group>( groupId ); }
 	
-
 private:
 	SvgManager(  const std::string &fileName );
 	
 	void initialize();
+	static void destroy();
 	
 	ci::svg::DocRef mDoc;
 	std::string		mFileName;
+	
+	friend class Engine;
 };
 	
 }

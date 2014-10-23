@@ -9,6 +9,7 @@
 #pragma once
 
 #include "Common.h"
+#include "SvgManager.h"
 
 #include "cinder/svg/Svg.h"
 
@@ -16,15 +17,18 @@ namespace heartbeat {
 	
 class Node {
 public:
-
-	static NodeRef create( const std::string &group );
 	
 	virtual ~Node() {}
 	
-private:
-	Node( const std::string &group );
+	void render();
 	
-	ci::svg::Group* mNode;
+protected:
+	Node( const std::string &group )
+	: mNode( SvgManager::get()->getGroup( group ) )
+	{
+	}
+	
+	const ci::svg::Group* mNode;
 };
 	
 }

@@ -59,7 +59,7 @@ void PrimitivePondElement::update()
 	static float i = 0.0f;
 	auto appElapsed = App::get()->getElapsedSeconds();
 	mTransformation.setTranslation( ci::vec3( 0, sin(appElapsed), 0  ) );
-	mTransformation.setRotation( ci::quat( ci::rotate( i += .05f, vec3( 0, 0, 1 ) ) ) );
+//	mTransformation.setRotation( ci::quat( ci::rotate( i += .05f, vec3( 0, 0, 1 ) ) ) );
 }
 	
 	

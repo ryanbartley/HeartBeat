@@ -10,8 +10,6 @@
 #include "InteractionEvents.h"
 #include "EventManager.h"
 
-#include "Kiosk.h"
-
 #include "cinder/Log.h"
 
 namespace heartbeat {
@@ -69,9 +67,9 @@ void KioskManager::touchDelegate( EventDataRef touchEvent )
 void KioskManager::update()
 {
 	uint32_t lock = 0;
-	for( auto & kiosk : mKiosks ) {
-		mLocks[lock++] = std::async( std::launch::async, std::bind( &Kiosk::update, kiosk ) );
-	}
+//	for( auto & kiosk : mKiosks ) {
+//		mLocks[lock++] = std::async( std::launch::async, std::bind( &Kiosk::update, kiosk ) );
+//	}
 }
 	
 void KioskManager::render()
@@ -80,9 +78,9 @@ void KioskManager::render()
 		lock.wait();
 	}
 	
-	for( auto & kiosk : mKiosks ) {
-		kiosk->draw();
-	}
+//	for( auto & kiosk : mKiosks ) {
+//		kiosk->draw();
+//	}
 }
 	
 void KioskManager::initialize()

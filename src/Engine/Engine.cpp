@@ -12,7 +12,6 @@
 
 #include "JsonManager.h"
 #include "Renderer.h"
-#include "Kiosk.h"
 #include "EventManager.h"
 #include "HidCommManager.h"
 #include "InteractionZones.h"

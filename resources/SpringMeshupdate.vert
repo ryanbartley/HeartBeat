@@ -22,6 +22,7 @@ uniform vec2 mouse_pos;
 // The outputs of the vertex shader are the same as the inputs
 out vec4 tf_position_mass;
 out vec3 tf_velocity;
+out vec3 tf_normal;
 
 // A uniform to hold the timestep. The application can update this
 uniform float t = 0.07;
@@ -64,6 +65,13 @@ float waveHeight(float x, float y) {
 	return height;
 }
 
+vec3 calcNormal( vec3 v0, vec3 v1, vec3 v2 )
+{
+	vec3 ab = v1 - v0;
+	vec3 ac = v2 - v0;
+	return normalize(cross(ab, ac));
+}
+
 void main(void)
 {
 	vec3 p = position_mass.xyz;		// p can be our position
@@ -75,6 +83,8 @@ void main(void)
 	
 	float globalOffset = float(gl_VertexID) / size;
 	
+	vec3 connectionPositions[4];
+	
 	for ( int i = 0; i < 4; ++i ) {
 		if(connection[i] != -1) {
 			// q is the position of the other vertex
@@ -83,10 +93,11 @@ void main(void)
 			float x = length(d);
 			F += -k * (rest_length - x) * normalize(d); //+ vec3(xOffset, yOffset, 0);
 			fixed_node = false;
+			connectionPositions[i] = q;
 		}
+		else
+			connectionPositions[i] = vec3( -1, -1, -1 );
 	}
-	
-	float wave = 0;
 	
 	// If this is a fixed node, reset force to zero
 	if(fixed_node) {
@@ -98,10 +109,21 @@ void main(void)
 			p = vec3(mouse_pos, -30);
 		}
 		else {
-			wave = waveHeight( p.x, p.y );
-			p.z = wave * 1.5;
+//			float wave = waveHeight( p.x, p.y );
+//			p.z = wave * 1.5;
 		}
 	}
+	
+	vec3 normal;
+	for ( int i = 0; i < 4; ++i ) {
+		vec3 v0 = connectionPositions[i%4];
+		vec3 v1 = connectionPositions[(i+1)%4];
+		if ( v0[0] != -1 && v1[0] != -1 ) {
+			normal += calcNormal( p, v0, v1 );
+		}
+	}
+	
+	normal = normalize( normal );
 	
 	// Accelleration due to force
 	vec3 a = F / m;
@@ -118,4 +140,5 @@ void main(void)
 	// Write the outputs
 	tf_position_mass = vec4((p + s), m );
 	tf_velocity = v;
+	tf_normal = normal;
 }

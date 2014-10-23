@@ -23,9 +23,10 @@ namespace heartbeat {
 	
 const int POSITION_INDEX	= 0;
 const int VELOCITY_INDEX	= 1;
-const int CONNECTION_INDEX	= 2;
-const int TEXCOORD_INDEX	= 3;
-const int NORMAL_INDEX		= 4;
+const int NORMAL_INDEX		= 2;
+const int CONNECTION_INDEX	= 3;
+const int TEXCOORD_INDEX	= 4;
+
 	
 SpringMesh::SpringMesh()
 : mIterationsPerFrame(1), mIterationIndex( 0 ), mLineIndices( 0 ), mTriangleIndices( 0 ), mDrawDebug( true ), mDrawTexture( true )
@@ -128,8 +129,8 @@ void SpringMesh::loadBuffers( const ci::vec2 &size )
 {
 	int n = 0;
 	
-	const int POINTS_X			= mNumRows;
-	const int POINTS_Y			= mNumColumns;
+	const int POINTS_X			= mNumRows + 1;
+	const int POINTS_Y			= mNumColumns + 1;
 	const int POINTS_TOTAL		= (POINTS_X * POINTS_Y);
 	const int CONNECTIONS_TOTAL	= (POINTS_X - 1) * POINTS_Y + (POINTS_Y - 1) * POINTS_X;
 	
@@ -138,6 +139,7 @@ void SpringMesh::loadBuffers( const ci::vec2 &size )
 	vector<vec4> positions( mPointTotal );
 	vector<vec3> velocities( mPointTotal );
 	vector<vec2> texCoords( mPointTotal );
+	vector<vec3> normals( mPointTotal, vec3( 0, 0, 1.0 ) );
 	// We set all connections to -1, because these will only be updated
 	// if there are connection indices. Explanation below.
 	vector<ivec4> connections( mPointTotal, ivec4( -1 ) );
@@ -153,7 +155,6 @@ void SpringMesh::loadBuffers( const ci::vec2 &size )
 								0,						// z coordinate
 								1.0f);					// mass
 			texCoords[n] = vec2( fi, fj );
-			cout << positions[n] << endl;
 			// This allows us to figure out the indices of the four points
 			// surrounding the current point. This will be used to index
 			// into the texture buffer.
@@ -184,6 +185,8 @@ void SpringMesh::loadBuffers( const ci::vec2 &size )
 	// Create the tex coords buffer.
 	mTexCoords = gl::Vbo::create( GL_ARRAY_BUFFER, texCoords.size() * sizeof(vec2), texCoords.data(), GL_STATIC_DRAW );
 	
+	mNormals = gl::Vbo::create( GL_ARRAY_BUFFER, normals.size() * sizeof(vec3), normals.data(), GL_STATIC_DRAW );
+	
 	// Create Connection Buffer to index into the Texture Buffer
 	mConnections = gl::Vbo::create( GL_ARRAY_BUFFER, connections.size() * sizeof(ivec4), connections.data(), GL_STATIC_DRAW );
 	
@@ -194,20 +197,26 @@ void SpringMesh::loadBuffers( const ci::vec2 &size )
 		// Bind the vao to capture index data for the glsl
 		mVaos[i]->bind();
 		mPositions[i]->bind();
-		gl::vertexAttribPointer( POSITION_INDEX, 4, GL_FLOAT, GL_FALSE, 0, NULL );
+		gl::vertexAttribPointer( POSITION_INDEX, 4, GL_FLOAT, GL_FALSE, 0, nullptr );
 		gl::enableVertexAttribArray( POSITION_INDEX );
 		
 		mVelocities[i]->bind();
-		gl::vertexAttribPointer( VELOCITY_INDEX, 3, GL_FLOAT, GL_FALSE, 0, NULL );
+		gl::vertexAttribPointer( VELOCITY_INDEX, 3, GL_FLOAT, GL_FALSE, 0, nullptr );
 		gl::enableVertexAttribArray( VELOCITY_INDEX );
 		
+		mNormals->bind();
+		gl::vertexAttribPointer( NORMAL_INDEX, 3, GL_FLOAT, GL_FALSE, 0,  nullptr );
+		gl::enableVertexAttribArray( NORMAL_INDEX );
+		
 		mConnections->bind();
-		gl::vertexAttribIPointer( CONNECTION_INDEX, 4, GL_INT, 0, NULL );
+		gl::vertexAttribIPointer( CONNECTION_INDEX, 4, GL_INT, 0, nullptr );
 		gl::enableVertexAttribArray( CONNECTION_INDEX );
 		
 		mTexCoords->bind();
-		gl::vertexAttribPointer( TEXCOORD_INDEX, 2, GL_FLOAT, GL_FALSE, 0, NULL );
+		gl::vertexAttribPointer( TEXCOORD_INDEX, 2, GL_FLOAT, GL_FALSE, 0, nullptr );
 		gl::enableVertexAttribArray( TEXCOORD_INDEX );
+		
+		
 		
 		// Create a TransformFeedbackObj, which is similar to Vao
 		// It's used to capture the output of a glsl and uses the
@@ -219,6 +228,7 @@ void SpringMesh::loadBuffers( const ci::vec2 &size )
 		mFeedbackObjs[i]->bind();
 		gl::bindBufferBase( GL_TRANSFORM_FEEDBACK_BUFFER, POSITION_INDEX, mPositions[i] );
 		gl::bindBufferBase( GL_TRANSFORM_FEEDBACK_BUFFER, VELOCITY_INDEX, mVelocities[i] );
+		gl::bindBufferBase( GL_TRANSFORM_FEEDBACK_BUFFER, NORMAL_INDEX, mNormals );
 		mFeedbackObjs[i]->unbind();
 		
 		// Create Texture buffers to gain access to the lookup tables for
@@ -250,19 +260,16 @@ void SpringMesh::loadBuffers( const ci::vec2 &size )
 	int x, y;
 	for( x = 0; x < mNumRows; x++ ) {
 		for( y = 0; y < mNumColumns; y++ ) {
-			uint32_t i = x * ( mNumColumns ) + y;
-			cout << i << endl;
+			uint32_t i = x * ( mNumColumns + 1 ) + y;
 			triangleIndices.push_back( i );
 			triangleIndices.push_back( i + 1 );
-			triangleIndices.push_back( i + mNumColumns );
-			
-			triangleIndices.push_back( i + mNumColumns );
-			triangleIndices.push_back( i + 1 );
 			triangleIndices.push_back( i + mNumColumns + 1 );
+			
+			triangleIndices.push_back( i + mNumColumns + 1 );
+			triangleIndices.push_back( i + 1 );
+			triangleIndices.push_back( i + mNumColumns + 2 );
 		}
-		cout << "resetting" << endl;
 	}
-	cout << x << " " << y << endl;
 	mTriangleIndices = triangleIndices.size();
 	mTriangleElementBuffer = gl::Vbo::create( GL_ELEMENT_ARRAY_BUFFER, triangleIndices.size() * sizeof(uint32_t), triangleIndices.data(), GL_STATIC_DRAW );
 }
@@ -274,9 +281,10 @@ void SpringMesh::loadShaders()
 	// Transform Feedback data. For instance, tf_position_mass,
 	// and tf_velocity are variables in the update.vert that we
 	// write our calculations to.
-	std::vector<std::string> varyings(2);
+	std::vector<std::string> varyings(3);
 	varyings[POSITION_INDEX] = "tf_position_mass";
 	varyings[VELOCITY_INDEX] = "tf_velocity";
+	varyings[NORMAL_INDEX] = "tf_normal";
 	
 	gl::GlslProg::Format updateFormat;
 	// Notice that we don't offer a fragment shader. We don't need
@@ -291,6 +299,7 @@ void SpringMesh::loadShaders()
 	.feedbackVaryings( varyings )
 	.attribLocation( "position_mass",	POSITION_INDEX )
 	.attribLocation( "velocity",		VELOCITY_INDEX )
+	.attribLocation( "normal",			NORMAL_INDEX )
 	.attribLocation( "connection",		CONNECTION_INDEX )
 	.attribLocation( "tex_coord",		TEXCOORD_INDEX );
 	
@@ -332,10 +341,11 @@ void SpringMesh::loadShaders()
 	
 	gl::GlslProg::Format renderFormat;
 	renderFormat.vertex( getFileContents( "SpringMeshrender.vert" ) )
-	.geometry( getFileContents( "SpringMeshrender.geom" ) )
+//	.geometry( getFileContents( "SpringMeshrender.geom" ) )
 	.fragment( getFileContents( "SpringMeshrender.frag" ) )
-	.attribLocation( "position", POSITION_INDEX )
-	.attribLocation( "texCoord", TEXCOORD_INDEX );
+	.attribLocation( "position",	POSITION_INDEX )
+	.attribLocation( "normal",		NORMAL_INDEX )
+	.attribLocation( "texCoord",	TEXCOORD_INDEX );
 	
 	try {
 		mRenderGlsl = gl::GlslProg::create( renderFormat );

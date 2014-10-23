@@ -32,9 +32,7 @@
 		B3CD076619F5448600886104 /* InteractionEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3CD074719F5448600886104 /* InteractionEvents.cpp */; };
 		B3CD076719F5448600886104 /* InteractionZones.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3CD074919F5448600886104 /* InteractionZones.cpp */; };
 		B3CD076819F5448600886104 /* InfoDisplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3CD074C19F5448600886104 /* InfoDisplay.cpp */; };
-		B3CD076919F5448600886104 /* Kiosk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3CD074E19F5448600886104 /* Kiosk.cpp */; };
 		B3CD076A19F5448600886104 /* KioskManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3CD075019F5448600886104 /* KioskManager.cpp */; };
-		B3CD076B19F5448600886104 /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3CD075219F5448600886104 /* Node.cpp */; };
 		B3CD076C19F5448600886104 /* Renderable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3CD075519F5448600886104 /* Renderable.cpp */; };
 		B3CD076D19F5448600886104 /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3CD075719F5448600886104 /* Renderer.cpp */; };
 		B3CD076E19F5448600886104 /* SpringMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3CD075919F5448600886104 /* SpringMesh.cpp */; };
@@ -100,11 +98,8 @@
 		B3CD074A19F5448600886104 /* InteractionZones.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InteractionZones.h; sourceTree = "<group>"; };
 		B3CD074C19F5448600886104 /* InfoDisplay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InfoDisplay.cpp; sourceTree = "<group>"; };
 		B3CD074D19F5448600886104 /* InfoDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoDisplay.h; sourceTree = "<group>"; };
-		B3CD074E19F5448600886104 /* Kiosk.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Kiosk.cpp; sourceTree = "<group>"; };
-		B3CD074F19F5448600886104 /* Kiosk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Kiosk.h; sourceTree = "<group>"; };
 		B3CD075019F5448600886104 /* KioskManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KioskManager.cpp; sourceTree = "<group>"; };
 		B3CD075119F5448600886104 /* KioskManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KioskManager.h; sourceTree = "<group>"; };
-		B3CD075219F5448600886104 /* Node.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Node.cpp; sourceTree = "<group>"; };
 		B3CD075319F5448600886104 /* Node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Node.h; sourceTree = "<group>"; };
 		B3CD075519F5448600886104 /* Renderable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Renderable.cpp; sourceTree = "<group>"; };
 		B3CD075619F5448600886104 /* Renderable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Renderable.h; sourceTree = "<group>"; };
@@ -350,11 +345,8 @@
 			children = (
 				B3CD074C19F5448600886104 /* InfoDisplay.cpp */,
 				B3CD074D19F5448600886104 /* InfoDisplay.h */,
-				B3CD074E19F5448600886104 /* Kiosk.cpp */,
-				B3CD074F19F5448600886104 /* Kiosk.h */,
 				B3CD075019F5448600886104 /* KioskManager.cpp */,
 				B3CD075119F5448600886104 /* KioskManager.h */,
-				B3CD075219F5448600886104 /* Node.cpp */,
 				B3CD075319F5448600886104 /* Node.h */,
 			);
 			path = Kiosk;
@@ -456,10 +448,8 @@
 				B3CD076C19F5448600886104 /* Renderable.cpp in Sources */,
 				B3CD076319F5448600886104 /* HidCommManager.cpp in Sources */,
 				B3CD076819F5448600886104 /* InfoDisplay.cpp in Sources */,
-				B3CD076B19F5448600886104 /* Node.cpp in Sources */,
 				B3CD076E19F5448600886104 /* SpringMesh.cpp in Sources */,
 				B3CD076119F5448600886104 /* EventManagerBase.cpp in Sources */,
-				B3CD076919F5448600886104 /* Kiosk.cpp in Sources */,
 				B3CD076A19F5448600886104 /* KioskManager.cpp in Sources */,
 				B3CD075C19F5448600886104 /* Common.cpp in Sources */,
 				B3CD076D19F5448600886104 /* Renderer.cpp in Sources */,

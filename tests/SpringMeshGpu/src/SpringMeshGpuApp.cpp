@@ -58,7 +58,7 @@ void SpringMeshGpuApp::draw()
 {
 	{
 		gl::ScopedFramebuffer scopeFbo( mPing );
-		gl::clear( Color( 0, 0, 0 ) );
+		gl::clear( Color( 1, 0, 0 ) );
 		mPond->renderPondElements();
 	}
 	

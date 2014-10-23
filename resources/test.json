@@ -61,7 +61,27 @@
 				]
 			},
 			"pondElements" : {
-				"cube" : {
+				"cube1" : {
+					"type" : "PrimitivePondElement",
+					"primitive" : "cube",
+					"transformation" : {
+						"scales" : [
+							2.51, 2.51
+						],
+						"rotations" : {
+							// This can either contain "quaternion" : []
+							// or "angle" : degree, axis is vec3( 0, 0, 1 )
+							//"angle" : 0
+						},
+						"translations" : {
+							// This can either contain "coordinates" : []
+							// or "center" : boolean
+							// "center" : true //,
+							"coordinates" : [ 0, 0 ]
+						}
+					}
+				},
+				"cube2" : {
 					"type" : "PrimitivePondElement",
 					"primitive" : "cube",
 					"transformation" : {
@@ -83,8 +103,8 @@
 				}
 			},
 			"springMesh" : {
-				"numRows" : 50,
-				"numColumns" : 50,
+				"numRows" : 100,
+				"numColumns" : 100,
 				"numIterations" : 1
 			}
 

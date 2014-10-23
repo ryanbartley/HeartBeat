@@ -7,3 +7,11 @@
 //
 
 #include "InfoDisplay.h"
+
+#include "JsonManager.h"
+
+namespace heartbeat {
+	
+
+	
+}

@@ -93,17 +93,17 @@ void HidCommManager::initialize()
 	
 void HidCommManager::setTop( int16_t topAddress )
 {
-	mConnections.insert( std::make_pair( HidId::TOP_KIOSK, std::move( Hid( HidId::TOP_KIOSK, topAddress ) ) ) );
+	mConnections.insert( std::make_pair( KioskId::TOP_KIOSK, std::move( Hid( KioskId::TOP_KIOSK, topAddress ) ) ) );
 }
 	
 void HidCommManager::setBottom( int16_t bottomAddress )
 {
-	mConnections.insert( std::make_pair( HidId::BOTTOM_KIOSK, std::move( Hid( HidId::BOTTOM_KIOSK, bottomAddress ) ) ) );
+	mConnections.insert( std::make_pair( KioskId::BOTTOM_KIOSK, std::move( Hid( KioskId::BOTTOM_KIOSK, bottomAddress ) ) ) );
 }
 	
 void HidCommManager::setMiddle( int16_t middleAddress )
 {
-	mConnections.insert( std::make_pair( HidId::MIDDLE_KIOSK, std::move( Hid( HidId::MIDDLE_KIOSK, middleAddress ) ) ) );
+	mConnections.insert( std::make_pair( KioskId::MIDDLE_KIOSK, std::move( Hid( KioskId::MIDDLE_KIOSK, middleAddress ) ) ) );
 }
 	
 void HidCommManager::openConnections( Hid &hid )

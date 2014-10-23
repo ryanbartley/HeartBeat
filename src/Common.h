@@ -12,6 +12,12 @@
 
 namespace heartbeat {
 	
+enum class KioskId {
+	TOP_KIOSK = 0,
+	MIDDLE_KIOSK = 1,
+	BOTTOM_KIOSK = 2
+};
+	
 using EngineRef = std::shared_ptr<class Engine>;
 using RendererRef = std::shared_ptr<class Renderer>;
 using JsonManagerRef = std::shared_ptr<class JsonManager>;
