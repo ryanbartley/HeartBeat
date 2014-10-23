@@ -9,6 +9,7 @@
 #include "KioskManager.h"
 #include "InteractionEvents.h"
 #include "EventManager.h"
+#include "InfoDisplay.h"
 
 #include "cinder/Log.h"
 
@@ -67,9 +68,9 @@ void KioskManager::touchDelegate( EventDataRef touchEvent )
 void KioskManager::update()
 {
 	uint32_t lock = 0;
-//	for( auto & kiosk : mKiosks ) {
-//		mLocks[lock++] = std::async( std::launch::async, std::bind( &Kiosk::update, kiosk ) );
-//	}
+	for( auto & display : mDisplays ) {
+		mLocks[lock++] = std::async( std::launch::async, std::bind( &InfoDisplay::update, display ) );
+	}
 }
 	
 void KioskManager::render()
@@ -78,9 +79,9 @@ void KioskManager::render()
 		lock.wait();
 	}
 	
-//	for( auto & kiosk : mKiosks ) {
-//		kiosk->draw();
-//	}
+	for( auto & display : mDisplays ) {
+		display->draw();
+	}
 }
 	
 void KioskManager::initialize()

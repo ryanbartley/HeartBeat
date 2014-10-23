@@ -18,6 +18,8 @@ enum class KioskId {
 	BOTTOM_KIOSK = 2
 };
 	
+std::string getKiosk( KioskId kioskId );
+	
 using EngineRef = std::shared_ptr<class Engine>;
 using RendererRef = std::shared_ptr<class Renderer>;
 using JsonManagerRef = std::shared_ptr<class JsonManager>;
@@ -29,7 +31,10 @@ using UrgRef = std::shared_ptr<class Urg>;
 using InteractionZonesRef = std::shared_ptr<class InteractionZones>;
 using RenderableRef = std::shared_ptr<class Renderable>;
 using InteractionDebugRenderableRef = std::shared_ptr<class InteractionDebugRenderable>;
+	
 using KioskManagerRef = std::shared_ptr<class KioskManager>;
+	using InfoDisplayRef = std::shared_ptr<class InfoDisplay>;
+	
 using SpringMeshRef = std::shared_ptr<class SpringMesh>;
 using PondElementRef = std::shared_ptr<class PondElement>;
 

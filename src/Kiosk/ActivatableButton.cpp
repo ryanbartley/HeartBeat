@@ -15,14 +15,9 @@ using namespace std;
 namespace heartbeat {
 	
 ActivatableButton::ActivatableButton( const std::string &name )
-: Button( name ), mActive( static_cast<const svg::Group*>( &mParent->getChild( "active" ) ) ),
-	mNonActive( static_cast<const svg::Group*>( &mParent->getChild( "default" ) ) )
+	: Button( name ), mActive( static_cast<const svg::Group*>( const_cast<svg::Group*>(mGroup)->findByIdContains<svg::Group>( "active" ) ) ),
+	mNonActive( static_cast<const svg::Group*>( const_cast<svg::Group*>(mGroup)->findByIdContains<svg::Group>( "default" ) ) )
 {
-}
-	
-ActivatableButtonRef ActivatableButton::create( const std::string &name )
-{
-	return ActivatableButtonRef( new ActivatableButton( name ) );
 }
 	
 }

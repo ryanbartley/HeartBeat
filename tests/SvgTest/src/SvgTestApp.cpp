@@ -8,6 +8,7 @@
 #include "Cairo.h"
 
 #include "SvgManager.h"
+#include "JsonManager.h"
 #include "Button.h"
 
 using namespace ci;
@@ -24,18 +25,31 @@ class SvgTestApp : public AppNative {
 	heartbeat::ButtonRef& getButton() { return mButton; }
 	
 	svg::DocRef mDoc;
-	heartbeat::ButtonRef mButton;
-	heartbeat::SvgManagerRef mManager;
+	heartbeat::ButtonRef		mButton;
+	heartbeat::SvgManagerRef	mManager;
+	heartbeat::JsonManagerRef	mJsonManager;
+	ci::gl::Texture2dRef		mTexture;
 };
 
 // Renders a given SVG group 'groupName' into a new gl::Texture
-gl::TextureRef renderSvgGroupToTexture( const svg::Doc &doc, heartbeat::ButtonRef& button, const Rectf &rect, bool alpha )
+gl::TextureRef renderSvgGroupToTexture( const svg::Doc &doc, const std::string &group, bool alpha )
 {
-	cairo::SurfaceImage srfImg( rect.getWidth(), rect.getHeight(), alpha );
+//	auto& nodes = dynamic_cast<svg::Group*>(const_cast<svg::Node*>(doc.findNode( group )))->getChildren();
+//	for( auto & node : nodes ) {
+//		cout << node->getId() << endl;
+//	}
+//	return gl::Texture2dRef();
+	auto node = dynamic_cast<svg::Group*>(const_cast<svg::Node*>(doc.findNode( group )))->findByIdContains<svg::Group>("active");
+	auto rect = node->getBoundingBox();
+	cout << "Rect " << rect << endl;
+	cairo::SurfaceImage srfImg( rect.getWidth() + 10, rect.getHeight() + 10, alpha );
 	cairo::Context ctx( srfImg );
-	ctx.scale( rect.getWidth() / doc.getWidth(), rect.getHeight() / doc.getHeight() );
-//	ctx.render( *button->getGroup()  );
+	
+	ctx.setAntiAlias( 16 );
+	ctx.translate( -rect.x1 + 5, -rect.y1 + 5 );
+	ctx.render( *node );
 	return gl::Texture::create( srfImg.getSurface() );
+	
 }
 
 void SvgTestApp::setup()
@@ -44,12 +58,14 @@ void SvgTestApp::setup()
 //	MatrixAffine2<float> transform = mDoc->getTransform();
 //	transform.scale( vec2(getWindowSize()) / vec2(mDoc->getSize()) );
 //	mDoc->setTransform( transform );
+	mJsonManager = heartbeat::JsonManager::create( "test.json" );
 	
-	mManager = heartbeat::SvgManager::create( "Actemra_V1.svg" );
+	mManager = heartbeat::SvgManager::create();
 	mManager->initialize();
 	
-	mButton = heartbeat::Button::create( "BUTTONS" );
-	
+//	mButton = heartbeat::Button::create( "BUTTONS" );
+	mDoc = mManager->getDoc();
+	mTexture = renderSvgGroupToTexture( *mDoc, "D2", true );
 }
 
 void SvgTestApp::mouseDown( MouseEvent event )
@@ -78,12 +94,15 @@ void SvgTestApp::update()
 
 void SvgTestApp::draw()
 {
-	gl::clear( Color( 0, 0, 0 ) );
+	gl::clear( Color::black() );
 	gl::setMatricesWindow( getWindowSize() );
 	
-	auto doc = mManager->getDoc();
 	
-	gl::draw( renderSvgGroupToTexture( *(doc), mButton, Rectf( vec2( 0 ), doc->getSize() ), false ) );
+	if( mTexture ) {
+		gl::enableAlphaBlending();
+		gl::color( Color::white() );
+		gl::draw( mTexture, vec2( 0 ) );
+	}
 }
 
 CINDER_APP_NATIVE( SvgTestApp, RendererGl )

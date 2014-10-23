@@ -22,16 +22,16 @@ public:
 	
 	virtual void render() = 0;
 	
-	const ci::svg::Group*	getParentGroup() { return mParent; }
-	const ci::svg::Node&	getChild( const std::string &childId ) { return mParent->getChild( childId ); }
+	const ci::svg::Group*	getRootGroup() { return mGroup; }
+	const ci::svg::Node&	getChild( const std::string &childId ) { return mGroup->getChild( childId ); }
 
 protected:
 	Node( const std::string &group )
-	: mParent( SvgManager::get()->getGroup( group ) )
+	: mGroup( SvgManager::get()->getGroup( group ) )
 	{
 	}
 	
-	const ci::svg::Group* mParent;
+	const ci::svg::Group* mGroup;
 };
 	
 }

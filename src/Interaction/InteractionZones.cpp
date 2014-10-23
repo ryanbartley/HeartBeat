@@ -145,6 +145,77 @@ void InteractionZones::initialize()
 		}
 		
 		try {
+			auto transform = interactionAttribs["transform"];
+			try {
+				
+				auto translationRoot = transform["translations"];
+				
+				if( translationRoot.hasChild( "coordinates" ) ) {
+					CI_LOG_V("Using coordinate version of translation");
+					auto translations = translationRoot["coordinates"].getChildren();
+					int i = 0;
+					vec2 translation;
+					for( auto & position : translations ) {
+						translation[i++] = position.getValue<float>();
+					}
+					mTransform.setTranslation( vec3(translation, 0) );
+				}
+				else if( translationRoot.hasChild( "center" ) ) {
+					CI_LOG_V("Using center version of translation");
+					auto center = translationRoot["center"].getValue<bool>();
+					if( center ) {
+						auto center = vec2( app::App::get()->getWindowSize() ) / 2.0f;
+						mTransform.setTranslation( vec3(center, 0) );
+					}
+				}
+			}
+			catch ( JsonTree::ExcChildNotFound &ex ) {
+				CI_LOG_W("translations child not found, using default 0, 0, 0");
+			}
+			
+			try {
+				auto scales = transform["scales"].getChildren();
+				int i = 0;
+				vec2 scale;
+				for( auto & scalar : scales ) {
+					scale[i++] = scalar.getValue<float>();
+				}
+				mTransform.setScale( vec3(scale, 1.0f) );
+				CI_LOG_V(scale);
+			}
+			catch ( JsonTree::ExcChildNotFound &ex ) {
+				CI_LOG_W("Scale child not found, using default 1, 1, 1");
+				mTransform.setScale( vec3( 1 ) );
+			}
+			
+			try {
+				auto rotationRoot = transform["rotations"];
+				if( rotationRoot.hasChild( "quat" ) ) {
+					CI_LOG_V("Using quat version of rotation");
+					auto quaternion = rotationRoot["quat"].getChildren();
+					int i = 0;
+					quat rotation;
+					for( auto & rotationStep : quaternion ) {
+						rotation[i++] = rotationStep.getValue<float>();
+					}
+					mTransform.setRotation( rotation );
+				}
+				else if( rotationRoot.hasChild( "angle" ) ) {
+					CI_LOG_V("Using angle axis version of rotation");
+					auto angle = rotationRoot["angle"].getValue<float>();
+					mTransform.setRotation( quat( rotate( toRadians(angle), vec3( 0, 0, 1 ) ) ) );
+				}
+				
+			}
+			catch ( JsonTree::ExcChildNotFound &ex ) {
+				CI_LOG_V("Rotation child not found, using default 0, 0, 0, 1");
+			}
+		}
+		catch ( JsonTree::ExcChildNotFound &ex ) {
+			CI_LOG_E("Transform Child not found " << ex.what() );
+		}
+		
+		try {
 			auto inBetweenThresh = interactionAttribs["inBetweenThresh"].getValue<uint32_t>();
 			mInBetweenThreshold = inBetweenThresh;
 		}

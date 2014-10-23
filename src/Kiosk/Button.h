@@ -15,25 +15,34 @@ namespace heartbeat {
 	
 using ButtonId = uint64_t;
 	
+enum class ButtonStatus {
+	ACTIVE,
+	VISIBLE,
+	INVISIBLE
+};
+	
 class Button {
 public:
 	
-	static ButtonRef create( const std::string &name );
+	virtual void changeState( InfoDisplayRef &display ) = 0;
 	
-	inline bool contains( const ci::vec2 &point ) { return mParent->containsPoint( point ); }
+	const std::string&		getGroupName() const { return mName; }
+	const ci::svg::Group*	getRoot() const { return mGroup; }
+	ButtonStatus			getStatus() const { return mStatus; }
+	virtual ButtonId		getType() const = 0;
 	
-	inline DataRef	getNavigation() { return mNavigation; }
+	void setStatus( ButtonStatus status ) { mStatus = status; }
 	
-	const std::string& getParentName() const { return mName; }
+	inline bool contains( const ci::vec2 &point ) { return mGroup->containsPoint( point ); }
+	
+	virtual void initializeGl() = 0;
 	
 protected:
 	Button( const std::string &name );
 	
-	void setNavigation( const DataRef &navigation ) { mNavigation = navigation; }
-	
-	const ci::svg::Group*	mParent;
-	DataRef					mNavigation;
+	const ci::svg::Group*	mGroup;
 	std::string				mName;
+	ButtonStatus			mStatus;
 };
 	
 }

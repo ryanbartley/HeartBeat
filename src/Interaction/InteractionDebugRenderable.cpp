@@ -57,7 +57,7 @@ InteractionDebugRenderableRef InteractionDebugRenderable::create( const Interact
 void InteractionDebugRenderable::initialize()
 {
 	try {
-		auto interactionDebugAttribs = JsonManager::get()->getRoot()["interactionDebug"];
+		auto interactionDebugAttribs = JsonManager::get()->getRoot()["interactionAttribs"];
 		
 		Renderable::initialize( interactionDebugAttribs["transformation"] );
 	}

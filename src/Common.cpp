@@ -19,6 +19,24 @@ namespace heartbeat {
 	
 boost::hash<std::string> Hash::HASHER;
 	
+std::string getKiosk( KioskId kioskId )
+{
+	switch ( kioskId ) {
+		case KioskId::TOP_KIOSK:
+			return "TOP_KIOSK";
+		break;
+		case KioskId::MIDDLE_KIOSK:
+			return "MIDDLE_KIOSK";
+		break;
+		case KioskId::BOTTOM_KIOSK:
+			return "MIDDLE_KIOSK";
+		break;
+		default:
+			return "UNKNOWN KIOSK";
+		break;
+	}
+}
+	
 boost::filesystem::path& getWorkingResourcePath()
 {
 	// This is dirty but works with the structure.

@@ -40,12 +40,7 @@
 				"approach" : 1.5,
 				"far" : 1.8
 			},
-			"inBetweenThresh" : 50
-		},
-		//////////////////////////////////////////////////////
-		// URG INTERACTION DEBUG SETTINGS
-		//////////////////////////////////////////////////////
-		"interactionDebug" : {
+			"inBetweenThresh" : 50,
 			"transformation" : {
 				"scales" : [
 					0.01, 0.01
@@ -62,6 +57,12 @@
 					// "coordinates" : [ 0, 0 ]
 				}
 			}
+		},
+		//////////////////////////////////////////////////////
+		// URG INTERACTION DEBUG SETTINGS
+		//////////////////////////////////////////////////////
+		"interactionDebug" : {
+			
 		},
 		//////////////////////////////////////////////////////
 		// POND ATTRIBUTES
@@ -131,7 +132,9 @@
 				"numColumns" : 100,
 				"numIterations" : 1
 			}
-
+		},
+		"svgAttribs" : {
+			"fileName" : "ACTEMRA_PondCharts_102114.svg"
 		}
 	}
 }

@@ -30,8 +30,9 @@ private:
 	
 	void initialize();
 	
-	std::array<KioskRef, 3>					mKiosks;
+	std::array<InfoDisplayRef, 3>			mDisplays;
 	std::array<std::shared_future<void>, 3> mLocks;
+	HidCommManagerRef						mHidCommManager;
 	
 	friend class Engine;
 };

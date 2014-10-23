@@ -10,20 +10,20 @@
 
 #include "Renderable.h"
 
-//#include "Cairo.h"
+#include "Cairo.h"
 
 #include "Node.h"
 
 namespace heartbeat {
 	
-using InfoDisplayRef = std::shared_ptr<class InfoDisplay>;
+
 	
 class InfoDisplay : public Renderable {
 public:
 	
-	static InfoDisplayRef create();
+	static InfoDisplayRef create( KioskId kioskId );
 	
-	~InfoDisplay();
+	~InfoDisplay() {}
 	
 	void draw() override;
 	void update() override;
@@ -34,21 +34,25 @@ public:
 	void deactivate();
 	
 	bool isActivated() { return mIsActivated; }
-	bool insideAngle( float radians );
+	bool insideAngle( float radians ) { return mMinAngle < radians && mMaxAngle > radians; }
 	
-	void initialize();
+	void registerTouch( EventDataRef eventData );
+	
+	ci::cairo::Context& getContext() { return mContext; }
 	
 private:
-	InfoDisplay();
+	InfoDisplay( KioskId kioskId );
 	
-//	ci::cairo::SurfaceSvg	mSurface;
-
-		
+	void initiaize( const ci::JsonTree &root );
 	
+	ci::cairo::SurfaceImage	mSurface;
+	ci::cairo::Context		mContext;
+	
+	ci::gl::Texture2dRef	mTexture;
 	ci::Rectf				mBoundingBox;
 	bool					mIsActivated;
 	float					mMinAngle, mMaxAngle;
-	KioskId					mId;
+	const KioskId			mId;
 	
 };
 	

@@ -10,10 +10,10 @@
 
 namespace heartbeat {
 	
-Data::Data( const std::string &name )
-: mParent( SvgManager::get()->getGroup( name ) )
-{
-	
-}
+//Data::Data( const std::string &name )
+//: mParent( SvgManager::get()->getGroup( name ) )
+//{
+//	
+//}
 	
 }

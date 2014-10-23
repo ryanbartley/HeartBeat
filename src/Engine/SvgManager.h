@@ -16,7 +16,7 @@ namespace heartbeat {
 class SvgManager {
 public:
 	
-	static SvgManagerRef create( const std::string &fileName );
+	static SvgManagerRef create();
 	static SvgManagerRef get();
 	
 	
@@ -38,7 +38,7 @@ public:
 	DataRef		getData( const std::string &name );
 	
 private:
-	SvgManager(  const std::string &fileName );
+	SvgManager();
 	
 	
 	static void destroy();

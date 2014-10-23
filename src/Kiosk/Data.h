@@ -18,13 +18,16 @@ public:
 	
 	DataRef& next() { return mNext; }
 	
-private:
+	void activate();
+	
+	
+protected:
 	Data( const std::string &name );
 	
 	void initialize();
 	
 	DataRef mNext;
-	const ci::svg::Group* mParent;
+	const ci::svg::Group* mRoot;
 };
 	
 }

@@ -9,6 +9,7 @@
 #pragma once
 
 #include "Common.h"
+#include "Transformation.h"
 
 namespace heartbeat {
 	
@@ -17,8 +18,9 @@ struct Interactor {
 	: mDistance( distance ), mIndex( index )
 	{}
 	
-	int mIndex;
-	long mDistance;
+	int			mIndex;
+	long		mDistance;
+	ci::vec3	mModelSpacePoint;
 };
 	
 class InteractionZones {
@@ -70,6 +72,7 @@ public:
 	
 	inline void setZoneUpdateCallback( const std::function<void()> &function ) { mZoneUpdateFunc = function; }
 	
+	inline const Transformation& getTransform() { return mTransform; }
 	
 private:
 	InteractionZones();
@@ -96,6 +99,8 @@ private:
 	UrgRef						mUrg;
 	
 	std::function<void()>		mZoneUpdateFunc;
+	
+	Transformation				mTransform;
 	
 	friend class InteractionManager;
 };

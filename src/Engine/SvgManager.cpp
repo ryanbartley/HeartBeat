@@ -30,8 +30,7 @@ SvgManagerRef	SvgManager::get() {
 	return nullptr;
 }
 
-SvgManager::SvgManager( const std::string &fileName )
-: mFileName( fileName )
+SvgManager::SvgManager()
 {
 }
 
@@ -40,9 +39,9 @@ SvgManager::~SvgManager()
 	CI_LOG_V("SvgManagerDestroyed");
 }
 
-SvgManagerRef SvgManager::create( const std::string &fileName )
+SvgManagerRef SvgManager::create()
 {
-	sSvgManager = SvgManagerRef( new SvgManager( fileName ) );
+	sSvgManager = SvgManagerRef( new SvgManager );
 	sSvgManagerInitialized = true;
 	CI_LOG_V("Created SvgManager");
 	return SvgManager::get();
@@ -68,6 +67,7 @@ void SvgManager::initialize()
 			CI_LOG_E("FileName couldn't be found, using default");
 			mDoc = svg::Doc::create( getFileContents( "ACTEMRA_PondCharts_102114.svg" ) );
 		}
+		
 		
 		
 		
