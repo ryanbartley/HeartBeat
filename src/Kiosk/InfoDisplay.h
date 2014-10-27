@@ -10,7 +10,7 @@
 
 #include "Renderable.h"
 
-#include "Cairo.h"
+//#include "Cairo.h"
 
 #include "Node.h"
 
@@ -38,15 +38,15 @@ public:
 	
 	void registerTouch( EventDataRef eventData );
 	
-	ci::cairo::Context& getContext() { return mContext; }
+//	ci::cairo::Context& getContext() { return mContext; }
 	
 private:
 	InfoDisplay( KioskId kioskId );
 	
 	void initiaize( const ci::JsonTree &root );
 	
-	ci::cairo::SurfaceImage	mSurface;
-	ci::cairo::Context		mContext;
+//	ci::cairo::SurfaceImage	mSurface;
+//	ci::cairo::Context		mContext;
 	
 	ci::gl::Texture2dRef	mTexture;
 	ci::Rectf				mBoundingBox;

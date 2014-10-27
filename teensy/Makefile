@@ -41,7 +41,7 @@
 
 
 # Target file name (without extension).
-TARGET = blinky
+TARGET = heartbeat
 
 
 # List C source files here. (C dependencies are automatically generated.)
@@ -80,7 +80,7 @@ OBJDIR = .
 
 
 # List C++ source files here. (C dependencies are automatically generated.)
-CPPSRC = PWMServo.cpp
+CPPSRC = 
 
 
 # List Assembler source files here.

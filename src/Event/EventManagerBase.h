@@ -15,7 +15,7 @@
 namespace heartbeat {
 	
 using EventType				= uint64_t;
-using EventListenerDelegate = delegate<void (EventDataRef)>;
+	using EventListenerDelegate = std::function<void (EventDataRef)>;
 
 class EventManagerBase {
 public:

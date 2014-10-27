@@ -9,6 +9,7 @@
 #include "InteractionZones.h"
 
 #include "cinder/Log.h"
+
 #include "InteractionEvents.h"
 #include "EventManager.h"
 #include "JsonManager.h"
@@ -82,13 +83,51 @@ void InteractionZones::initialize()
 			auto runUrg = interactionAttribs["runUrg"].getValue<bool>();
 			
 			if( runUrg ) {
-				mUrg = Urg::create();
-				mUrg->initialize();
-				mUrg->open();
+				auto urg = Urg::create();
+				if( urg->initialize() ) {
+					if( urg->open() )
+						mUrg = urg;
+					else
+						CI_LOG_W("Couldn't open Urg");
+				}
+				else {
+					CI_LOG_W("Couldn't initialize Urg");
+				}
 			}
+			else
+				CI_LOG_V("Not running urg");
 		}
 		catch( JsonTree::ExcChildNotFound &ex ) {
 			CI_LOG_W("runUrg child not found, defaulting to false");
+		}
+		
+		try {
+			auto approachZones = interactionAttribs["approachZones"];
+		
+			auto topZone = approachZones["top"];
+			mApproachZones.insert( make_pair( KioskId::TOP_KIOSK, ApproachData( KioskId::TOP_KIOSK, topZone.getChild(0).getValue<int>(), topZone.getChild(1).getValue<int>() ) ) );
+			auto middleZone = approachZones["middle"];
+			mApproachZones.insert( make_pair( KioskId::MIDDLE_KIOSK, ApproachData( KioskId::MIDDLE_KIOSK, middleZone.getChild(0).getValue<int>(), middleZone.getChild(1).getValue<int>() ) ) );
+			auto bottomZone = approachZones["bottom"];
+			mApproachZones.insert( make_pair( KioskId::BOTTOM_KIOSK, ApproachData( KioskId::BOTTOM_KIOSK, bottomZone.getChild(0).getValue<int>(), bottomZone.getChild(1).getValue<int>() ) ) );
+		}
+		catch( const JsonTree::ExcChildNotFound &ex ) {
+			CI_LOG_E("Approach Divisions problem, using default top - 330, middle - 660, bottom - 1080 " << ex.what());
+			mApproachZones.insert( make_pair( KioskId::TOP_KIOSK, ApproachData( KioskId::TOP_KIOSK, 0, 330 ) ) );
+			mApproachZones.insert( make_pair( KioskId::MIDDLE_KIOSK, ApproachData( KioskId::MIDDLE_KIOSK, 331, 660 ) ) );
+			mApproachZones.insert( make_pair( KioskId::BOTTOM_KIOSK, ApproachData( KioskId::BOTTOM_KIOSK, 661, 1080 ) ) );
+		}
+		
+		try {
+			auto poleIndices = interactionAttribs["poleIndices"];
+			
+			for( auto & index : poleIndices ) {
+				mPoleIndices.push_back( index.getValue<uint32_t>() );
+			}
+		}
+		catch( const JsonTree::ExcChildNotFound &ex ) {
+			CI_LOG_E("PoleIndices not found, using default");
+			mPoleIndices = { 379, 380, 381, 585, 586, 726, 727 };
 		}
 		
 		// Now cache scales for barrier zones
@@ -112,7 +151,7 @@ void InteractionZones::initialize()
 			}
 			catch ( JsonTree::ExcChildNotFound &ex ) {
 				CI_LOG_W("no dead child found, using default - 1.2f");
-				mZones.insert( make_pair( Zone::DEAD, 1.2f ) );
+				mZones.insert( make_pair( Zone::DEAD, 1.0f ) );
 			}
 			
 			// Approach scale
@@ -139,13 +178,13 @@ void InteractionZones::initialize()
 		catch ( JsonTree::ExcChildNotFound &ex ) {
 			CI_LOG_W(ex.what() << "using default scales\n\tTABLE - 0.85f\n\tDEAD - 1.2f\n\tAPPROACH - 1.5f\n\tFAR - 1.8f");
 			mZones.insert( make_pair( Zone::TABLE, .85f ) );
-			mZones.insert( make_pair( Zone::DEAD, 1.2f ) );
+			mZones.insert( make_pair( Zone::DEAD, 1.0f ) );
 			mZones.insert( make_pair( Zone::APPROACH, 1.5f ) );
 			mZones.insert( make_pair( Zone::FAR, 1.8f ) );
 		}
 		
 		try {
-			auto transform = interactionAttribs["transform"];
+			auto transform = interactionAttribs["transforms"];
 			try {
 				
 				auto translationRoot = transform["translations"];
@@ -306,7 +345,11 @@ float InteractionZones::getZoneScalar( Zone zone )
 void InteractionZones::process()
 {
 	if( ! mUrg ) {
-		CI_LOG_V("Attempting to process Urg Interaction Data without an Urg");
+		static bool runOnce = false;
+		if( ! runOnce ) {
+			runOnce = true;
+			CI_LOG_V("Attempting to process Urg Interaction Data without an Urg");
+		}
 		return;
 	}
 		
@@ -332,22 +375,36 @@ void InteractionZones::process()
 	}
 	
 	std::vector<Interactor> approachEvents, tableEvents;
-	
-	int i = 0;
+	bool checkPoleIndices = true;
+	int i = 0, k = 0;
 	for( auto barrierIt = mBarrier.cbegin(); barrierIt != mBarrier.cend(); ++barrierIt, ++i ) {
-		if( data[i] > *barrierIt * FAR_SCALAR ) {
-			// do nothing
+		bool emitEvents = true;
+		if( checkPoleIndices ) {
+			if( mPoleIndices[k] == i ) {
+				emitEvents = false;
+				++k;
+				if( mPoleIndices.size() - 1 < k )
+					checkPoleIndices = false;
+			}
 		}
-		else if( data[i] > *barrierIt * APPROACH_SCALAR ) {
-			// emit approaching event.
-			addEvent( approachEvents, i, data[i] );
-		}
-		else if( data[i] > *barrierIt * DEAD_SCALAR ) {
-			// do nothing
-		}
-		else if( data[i] > *barrierIt * TABLE_SCALAR ) {
-			// emit touching event.
-			addEvent( tableEvents, i, data[i] );
+		if( emitEvents ) {
+			if( data[i] > *barrierIt * FAR_SCALAR ) {
+				// do nothing
+			}
+			else if( data[i] > *barrierIt * APPROACH_SCALAR ) {
+				// emit approaching event.
+				addEvent( approachEvents, i, data[i] );
+			}
+			else if( data[i] > *barrierIt * DEAD_SCALAR ) {
+				// do nothing
+			}
+			// I did something weird here. I care about the events below the
+			// table scalar value. If it gets to this place and it's lower than
+			// the scalar then I know someone's touching the table.
+			else if( data[i] < *barrierIt * TABLE_SCALAR ) {
+				// emit touching event.
+				addEvent( tableEvents, i, data[i] );
+			}
 		}
 	}
 	
@@ -362,8 +419,23 @@ void InteractionZones::process()
 		return;
 	}
 	
-	for( auto approachIt = approachEvents.begin(); approachIt != approachEvents.end(); ++approachIt ) {
-		eventManager->queueEvent( EventDataRef( new ApproachEvent( approachIt->mIndex, approachIt->mDistance ) ) );
+	if( ! approachEvents.empty() ) {
+		processApproaches( approachEvents );
+		for( auto & zone : mApproachZones ) {
+			auto & approachZone = zone.second;
+			auto activated = approachZone.getIsActivated();
+			auto numDistances = approachZone.getNumDistances();
+			if( activated && numDistances == 0 ) {
+				eventManager->queueEvent( EventDataRef( new DepartEvent( approachZone.getKiosk() ) ) );
+				approachZone.activate( false );
+			}
+			else if( !activated && numDistances > 0 ) {
+				eventManager->queueEvent( EventDataRef( new ApproachEvent( approachZone.getKiosk() ) ) );
+				approachZone.activate( true );
+				
+			}
+			approachZone.reset();
+		}
 	}
 	
 	for( auto touchIt = tableEvents.begin(); touchIt != tableEvents.end(); ++touchIt ) {

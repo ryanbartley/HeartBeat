@@ -23,7 +23,10 @@ namespace heartbeat {
 	
 const uint8_t HidProtocol::HANDSHAKE = 255;
 	
-const uint32_t HidMessage::MAX_PACKET_SIZE = 64;
+Hid::Hid( KioskId hidId, int index )
+: mId( hidId ), mActivated( false ),
+mOpen( true ), mNum( index )
+{}
 	
 HidCommManager::HidCommManager()
 {
@@ -45,121 +48,119 @@ void HidCommManager::initialize()
 	try {
 		auto hidAttribs = JsonManager::get()->getRoot()["hid"];
 		
+		int numToOpen = hidAttribs["numToOpen"].getValue<int>();
+		
+		int32_t numOpened = rawhid_open( numToOpen, 0x16C0, 0x0480, 0xFFAB, 0 );
+		if( numOpened != numToOpen ) {
+			CI_LOG_E("Didn't open 3 hid's, instead opened " << numOpened);
+		}
+		
 		try {
-			auto topId = hidAttribs["top"].getValue<int16_t>();
+			auto positions = hidAttribs["positions"].getChildren();
 			
-			setTop( topId );
+			int i = 0;
+			
+			for( auto & pos : positions ) {
+				KioskId firstPosKiosk;
+				auto position = pos.getValue();
+				if( position == "top" ) {
+					cout << i << ": top" << endl;
+					firstPosKiosk = KioskId::TOP_KIOSK;
+				}
+				else if ( position == "middle" ) {
+					cout << i << ": middle" << endl;
+					firstPosKiosk = KioskId::MIDDLE_KIOSK;
+				}
+				else if ( position == "bottom" ) {
+					cout << i << ": bottom" << endl;
+					firstPosKiosk = KioskId::BOTTOM_KIOSK;
+				}
+				else {
+					CI_LOG_E("Couldn't find the Id, defaulting to TOP");
+					firstPosKiosk = KioskId::TOP_KIOSK;
+				}
+				
+				mConnections.insert( make_pair( firstPosKiosk, std::move( Hid( firstPosKiosk, i++ ) ) ) );
+			}
+			
+			if( numToOpen != i ) {
+				CI_LOG_E("NumToOpen is not how many were opened " << "numToOpen: " << numToOpen << " i: " << i );
+			}
 		}
 		catch ( JsonTree::ExcChildNotFound &ex ) {
 			CI_LOG_W("'top' child not found, using default -1, communication will be suspended");
-			setTop( -1 );
-		}
-		
-		try {
-			auto bottomId = hidAttribs["bottom"].getValue<int16_t>();
 			
-			setBottom( bottomId );
-		}
-		catch ( JsonTree::ExcChildNotFound &ex) {
-			CI_LOG_W("'bottom' child not found, using default -1, communication will be suspended");
-			setBottom( -1 );
 		}
 		
-		try {
-			auto middleId = hidAttribs["middle"].getValue<int16_t>();
-			
-			setMiddle( middleId );
-		}
-		catch ( JsonTree::ExcChildNotFound &ex) {
-			CI_LOG_W("'middle' child not found, using default -1, communication will be suspended");
-			setMiddle( -1 );
-		}
-		
-		int num = 0;
-		for( auto & connection : mConnections ) {
-			auto & hid = connection.second;
-			hid.mNum = num;
-			openConnections( hid );
-			++num;
-		}
 		
 	} catch ( JsonTree::ExcChildNotFound &ex ) {
 		CI_LOG_W("'hidAttribs' child from root not found, using default -1, communication with all will be suspended");
-		setTop( -1 );
-		setBottom( -1 );
-		setTop( -1 );
 	}
 }
 	
-void HidCommManager::setTop( int16_t topAddress )
+void HidCommManager::send( const Hid &hid, HidMessage &packet )
 {
-	mConnections.insert( std::make_pair( KioskId::TOP_KIOSK, std::move( Hid( KioskId::TOP_KIOSK, topAddress ) ) ) );
+	if( hid.mNum != -1 ) {
+		ci::Timer time;
+		time.start();
+		packet.mBytesUsed = rawhid_send( hid.mNum,
+										static_cast<void*>( &(packet.mBuffer[0]) ),
+										packet.mBytesUsed,
+										0 );
+		time.stop();
+		cout << "TIME: " << time.getSeconds() << endl;
+		if( packet.mBytesUsed == 0 )
+			CI_LOG_E("Transmitted nothing" << getReadableHid( hid.mId ) );
+		else if( packet.mBytesUsed == -1 )
+			CI_LOG_E("Returned -1 from: " << getReadableHid( hid.mId ) );
+	}
+	else {
+		CI_LOG_E("DIDN'T SEND");
+	}
 }
 	
-void HidCommManager::setBottom( int16_t bottomAddress )
+HidMessage HidCommManager::recv( const Hid &hid )
 {
-	mConnections.insert( std::make_pair( KioskId::BOTTOM_KIOSK, std::move( Hid( KioskId::BOTTOM_KIOSK, bottomAddress ) ) ) );
-}
-	
-void HidCommManager::setMiddle( int16_t middleAddress )
-{
-	mConnections.insert( std::make_pair( KioskId::MIDDLE_KIOSK, std::move( Hid( KioskId::MIDDLE_KIOSK, middleAddress ) ) ) );
-}
-	
-void HidCommManager::openConnections( Hid &hid )
-{
-	// Open up from top to Bottom
-	
-	if( hid.mAddress != -1 ) {
+	if( hid.mNum != -1 ) {
+		HidMessage ret;
+		// TODO: Figure out if I actually need that much info
+		ret.mBytesUsed = rawhid_recv( hid.mNum,
+											static_cast<void*>( &(ret.mBuffer[0]) ),
+											ret.mBytesUsed,
+											0 );
+		if( ret.mBytesUsed == 0 )
+			CI_LOG_W("Received 0 bytes");
+		if( ret.mBytesUsed == -1 )
+			CI_LOG_E("Returned -1 from: " << getReadableHid( hid.mId ) );
 		
-		int32_t numOpened = rawhid_open( 1, 0x16C0, 0x0480, 0xFFAB, hid.mAddress );
-		if( numOpened == 1 ) {
-			hid.mOpen = true;
-			
-			auto message = HidMessage();
-			
-			message.mBuffer = { HidProtocol::HANDSHAKE };
-			message.mHid = &hid;
-			
-			write( message );
-		}
-			CI_LOG_W("HID " << static_cast<size_t>(hid.mId) << ": could not be opened");
+		return ret;
 	}
-	else
-		CI_LOG_W("HID " << static_cast<size_t>(hid.mId) << ": address is -1 and will not be opened");
+	else {
+		return HidMessage();
+	}
 }
 	
-void HidCommManager::write( const HidMessage &packet )
+void HidCommManager::activate( heartbeat::KioskId kioskId, bool activate )
 {
-	auto bytesWritten = rawhid_send( packet.mHid->mNum,
-				static_cast<void*>( const_cast<uint8_t*>( packet.mBuffer.data() ) ),
-				packet.mBuffer.size(),
-				10 );
-	if( bytesWritten == -1 )
-		CI_LOG_E("Returned -1 from: " << static_cast<int>(packet.mHid->mId) );
-}
-	
-HidMessage HidCommManager::recv( const Hid *hid )
-{
-	HidMessage ret;
-	// TODO: Figure out if I actually need that much info
-	ret.mBuffer.resize( HidMessage::MAX_PACKET_SIZE );
-	auto bytesRead = rawhid_recv( hid->mNum,
-								 static_cast<void*>( const_cast<uint8_t*>( ret.mBuffer.data() ) ),
-								 ret.mBuffer.size(),
-								 2 );
-	if( bytesRead == -1 )
-		CI_LOG_E("Returned -1 from: " << static_cast<int>(hid->mId) );
-	
-	return ret;
-}
-	
-void HidCommManager::update()
-{
-	for( auto & connection : mConnections ) {
-		auto message = recv( &connection.second );
+	auto found = mConnections.find( kioskId );
+	if( found != mConnections.end() && found->second.mActivated != activate ) {
+		found->second.mActivated = activate;
+		HidMessage mess;
+		if( activate )
+			mess.mBuffer.fill( 255 );
+		else
+			mess.mBuffer.fill( 0 );
 		
+		send( found->second, mess );
 	}
+	else {
+		CI_LOG_E("DIDN'T SEND");
+	}
+}
+
+std::string HidCommManager::getReadableHid( KioskId kioskId )
+{
+	return " Hid " + std::to_string( static_cast<size_t>(kioskId) ) + " ";
 }
 
 	

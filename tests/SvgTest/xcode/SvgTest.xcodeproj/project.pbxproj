@@ -18,6 +18,7 @@
 		5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		AB66BEA27B174B48BAF839A6 /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = A399250DDD9D460E88AC79F9 /* CinderApp.icns */; };
+		B3274BDA19FE61BC007B4348 /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3274BD919FE61BC007B4348 /* Node.cpp */; };
 		B366297719F41F7800FACB16 /* Common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B366294019F41F7800FACB16 /* Common.cpp */; };
 		B366297819F41F7800FACB16 /* Engine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B366294319F41F7800FACB16 /* Engine.cpp */; };
 		B366297919F41F7800FACB16 /* JsonManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B366294519F41F7800FACB16 /* JsonManager.cpp */; };
@@ -34,11 +35,9 @@
 		B366298519F41F7800FACB16 /* Renderable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B366297219F41F7800FACB16 /* Renderable.cpp */; };
 		B366298619F41F7800FACB16 /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B366297419F41F7800FACB16 /* Renderer.cpp */; };
 		B366298919F4207100FACB16 /* KioskManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B366298719F4207100FACB16 /* KioskManager.cpp */; };
-		B3B5C18B19F85FF8004BE73E /* Button.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3B5C18919F85FF8004BE73E /* Button.cpp */; };
-		B3B5C18E19F913D4004BE73E /* Data.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3B5C18C19F913D4004BE73E /* Data.cpp */; };
-		B3B5C19119F960AF004BE73E /* ActivatableButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3B5C18F19F960AF004BE73E /* ActivatableButton.cpp */; };
-		B3B5C19419F9854E004BE73E /* Overlay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3B5C19219F9854E004BE73E /* Overlay.cpp */; };
+		B3B5C19119F960AF004BE73E /* ButtonTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3B5C18F19F960AF004BE73E /* ButtonTypes.cpp */; };
 		B3B5C19719F998AC004BE73E /* DisplayState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3B5C19519F998AC004BE73E /* DisplayState.cpp */; };
+		B3B5C19D19FAE0DD004BE73E /* PageTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3B5C19B19FAE0DD004BE73E /* PageTypes.cpp */; };
 		B69F30A36C3044738BCFF082 /* Cairo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0BA037438BD44409245C437 /* Cairo.cpp */; };
 		F8DDC1429C214D2AAB3C0FCE /* SvgTestApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5F37B2C4084B48278F3DE953 /* SvgTestApp.cpp */; };
 /* End PBXBuildFile section */
@@ -61,6 +60,7 @@
 		8D1107320486CEB800E47090 /* SvgTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SvgTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8EFFD52AEAE04802B2EACC8B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A399250DDD9D460E88AC79F9 /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CinderApp.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; };
+		B3274BD919FE61BC007B4348 /* Node.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Node.cpp; sourceTree = "<group>"; };
 		B366294019F41F7800FACB16 /* Common.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Common.cpp; sourceTree = "<group>"; };
 		B366294119F41F7800FACB16 /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
 		B366294319F41F7800FACB16 /* Engine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Engine.cpp; sourceTree = "<group>"; };
@@ -107,16 +107,12 @@
 		B366298719F4207100FACB16 /* KioskManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KioskManager.cpp; sourceTree = "<group>"; };
 		B366298819F4207100FACB16 /* KioskManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KioskManager.h; sourceTree = "<group>"; };
 		B366299819F4739700FACB16 /* Node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Node.h; sourceTree = "<group>"; };
-		B3B5C18919F85FF8004BE73E /* Button.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Button.cpp; sourceTree = "<group>"; };
-		B3B5C18A19F85FF8004BE73E /* Button.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Button.h; sourceTree = "<group>"; };
-		B3B5C18C19F913D4004BE73E /* Data.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Data.cpp; sourceTree = "<group>"; };
-		B3B5C18D19F913D4004BE73E /* Data.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Data.h; sourceTree = "<group>"; };
-		B3B5C18F19F960AF004BE73E /* ActivatableButton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ActivatableButton.cpp; sourceTree = "<group>"; };
-		B3B5C19019F960AF004BE73E /* ActivatableButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivatableButton.h; sourceTree = "<group>"; };
-		B3B5C19219F9854E004BE73E /* Overlay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Overlay.cpp; sourceTree = "<group>"; };
-		B3B5C19319F9854E004BE73E /* Overlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Overlay.h; sourceTree = "<group>"; };
+		B3B5C18F19F960AF004BE73E /* ButtonTypes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ButtonTypes.cpp; sourceTree = "<group>"; };
+		B3B5C19019F960AF004BE73E /* ButtonTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonTypes.h; sourceTree = "<group>"; };
 		B3B5C19519F998AC004BE73E /* DisplayState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DisplayState.cpp; sourceTree = "<group>"; };
 		B3B5C19619F998AC004BE73E /* DisplayState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayState.h; sourceTree = "<group>"; };
+		B3B5C19B19FAE0DD004BE73E /* PageTypes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PageTypes.cpp; sourceTree = "<group>"; };
+		B3B5C19C19FAE0DD004BE73E /* PageTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageTypes.h; sourceTree = "<group>"; };
 		C0BA037438BD44409245C437 /* Cairo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = Cairo.cpp; path = ../../../../../clean_cinder/blocks/Cairo/src/Cairo.cpp; sourceTree = "<group>"; };
 		E41182AA85B64CB68B5DC950 /* SvgTest_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = SvgTest_Prefix.pch; sourceTree = "<group>"; };
 		E9F7A89FC8164A5CBEBCF4AB /* Cairo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Cairo.h; path = ../../../../../clean_cinder/blocks/Cairo/include/cinder/cairo/Cairo.h; sourceTree = "<group>"; };
@@ -376,14 +372,11 @@
 				B366298719F4207100FACB16 /* KioskManager.cpp */,
 				B366298819F4207100FACB16 /* KioskManager.h */,
 				B366299819F4739700FACB16 /* Node.h */,
-				B3B5C18919F85FF8004BE73E /* Button.cpp */,
-				B3B5C18A19F85FF8004BE73E /* Button.h */,
-				B3B5C18C19F913D4004BE73E /* Data.cpp */,
-				B3B5C18D19F913D4004BE73E /* Data.h */,
-				B3B5C18F19F960AF004BE73E /* ActivatableButton.cpp */,
-				B3B5C19019F960AF004BE73E /* ActivatableButton.h */,
-				B3B5C19219F9854E004BE73E /* Overlay.cpp */,
-				B3B5C19319F9854E004BE73E /* Overlay.h */,
+				B3274BD919FE61BC007B4348 /* Node.cpp */,
+				B3B5C19B19FAE0DD004BE73E /* PageTypes.cpp */,
+				B3B5C19C19FAE0DD004BE73E /* PageTypes.h */,
+				B3B5C18F19F960AF004BE73E /* ButtonTypes.cpp */,
+				B3B5C19019F960AF004BE73E /* ButtonTypes.h */,
 				B3B5C19519F998AC004BE73E /* DisplayState.cpp */,
 				B3B5C19619F998AC004BE73E /* DisplayState.h */,
 			);
@@ -486,6 +479,7 @@
 				F8DDC1429C214D2AAB3C0FCE /* SvgTestApp.cpp in Sources */,
 				B366298519F41F7800FACB16 /* Renderable.cpp in Sources */,
 				B366297919F41F7800FACB16 /* JsonManager.cpp in Sources */,
+				B3B5C19D19FAE0DD004BE73E /* PageTypes.cpp in Sources */,
 				B366297A19F41F7800FACB16 /* SvgManager.cpp in Sources */,
 				B366297819F41F7800FACB16 /* Engine.cpp in Sources */,
 				B366297D19F41F7800FACB16 /* hid_MACOSX.c in Sources */,
@@ -495,16 +489,14 @@
 				B366297E19F41F7800FACB16 /* HidCommManager.cpp in Sources */,
 				B366298319F41F7800FACB16 /* InfoDisplay.cpp in Sources */,
 				B69F30A36C3044738BCFF082 /* Cairo.cpp in Sources */,
+				B3274BDA19FE61BC007B4348 /* Node.cpp in Sources */,
 				B366297C19F41F7800FACB16 /* EventManagerBase.cpp in Sources */,
-				B3B5C19419F9854E004BE73E /* Overlay.cpp in Sources */,
 				B366297719F41F7800FACB16 /* Common.cpp in Sources */,
 				B366298019F41F7800FACB16 /* InteractionDebugRenderable.cpp in Sources */,
-				B3B5C18E19F913D4004BE73E /* Data.cpp in Sources */,
 				B3B5C19719F998AC004BE73E /* DisplayState.cpp in Sources */,
-				B3B5C18B19F85FF8004BE73E /* Button.cpp in Sources */,
 				B366298119F41F7800FACB16 /* InteractionEvents.cpp in Sources */,
 				B366297B19F41F7800FACB16 /* EventManager.cpp in Sources */,
-				B3B5C19119F960AF004BE73E /* ActivatableButton.cpp in Sources */,
+				B3B5C19119F960AF004BE73E /* ButtonTypes.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

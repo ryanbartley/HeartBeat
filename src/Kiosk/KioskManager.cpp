@@ -10,6 +10,7 @@
 #include "InteractionEvents.h"
 #include "EventManager.h"
 #include "InfoDisplay.h"
+#include "HidCommManager.h"
 
 #include "cinder/Log.h"
 
@@ -19,8 +20,9 @@ KioskManager::KioskManager()
 {
 	auto eventManager = EventManagerBase::get();
 	if( eventManager ) {
-		eventManager->addListener( EventListenerDelegate( this, &KioskManager::approachDelegate ), ApproachEvent::TYPE );
-		eventManager->addListener( EventListenerDelegate( this, &KioskManager::touchDelegate ), TableEvent::TYPE );
+		eventManager->addListener( std::bind( &KioskManager::approachDelegate, this, std::placeholders::_1 ), ApproachEvent::TYPE );
+		eventManager->addListener( std::bind( &KioskManager::departDelegate, this, std::placeholders::_1 ), DepartEvent::TYPE );
+		eventManager->addListener( std::bind( &KioskManager::touchDelegate, this, std::placeholders::_1 ), TableEvent::TYPE );
 		CI_LOG_V("KioskManager has registered it's event listeners");
 	}
 	else
@@ -30,10 +32,7 @@ KioskManager::KioskManager()
 	
 KioskManager::~KioskManager()
 {
-	for( auto & lock : mLocks ) {
-		lock.wait();
-	}
-	
+
 }
 	
 KioskManagerRef KioskManager::create()
@@ -50,6 +49,22 @@ void KioskManager::approachDelegate( EventDataRef approachEvent )
 		return;
 	}
 	
+	CI_LOG_V("Got a approachEvent for " << static_cast<int>(event->getKiosk()) );
+	mHidCommManager->activate( event->getKiosk(), true );
+	// Implement this.
+}
+	
+void KioskManager::departDelegate( EventDataRef departEvent )
+{
+	auto event = std::dynamic_pointer_cast<DepartEvent>( departEvent );
+	
+	if( ! event ) {
+		CI_LOG_E("Not a DepartEvent " << departEvent->getName() );
+		return;
+	}
+	
+	CI_LOG_V("Got a departEvent for " << static_cast<int>(event->getKiosk()) );
+	mHidCommManager->activate( event->getKiosk(), false );
 	// Implement this.
 }
 	
@@ -58,7 +73,7 @@ void KioskManager::touchDelegate( EventDataRef touchEvent )
 	auto event = std::dynamic_pointer_cast<TableEvent>( touchEvent );
 	
 	if( ! event ) {
-		CI_LOG_E("Not an ApproachEvent " << touchEvent->getName() );
+		CI_LOG_V("Not an touchEvent " << touchEvent->getName() );
 		return;
 	}
 	
@@ -67,26 +82,18 @@ void KioskManager::touchDelegate( EventDataRef touchEvent )
 	
 void KioskManager::update()
 {
-	uint32_t lock = 0;
-	for( auto & display : mDisplays ) {
-		mLocks[lock++] = std::async( std::launch::async, std::bind( &InfoDisplay::update, display ) );
-	}
+	
 }
 	
 void KioskManager::render()
 {
-	for( auto & lock : mLocks ) {
-		lock.wait();
-	}
 	
-	for( auto & display : mDisplays ) {
-		display->draw();
-	}
 }
 	
 void KioskManager::initialize()
 {
-	
+	mHidCommManager = HidCommManager::create();
+	mHidCommManager->initialize();
 }
 	
 }

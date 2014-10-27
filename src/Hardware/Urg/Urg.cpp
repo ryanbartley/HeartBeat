@@ -89,7 +89,7 @@ void Urg::read()
 	}
 }
 	
-void Urg::initialize()
+bool Urg::initialize()
 {
 	try {
 		auto & urgAttribs = JsonManager::get()->getRoot()["urg"];
@@ -98,24 +98,34 @@ void Urg::initialize()
 			auto urgAddress = urgAttribs["address"].getValue();
 			mDeviceName = urgAddress;
 			
+			auto devices = Serial::getDevices();  
+			for( auto & device : devices ) {
+				auto & name = device.getName();
+				// If the devices name contains this fill out the rest of the
+				// address with it.
+				cout << "\t" << name << endl;
+			}
+			
 			CI_LOG_V("Device Name Found: " << mDeviceName );
 		}
 		catch ( JsonTree::ExcChildNotFound &ex ) {
 			CI_LOG_W("Device address not found, finding first usb address");
 			// Query the available serial Devices
 			auto devices = Serial::getDevices();
-			
+			cout << "Available Devices: " << endl;
 			for( auto & device : devices ) {
 				auto & name = device.getName();
 				// If the devices name contains this fill out the rest of the
 				// address with it.
-				if( name.find( "tty.usbmodemfa" ) != std::string::npos )
-					mDeviceName += name;
+				cout << "\t" << name << endl;
 			}
+			return false;
 		}
+		return true;
 	}
 	catch( JsonTree::ExcChildNotFound &ex ) {
 		CI_LOG_E(ex.what());
+		return false;
 	}
 }
 	

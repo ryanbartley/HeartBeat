@@ -18,9 +18,15 @@
 		//////////////////////////////////////////////////////
 		"hid" : {
 			// Right now built on 0x0300, 0x0301, 0x0302
-			"top" : 	768, // int for 0x0300
-			"middle" : 	769, // int for 0x0301
-			"bottom" : 	770  // int for 0x0302
+			"numToOpen" : 3,
+			"positions" : [
+				"top", 		
+				"middle", 	
+				"bottom"  	
+			]
+			// 0 index for 0x0300
+			// 1 index for 0x0301
+			// 2 index for 0x0302
 		},
 		//////////////////////////////////////////////////////
 		// URG ATTRIBUTES
@@ -34,21 +40,29 @@
 		"interactionZones" : {
 			"barrierFile" : "tableData.bin",
 			"runUrg" : true,
+			"poleIndices" : [
+				378, 379, 380, 381, 382, 585, 586, 592, 606, 720, 725, 726, 727, 728, 1080
+			],
+			"approachZones" : {
+				"top" : [ 0 ,330 ],
+				"middle" : [ 331, 660 ],
+				"bottom" : [ 661, 1080 ]
+			},
 			"scales" : {
 				"table" : 0.85,
-				"dead" : 1.2,
-				"approach" : 1.5,
+				"dead" : 1.0,
+				"approach" : 1.3,
 				"far" : 1.8
 			},
 			"inBetweenThresh" : 50,
-			"transformation" : {
+			"transforms" : {
 				"scales" : [
-					0.01, 0.01
+					0.1, 0.1
 				],
 				"rotations" : {
 					// This can either contain "quaternion" : []
 					// or "angle" : degree, axis is vec3( 0, 0, 1 )
-					"angle" : 360
+					"angle" : 180
 				},
 				"translations" : {
 					// This can either contain "coordinates" : []
@@ -134,7 +148,87 @@
 			}
 		},
 		"svgAttribs" : {
-			"fileName" : "ACTEMRA_PondCharts_102114.svg"
+			"fileName" : "ACTEMRA_PondCharts_102114.svg",
+			"pageAttribs" : {
+				"dataPages" : {
+					"sections" : { 
+						"1" : [ "1-1", "1-2", "1-3", "1-4", "1-5" ],
+						"2" : [ "2-1", "2-2", "2-3", "2-4", "2-5", "2-6" ],
+						"3" : [ "3-1", "3-2", "3-3", "3-4" ],
+						"4" : [ "4-1", "4-2", "4-3" ],
+						"5" : [ "5-1", "5-2", "5-3", "5-4", "5-5" ]
+					}
+				},
+				"overlayPages" : {
+					"REFERENCE" : {
+						"type" : "overlay",
+						"button" : "ref"
+					},
+					"STUDY-1" : {
+						"type" : "overlaySection",
+						"button" : "study",
+						"section" : "1"
+					},
+					"STUDY-2" : {
+						"type" : "overlaySection",
+						"button" : "study",
+						"section" : "2"
+					},
+					"STUDY-3" : {
+						"type" : "overlaySection",
+						"button" : "study",
+						"section" : "3"
+					},
+					"STUDY-4" : {
+						"type" : "overlaySection",
+						"button" : "study",
+						"section" : "4"
+					},
+					"ISI" : {
+						"images" : [
+							"ISI-1",
+							"ISI-2",
+							"ISI-3",
+							"ISI-4",
+							"ISI-5"
+						],
+						"button" : "isi",
+						"type" : "overlayPlus"
+					}
+					
+				}
+			},
+			"buttonAttribs" : {
+				"D1" : {
+					"type" : "dataPageButton",
+					"section" : "1"
+				},
+				"D2" : {
+					"type" : "dataPageButton",
+					"section" : "2"
+				},
+				"D3" : {
+					"type" : "dataPageButton",
+					"section" : "3"
+				},
+				"D4" : {
+					"type" : "dataPageButton",
+					"section" : "4"
+				},
+				"D5" : {
+					"type" : "dataPageButton",
+					"section" : "5"
+				},
+				"BUTTON-PREV" : {
+
+				},
+				"BUTTON-NEXT" : {
+
+				},
+				"BUTTON-MENU" : {
+						
+				}
+			}
 		}
 	}
 }

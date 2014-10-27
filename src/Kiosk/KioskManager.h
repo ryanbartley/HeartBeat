@@ -20,18 +20,18 @@ public:
 	static KioskManagerRef create();
 	
 	void approachDelegate( EventDataRef approachEvent );
+	void departDelegate( EventDataRef departEvent );
 	void touchDelegate( EventDataRef touchEvent );
 	
 	void update();
 	void render();
 	
+	void initialize();
+	
 private:
 	KioskManager();
 	
-	void initialize();
-	
 	std::array<InfoDisplayRef, 3>			mDisplays;
-	std::array<std::shared_future<void>, 3> mLocks;
 	HidCommManagerRef						mHidCommManager;
 	
 	friend class Engine;

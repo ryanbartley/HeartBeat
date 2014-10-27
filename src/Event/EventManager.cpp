@@ -34,17 +34,17 @@ bool EventManager::addListener( const EventListenerDelegate &eventDelegate, cons
 	CI_LOG_V( "Attempting to add delegate function for event type: " + to_string( type ) );
 	
 	auto & eventDelegateList = mEventListeners[type];
-	auto listenIt = eventDelegateList.begin();
-	auto end = eventDelegateList.end();
-	while ( listenIt != end ) {
-		if ( eventDelegate == (*listenIt)) {
-			CI_LOG_W("Attempting to double-register a delegate");
-			return false;
-		}
-		++listenIt;
-	}
-	
-	eventDelegateList.push_back(eventDelegate);
+//	auto listenIt = eventDelegateList.begin();
+//	auto end = eventDelegateList.end();
+//	while ( listenIt != end ) {
+//		if ( eventDelegate == (*listenIt) ) {
+//			CI_LOG_W("Attempting to double-register a delegate");
+//			return false;
+//		}
+//		++listenIt;
+//	}
+	eventDelegateList.connect( eventDelegate );
+//	eventDelegateList.push_back(eventDelegate);
 	CI_LOG_V("Successfully added delegate for event type: " + to_string( type ) );
 	return true;
 }
@@ -56,15 +56,15 @@ bool EventManager::removeListener( const EventListenerDelegate &eventDelegate, c
 	
 	auto found = mEventListeners.find(type);
 	if( found != mEventListeners.end() ) {
-		auto & listeners = found->second;
-		for( auto listIt = listeners.begin(); listIt != listeners.end(); ++listIt ) {
-			if( eventDelegate == (*listIt) ) {
-				listeners.erase(listIt);
-				CI_LOG_V("Successfully removed delegate function from event type: ");
-				success = true;
-				break;
-			}
-		}
+//		auto & listeners = found->second;
+//		for( auto listIt = listeners.begin(); listIt != listeners.end(); ++listIt ) {
+//			if( eventDelegate == (*listIt) ) {
+//				listeners.erase(listIt);
+//				CI_LOG_V("Successfully removed delegate function from event type: ");
+//				success = true;
+//				break;
+//			}
+//		}
 	}
 	return success;
 }
@@ -76,13 +76,14 @@ bool EventManager::triggerEvent( const EventDataRef &event )
 	
 	auto found = mEventListeners.find(event->getEventType());
 	if( found != mEventListeners.end() ) {
-		const auto & eventListenerList = found->second;
-		for( auto listIt = eventListenerList.begin(); listIt != eventListenerList.end(); ++listIt ) {
-			auto& listener = (*listIt);
-			CI_LOG_V("Sending event " + std::string( event->getName() ) + " to delegate.");
-			listener( event );
-			processed = true;
-		}
+//		const auto & eventListenerList = found->second;
+		found->second( event );
+//		for( auto listIt = eventListenerList.begin(); listIt != eventListenerList.end(); ++listIt ) {
+//			auto& listener = (*listIt);
+//			CI_LOG_V("Sending event " + std::string( event->getName() ) + " to delegate.");
+//			listener( event );
+//			processed = true;
+//		}
 	}
 	
 	return processed;
@@ -146,7 +147,11 @@ bool EventManager::update( uint64_t maxMillis )
 	mActiveQueue = (mActiveQueue + 1) % NUM_QUEUES;
 	mQueues[mActiveQueue].clear();
 	
-	CI_LOG_V("Processing Event Queue " + to_string(queueToProcess) + "; " + to_string(mQueues[queueToProcess].size()) + " events to process");
+	static bool processNotify = false;
+	if( ! processNotify ) {
+		CI_LOG_V("Processing Event Queue " + to_string(queueToProcess) + "; " + to_string(mQueues[queueToProcess].size()) + " events to process");
+		processNotify = true;
+	}
 	
 	while (!mQueues[queueToProcess].empty()) {
 		auto event = mQueues[queueToProcess].front();
@@ -157,16 +162,17 @@ bool EventManager::update( uint64_t maxMillis )
 		
 		auto found = mEventListeners.find(eventType);
 		if(found != mEventListeners.end()) {
-			const auto & eventListeners = found->second;
-			CI_LOG_V("\t\tFound " + to_string(eventListeners.size()) + " delegates");
-			
-			auto listIt = eventListeners.begin();
-			auto end = eventListeners.end();
-			while( listIt++ != end ) {
-				auto listener = (*listIt);
-				CI_LOG_V("\t\tSending Event " + std::string( event->getName()) + " to delegate");
-				listener(event);
-			}
+			found->second( event );
+//			const auto & eventListeners = found->second;
+//			CI_LOG_V("\t\tFound " + to_string(eventListeners.size()) + " delegates");
+//			
+//			auto listIt = eventListeners.begin();
+//			auto end = eventListeners.end();
+//			while( listIt++ != end ) {
+//				auto listener = (*listIt);
+//				CI_LOG_V("\t\tSending Event " + std::string( event->getName()) + " to delegate");
+//				listener(event);
+//			}
 		}
 		
 		currMs = app::App::get()->getElapsedSeconds() * 1000;//Engine::getTickCount();

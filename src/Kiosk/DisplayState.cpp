@@ -7,7 +7,7 @@
 //
 
 #include "DisplayState.h"
-#include "ActivatableButton.h"
+#include "ButtonTypes.h"
 
 namespace heartbeat {
 	
@@ -27,17 +27,17 @@ void DisplayState::update()
 	
 void DisplayState::renderToSurface()
 {
-	auto ctx = mParent->getContext();
-	ctx.flush();
+//	auto ctx = mParent->getContext();
+//	ctx.flush();
 	
 //	ctx.render( mCurrentPage-> )
 	
 	
-	for( auto & button : mButtons ) {
-		if( button->getType() == ActivatableButton::TYPE ) {
-			
-		}
-	}
+//	for( auto & button : mButtons ) {
+//		if( button->getType() == ActivatableButton::TYPE ) {
+//			
+//		}
+//	}
 }
 	
 }

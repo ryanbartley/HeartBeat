@@ -15,23 +15,20 @@ namespace heartbeat {
 	
 struct Hid {
 	
-	Hid( KioskId hidId, int16_t address )
-	: mId( hidId ), mAddress( address ),
-		mOpen( false ), mNum( -1 )
-	{}
+	Hid( KioskId hidId, int index );
 	
 	const KioskId	mId;
-	const int16_t	mAddress;
 	int				mNum;
 	bool			mOpen;
+	bool			mActivated;
 };
 	
 struct HidMessage {
 
-	static const uint32_t MAX_PACKET_SIZE;
-	
-	Hid* mHid;
-	std::vector<uint8_t> mBuffer;
+	static constexpr uint32_t MAX_PACKET_SIZE = 64;
+
+	int  mBytesUsed = 64;
+	std::array<uint8_t, MAX_PACKET_SIZE> mBuffer;
 };
 	
 struct HidProtocol {
@@ -50,21 +47,16 @@ public:
 	static HidCommManagerRef get();
 	static void destroy();
 	
-	void update();
+	void send( const Hid &hid, HidMessage &packet );
+	HidMessage recv( const Hid & hid );
 	
-	void write( const HidMessage &packet );
-	HidMessage recv( const Hid* hid );
+	void activate( KioskId kioskId, bool activate );
+	
+	void initialize();
+	static std::string getReadableHid( KioskId kioskId );
 	
 private:
 	HidCommManager();
-	
-	void initialize();
-	
-	void openConnections( Hid &hid );
-
-	void setTop( int16_t topAddress );
-	void setBottom( int16_t bottomAddress );
-	void setMiddle( int16_t middleAddress );
 	
 	std::map<KioskId, Hid> mConnections;
 	

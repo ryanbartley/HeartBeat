@@ -53,7 +53,9 @@ ci::DataSourceRef getFileContents( const std::string &fileName )
 		auto path = getWorkingResourcePath() / fileName;
 		ret = ci::loadFile( path );
 #else
-		ret = loadResource( fileName );
+		auto path = getWorkingResourcePath() / fileName;
+		ret = ci::loadFile( path );
+//		ret = loadResource( fileName );
 #endif
 		return ret;
 	}

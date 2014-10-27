@@ -61,8 +61,8 @@ void InfoDisplay::initiaize(const ci::JsonTree &root)
 				size[i++] = dimension.getValue<float>();
 			}
 			
-			mSurface = cairo::SurfaceImage( size.x, size.y, true );
-			mContext = cairo::Context( mSurface );
+//			mSurface = cairo::SurfaceImage( size.x, size.y, true );
+//			mContext = cairo::Context( mSurface );
 		}
 		catch ( const JsonTree::ExcChildNotFound &ex ) {
 			CI_LOG_W("Couldn't find surface Attribs " << ex.what());

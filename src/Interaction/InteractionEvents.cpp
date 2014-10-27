@@ -14,5 +14,6 @@ namespace heartbeat {
 	
 const EventType ApproachEvent::TYPE = Hash::HASHER("ApproachEvent");
 const EventType TableEvent::TYPE = Hash::HASHER("TableEvent");
+const EventType DepartEvent::TYPE = Hash::HASHER("DepartEvent");
 	
 }

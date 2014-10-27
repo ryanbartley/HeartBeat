@@ -11,6 +11,10 @@
 #include "Common.h"
 #include "cinder/svg/Svg.h"
 
+namespace cinder {
+class JsonTree;
+}
+
 namespace heartbeat {
 	
 class SvgManager {
@@ -18,7 +22,7 @@ public:
 	
 	static SvgManagerRef create();
 	static SvgManagerRef get();
-	
+	static void destroy();
 	
 	SvgManager( const SvgManager & ) = delete;
 	SvgManager( SvgManager && ) = delete;
@@ -28,26 +32,30 @@ public:
 	~SvgManager();
 	
 	const ci::svg::Group* getGroup( const std::string &groupId ) { return mDoc->find<ci::svg::Group>( groupId ); }
-	
 	const ci::svg::Node* getNode( const std::string &groupId ) { return mDoc->findNode( groupId ); }
 	const ci::svg::DocRef& getDoc() { return mDoc; }
 	
 	void initialize();
 	
-	ButtonRef	getButton( const std::string &name );
-	DataRef		getData( const std::string &name );
+	ButtonRef		getButton( const std::string &name );
+	DataPageRef		getData( const std::string &name );
+	OverlayPageRef	getOverlay( const std::string &name );
 	
 private:
 	SvgManager();
 	
+	void initializeDataPages( const ci::JsonTree &root );
+	void initializeOverlayPages( const ci::JsonTree &root );
+	void initializeButtons( const ci::JsonTree &root );
 	
-	static void destroy();
+	void initializeGl();
 	
 	ci::svg::DocRef mDoc;
 	std::string		mFileName;
 	
-	std::map<std::string, ButtonRef>	mButtons;
-	std::map<std::string, DataRef>		mDatas;
+	std::map<std::string, ButtonRef>		mButtons;
+	std::map<std::string, DataPageRef>		mDatas;
+	std::map<std::string, OverlayPageRef>   mOverlays;
 	
 	friend class Engine;
 };

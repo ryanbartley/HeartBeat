@@ -24,7 +24,6 @@
 #include <avr/io.h>
 #include <avr/pgmspace.h>
 #include <util/delay.h>
-#include <memory>
 
 #define DEBUG 0
 
@@ -35,7 +34,6 @@
 #endif
 
 #include "print.h"
-#include "PWMServo.h"
 
 
 // Teensy 2.0: LED is active high
@@ -57,8 +55,6 @@ void morse_character(char c);
 void morse_P(const char *s);
 const unsigned char morse_code_table[];
 
-PWMServo* servo;
-
 
 int main(void)
 {
@@ -68,8 +64,6 @@ int main(void)
 	CPU_PRESCALE(0);
 	LED_CONFIG;
 	LED_OFF;
-	
-	servo = new PWMServo();
 
 	// initialize the USB, but don't want for the host to
 	// configure.  The first several messages sent will be

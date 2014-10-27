@@ -11,6 +11,8 @@
 #include "Common.h"
 #include "Transformation.h"
 
+#include <deque>
+
 namespace heartbeat {
 	
 struct Interactor {
@@ -20,7 +22,30 @@ struct Interactor {
 	
 	int			mIndex;
 	long		mDistance;
-	ci::vec3	mModelSpacePoint;
+};
+	
+struct ApproachData {
+	
+	ApproachData( KioskId kiosk, int lowestIndex, int highestIndex )
+	: mKiosk( kiosk ), mLowestIndex( lowestIndex ), mHighestIndex( highestIndex ),
+	mIsActivated( false ), mNumEvents( 0 )
+	{}
+	
+	inline bool contains( int index ) { return mLowestIndex < index && mHighestIndex > index; }
+	inline void addEvent() { mNumEvents++; }
+	bool	getIsActivated() const { return mIsActivated; }
+	void	activate( bool enable ) { mIsActivated = enable; }
+	size_t	getNumDistances() const { return mNumEvents; }
+	KioskId getKiosk() const { return mKiosk; }
+	void	reset() { mNumEvents = 0; }
+	inline const int getLowest() const { return mLowestIndex; }
+	inline const int getHighest() const { return mHighestIndex; }
+	
+	const KioskId		mKiosk;
+	const int			mLowestIndex, mHighestIndex;
+	int					mNumEvents;
+	bool				mIsActivated;
+	
 };
 	
 class InteractionZones {
@@ -83,6 +108,8 @@ private:
 	//! Sets the current scalar of \a zone.
 	void setZoneScalar( Zone zone, float scalar );
 	
+	inline void processApproaches( const std::vector<Interactor> &events );
+	
 	inline void addEvent( std::vector<Interactor> &events, int index, long dist );
 	
 	//! Normalized scalar to be applied to the barrier
@@ -91,6 +118,9 @@ private:
 	std::map<Zone, float>		mZones;
 	//! Static Barrier of the object in question
 	std::vector<long>			mBarrier;
+	
+	std::map<KioskId, ApproachData>		mApproachZones;
+	std::vector<uint32_t>				mPoleIndices;
 	
 	int							mInBetweenThreshold;
 	bool						mZoneScalarsUpdated;
@@ -111,7 +141,7 @@ void InteractionZones::addEvent( std::vector<Interactor> &events, int index, lon
 		events.emplace_back( index, dist );
 	else {
 		auto & back = events.back();
-		// if we're one more and our distance is less than this is a more precise
+		// if we're one more and our distance is less than, this is a more precise
 		// middle point
 		if( index == back.mIndex + 1 ) {
 			if(  dist <= back.mDistance ) {
@@ -123,6 +153,17 @@ void InteractionZones::addEvent( std::vector<Interactor> &events, int index, lon
 		// it's another object
 		else if( index > back.mIndex + mInBetweenThreshold ){
 			events.emplace_back( index, dist );
+		}
+	}
+}
+	
+void InteractionZones::processApproaches( const std::vector<Interactor> &events )
+{
+	for( auto & event : events ) {
+		for( auto & approachZone : mApproachZones ) {
+			if( approachZone.second.contains( event.mIndex ) ) {
+				approachZone.second.addEvent();
+			}
 		}
 	}
 }

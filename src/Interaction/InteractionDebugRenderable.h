@@ -38,6 +38,8 @@ public:
 	
 	bool isDistanceEnabled() { return mDrawDistanceData; }
 	bool isZoneEnabled() { return mDrawZoneData; }
+	
+	void touchDelegate( EventDataRef event );
 
 private:
 	InteractionDebugRenderable( const InteractionZonesRef &interactionZones );
@@ -47,6 +49,7 @@ private:
 	size_t					mNumBarrierVertices;
 	
 	InteractionZonesRef		mInteractionZones;
+	std::list<int>		mTouchIndices;
 	
 	bool					mDrawDistanceData, mDrawZoneData, mZoneCached;
 };

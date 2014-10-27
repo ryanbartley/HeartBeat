@@ -38,9 +38,11 @@ using KioskManagerRef = std::shared_ptr<class KioskManager>;
 using SpringMeshRef = std::shared_ptr<class SpringMesh>;
 using PondElementRef = std::shared_ptr<class PondElement>;
 
-using ButtonRef		= std::shared_ptr<class Button>;
-using DataRef		= std::shared_ptr<class Data>;
-using OverlayRef	= std::shared_ptr<class Overlay>;
+using ButtonRef			= std::shared_ptr<class Button>;
+using DataPageRef		= std::shared_ptr<class DataPage>;
+using OverlayPageRef	= std::shared_ptr<class OverlayPage>;
+using OverlaySectionRef = std::shared_ptr<class OverlaySection>;
+using OverlayPlusRef	= std::shared_ptr<class OverlayPlus>;
 	
 using EventType		= uint64_t;
 using EventDataRef	= std::shared_ptr<class EventData>;

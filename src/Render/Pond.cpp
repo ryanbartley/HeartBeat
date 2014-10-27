@@ -123,7 +123,7 @@ void Pond::initialize()
 	auto eventManager = EventManagerBase::get();
 	
 	if( eventManager ) {
-		eventManager->addListener( EventListenerDelegate( this, &Pond::touchDelegate ), TableEvent::TYPE );
+		eventManager->addListener( std::bind( &Pond::touchDelegate, this, std::placeholders::_1 ), TableEvent::TYPE );
 	}
 
 }

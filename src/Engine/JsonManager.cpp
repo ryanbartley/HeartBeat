@@ -22,7 +22,7 @@ JsonManagerRef	JsonManager::get() {
 		return sJsonManager;
 	}
 	
-	CI_LOG_W("Trying to access JsonManager after it's already been destroyed()");
+	CI_LOG_W("Trying to access JsonManager after it's not initialized or already been destroyed");
 	return nullptr;
 }
 	

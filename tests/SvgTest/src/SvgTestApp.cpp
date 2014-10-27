@@ -9,7 +9,7 @@
 
 #include "SvgManager.h"
 #include "JsonManager.h"
-#include "Button.h"
+#include "Node.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -62,10 +62,10 @@ void SvgTestApp::setup()
 	
 	mManager = heartbeat::SvgManager::create();
 	mManager->initialize();
-	
+	quit();
 //	mButton = heartbeat::Button::create( "BUTTONS" );
-	mDoc = mManager->getDoc();
-	mTexture = renderSvgGroupToTexture( *mDoc, "D2", true );
+//	mDoc = mManager->getDoc();
+//	mTexture = renderSvgGroupToTexture( *mDoc, "D2", true );
 }
 
 void SvgTestApp::mouseDown( MouseEvent event )

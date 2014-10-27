@@ -9,8 +9,7 @@
 #pragma once
 
 #include "Button.h"
-#include "Data.h"
-#include "Overlay.h"
+#include "PageTypes.h"
 #include "InfoDisplay.h"
 
 namespace heartbeat {
@@ -30,8 +29,8 @@ private:
 	InfoDisplayRef			mParent;
 	ButtonRef				mCurrentActiveButton;
 	std::vector<ButtonRef>	mButtons;
-	DataRef					mCurrentPage, mNextPage;
-	OverlayRef				mCurrentOverlay;
+	DataPageRef				mCurrentPage, mNextPage;
+	OverlayPageRef			mCurrentOverlay;
 };
 	
 }

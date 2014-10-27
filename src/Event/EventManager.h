@@ -18,7 +18,7 @@ namespace heartbeat {
 constexpr auto NUM_QUEUES = 2u;
 	
 class EventManager : public EventManagerBase {
-	using EventListenerList = std::list<EventListenerDelegate>;
+	using EventListenerList = boost::signals2::signal<void(EventDataRef)>;
 	using EventListenerMap	= std::map<EventType, EventListenerList>;
 	using EventQueue		= std::deque<EventDataRef>;
 	

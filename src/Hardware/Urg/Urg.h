@@ -56,7 +56,7 @@ private:
 	Urg();
 	
 	//! Loads settings from JsonManager.
-	void initialize();
+	bool initialize();
 	
 	urg_t				mSensor;
 	std::string			mDeviceName;
