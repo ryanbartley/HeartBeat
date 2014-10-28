@@ -349,6 +349,7 @@ float InteractionZones::getZoneScalar( Zone zone )
 	
 void InteractionZones::process()
 {
+	static int captureFrames = 20;
 	if( ! mUrg ) {
 		static bool runOnce = false;
 		if( ! runOnce ) {
@@ -357,6 +358,7 @@ void InteractionZones::process()
 		}
 		return;
 	}
+	
 		
 	mUrg->read();
 	auto & data = mUrg->getCurrentData();
@@ -393,6 +395,7 @@ void InteractionZones::process()
 			}
 		}
 		if( emitEvents ) {
+			if( data[i] == 1 ) data[i] = 100000;
 			if( data[i] > *barrierIt * APPROACH_SCALAR ) {
 				// do nothing
 			}
@@ -412,14 +415,21 @@ void InteractionZones::process()
 					addEvent( touchEvents, i, data[i] );
 				}
 				else {
-					mIgnoreIndices.push_back( i );
+					auto found = std::find( mIgnoreIndices.begin(), mIgnoreIndices.end(), i );
+					if ( found == mIgnoreIndices.end() ) {
+						mIgnoreIndices.push_back( i );
+						std::sort( mIgnoreIndices.begin(), mIgnoreIndices.end(), []( int i, int j ) {
+							return i < j;
+						});
+					}
 				}
 			}
 		}
 	}
 	
-	if( ! mSendEvents ) {
+	if( ! mSendEvents && ! ( captureFrames-- ) ) {
 		mSendEvents = true;
+		captureFrames = 10;
 		return;
 	}
 	
@@ -436,24 +446,28 @@ void InteractionZones::process()
 	
 	if( ! approachEvents.empty() ) {
 		processApproaches( approachEvents );
-		for( auto & zone : mApproachZones ) {
-			auto & approachZone = zone.second;
-			auto activated = approachZone.getIsActivated();
-			auto numDistances = approachZone.getNumDistances();
-			if( activated && numDistances == 0 ) {
-				eventManager->queueEvent( EventDataRef( new DepartEvent( approachZone.getKiosk() ) ) );
-				approachZone.activate( false );
-			}
-			else if( !activated && numDistances > 0 ) {
-				eventManager->queueEvent( EventDataRef( new ApproachEvent( approachZone.getKiosk() ) ) );
-				approachZone.activate( true );
-				
-			}
-			approachZone.reset();
+	}
+	
+	for( auto & zone : mApproachZones ) {
+		auto & approachZone = zone.second;
+		auto activated = approachZone.getIsActivated();
+		auto numDistances = approachZone.getNumDistances();
+		if( activated && numDistances == 0 ) {
+			eventManager->queueEvent( EventDataRef( new DepartEvent( approachZone.getKiosk() ) ) );
+			approachZone.activate( false );
+			cout << "Deactivating" << endl;
 		}
+		else if( !activated && numDistances > 0 ) {
+			eventManager->queueEvent( EventDataRef( new ApproachEvent( approachZone.getKiosk() ) ) );
+			approachZone.activate( true );
+			cout << "Activating" << endl;
+		}
+		cout << "Approach Zone: " << getKiosk( approachZone.getKiosk() ) << " numEvents: " << approachZone.getNumDistances() << " isActivated: " << approachZone.getIsActivated() << endl;
+		approachZone.reset();
 	}
 	
 	for( auto touchIt = touchEvents.begin(); touchIt != touchEvents.end(); ++touchIt ) {
+		cout << "TOUCH EVENT: index: " << touchIt->mIndex << " dist: " << touchIt->mDistance << endl;
 		eventManager->queueEvent( EventDataRef( new TouchEvent( touchIt->mIndex, touchIt->mDistance, shared_from_this() ) ) );
 	}
 	

@@ -166,6 +166,7 @@ void InteractionDebugRenderable::draw()
 	
 	gl::ScopedModelMatrix scopeModel;
 	gl::setModelMatrix( getModelMatrix() );
+	gl::ScopedColor scopeColor( Color( 1, 1, 1 ) );
 	
 	if( mDrawZoneData ) {
 		drawZones();

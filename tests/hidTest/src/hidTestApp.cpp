@@ -239,6 +239,7 @@ void hidTestApp::drawColorString( const ci::vec2 &size, const std::string &str, 
 {
 	gl::color( background );
 	gl::drawSolidRect( Rectf( 0, 0, size.x, size.y ) );
+	gl::color( 1, 1, 1 );
 	gl::drawStringCentered( str, vec2( size.x / 2.0f, size.y / 2.0f ), text );
 }
 
@@ -251,6 +252,7 @@ void hidTestApp::update()
 
 void hidTestApp::drawKey()
 {
+	gl::enableAlphaBlending();
 	auto size = vec2( 200, 40 );
 	{
 		gl::ScopedModelMatrix scopeModel;
@@ -298,7 +300,7 @@ void hidTestApp::drawKey()
 		gl::multModelMatrix( ci::translate( vec3( getWindowWidth() - size.x, 30 + size.y * 7, 0 )  ) );
 		drawColorString( size, "Unreg. Index", Color( 1, 1, 1 ), Color::black() );
 	}
-	
+	gl::disableAlphaBlending();
 }
 
 void hidTestApp::draw()
