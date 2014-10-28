@@ -83,7 +83,7 @@ protected:
 };
 	
 using CloseButtonRef = std::shared_ptr<class CloseButton>;
-using NavagableButtonRef = std::shared_ptr<class NavagableButton>;
+using NavigableButtonRef = std::shared_ptr<class NavigableButton>;
 	
 class CloseButton : public StaticButton {
 public:
@@ -104,12 +104,12 @@ private:
 	
 };
 	
-class NavagableButton : public StaticButton {
+class NavigableButton : public StaticButton {
 public:
 	
 	static const ButtonId TYPE;
 	
-	static NavagableButtonRef create( const std::string &buttonId );
+	static NavigableButtonRef create( const std::string &buttonId );
 	
 	void changeState( InfoDisplayRef &display ) override;
 	ButtonId getType() const override { return TYPE; }
@@ -118,7 +118,7 @@ public:
 	void initializeGl() override;
 	
 private:
-	NavagableButton( const std::string &buttonId );
+	NavigableButton( const std::string &buttonId );
 };
 	
 }

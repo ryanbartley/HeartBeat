@@ -25,7 +25,7 @@ DataPageRef DataPage::create( const std::string &name )
 	return DataPageRef( new DataPage( name ) );
 }
 
-void DataPage::initialize( const ci::JsonTree &root )
+bool DataPage::initialize( const ci::JsonTree &root )
 {
 	
 }
@@ -40,9 +40,53 @@ OverlayPageRef OverlayPage::create( const std::string &name )
 	return OverlayPageRef( new OverlayPage( name ) );
 }
 	
-void OverlayPage::initialize( const ci::JsonTree &root )
+bool OverlayPage::initialize( const ci::JsonTree &root )
 {
+	try {
+		
+	}
+	catch( const JsonTree::ExcChildNotFound &ex ) {
+		
+	}
+}
 	
+OverlaySection::OverlaySection( const std::string &name )
+: OverlayPage( name )
+{
+}
+
+OverlaySectionRef OverlaySection::create( const std::string &name )
+{
+	return OverlaySectionRef( new OverlaySection( name ) );
+}
+
+bool OverlaySection::initialize( const ci::JsonTree &root )
+{
+	try {
+		
+	} catch ( const JsonTree::ExcChildNotFound &ex ) {
+		
+	}
+}
+
+OverlayPlus::OverlayPlus( const std::string &name )
+: OverlayPage( name )
+{
+}
+
+OverlayPlusRef OverlayPlus::create( const std::string &name )
+{
+	return OverlayPlusRef( new OverlayPlus( name ) );
+}
+
+bool OverlayPlus::initialize( const ci::JsonTree &root )
+{
+	try {
+		
+	}
+	catch( const JsonTree::ExcChildNotFound &ex ) {
+		
+	}
 }
 
 }

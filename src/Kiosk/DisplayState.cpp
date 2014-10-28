@@ -8,6 +8,7 @@
 
 #include "DisplayState.h"
 #include "ButtonTypes.h"
+#include "InfoDisplay.h"
 
 namespace heartbeat {
 	
@@ -25,19 +26,9 @@ void DisplayState::update()
 	
 }
 	
-void DisplayState::renderToSurface()
+void DisplayState::render()
 {
-//	auto ctx = mParent->getContext();
-//	ctx.flush();
-	
-//	ctx.render( mCurrentPage-> )
-	
-	
-//	for( auto & button : mButtons ) {
-//		if( button->getType() == ActivatableButton::TYPE ) {
-//			
-//		}
-//	}
+
 }
 	
 }

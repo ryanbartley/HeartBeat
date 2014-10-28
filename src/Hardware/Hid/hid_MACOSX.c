@@ -34,12 +34,13 @@
 #include <unistd.h>
 #include <IOKit/IOKitLib.h>
 #include <IOKit/hid/IOHIDLib.h>
+#include <IOKit/hid/IOHIDKeys.h>
 
 #include "hid.h"
 
 #define BUFFER_SIZE 64
 
-#define printf(...) // comment this out to get lots of info printed
+//#define printf(...) // comment this out to get lots of info printed
 
 
 // a list of all opened HID devices, so the caller can
@@ -51,6 +52,7 @@ static hid_t *last_hid = NULL;
 struct hid_struct {
 	IOHIDDeviceRef ref;
 	int open;
+	int32_t usage;
 	uint8_t buffer[BUFFER_SIZE];
 	buffer_t *first_buffer;
 	buffer_t *last_buffer;
@@ -65,6 +67,7 @@ struct buffer_struct {
 
 // private functions, not intended to be used from outside this file
 static void add_hid(hid_t *);
+static hid_t * get_hid_by_id(int);
 static hid_t * get_hid(int);
 static void free_all_hid(void);
 static void hid_close(hid_t *);
@@ -107,6 +110,60 @@ int rawhid_recv(int num, void *buf, int len, int timeout)
 	context.info = &timeout_occurred;
 	timer = CFRunLoopTimerCreate(NULL, CFAbsoluteTimeGetCurrent() +
 		(double)timeout / 1000.0, 0, 0, 0, timeout_callback, &context);
+	CFRunLoopAddTimer(CFRunLoopGetCurrent(), timer, kCFRunLoopDefaultMode);
+	while (1) {
+		CFRunLoopRun();
+		if ((b = hid->first_buffer) != NULL) {
+			if (len > b->len) len = b->len;
+			memcpy(buf, b->buf, len);
+			hid->first_buffer = b->next;
+			free(b);
+			ret = len;
+			break;
+		}
+		if (!hid->open) {
+			printf("rawhid_recv, device not open\n");
+			ret = -1;
+			break;
+		}
+		if (timeout_occurred) break;
+	}
+	CFRunLoopTimerInvalidate(timer);
+	CFRelease(timer);
+	return ret;
+}
+
+//  rawhid_recv - receive a packet
+//    Inputs:
+//	num = device to receive from (zero based)
+//	buf = buffer to receive packet
+//	len = buffer's size
+//	timeout = time to wait, in milliseconds
+//    Output:
+//	number of bytes received, or -1 on error
+//
+int rawhid_recv_by_id(int id, void *buf, int len, int timeout)
+{
+	hid_t *hid;
+	buffer_t *b;
+	CFRunLoopTimerRef timer=NULL;
+	CFRunLoopTimerContext context;
+	int ret=0, timeout_occurred=0;
+	
+	if (len < 1) return 0;
+	hid = get_hid_by_id(id);
+	if (!hid || !hid->open) return -1;
+	if ((b = hid->first_buffer) != NULL) {
+		if (len > b->len) len = b->len;
+		memcpy(buf, b->buf, len);
+		hid->first_buffer = b->next;
+		free(b);
+		return len;
+	}
+	memset(&context, 0, sizeof(context));
+	context.info = &timeout_occurred;
+	timer = CFRunLoopTimerCreate(NULL, CFAbsoluteTimeGetCurrent() +
+								 (double)timeout / 1000.0, 0, 0, 0, timeout_callback, &context);
 	CFRunLoopAddTimer(CFRunLoopGetCurrent(), timer, kCFRunLoopDefaultMode);
 	while (1) {
 		CFRunLoopRun();
@@ -214,6 +271,48 @@ int rawhid_send(int num, void *buf, int len, int timeout)
 	//
 	IOHIDDeviceSetReportWithCallback(hid->ref, kIOHIDReportTypeOutput,
 		0, buf, len, (double)timeout / 1000.0, output_callback, &result);
+	while (1) {
+		printf("enter run loop (send)\n");
+		CFRunLoopRun();
+		printf("leave run loop (send)\n");
+		if (result > -100) break;
+		if (!hid->open) {
+			result = -1;
+			break;
+		}
+	}
+#endif
+	return result;
+}
+
+int rawhid_send_by_id(int id, void *buf, int len, int timeout)
+{
+	hid_t *hid;
+	int result=-100;
+	
+	hid = get_hid_by_id(id);
+	if (!hid || !hid->open) return -1;
+#if 1
+#warning "Send timeout not implemented on MACOSX"
+	IOReturn ret = IOHIDDeviceSetReport(hid->ref, kIOHIDReportTypeOutput, 0, buf, len);
+	result = (ret == kIOReturnSuccess) ? len : -1;
+#endif
+#if 0
+	// No matter what I tried this never actually sends an output
+	// report and output_callback never gets called.  Why??
+	// Did I miss something?  This is exactly the same params as
+	// the sync call that works.  Is it an Apple bug?
+	// (submitted to Apple on 22-sep-2009, problem ID 7245050)
+	//
+	IOHIDDeviceScheduleWithRunLoop(hid->ref, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
+	// should already be scheduled with run loop by attach_callback,
+	// sadly this doesn't make any difference either way
+	
+	// could this be related?
+	// http://lists.apple.com/archives/usb/2008/Aug/msg00021.html
+	//
+	IOHIDDeviceSetReportWithCallback(hid->ref, kIOHIDReportTypeOutput,
+									 0, buf, len, (double)timeout / 1000.0, output_callback, &result);
 	while (1) {
 		printf("enter run loop (send)\n");
 		CFRunLoopRun();
@@ -343,6 +442,14 @@ static void add_hid(hid_t *h)
 	last_hid = h;
 }
 
+static hid_t * get_hid_by_id(int id)
+{
+	hid_t *p;
+	for(p = first_hid; p; p = p->next ) {
+		if( p->usage == id ) return p;
+	}
+	return NULL;
+}
 
 static hid_t * get_hid(int num)
 {
@@ -391,6 +498,21 @@ static void detach_callback(void *context, IOReturn r, void *hid_mgr, IOHIDDevic
 	}
 }
 
+static int32_t get_int_property(IOHIDDeviceRef device, CFStringRef key)
+{
+	CFTypeRef ref;
+	int32_t value;
+	
+	ref = IOHIDDeviceGetProperty(device, key);
+	if (ref) {
+		if (CFGetTypeID(ref) == CFNumberGetTypeID()) {
+			CFNumberGetValue((CFNumberRef) ref, kCFNumberSInt32Type, &value);
+			return value;
+		}
+	}
+	return 0;
+}
+
 
 static void attach_callback(void *context, IOReturn r, void *hid_mgr, IOHIDDeviceRef dev)
 {
@@ -404,6 +526,7 @@ static void attach_callback(void *context, IOReturn r, void *hid_mgr, IOHIDDevic
 	IOHIDDeviceScheduleWithRunLoop(dev, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
 	IOHIDDeviceRegisterInputReportCallback(dev, h->buffer, sizeof(h->buffer),
 		input_callback, h);
+	h->usage = get_int_property( dev, CFSTR( kIOHIDPrimaryUsageKey ) );
 	h->ref = dev;
 	h->open = 1;
 	add_hid(h);

@@ -19,7 +19,7 @@ namespace heartbeat {
 const ButtonId DataPageButton::TYPE = Hash::HASHER( "DataPageButton" );
 const ButtonId OverlayPageButton::TYPE = Hash::HASHER( "OverlayPageButton" );
 const ButtonId CloseButton::TYPE = Hash::HASHER( "CloseButton" );
-const ButtonId NavagableButton::TYPE = Hash::HASHER( "NavagableButton" );
+const ButtonId NavigableButton::TYPE = Hash::HASHER( "NavigableButton" );
 	
 ///////////////////////////////////////////////////////////////////////////////////////
 // Activatable Button
@@ -157,20 +157,20 @@ void CloseButton::changeState( InfoDisplayRef &display )
 }
 	
 ///////////////////////////////////////////////////////////////////////////////////////
-// Navagable Button
+// Navigable Button
 ///////////////////////////////////////////////////////////////////////////////////////
 	
-NavagableButton::NavagableButton( const std::string &buttonId )
+NavigableButton::NavigableButton( const std::string &buttonId )
 : StaticButton( buttonId )
 {
 }
 	
-NavagableButtonRef NavagableButton::create( const std::string &buttonId )
+NavigableButtonRef NavigableButton::create( const std::string &buttonId )
 {
-	return NavagableButtonRef( new NavagableButton( buttonId ) );
+	return NavigableButtonRef( new NavigableButton( buttonId ) );
 }
 	
-bool NavagableButton::initialize( const ci::JsonTree &root )
+bool NavigableButton::initialize( const ci::JsonTree &root )
 {
 	try {
 		// need to talk about direction.
@@ -183,12 +183,12 @@ bool NavagableButton::initialize( const ci::JsonTree &root )
 	return true;
 }
 
-void NavagableButton::initializeGl()
+void NavigableButton::initializeGl()
 {
 	
 }
 
-void NavagableButton::changeState( InfoDisplayRef &display )
+void NavigableButton::changeState( InfoDisplayRef &display )
 {
 	
 }

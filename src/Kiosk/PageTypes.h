@@ -20,7 +20,7 @@ public:
 	DataPageRef& next() { return mNext; }
 	void connectBack( DataPageRef dataPage ) { mNext = dataPage; }
 	
-	void initialize( const ci::JsonTree &root ) override;
+	bool initialize( const ci::JsonTree &root ) override;
 	
 protected:
 	DataPage( const std::string &name );
@@ -33,7 +33,7 @@ public:
 	
 	static OverlayPageRef create( const std::string &name );
 
-	void initialize( const ci::JsonTree &root ) override;
+	bool initialize( const ci::JsonTree &root ) override;
 	
 protected:
 	OverlayPage( const std::string &name );
@@ -48,8 +48,10 @@ public:
 	
 	std::string& getSection() { return mSection; }
 	
+	bool initialize( const ci::JsonTree &root ) override;
 	
 private:
+	OverlaySection( const std::string &name );
 	
 	std::string		mSection;
 };
@@ -59,7 +61,11 @@ public:
 	
 	static OverlayPlusRef create( const std::string &name );
 	
+	bool initialize( const ci::JsonTree &root ) override;
+	
 private:
+	OverlayPlus( const std::string &name );
+	
 	std::vector<const ci::svg::Group*> mOverlays;
 	std::vector<ci::gl::Texture2dRef>  mTextures;
 	uint32_t mCurrentIndex;

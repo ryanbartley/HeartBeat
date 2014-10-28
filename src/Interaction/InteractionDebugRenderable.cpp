@@ -52,7 +52,7 @@ InteractionDebugRenderable::InteractionDebugRenderable( const InteractionZonesRe
 	
 	auto eventManager = EventManagerBase::get();
 	if( eventManager ) {
-		eventManager->addListener( std::bind( &InteractionDebugRenderable::touchDelegate, this, std::placeholders::_1 ), TableEvent::TYPE );
+		eventManager->addListener( std::bind( &InteractionDebugRenderable::touchDelegate, this, std::placeholders::_1 ), TouchEvent::TYPE );
 	}
 }
 	
@@ -137,7 +137,7 @@ void InteractionDebugRenderable::setupZoneGlBuffers()
 	
 void InteractionDebugRenderable::touchDelegate( EventDataRef touchEvent )
 {
-	auto event = std::dynamic_pointer_cast<TableEvent>( touchEvent );
+	auto event = std::dynamic_pointer_cast<TouchEvent>( touchEvent );
 	
 	if( ! event ) {
 		CI_LOG_V("Not an touchEvent " << touchEvent->getName() );
@@ -185,24 +185,41 @@ void InteractionDebugRenderable::draw()
 			return;
 		}
 		auto points = urg->getDrawablePoints();
+		auto approachZones = mInteractionZones->getApproachZoneData();
 
 		int i = 0;
 		int k = 10;
 		for( auto & point : points ) {
-			auto found = false;
+			auto isTouched = false;
+			auto isApproached = false;
+			// First check if this index is inside the TouchedIndices, if it is get rid of it.
 			for( auto indexIt = mTouchIndices.begin(); indexIt != mTouchIndices.end(); ++indexIt ) {
 				if( *indexIt == i ) {
-					found = true;
+					isTouched = true;
 					mTouchIndices.erase(indexIt);
 					break;
 				}
 			}
-			if( found ) {
-				gl::color( 1, .5, 1 );
+			// If it isn't touched and k is 0, or in other words we're through showing the area of touch
+			// check to see if this is inside an activated approach zone.
+			if( ! isTouched && k == 0 ) {
+				for ( auto & approachZone : approachZones ) {
+					if( approachZone.second.contains( i ) ) {
+						isApproached = approachZone.second.getIsActivated();
+					}
+				}
+			}
+			// If this point isTouched provide a Red color and start the countDown at ten to show
+			// an area.
+			if( isTouched ) {
+				gl::color( 1, 0, .5, 0.5f );
 				k = 10;
 			}
-			else if( k == 0 ) {
+			else if( k <= 0 && !isApproached ) {
 				gl::color( 1, 1, 1, 0.5f );
+			}
+			else if( k <= 0 && isApproached ) {
+				gl::color( 1.0, 1.0, 0.0, 0.5f );
 			}
 			else {
 				k--;

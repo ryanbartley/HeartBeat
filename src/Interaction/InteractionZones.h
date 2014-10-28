@@ -28,13 +28,13 @@ struct ApproachData {
 	
 	ApproachData( KioskId kiosk, int lowestIndex, int highestIndex )
 	: mKiosk( kiosk ), mLowestIndex( lowestIndex ), mHighestIndex( highestIndex ),
-	mIsActivated( false ), mNumEvents( 0 )
+	mIsActivated( false ), mNumEvents( 0 ), mActivationTime( 0.0 )
 	{}
 	
 	inline bool contains( int index ) { return mLowestIndex < index && mHighestIndex > index; }
 	inline void addEvent() { mNumEvents++; }
 	bool	getIsActivated() const { return mIsActivated; }
-	void	activate( bool enable ) { mIsActivated = enable; }
+	void	activate( bool enable );
 	size_t	getNumDistances() const { return mNumEvents; }
 	KioskId getKiosk() const { return mKiosk; }
 	void	reset() { mNumEvents = 0; }
@@ -45,10 +45,10 @@ struct ApproachData {
 	const int			mLowestIndex, mHighestIndex;
 	int					mNumEvents;
 	bool				mIsActivated;
-	
+	double				mActivationTime;
 };
 	
-class InteractionZones {
+class InteractionZones : public std::enable_shared_from_this<InteractionZones> {
 public:
 	
 	enum class Zone {
@@ -88,6 +88,8 @@ public:
 	//! Returns the current scalar being used for this zone
 	float getZoneScalar( Zone zone );
 	
+	//! Returns 
+	
 	//! Initialize moved to public for use in the TestApp, shouldn't be
 	//! called normally. Engine should handle the initialization.
 	void initialize();
@@ -95,9 +97,23 @@ public:
 	//! This allows data to be captured into barrier
 	void captureBarrier();
 	
+	//! Used only by InteractionDebugRenderable to be used as a callback when settings inside
+	//! have been updated like Zone Scalars for instance.
 	inline void setZoneUpdateCallback( const std::function<void()> &function ) { mZoneUpdateFunc = function; }
 	
-	inline const Transformation& getTransform() { return mTransform; }
+	//! Returns the a const transformation reference used to transform urg points into modelSpace.
+	inline const Transformation& getTransform() const { return mTransform; }
+	//! Returns the a transformation reference used to transform urg points into modelSpace.
+	inline Transformation& getTransform() { return mTransform; }
+	
+	inline std::map<KioskId, ApproachData>& getApproachZoneData() { return mApproachZones; }
+	
+	void queryIgnoreIndices() { mIgnoreIndices.clear(); mSendEvents = false; }
+	
+	const std::vector<uint32_t>& getIgnoreIndices() const { return mIgnoreIndices; }
+	
+	//! Sets the current scalar of \a zone.
+	void setZoneScalar( Zone zone, float scalar );
 	
 private:
 	InteractionZones();
@@ -105,8 +121,7 @@ private:
 	//! This is a possible async implementation.
 	void processImpl( std::vector<long> &&newData );
 	
-	//! Sets the current scalar of \a zone.
-	void setZoneScalar( Zone zone, float scalar );
+	
 	
 	inline void processApproaches( const std::vector<Interactor> &events );
 	
@@ -120,10 +135,11 @@ private:
 	std::vector<long>			mBarrier;
 	
 	std::map<KioskId, ApproachData>		mApproachZones;
-	std::vector<uint32_t>				mPoleIndices;
+	std::vector<uint32_t>				mIgnoreIndices;
 	
 	int							mInBetweenThreshold;
 	bool						mZoneScalarsUpdated;
+	bool						mSendEvents;
 	
 	//! Pointer to the urg
 	UrgRef						mUrg;
@@ -161,6 +177,7 @@ void InteractionZones::processApproaches( const std::vector<Interactor> &events 
 {
 	for( auto & event : events ) {
 		for( auto & approachZone : mApproachZones ) {
+			std::cout << "Index: " << event.mIndex << " distance: " << std::endl;
 			if( approachZone.second.contains( event.mIndex ) ) {
 				approachZone.second.addEvent();
 			}

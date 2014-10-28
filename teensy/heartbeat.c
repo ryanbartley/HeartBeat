@@ -36,7 +36,11 @@ void notify( int numTimes );
 uint8_t buffer[64];
 
 double amountOn;
+#if DEBUG
+int currentDirection = 1;
+#else
 int currentDirection = 0;
+#endif
 
 int main(void)
 {
@@ -68,11 +72,15 @@ int main(void)
 		int8_t recv = usb_rawhid_recv( buffer, 0 );
 		if( recv > 0 ) {
 			if( buffer[0] == 0 ) {
+				#if DEBUG
 				notify(6);
+				#endif
 				currentDirection = -1;
 			}
 			else if( buffer[0] == 255 ) {
+				#if DEBUG
 				notify(2);
+				#endif
 				currentDirection = 1;
 			}
 		}
@@ -109,7 +117,7 @@ void notify( int numTimes )
 
 void process()
 {
-	static const double totalSteps = 250.0;
+	static const double totalSteps = 200.0;
 	static double totalAnimation = 1.0 / totalSteps;
 	static double currentFrame = 0.0;
 
@@ -117,12 +125,20 @@ void process()
 
 	amountOn = ((currentFrame * totalAnimation) * amountToMove) + fullyOpen;
 	if( amountOn >= fullyClosed && currentDirection == 1 ) {
+		#if DEBUG
+		currentDirection = -1;
+		#else
 		currentDirection = 0;
+		#endif
 		amountOn = fullyClosed;
 		currentFrame = totalSteps;
 	}
 	else if( amountOn <= fullyOpen && currentDirection == -1 ) {
+		#if DEBUG
+		currentDirection = 1;
+		#else
 		currentDirection = 0;
+		#endif
 		amountOn = fullyOpen;
 		currentFrame = 0;
 	}

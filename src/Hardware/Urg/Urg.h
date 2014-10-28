@@ -50,7 +50,7 @@ public:
 	
 	inline ci::vec2 getPoint( int index, long dist, float scale = 1.0f );
 	
-	const std::vector<long>& getCurrentData() { return mCurrentData; }
+	const std::vector<long>& getCurrentData() const { return mCurrentData; }
 	
 private:
 	Urg();
@@ -62,6 +62,8 @@ private:
 	std::string			mDeviceName;
 	std::vector<long>	mCurrentData;
 	bool				mIsOpen;
+	
+	std::vector<long>& getCurrentData() { return mCurrentData; }
 	
 	friend class InteractionZones;
 };

@@ -23,9 +23,9 @@ namespace heartbeat {
 	
 const uint8_t HidProtocol::HANDSHAKE = 255;
 	
-Hid::Hid( KioskId hidId, int index )
-: mId( hidId ), mActivated( false ),
-mOpen( true ), mNum( index )
+Hid::Hid( KioskId kioskId, int hidId )
+: mKioskId( kioskId ), mId( hidId ), mActivated( false ),
+mOpen( true )
 {}
 	
 HidCommManager::HidCommManager()
@@ -54,41 +54,14 @@ void HidCommManager::initialize()
 		if( numOpened != numToOpen ) {
 			CI_LOG_E("Didn't open 3 hid's, instead opened " << numOpened);
 		}
-		
+
 		try {
-			auto positions = hidAttribs["positions"].getChildren();
-			
-			int i = 0;
-			
-			for( auto & pos : positions ) {
-				KioskId firstPosKiosk;
-				auto position = pos.getValue();
-				if( position == "top" ) {
-					cout << i << ": top" << endl;
-					firstPosKiosk = KioskId::TOP_KIOSK;
-				}
-				else if ( position == "middle" ) {
-					cout << i << ": middle" << endl;
-					firstPosKiosk = KioskId::MIDDLE_KIOSK;
-				}
-				else if ( position == "bottom" ) {
-					cout << i << ": bottom" << endl;
-					firstPosKiosk = KioskId::BOTTOM_KIOSK;
-				}
-				else {
-					CI_LOG_E("Couldn't find the Id, defaulting to TOP");
-					firstPosKiosk = KioskId::TOP_KIOSK;
-				}
-				
-				mConnections.insert( make_pair( firstPosKiosk, std::move( Hid( firstPosKiosk, i++ ) ) ) );
-			}
-			
-			if( numToOpen != i ) {
-				CI_LOG_E("NumToOpen is not how many were opened " << "numToOpen: " << numToOpen << " i: " << i );
-			}
+			mConnections.insert( make_pair( KioskId::TOP_KIOSK, std::move( Hid( KioskId::TOP_KIOSK, hidAttribs["top"].getValue<int>() ) ) ) );
+			mConnections.insert( make_pair( KioskId::MIDDLE_KIOSK, std::move( Hid( KioskId::MIDDLE_KIOSK, hidAttribs["middle"].getValue<int>() ) ) ) );
+			mConnections.insert( make_pair( KioskId::BOTTOM_KIOSK, std::move( Hid( KioskId::BOTTOM_KIOSK, hidAttribs["bottom"].getValue<int>() ) ) ) );
 		}
 		catch ( JsonTree::ExcChildNotFound &ex ) {
-			CI_LOG_W("'top' child not found, using default -1, communication will be suspended");
+			CI_LOG_W("'top' child not found, using default -1, communication will be suspended" << ex.what() );
 			
 		}
 		
@@ -100,44 +73,35 @@ void HidCommManager::initialize()
 	
 void HidCommManager::send( const Hid &hid, HidMessage &packet )
 {
-	if( hid.mNum != -1 ) {
 		ci::Timer time;
 		time.start();
-		packet.mBytesUsed = rawhid_send( hid.mNum,
+		packet.mBytesUsed = rawhid_send_by_id( hid.mId,
 										static_cast<void*>( &(packet.mBuffer[0]) ),
 										packet.mBytesUsed,
 										0 );
 		time.stop();
 		cout << "TIME: " << time.getSeconds() << endl;
 		if( packet.mBytesUsed == 0 )
-			CI_LOG_E("Transmitted nothing" << getReadableHid( hid.mId ) );
+			CI_LOG_E("Transmitted nothing" << getKiosk( hid.mKioskId ) );
 		else if( packet.mBytesUsed == -1 )
-			CI_LOG_E("Returned -1 from: " << getReadableHid( hid.mId ) );
-	}
-	else {
-		CI_LOG_E("DIDN'T SEND");
-	}
+			CI_LOG_E("Returned -1 from: " << getKiosk( hid.mKioskId ) );
 }
 	
 HidMessage HidCommManager::recv( const Hid &hid )
 {
-	if( hid.mNum != -1 ) {
+	
 		HidMessage ret;
 		// TODO: Figure out if I actually need that much info
-		ret.mBytesUsed = rawhid_recv( hid.mNum,
+		ret.mBytesUsed = rawhid_recv_by_id( hid.mId,
 											static_cast<void*>( &(ret.mBuffer[0]) ),
 											ret.mBytesUsed,
 											0 );
 		if( ret.mBytesUsed == 0 )
 			CI_LOG_W("Received 0 bytes");
 		if( ret.mBytesUsed == -1 )
-			CI_LOG_E("Returned -1 from: " << getReadableHid( hid.mId ) );
+			CI_LOG_E("Returned -1 from: " << getKiosk( hid.mKioskId ) );
 		
 		return ret;
-	}
-	else {
-		return HidMessage();
-	}
 }
 	
 void HidCommManager::activate( heartbeat::KioskId kioskId, bool activate )
@@ -154,14 +118,13 @@ void HidCommManager::activate( heartbeat::KioskId kioskId, bool activate )
 		send( found->second, mess );
 	}
 	else {
-		CI_LOG_E("DIDN'T SEND");
+		if( found == mConnections.end() ) {
+			CI_LOG_E("Couldn't find not sending to " << getKiosk( kioskId ) );
+		}
+		else {
+		CI_LOG_E("Already Activated " << activate);
+		}
 	}
 }
-
-std::string HidCommManager::getReadableHid( KioskId kioskId )
-{
-	return " Hid " + std::to_string( static_cast<size_t>(kioskId) ) + " ";
-}
-
 	
 }

@@ -123,7 +123,7 @@ void Pond::initialize()
 	auto eventManager = EventManagerBase::get();
 	
 	if( eventManager ) {
-		eventManager->addListener( std::bind( &Pond::touchDelegate, this, std::placeholders::_1 ), TableEvent::TYPE );
+		eventManager->addListener( std::bind( &Pond::touchDelegate, this, std::placeholders::_1 ), TouchEvent::TYPE );
 	}
 
 }
@@ -133,9 +133,9 @@ void Pond::touchDelegate( EventDataRef touchEvent )
 	if( touchEvent->isHandled() )
 		return;
 	
-	auto event = std::dynamic_pointer_cast<TableEvent>(touchEvent);
+	auto event = std::dynamic_pointer_cast<TouchEvent>(touchEvent);
 	if( !event ) {
-		CI_LOG_W("Not a TableEvent " << touchEvent->getName() );
+		CI_LOG_W("Not a TouchEvent " << touchEvent->getName() );
 		return;
 	}
 	

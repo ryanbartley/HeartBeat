@@ -15,10 +15,10 @@ namespace heartbeat {
 	
 struct Hid {
 	
-	Hid( KioskId hidId, int index );
+	Hid( KioskId kioskId, int hidId );
 	
-	const KioskId	mId;
-	int				mNum;
+	const KioskId	mKioskId;
+	const int		mId;
 	bool			mOpen;
 	bool			mActivated;
 };
@@ -53,7 +53,6 @@ public:
 	void activate( KioskId kioskId, bool activate );
 	
 	void initialize();
-	static std::string getReadableHid( KioskId kioskId );
 	
 private:
 	HidCommManager();

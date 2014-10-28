@@ -8,9 +8,8 @@
 
 #pragma once
 
-#include "Button.h"
+#include "Node.h"
 #include "PageTypes.h"
-#include "InfoDisplay.h"
 
 namespace heartbeat {
 	
@@ -21,7 +20,7 @@ public:
 	
 	void update();
 	
-	void renderToSurface();
+	void render();
 	
 private:
 	DisplayState();

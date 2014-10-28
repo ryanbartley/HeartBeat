@@ -29,7 +29,7 @@ public:
 	const std::string&	getGroupName() const { return mName; }
 	
 	virtual void initializeGl() = 0;
-	virtual void initialize( const ci::JsonTree &root ) = 0;
+	virtual bool initialize( const ci::JsonTree &root ) = 0;
 	
 protected:
 	Node( const std::string &name );

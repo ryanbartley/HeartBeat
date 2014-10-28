@@ -17,9 +17,7 @@ public:
 	
 	static const EventType TYPE;
 	
-	explicit ApproachEvent( KioskId kioskId )
-	: mKiosk( kioskId )
-	{}
+	explicit ApproachEvent( KioskId kioskId );
 	~ApproachEvent() {}
 	
 	//! Returns the index of the approaching entity
@@ -48,9 +46,7 @@ public:
 	
 	static const EventType TYPE;
 	
-	explicit DepartEvent( KioskId kioskId )
-	: mKiosk( kioskId )
-	{}
+	explicit DepartEvent( KioskId kioskId );
 	~DepartEvent() {}
 	
 	//! Returns the index of the approaching entity
@@ -74,21 +70,21 @@ private:
 	KioskId mKiosk;
 };
 
-class TableEvent : public EventData {
+class TouchEvent : public EventData {
 public:
 	
 	static const EventType TYPE;
 	
-	explicit TableEvent( int index, float dist )
-	: mIndex( index ), mDist( dist )
-	{}
-	~TableEvent() {}
+	explicit TouchEvent( int index, float dist, const InteractionZonesRef &interactionZones );
+	~TouchEvent() {}
 	
 	int getIndex() { return mIndex; }
 	float getDistance() { return mDist; }
 	
-	EventDataRef copy() { return EventDataRef( new TableEvent( mIndex, mDist ) ); }
-	const char* getName() { return "TableEvent";}
+	ci::vec2& getWorldCoordinate();
+	
+	EventDataRef copy() { return EventDataRef( new TouchEvent( mIndex, mDist, mInteractionZones ) ); }
+	const char* getName() { return "TouchEvent";}
 	virtual const EventType& getEventType() { return TYPE; }
 	
 #if defined( DEBUG )
@@ -101,8 +97,13 @@ public:
 #endif
 	
 private:
-	int		mIndex;
-	float	mDist;
+	void calcWorldCoord();
+	
+	InteractionZonesRef mInteractionZones;
+	ci::vec2	mWorldCoord;
+	bool		mCachedWorldCoord;
+	int			mIndex;
+	float		mDist;
 };
 	
 }

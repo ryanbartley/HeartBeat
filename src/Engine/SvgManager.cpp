@@ -10,7 +10,7 @@
 
 #include "JsonManager.h"
 #include "PageTypes.h"
-
+#include "ButtonTypes.h"
 
 #include "cinder/Log.h"
 
@@ -23,6 +23,19 @@ namespace heartbeat {
 static SvgManagerRef sSvgManager = nullptr;
 static bool sSvgManagerInitialized = false;
 	
+OverlayPageCreators SvgManager::OverlayCreators = {
+	make_pair( "overlay", &OverlayPage::create ),
+	make_pair( "overlaySection", &OverlaySection::create ),
+	make_pair( "overlayPlus", &OverlayPlus::create ),
+};
+	
+ButtonCreators SvgManager::ButtonCreators = {
+	make_pair( "dataPageButton", &DataPageButton::create ),
+	make_pair( "overlayPageButton", &OverlayPageButton::create ),
+	make_pair( "closeButton", &CloseButton::create ),
+	make_pair( "navigableButton", &NavigableButton::create )
+};
+	
 SvgManagerRef	SvgManager::get() {
 	if( sSvgManagerInitialized ) {
 		return sSvgManager;
@@ -34,6 +47,7 @@ SvgManagerRef	SvgManager::get() {
 
 SvgManager::SvgManager()
 {
+	
 }
 
 SvgManager::~SvgManager()
@@ -107,21 +121,27 @@ void SvgManager::initializeDataPages( const ci::JsonTree &root )
 			DataPageRef last;
 			for( auto & connection : connectionList ) {
 				auto connectionName = connection.getValue();
-				auto next = mDatas.find( connectionName );
-				if( next != mDatas.end() ) {
-					if( last ) {
-						last->connectBack( next->second );
-					}
+				auto next = mPages.find( connectionName );
+				if( next != mPages.end() ) {
+					auto dataPage = std::dynamic_pointer_cast<DataPage>( next->second );
+					if( dataPage ) {
+						if( last ) {
+							last->connectBack( dataPage );
+						}
 					
-					last = next->second;
+						last = dataPage;
+					}
+					else {
+						CI_LOG_W("Data Page couldn't be cast" << next->second->getGroupName());
+					}
 				}
 				else {
 					auto dataPage = DataPage::create( connectionName );
-					auto newPage = mDatas.insert( make_pair( connectionName, dataPage ) );
+					mPages.insert( make_pair( connectionName, dataPage ) );
 					if( last )
-						last->connectBack( newPage.first->second );
+						last->connectBack( dataPage );
 					
-					last = newPage.first->second;
+					last = dataPage;
 				}
 			}
 		}
@@ -135,12 +155,25 @@ void SvgManager::initializeOverlayPages( const ci::JsonTree &root )
 {
 	try {
 		
-		auto overlayPageIds = root.getChildren();
-		for( auto & overlayId : overlayPageIds ) {
-			auto overlayPageId = overlayId.getKey();
+		auto overlayPageInfos = root.getChildren();
+		for( auto & overlayInfo : overlayPageInfos ) {
+			auto overlayPageId = overlayInfo.getKey();
 			CI_LOG_V("Adding overlayPage " << overlayPageId);
-			auto overlayPage = OverlayPage::create( overlayPageId );
-			mOverlays.insert( make_pair( overlayPageId, overlayPage ) );
+			auto type = overlayInfo["type"].getValue();
+			auto found = OverlayCreators.find( type );
+			if( found != OverlayCreators.end() ) {
+				auto overlayPage = found->second( overlayPageId );
+				if( overlayPage->initialize( overlayInfo ) ) {
+					mPages.insert( make_pair( overlayPageId, overlayPage ) );
+				}
+				else {
+					CI_LOG_W("Overlay Page didn't initialize " << overlayPage->getGroupName() );
+				}
+			}
+			else {
+				CI_LOG_W("Creator wasn't found, " << type);
+			}
+			
 		}
 	}
 	catch ( const JsonTree::ExcChildNotFound &ex ) {
@@ -160,11 +193,8 @@ void SvgManager::initializeButtons( const ci::JsonTree &root )
 	
 void SvgManager::initializeGl()
 {
-	for( auto & dataPage : mDatas ) {
-		dataPage.second->initializeGl();
-	}
-	for( auto & overlayPage : mOverlays ) {
-		overlayPage.second->initializeGl();
+	for( auto & page : mPages ) {
+		page.second->initializeGl();
 	}
 	for( auto & button : mButtons ) {
 		button.second->initializeGl();

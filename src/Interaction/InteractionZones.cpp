@@ -22,8 +22,13 @@ using namespace std;
 
 namespace heartbeat {
 	
+void ApproachData::activate( bool enable )
+{
+	mIsActivated = enable;
+}
+	
 InteractionZones::InteractionZones()
-: mZoneScalarsUpdated( false ), mInBetweenThreshold( 0 )
+: mZoneScalarsUpdated( false ), mInBetweenThreshold( 0 ), mSendEvents( true )
 {
 	
 }
@@ -122,12 +127,12 @@ void InteractionZones::initialize()
 			auto poleIndices = interactionAttribs["poleIndices"];
 			
 			for( auto & index : poleIndices ) {
-				mPoleIndices.push_back( index.getValue<uint32_t>() );
+				mIgnoreIndices.push_back( index.getValue<uint32_t>() );
 			}
 		}
 		catch( const JsonTree::ExcChildNotFound &ex ) {
 			CI_LOG_E("PoleIndices not found, using default");
-			mPoleIndices = { 379, 380, 381, 585, 586, 726, 727 };
+			mSendEvents = false;
 		}
 		
 		// Now cache scales for barrier zones
@@ -374,24 +379,24 @@ void InteractionZones::process()
 		mZoneScalarsUpdated = false;
 	}
 	
-	std::vector<Interactor> approachEvents, tableEvents;
-	bool checkPoleIndices = true;
+	std::vector<Interactor> approachEvents, touchEvents;
+	bool checkPoleIndices = mSendEvents;
 	int i = 0, k = 0;
 	for( auto barrierIt = mBarrier.cbegin(); barrierIt != mBarrier.cend(); ++barrierIt, ++i ) {
 		bool emitEvents = true;
 		if( checkPoleIndices ) {
-			if( mPoleIndices[k] == i ) {
+			if( mIgnoreIndices[k] == i ) {
 				emitEvents = false;
 				++k;
-				if( mPoleIndices.size() - 1 < k )
+				if( mIgnoreIndices.size() - 1 < k )
 					checkPoleIndices = false;
 			}
 		}
 		if( emitEvents ) {
-			if( data[i] > *barrierIt * FAR_SCALAR ) {
+			if( data[i] > *barrierIt * APPROACH_SCALAR ) {
 				// do nothing
 			}
-			else if( data[i] > *barrierIt * APPROACH_SCALAR ) {
+			else if( data[i] < *barrierIt * APPROACH_SCALAR && data[i] > *barrierIt * DEAD_SCALAR ) {
 				// emit approaching event.
 				addEvent( approachEvents, i, data[i] );
 			}
@@ -402,10 +407,20 @@ void InteractionZones::process()
 			// table scalar value. If it gets to this place and it's lower than
 			// the scalar then I know someone's touching the table.
 			else if( data[i] < *barrierIt * TABLE_SCALAR ) {
+				if( mSendEvents ) {
 				// emit touching event.
-				addEvent( tableEvents, i, data[i] );
+					addEvent( touchEvents, i, data[i] );
+				}
+				else {
+					mIgnoreIndices.push_back( i );
+				}
 			}
 		}
+	}
+	
+	if( ! mSendEvents ) {
+		mSendEvents = true;
+		return;
 	}
 	
 	auto eventManager = EventManagerBase::get();
@@ -438,8 +453,8 @@ void InteractionZones::process()
 		}
 	}
 	
-	for( auto touchIt = tableEvents.begin(); touchIt != tableEvents.end(); ++touchIt ) {
-		eventManager->queueEvent( EventDataRef( new  TableEvent( touchIt->mIndex, touchIt->mDistance ) ) );
+	for( auto touchIt = touchEvents.begin(); touchIt != touchEvents.end(); ++touchIt ) {
+		eventManager->queueEvent( EventDataRef( new TouchEvent( touchIt->mIndex, touchIt->mDistance, shared_from_this() ) ) );
 	}
 	
 }

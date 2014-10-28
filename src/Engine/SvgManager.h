@@ -15,7 +15,14 @@ namespace cinder {
 class JsonTree;
 }
 
+
+
 namespace heartbeat {
+	
+using OverlayPageCreator	= std::function<OverlayPageRef(const std::string&)>;
+using OverlayPageCreators	= std::map<std::string, OverlayPageCreator>;
+using ButtonCreator			= std::function<ButtonRef(const std::string&)>;
+using ButtonCreators		= std::map<std::string, ButtonCreator>;
 	
 class SvgManager {
 public:
@@ -23,6 +30,8 @@ public:
 	static SvgManagerRef create();
 	static SvgManagerRef get();
 	static void destroy();
+	static OverlayPageCreators	OverlayCreators;
+	static ButtonCreators		ButtonCreators;
 	
 	SvgManager( const SvgManager & ) = delete;
 	SvgManager( SvgManager && ) = delete;
@@ -54,8 +63,7 @@ private:
 	std::string		mFileName;
 	
 	std::map<std::string, ButtonRef>		mButtons;
-	std::map<std::string, DataPageRef>		mDatas;
-	std::map<std::string, OverlayPageRef>   mOverlays;
+	std::map<std::string, PageRef>			mPages;
 	
 	friend class Engine;
 };

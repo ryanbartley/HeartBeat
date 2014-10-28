@@ -9,10 +9,8 @@
 #pragma once
 
 #include "Renderable.h"
-
-//#include "Cairo.h"
-
 #include "Node.h"
+#include "DisplayState.h"
 
 namespace heartbeat {
 	
@@ -38,22 +36,18 @@ public:
 	
 	void registerTouch( EventDataRef eventData );
 	
-//	ci::cairo::Context& getContext() { return mContext; }
-	
 private:
 	InfoDisplay( KioskId kioskId );
 	
 	void initiaize( const ci::JsonTree &root );
-	
-//	ci::cairo::SurfaceImage	mSurface;
-//	ci::cairo::Context		mContext;
-	
-	ci::gl::Texture2dRef	mTexture;
+
 	ci::Rectf				mBoundingBox;
+	DisplayStateRef			mDisplayState;
+	ci::gl::Texture2dRef	mTexture;
+	float					mMasterAlpha;
 	bool					mIsActivated;
 	float					mMinAngle, mMaxAngle;
 	const KioskId			mId;
-	
 };
 	
 }
