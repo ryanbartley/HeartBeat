@@ -131,7 +131,6 @@ void InfoDisplay::draw()
 				gl::drawSolidCircle( point, 20 );
 			}
         }
-        mPoints.clear();
 #endif
 		gl::disableAlphaBlending();
 	}
@@ -148,6 +147,17 @@ void InfoDisplay::draw()
 //	gl::drawSolidRect( mPresentRect );
 	gl::enableAlphaBlending();
 	gl::draw( tex );
+	
+#if defined( DEBUG )
+	{
+		gl::ScopedColor scopeColor( ColorA(1, 0, 0, 1) );
+		for( auto & point : mPoints ) {
+			cout << "I should be drawing this point" << endl;
+			gl::drawSolidCircle( point, 20 );
+		}
+	}
+	mPoints.clear();
+#endif
 	gl::enableAlphaBlending();
 	
 }
