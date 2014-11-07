@@ -4,14 +4,14 @@
 		// RENDERER
 		//////////////////////////////////////////////////////
 		"screenRender" : {
-			"imageStencil" : "tableoutline_110714-V2.png",
+			"imageStencil" : "tableoutline_110714-V2.1.png",
 			"individualProjectorSize" : [
 				1920,
 				1080
 			],
 			"numPixelOverlap" : 200,
-			"splitWindow" : false,
-			"halfSize" : true
+			"splitWindow" : true,
+			"halfSize" : false
 		},
 		//////////////////////////////////////////////////////
 		// HID ATTRIBUTES
@@ -31,7 +31,7 @@
 		// URG ATTRIBUTES
 		//////////////////////////////////////////////////////
 		"urg" : {
-			"address" : "/dev/tty.usbmodemfa131"
+			"address" : "/dev/tty.usbmodem1d21"
 		},
 		//////////////////////////////////////////////////////
 		// INTERACTION ZONE ATTRIBUTES
@@ -63,25 +63,25 @@
 				"far" : 1.2
 			},
 			"inBetweenThresh" : 50,
-			"halfSize" : {
-				"transforms" : {
-					"scales" : [
-						0.5, 0.5
-					],
-					"rotations" : {
-						// This can either contain "quaternion" : []
-						// or "angle" : degree, axis is vec3( 0, 0, 1 )
-						"angle" : -25
-					},
-					"translations" : {
-						// This can either contain "coordinates" : []
-						// or "center" : boolean
-						// "center" : true //,
-						"coordinates" : [ 318.74, -443.21 ]
-					}
-				}
-			},
-			"fullSize" : {
+			// "halfSize" : {
+			// 	"transforms" : {
+			// 		"scales" : [
+			// 			0.5, 0.5
+			// 		],
+			// 		"rotations" : {
+			// 			// This can either contain "quaternion" : []
+			// 			// or "angle" : degree, axis is vec3( 0, 0, 1 )
+			// 			"angle" : -25
+			// 		},
+			// 		"translations" : {
+			// 			// This can either contain "coordinates" : []
+			// 			// or "center" : boolean
+			// 			// "center" : true //,
+			// 			"coordinates" : [ 318.74, -443.21 ]
+			// 		}
+			// 	}
+			// },
+			// "fullSize" : {
 				"transforms" : {
 					"scales" : [
 						1.0, 1.0
@@ -98,7 +98,7 @@
 						"coordinates" : [ 585.0, -860.0 ]
 					}
 				}
-			}
+			// }
 		},
 		//////////////////////////////////////////////////////
 		// URG INTERACTION DEBUG SETTINGS
@@ -218,9 +218,9 @@
 				"top" : {
 					"fullSize" : {
 						"transformation" : {
-							"scales" : [ 0.19, 0.19 ],
+							"scales" : [ 0.185, 0.185 ],
 							"translations" : {
-								"coordinates" : [ 1535.86, 600.0 ] 
+								"coordinates" : [ 1547.48, 599.65 ] 
 							},
 							"rotations" : {
 								"angle" : 180
@@ -242,12 +242,12 @@
 				"middle" : {
 					"fullSize" : {
 						"transformation" : {
-							"scales" : [ 0.19, 0.19 ],
+							"scales" : [ 0.18, 0.18 ],
 							"translations" : {
-								"coordinates" : [ 921.41, 1373.58 ] 
+								"coordinates" : [ 962.0, 1252.0 ] 
 							},
 							"rotations" : {
-								"angle" : -30
+								"angle" : -10
 							}
 						}
 					},
@@ -266,12 +266,12 @@
 				"bottom" : {
 					"fullSize" : { 
 						"transformation" : {
-							"scales" : [ 0.19, 0.19 ],
+							"scales" : [ 0.18, 0.18 ],
 							"translations" : {
-								"coordinates" : [ 286.72, 829.85 ] 
+								"coordinates" : [ 454.05, 859.81 ] 
 							},
 							"rotations" : {
-								"angle" : 45
+								"angle" : 67
 							}
 						}
 					},
