@@ -31,6 +31,16 @@ public:
 	virtual void initializeGl() = 0;
 	virtual bool initialize( const ci::JsonTree &root ) = 0;
 	
+	virtual void debugRender() = 0;
+	virtual void render() = 0;
+	
+	const ci::vec2& getScenePosition() { return mAbsolutePosition; }
+	bool			isAnimating() { return mIsAnimating; }
+	float			getCurrentAlpha() const { return mCurrentAlpha; }
+	float&			getCurrentAlpha() { return mCurrentAlpha; }
+	ci::vec2&		getCurrentPosition() { return mCurrentPosition; }
+	const ci::vec2& getCurrentPosition() const { return mCurrentPosition; }
+	
 protected:
 	Node( const std::string &name );
 	
@@ -40,50 +50,61 @@ protected:
 	std::string				mName;
 	ci::vec2				mOffset;
 	uint8_t					mAntiAlias;
+	
+	ci::vec2				mAbsolutePosition;
+	bool					mIsAnimating;
+	float					mCurrentAlpha;
+	ci::vec2				mCurrentPosition;
 };
+	
+using PageId = uint64_t;
 	
 class Page : public Node {
 public:
 	
 	virtual ~Page() {}
 	
-	const ci::gl::Texture2dRef& getTexture() const { return mTexture; }
-	ci::gl::Texture2dRef& getTexture() { return mTexture; }
+	virtual PageId getType() const = 0;
 	
-	virtual void initializeGl() override;
+	virtual PageRef clone() = 0;
+	
+	const std::string& getButtonName() const { return mButton; }
 	
 protected:
 	Page( const std::string &name );
 
-	ci::gl::Texture2dRef	mTexture;
+	std::string				mButton;
+	
 };
 
 using ButtonId = uint64_t;
-
-enum class ButtonStatus {
-	ACTIVE,
-	VISIBLE,
-	INVISIBLE
-};
 
 class Button : public Node {
 public:
 	
 	virtual ~Button() {}
 	
-	virtual void changeState( InfoDisplayRef &display ) = 0;
-	
-	ButtonStatus			getStatus() const { return mStatus; }
+	//! Returns the buttonId
 	virtual ButtonId		getType() const = 0;
 	
-	void setStatus( ButtonStatus status ) { mStatus = status; }
+	//! Returns whether the point is contained within this node.
+	inline bool contains( const ci::vec2 &point ) { return mGroup->getBoundingBox().contains( point ); }
+	//! Abstract method used to change the state of the infodisplay
+	virtual void changeState( InfoDisplayRef &display ) = 0;
 	
-	inline bool contains( const ci::vec2 &point ) { return mGroup->containsPoint( point ); }
+	//! Copies things that need to be copied.
+	virtual ButtonRef clone() = 0;
 	
 protected:
 	Button( const std::string &name );
 	
-	ButtonStatus			mStatus;
+};
+	
+class StaticElement : public Node {
+public:
+	
+private:
+	StaticElement( const std::string &name );
 };
 	
 }

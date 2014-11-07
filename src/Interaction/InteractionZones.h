@@ -108,7 +108,7 @@ public:
 	
 	inline std::map<KioskId, ApproachData>& getApproachZoneData() { return mApproachZones; }
 	
-	void queryIgnoreIndices() { mIgnoreIndices.clear(); mSendEvents = false; std::cout << "Just Cleared indices" << std::endl;}
+	inline void queryIgnoreIndices() { mIgnoreIndices.clear(); mSendEvents = false; }
 	
 	const std::vector<uint32_t>& getIgnoreIndices() const { return mIgnoreIndices; }
 	
@@ -175,17 +175,13 @@ void InteractionZones::addEvent( std::vector<Interactor> &events, int index, lon
 	
 void InteractionZones::processApproaches( const std::vector<Interactor> &events )
 {
-	std::cout << "Frame" << std::endl;
 	for( auto & event : events ) {
 		for( auto & approachZone : mApproachZones ) {
-			
-			std::cout << "Index: " << event.mIndex << " distance: " << event.mDistance << std::endl;
 			if( approachZone.second.contains( event.mIndex ) ) {
 				approachZone.second.addEvent();
 			}
 		}
 	}
-	std::cout << "End" << std::endl;
 }
 	
 }

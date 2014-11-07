@@ -10,7 +10,7 @@
 				1080
 			],
 			"numPixelOverlap" : 200,
-			"splitWindow" : true,
+			"splitWindow" : false,
 			"halfSize" : true
 		},
 		//////////////////////////////////////////////////////
@@ -21,8 +21,8 @@
 			"numToOpen" : 3,
 			// defaults to opening in order
 			"top" : 768,	
-			"middle" : 769,
-			"bottom" : 770
+			"middle" : 770,
+			"bottom" : 769
 			// 768 index for 0x0300
 			// 1 index for 0x0301
 			// 2 index for 0x0302
@@ -40,9 +40,11 @@
 			"barrierFile" : "tableData.bin",
 			"runUrg" : true,
 			"poleIndices" : [
-				379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 
-				587, 588, 589, 590, 591, 592, 593,  
-				727, 728, 729, 730, 731, 732, 733, 734
+				0,
+				9, 10, 11, 12, 13, 14,
+				381, 382, 383, 384, 385, 386, 387, 388,  
+				585, 586, 587, 588, 589, 
+				725, 726, 727, 728, 729, 730
 			],
 			// Edge
 			// Left Pole
@@ -56,25 +58,25 @@
 			},
 			"scales" : {
 				"table" : 0.85,
-				"dead" : 1.0,
-				"approach" : 1.3,
-				"far" : 1.8
+				"dead" : 0.9,
+				"approach" : 1.0,
+				"far" : 1.2
 			},
 			"inBetweenThresh" : 50,
 			"transforms" : {
 				"scales" : [
-					0.1, 0.1
+					0.41, 0.41
 				],
 				"rotations" : {
 					// This can either contain "quaternion" : []
 					// or "angle" : degree, axis is vec3( 0, 0, 1 )
-					"angle" : 180
+					"angle" : 14
 				},
 				"translations" : {
 					// This can either contain "coordinates" : []
 					// or "center" : boolean
-					"center" : true //,
-					// "coordinates" : [ 0, 0 ]
+					// "center" : true //,
+					"coordinates" : [ 292.00, 383.44 ]
 				}
 			}
 		},
@@ -153,42 +155,137 @@
 				"numIterations" : 1
 			}
 		},
+		//////////////////////////////////////////////////////
+		// Info Display SETTINGS
+		//////////////////////////////////////////////////////
+		"kioskManagerAttribs" : {
+			"infoDisplays" : { 
+				"structure" : {
+					"staticPages" : {
+						"lines" : "TopLines",
+						"background" : "background"
+					},
+					"homePage" : {
+						"buttons" : [
+							"BUTTON-HOME1", "BUTTON-HOME2", "BUTTON-HOME3",
+							"BUTTON-HOME4", "BUTTON-HOME5", "BUTTON-HOMEISI"
+						],
+						"pages" : [
+							"HOME", "ISI"
+						]
+					},
+					"overlayPage" : {
+						"pages" : [
+							"STUDY-1", "STUDY-2", "STUDY-3", "STUDY-4", "ISI", "REFERENCE"
+						]
+					},
+					"dataPage" : {
+						"buttons" : [
+							"BUTTON-D1", "BUTTON-D2", "BUTTON-D3", "BUTTON-D4", "BUTTON-D5",
+							"BUTTON-NEXT", "BUTTON-PREV", "BUTTON-MENU",
+							"BUTTON-REFERENCE", "BUTTON-ISI", "BUTTON-STUDY"
+						],
+						"pages" : [
+							"D1-1", "D2-1", "D3-1", "D4-1", "D5-1" 
+						]
+					}
+				},
+				"top" : {
+					"transformation" : {
+						"scales" : [ 0.217, 0.217 ],
+						"translations" : {
+							"coordinates" : [ 644, 234 ] 
+						},
+						"rotations" : {
+							"angle" : 156
+						}
+					}
+				},
+				"middle" : {
+					"transformation" : {
+						"scales" : [ 0.19, 0.19 ],
+						"translations" : {
+							"coordinates" : [ 517.19, 622.07 ] 
+						},
+						"rotations" : {
+							"angle" : -66
+						}
+					}
+				},
+				"bottom" : {
+					"transformation" : {
+						"scales" : [ 0.2, 0.2 ],
+						"translations" : {
+							"coordinates" : [ 177.94, 434.91 ] 
+						},
+						"rotations" : {
+							"angle" : 31
+						}
+					}
+				}
+			}
+		},
+		//////////////////////////////////////////////////////
+		// SVG MANAGER SETTINGS
+		//////////////////////////////////////////////////////
 		"svgAttribs" : {
-			"fileName" : "ACTEMRA_PondCharts_102114.svg",
+			"fileName" : "ACTEMRA_PondCharts_PattenLayout_Outlined.svg",
 			"pageAttribs" : {
+				"staticPages" : {
+					"pages" : [
+						"TopLines",
+						"background"
+					]
+				},
 				"dataPages" : {
 					"sections" : { 
-						"1" : [ "1-1", "1-2", "1-3", "1-4", "1-5" ],
-						"2" : [ "2-1", "2-2", "2-3", "2-4", "2-5", "2-6" ],
-						"3" : [ "3-1", "3-2", "3-3", "3-4" ],
-						"4" : [ "4-1", "4-2", "4-3" ],
-						"5" : [ "5-1", "5-2", "5-3", "5-4", "5-5" ]
+						"1" : [ "D1-1", "D1-2", "D1-3", "D1-4", "D1-5" ],
+						"2" : [ "D2-1", "D2-2", "D2-3", "D2-4", "D2-5", "D2-6" ],
+						"3" : [ "D3-1", "D3-2", "D3-3", "D3-4" ],
+						"4" : [ "D4-1", "D4-2", "D4-3" ],
+						"5" : [ "D5-1", "D5-2", "D5-3", "D5-4", "D5-5" ],
+						"HOME" : [ "HOME" ]
 					}
 				},
 				"overlayPages" : {
 					"REFERENCE" : {
 						"type" : "overlay",
-						"button" : "ref"
+						"button" : "ref",
+						"buttons" : [
+							"BUTTON-REFERENCE-close"
+						]
 					},
 					"STUDY-1" : {
 						"type" : "overlaySection",
 						"button" : "study",
-						"section" : "1"
+						"section" : 1,
+						"buttons" : [
+							"BUTTON-STUDY-close"
+						]
 					},
 					"STUDY-2" : {
 						"type" : "overlaySection",
 						"button" : "study",
-						"section" : "2"
+						"section" : 2,
+						"buttons" : [
+							"BUTTON-STUDY-close"
+						]
 					},
 					"STUDY-3" : {
 						"type" : "overlaySection",
 						"button" : "study",
-						"section" : "3"
+						"section" : 3,
+						"buttons" : [
+							"BUTTON-STUDY-close"
+						]
 					},
 					"STUDY-4" : {
 						"type" : "overlaySection",
 						"button" : "study",
-						"section" : "4"
+						"section" : 4,
+						"buttons" : [
+							"BUTTON-STUDY-close"
+						]
 					},
 					"ISI" : {
 						"images" : [
@@ -199,42 +296,146 @@
 							"ISI-5"
 						],
 						"button" : "isi",
-						"type" : "overlayPlus"
+						"type" : "overlayPlus",
+						"buttons" : [
+							"BUTTON-ISI-close",
+							"BUTTON-ISI-Prev",
+							"BUTTON-ISI-Next"
+						]
 					}
-					
 				}
 			},
 			"buttonAttribs" : {
-				"D1" : {
+				"BUTTON-D1" : {
 					"type" : "dataPageButton",
-					"section" : "1"
+					"section" : 1,
+					"dataPage" : "D1-1"
 				},
-				"D2" : {
+				"BUTTON-D2" : {
 					"type" : "dataPageButton",
-					"section" : "2"
+					"section" : 2,
+					"dataPage" : "D2-1"
 				},
-				"D3" : {
+				"BUTTON-D3" : {
 					"type" : "dataPageButton",
-					"section" : "3"
+					"section" : 3,
+					"dataPage" : "D3-1"
 				},
-				"D4" : {
+				"BUTTON-D4" : {
 					"type" : "dataPageButton",
-					"section" : "4"
+					"section" : 4,
+					"dataPage" : "D4-1"
 				},
-				"D5" : {
+				"BUTTON-D5" : {
 					"type" : "dataPageButton",
-					"section" : "5"
+					"section" : 5,
+					"dataPage" : "D5-1"
 				},
 				"BUTTON-PREV" : {
-					"type" : "navigableButton"
+					"type" : "navigableButton",
+					"navigation" : "prev",
+					"opposite" : "BUTTON-NEXT"
 				},
 				"BUTTON-NEXT" : {
-					"type" : "navigableButton"
+					"type" : "navigableButton",
+					"navigation" : "next",
+					"opposite" : "BUTTON-PREV"
 				},
 				"BUTTON-MENU" : {
-
+					"type" : "returnButton",
+					"navigation" : "reset",
+					"buttonActive" : "",
+					"statusChange" : "home",
+					"section" : 0
+				},
+				"BUTTON-REFERENCE" : {
+					"type" : "overlayPageButton",
+					"overlayPage" : "REFERENCE"
+				},
+				"BUTTON-ISI" : {
+					"type" : "overlayPageButton",
+					"overlayPage" : "ISI"
+				},
+				"BUTTON-STUDY" : {
+					"type" : "overlayPageSectionButton",
+					"overlayPage" : "STUDY-",
+					"prefix" : "STUDY-"
+				},
+				"BUTTON-HOME1" : {
+					"type" : "returnButton",
+					"navigation" : "D1-1",
+					"buttonActive" : "BUTTON-D1",
+					"statusChange" : "data",
+					"section" : 1
+				},
+				"BUTTON-HOME2" : {
+					"type" : "returnButton",
+					"navigation" : "D2-1",
+					"buttonActive" : "BUTTON-D2",
+					"statusChange" : "data",
+					"section" : 2
+				},
+				"BUTTON-HOME3" : {
+					"type" : "returnButton",
+					"navigation" : "D3-1",
+					"buttonActive" : "BUTTON-D3",
+					"statusChange" : "data",
+					"section" : 3
+				},
+				"BUTTON-HOME4" : {
+					"type" : "returnButton",
+					"navigation" : "D4-1",
+					"buttonActive" : "BUTTON-D4",
+					"statusChange" : "data",
+					"section" : 4
+				},
+				"BUTTON-HOME5" : {
+					"type" : "returnButton",
+					"navigation" : "D5-1",
+					"buttonActive" : "BUTTON-D5",
+					"statusChange" : "data",
+					"section" : 5
+				},
+				"BUTTON-HOMEISI" : {
+					"type" : "returnButton",
+					"navigation" : "reset",
+					"buttonActive" : "",
+					"section" : 0,
+					"overlayPage" : "OVERLAYS-ISI",
+					"activateButton" : "BUTTON-ISI",
+					"statusChange" : "home"
+				},
+				"BUTTON-REFERENCE-close" : {
+					"type" : "returnButton",
+					"navigation" : "reset",
+					"buttonActive" : "",
+					"section" : 6,
+					"statusChange" : "close"
+				},
+				"BUTTON-STUDY-close" : {
+					"type" : "returnButton",
+					"navigation" : "reset",
+					"buttonActive" : "",
+					"section" : 6,
+					"statusChange" : "close"
+				},
+				"BUTTON-ISI-close" : {
+					"type" : "returnButton",
+					"buttonActive" : "",
+					"section" : 6,
+					"statusChange" : "close",
+					"navigation" : "reset"
+				},
+				"BUTTON-ISI-Prev" : {
+					"type" : "navigableButton",
+					"navigation" : "prev",
+					"opposite" : "BUTTON-ISI-Next"
+				},
+				"BUTTON-ISI-Next" : {
+					"type" : "navigableButton",
+					"navigation" : "next",
+					"opposite" : "BUTTON-ISI-Prev"
 				}
-
 			}
 		}
 	}

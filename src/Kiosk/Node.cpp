@@ -8,6 +8,7 @@
 
 #include "Node.h"
 #include "Cairo.h"
+#include "cinder/Log.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -17,8 +18,20 @@ namespace heartbeat {
 	
 Node::Node( const std::string &group )
 : mGroup( dynamic_cast<const svg::Group*>( SvgManager::get()->getDoc()->findNode( group ) ) ),
-	mName(group)
+	mName(group), mAntiAlias( 0 ), mOffset( vec2( 10 ) ), mCurrentAlpha( 1.0f ), mIsAnimating( false ), 
+	mCurrentPosition( vec2( mGroup->getBoundingBox().x1, mGroup->getBoundingBox().y1 ) ), mAbsolutePosition( vec2( mGroup->getBoundingBox().x1 - mOffset.x / 2.0f, mGroup->getBoundingBox().y1 - mOffset.y / 2.0f ) )
 {
+	if( ! mGroup ) {
+		CI_LOG_E(mName << " wasn't able to be found");
+	}
+	else {
+		CI_LOG_V(mGroup->getId() << " was initialized correctly");
+	}
+	
+	if( mName == "BUTTON-STUDY-close" ) {
+		cout << "TopLines display is " << ! mGroup->isDisplayNone() << endl;
+		cout << "Absolute: " << mGroup->getBoundingBox() << endl;
+	}
 }
 	
 ci::gl::Texture2dRef Node::initializeGl( const ci::svg::Group *group )
@@ -27,9 +40,9 @@ ci::gl::Texture2dRef Node::initializeGl( const ci::svg::Group *group )
 	cairo::SurfaceImage srfImg( rect.getWidth() + mOffset.x, rect.getHeight() + mOffset.y, true );
 	cairo::Context ctx( srfImg );
 	
-	ctx.setAntiAlias( 16 );
+	ctx.setAntiAlias( mAntiAlias );
 	ctx.translate( -rect.x1 + (mOffset.x / 2), -rect.y1 + (mOffset.y / 2) );
-	ctx.render( *mGroup );
+	ctx.render( *group );
 	return gl::Texture::create( srfImg.getSurface() );
 }
 	
@@ -38,13 +51,8 @@ Page::Page( const std::string &name )
 {
 }
 	
-void Page::initializeGl()
-{
-	mTexture = Node::initializeGl( mGroup );
-}
-	
 Button::Button( const std::string &name )
-: Node(name), mStatus(ButtonStatus::INVISIBLE)
+: Node(name)
 {
 }
 	

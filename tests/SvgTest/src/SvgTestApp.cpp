@@ -9,7 +9,11 @@
 
 #include "SvgManager.h"
 #include "JsonManager.h"
+#include "EventManager.h"
 #include "Node.h"
+#include "KioskManager.h"
+#include "InfoDisplay.h"
+#include "InteractionEvents.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -19,90 +23,95 @@ class SvgTestApp : public AppNative {
   public:
 	void setup() override;
 	void mouseDown( MouseEvent event ) override;
+	void keyDown( KeyEvent event ) override;
 	void update() override;
 	void draw() override;
-	
-	heartbeat::ButtonRef& getButton() { return mButton; }
-	
-	svg::DocRef mDoc;
-	heartbeat::ButtonRef		mButton;
+
+	heartbeat::EventManagerRef  mEventManager;
 	heartbeat::SvgManagerRef	mManager;
 	heartbeat::JsonManagerRef	mJsonManager;
+	heartbeat::KioskManagerRef	mKioskManager;
 	ci::gl::Texture2dRef		mTexture;
+	std::map<std::string, heartbeat::PageRef> mPages;
+	std::map<std::string, heartbeat::ButtonRef> mButtons;
+	int mIndex;
+	bool debugRenderPages;
 };
-
-// Renders a given SVG group 'groupName' into a new gl::Texture
-gl::TextureRef renderSvgGroupToTexture( const svg::Doc &doc, const std::string &group, bool alpha )
-{
-//	auto& nodes = dynamic_cast<svg::Group*>(const_cast<svg::Node*>(doc.findNode( group )))->getChildren();
-//	for( auto & node : nodes ) {
-//		cout << node->getId() << endl;
-//	}
-//	return gl::Texture2dRef();
-	auto node = dynamic_cast<svg::Group*>(const_cast<svg::Node*>(doc.findNode( group )))->findByIdContains<svg::Group>("active");
-	auto rect = node->getBoundingBox();
-	cout << "Rect " << rect << endl;
-	cairo::SurfaceImage srfImg( rect.getWidth() + 10, rect.getHeight() + 10, alpha );
-	cairo::Context ctx( srfImg );
-	
-	ctx.setAntiAlias( 16 );
-	ctx.translate( -rect.x1 + 5, -rect.y1 + 5 );
-	ctx.render( *node );
-	return gl::Texture::create( srfImg.getSurface() );
-	
-}
 
 void SvgTestApp::setup()
 {
-//	mDoc = svg::Doc::create( loadAsset("Actemra_V1.svg") );
-//	MatrixAffine2<float> transform = mDoc->getTransform();
-//	transform.scale( vec2(getWindowSize()) / vec2(mDoc->getSize()) );
-//	mDoc->setTransform( transform );
+	mEventManager = heartbeat::EventManager::create( "Global", true );
 	mJsonManager = heartbeat::JsonManager::create( "test.json" );
 	
 	mManager = heartbeat::SvgManager::create();
 	mManager->initialize();
-	quit();
-//	mButton = heartbeat::Button::create( "BUTTONS" );
-//	mDoc = mManager->getDoc();
-//	mTexture = renderSvgGroupToTexture( *mDoc, "D2", true );
+	mPages = mManager->getPages();
+	mButtons = mManager->getButtons();
+	mIndex = 0;
+	debugRenderPages = true;
+	
+	mKioskManager = heartbeat::KioskManager::create();
+	mKioskManager->initialize();
 }
 
 void SvgTestApp::mouseDown( MouseEvent event )
 {
-	auto node = mDoc->nodeUnderPoint( event.getPos() );
-	if( node ) {
-		auto found = false;
-		const svg::Node* prepNode = node;
-		while ( ! found ) {
-			auto id = prepNode->getId();
-			if( id.empty() ) {
-				prepNode = prepNode->getParent();
-			}
-			else {
-				cout << id << endl;
-				cout << prepNode->getParent()->getId() << endl;
-				found = true;
-			}
-		}
-	}
+	mEventManager->queueEvent( heartbeat::EventDataRef( new heartbeat::TouchEvent( event.getPos() ) ) );
+}
+
+void SvgTestApp::keyDown( cinder::app::KeyEvent event )
+{
+	auto displays = mKioskManager->getInfoDisplays();
+	displays[0]->toggleStatus();
 }
 
 void SvgTestApp::update()
 {
+	mEventManager->update();
 }
 
 void SvgTestApp::draw()
 {
+	static int lastIndex = mIndex;
 	gl::clear( Color::black() );
 	gl::setMatricesWindow( getWindowSize() );
 	
-	
-	if( mTexture ) {
-		gl::enableAlphaBlending();
-		gl::color( Color::white() );
-		gl::draw( mTexture, vec2( 0 ) );
-	}
+//	if( debugRenderPages ) {
+//		auto page = mPages.begin();
+//		
+//		if( mIndex < mPages.size() ) {
+//			for( int i = 0; i < mIndex; i++ ) {
+//				page++;
+//			}
+//		}
+//		gl::enableAlphaBlending();
+//		gl::color( Color::white() );
+//		page->second->debugRender();
+//		
+//		if( mIndex != lastIndex ) {
+//			cout << page->second->getGroupName() << endl;
+//			lastIndex = mIndex;
+//		}
+//	}
+//	else {
+//		auto button = mButtons.begin();
+//		
+//		if( mIndex < mButtons.size() ) {
+//			for( int i = 0; i < mIndex; i++ ) {
+//				button++;
+//			}
+//		}
+//		
+//		gl::enableAlphaBlending();
+//		gl::color( Color::white() );
+//		button->second->debugRender();
+//		
+//		if( mIndex != lastIndex ) {
+//			cout << button->second->getGroupName() << endl;
+//			lastIndex = mIndex;
+//		}
+//	}
+	mKioskManager->render();
 }
 
 CINDER_APP_NATIVE( SvgTestApp, RendererGl )

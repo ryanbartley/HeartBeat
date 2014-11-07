@@ -102,7 +102,6 @@ void hidTestApp::setup()
 	mKioskManager				= heartbeat::KioskManager::create();
 	mKioskManager->initialize();
 	
-	cout << "Initialized Interaction Zones" << endl;
 	mInteractionZones->initialize();
 	mInteractionZonesDebug->initialize();
 	

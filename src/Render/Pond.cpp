@@ -38,10 +38,10 @@ Pond::Pond( const ci::vec2 &pondSize )
 	
 }
 	
-	PondRef Pond::create( const ci::vec2 &pondSize )
-	{
-		return PondRef( new Pond( pondSize ) );
-	}
+PondRef Pond::create( const ci::vec2 &pondSize )
+{
+	return PondRef( new Pond( pondSize ) );
+}
 	
 void Pond::initialize()
 {

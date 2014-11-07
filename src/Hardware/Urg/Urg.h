@@ -10,6 +10,7 @@
 
 #include "urg_sensor.h"
 #include "urg_utils.h"
+#include "cinder/ConcurrentCircularBuffer.h"
 
 #include "Common.h"
 

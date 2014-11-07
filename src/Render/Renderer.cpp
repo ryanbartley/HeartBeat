@@ -373,7 +373,7 @@ void Renderer::renderToPresentTarget( uint32_t target )
 	gl::clearColor( ColorA( 1, 1, 1, 1 ) );
 	gl::clear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 	
-	gl::setMatricesWindow( mIndividualProjectorSize, false );
+	gl::setMatricesWindow( mIndividualProjectorSize, true );
 	
 	if( target == BOTTOM_PRESENT_TARGET ) {
 		
@@ -389,9 +389,7 @@ void Renderer::renderToPresentTarget( uint32_t target )
 	
 void Renderer::renderToSingleWindow()
 {
-	cout << "I'm calling single window" << endl;
 	if( ! mIsSplitWindow ) {
-		cout << "I'm about to draw single window" << endl;
 		gl::clear();
 		gl::ScopedViewport scopeView( vec2( 0 ), getWindowSize() );
 		gl::ScopedMatrices scopeMat;
@@ -401,7 +399,8 @@ void Renderer::renderToSingleWindow()
 		// This is the bottom Presentation Target using the edge Width on the top
 		mEdgeBlendGlsl->uniform( "edges", vec4( 0.0, mEdgeWidth, 0.0, 0.0 ) );
 		{
-			auto tex = getBottomPresentationTarget()->getColorTexture();
+			
+			auto tex = getTopPresentationTarget()->getColorTexture();
 			gl::ScopedTextureBind scopeTex( tex );
 			
 			gl::drawSolidRect( Rectf( vec2( 0 ), tex->getSize() ) );
@@ -410,11 +409,11 @@ void Renderer::renderToSingleWindow()
 		// This is the top Presentation Target using the edge Width on the bottom
 		mEdgeBlendGlsl->uniform( "edges", vec4( 0.0, 0.0, 0.0, mEdgeWidth ) );
 		{
-			auto tex = getTopPresentationTarget()->getColorTexture();
+			auto tex = getBottomPresentationTarget()->getColorTexture();
 			
 			gl::ScopedModelMatrix scopeMat;
-			gl::ScopedTextureBind scopeTex( tex );
 			gl::translate( vec2( 0, getWindowHeight() ) / 2.0f );
+			gl::ScopedTextureBind scopeTex( tex );
 			gl::drawSolidRect( Rectf( vec2( 0 ), tex->getSize() ) );
 		}
 	}

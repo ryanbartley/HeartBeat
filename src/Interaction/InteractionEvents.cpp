@@ -39,6 +39,11 @@ TouchEvent::TouchEvent( int index, float dist, const InteractionZonesRef &intera
 {
 }
 	
+TouchEvent::TouchEvent( const ci::vec2 &point )
+: mIndex( 100 ), mDist( 0 ), mWorldCoord( point ), mCachedWorldCoord( true )
+{
+}
+	
 ci::vec2& TouchEvent::getWorldCoordinate()
 {
 	if( ! mCachedWorldCoord ) {

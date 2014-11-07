@@ -39,9 +39,13 @@ public:
 	const JsonManagerRef& getJsonManager() { return mJsonManager; }
 	EventManagerRef& getEventManager() { return mEventManager; }
 	const EventManagerRef& getEventManager() const { return mEventManager; }
-	HidCommManagerRef& getHidCommManager() { return mHidCommManager; }
-	const HidCommManagerRef& getHidCommManager() const { return mHidCommManager; }
+	KioskManagerRef& getKioskManager() { return mKioskManager; }
+	InteractionZonesRef& getInteractionZones() { return mInteractionManager; }
 	
+#if defined( DEBUG )
+	InteractionDebugRenderableRef& getInteractionDebug() { return mInteractionDebug; }
+	void setParams( const ci::params::InterfaceGlRef &params ) { mParams = params; }
+#endif
 	
 private:
 	Engine();
@@ -51,13 +55,15 @@ private:
 	
 	RendererRef					mRenderer;
 	JsonManagerRef				mJsonManager;
+	SvgManagerRef				mSvgManager;
 	EventManagerRef				mEventManager;
-	HidCommManagerRef			mHidCommManager;
 	InteractionZonesRef			mInteractionManager;
-	std::array<KioskRef, 3>		mKiosks;
+	KioskManagerRef				mKioskManager;
+	PondRef						mPond;
 	
 #if defined( DEBUG )
-	ci::params::InterfaceGlRef	mParams;
+	InteractionDebugRenderableRef	mInteractionDebug;
+	ci::params::InterfaceGlRef		mParams;
 #endif
 	
 	std::vector<boost::signals2::connection> mConnections;

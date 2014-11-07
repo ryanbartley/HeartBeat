@@ -35,17 +35,21 @@ using InteractionDebugRenderableRef = std::shared_ptr<class InteractionDebugRend
 using KioskManagerRef	= std::shared_ptr<class KioskManager>;
 using InfoDisplayRef	= std::shared_ptr<class InfoDisplay>;
 	
-using SpringMeshRef = std::shared_ptr<class SpringMesh>;
-using PondElementRef = std::shared_ptr<class PondElement>;
+using SpringMeshRef		= std::shared_ptr<class SpringMesh>;
+using PondElementRef	= std::shared_ptr<class PondElement>;
+using PondRef			= std::shared_ptr<class Pond>;
 
 using NodeRef			= std::shared_ptr<class Node>;
 using PageRef			= std::shared_ptr<class Page>;
 using ButtonRef			= std::shared_ptr<class Button>;
+using StaticButtonRef	= std::shared_ptr<class StaticButton>;
 using DataPageRef		= std::shared_ptr<class DataPage>;
 using OverlayPageRef	= std::shared_ptr<class OverlayPage>;
 using OverlaySectionRef = std::shared_ptr<class OverlaySection>;
 using OverlayPlusRef	= std::shared_ptr<class OverlayPlus>;
 using DisplayStateRef	= std::shared_ptr<class DisplayState>;
+using SingleTexturePageRef = std::shared_ptr<class SingleTexturePage>;
+using ActivatableButtonRef = std::shared_ptr<class ActivatableButton>;
 	
 using EventType		= uint64_t;
 using EventDataRef	= std::shared_ptr<class EventData>;

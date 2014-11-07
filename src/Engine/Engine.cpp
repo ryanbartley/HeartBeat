@@ -16,6 +16,10 @@
 #include "HidCommManager.h"
 #include "InteractionZones.h"
 #include "Renderable.h"
+#include "SvgManager.h"
+#include "KioskManager.h"
+#include "Pond.h"
+#include "InteractionDebugRenderable.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -28,7 +32,6 @@ static bool sEngineInitialized = false;
 
 Engine::Engine()
 {
-	
 }
 	
 EngineRef Engine::create()
@@ -65,11 +68,26 @@ void Engine::initialize()
 	mEventManager = heartbeat::EventManager::create( "Global", true );
 	mJsonManager = heartbeat::JsonManager::create( "test.json" );
 	
+	mInteractionManager = heartbeat::InteractionZones::create();
+#if defined( DEBUG )
+	mInteractionDebug = heartbeat::InteractionDebugRenderable::create( mInteractionManager );
+#endif
+	mInteractionManager->initialize();
+#if defined( DEBUG )
+	mInteractionDebug->initialize();
+#endif
+	
+	mSvgManager = heartbeat::SvgManager::create();
+	mSvgManager->initialize();
+	
 	mRenderer = heartbeat::Renderer::create();
 	mRenderer->initialize();
 	
-	mHidCommManager = heartbeat::HidCommManager::create();
-	mHidCommManager->initialize();
+	mKioskManager = heartbeat::KioskManager::create();
+	mKioskManager->initialize();
+	
+	mPond = heartbeat::Pond::create( mRenderer->getTotalRenderSize() );
+	mPond->initialize();
 	
 	auto app = app::App::get();
 	
@@ -86,7 +104,6 @@ void Engine::cleanup()
 	mRenderer.reset();
 	mJsonManager.reset();
 	mEventManager.reset();
-	mHidCommManager.reset();
 }
 	
 void Engine::keyDown( ci::app::KeyEvent event )
@@ -110,9 +127,11 @@ void Engine::keyDown( ci::app::KeyEvent event )
 	
 void Engine::update()
 {
-	for( auto & kiosk : mKiosks ) {
-		
-	}
+	mInteractionManager->process();
+	mEventManager->update();
+	mPond->update();
+	mKioskManager->update();
+	
 }
 	
 void Engine::preDraw()
@@ -122,44 +141,32 @@ void Engine::preDraw()
 	
 void Engine::draw()
 {
-	cout << "I'm in draw" << endl;
+	gl::setMatricesWindow( getRenderer()->getTotalRenderSize() );
 	
-	CameraPersp		mCamera;
-	auto aspect = getRenderer()->getTotalRenderSize();
-	mCamera.setPerspective( 60.0f, aspect.x / aspect.y , .01f, 1000.0f );
-	mCamera.lookAt( vec3( 0, 0, 6 ), vec3( 0 ) );
+	gl::drawSolidRect( Rectf( vec2( 0, 0 ), getRenderer()->getTotalRenderSize() ) );
 	
-	{
-		gl::ScopedMatrices scopeMat;
-		gl::setMatricesWindow( getRenderer()->getTotalRenderSize() );
-		gl::color( 1, 0, 0 );
-		gl::drawSolidRect( Rectf( vec2( 0 ), getRenderer()->getTotalRenderSize() ) );
+	mKioskManager->render();
+	
+#if defined( DEBUG )
+	if( mInteractionDebug ) {
+		mInteractionDebug->draw();
 	}
-	{
-		gl::enableDepthRead();
-		gl::enableDepthWrite();
-		
-		static float rotation = 0.0f;
-		gl::ScopedMatrices scopeMat;
-		gl::setMatrices( mCamera );
-		gl::color( 1, 1, 1 );
-		gl::multModelMatrix( rotate( rotation += 0.01f, vec3( 0, 1, 0 ) ) );
-		gl::drawColorCube( vec3( 0 ), vec3( 4 ) );
-		
-		gl::disableDepthRead();
-		gl::disableDepthWrite();
+	if( mParams ) {
+		gl::ScopedViewport scopeView( vec2( 0 ), getWindowSize() );
+		gl::ScopedMatrices scopeMatrices;
+		gl::setMatricesWindow( getWindowSize() );
+		mParams->draw();
 	}
-	
-//	for( auto & renderable : mRenderables ) {
-//		renderable->draw();
-//	}
-	
+#endif
+
+
 }
 	
 void Engine::postDraw()
 {
 	mRenderer->endFrame();
 	mRenderer->presentRender();
+	
 }
 
 }

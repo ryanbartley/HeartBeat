@@ -19,8 +19,8 @@ class JsonTree;
 
 namespace heartbeat {
 	
-using OverlayPageCreator	= std::function<OverlayPageRef(const std::string&)>;
-using OverlayPageCreators	= std::map<std::string, OverlayPageCreator>;
+using PageCreator			= std::function<PageRef(const std::string&)>;
+using PageCreators			= std::map<std::string, PageCreator>;
 using ButtonCreator			= std::function<ButtonRef(const std::string&)>;
 using ButtonCreators		= std::map<std::string, ButtonCreator>;
 	
@@ -30,7 +30,7 @@ public:
 	static SvgManagerRef create();
 	static SvgManagerRef get();
 	static void destroy();
-	static OverlayPageCreators	OverlayCreators;
+	static PageCreators			OverlayCreators;
 	static ButtonCreators		ButtonCreators;
 	
 	SvgManager( const SvgManager & ) = delete;
@@ -49,13 +49,19 @@ public:
 	ButtonRef		getButton( const std::string &name );
 	DataPageRef		getData( const std::string &name );
 	OverlayPageRef	getOverlay( const std::string &name );
+	PageRef			getPage( const std::string &name );
+	
+	std::map<std::string, ButtonRef>& getButtons() { return mButtons; }
+	std::map<std::string, PageRef>& getPages() { return mPages; }
 	
 private:
 	SvgManager();
 	
 	void initializeDataPages( const ci::JsonTree &root );
-	void initializeOverlayPages( const ci::JsonTree &root );
+	void preInitializeOverlayPages( const ci::JsonTree &root );
+	void postInitializeOverlayPages( const ci::JsonTree &root );
 	void initializeButtons( const ci::JsonTree &root );
+	void initializeStaticPages( const ci::JsonTree &root );
 	
 	void initializeGl();
 	

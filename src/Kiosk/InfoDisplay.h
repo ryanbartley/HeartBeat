@@ -10,14 +10,23 @@
 
 #include "Renderable.h"
 #include "Node.h"
-#include "DisplayState.h"
 
 namespace heartbeat {
 	
-
-	
-class InfoDisplay : public Renderable {
+class InfoDisplay : public Renderable, public std::enable_shared_from_this<InfoDisplay> {
 public:
+	
+	enum class Status {
+		HOME_SCREEN,
+		DATA_SCREEN
+	};
+	
+	enum class AnimateType {
+		RIGHT_TO_LEFT,
+		LEFT_TO_RIGHT,
+		FADE_OUT_FADE_IN,
+		CUT
+	};
 	
 	static InfoDisplayRef create( KioskId kioskId );
 	
@@ -26,28 +35,70 @@ public:
 	void draw() override;
 	void update() override;
 	
-	const ci::Rectf getBoundingBox() { return mBoundingBox; }
+	const ci::Rectf getPresentationRect() { return mPresentRect; }
 	
-	void activate();
-	void deactivate();
+	void activate( bool activate );
+	void reset();
 	
 	bool isActivated() { return mIsActivated; }
-	bool insideAngle( float radians ) { return mMinAngle < radians && mMaxAngle > radians; }
+	bool insideAngle( int index ) { return mMinIndex < index && mMaxIndex > index; }
+	
+	void renderCurrentScene();
+	void renderHomeScreen();
+	void renderDataScreen();
+	void renderOverlayScreen();
+	
+	void toggleStatus();
 	
 	void registerTouch( EventDataRef eventData );
 	
-private:
-	InfoDisplay( KioskId kioskId );
+	void addDataPage( DataPageRef &page, AnimateType type );
+	void addOverlayPage( OverlayPageRef &page );
+	
+	std::vector<ButtonRef>& getHomeButtons() { return mHomeButtons; }
+	std::vector<ButtonRef>& getDataButtons() { return mDataButtons; }
 	
 	void initiaize( const ci::JsonTree &root );
+	
+	void setPresentFbo( const ci::gl::FboRef &fbo ) { mPresentationFbo = fbo; }
+	void setStatus( Status status ) { mStatus = status; }
+	
+	std::map<std::string, PageRef>& getPageCache() { return mPageCache; }
+	std::deque<DataPageRef>& getCurrentPages() { return mDataPages; }
+	OverlayPageRef& getOverlayPage() { return mOverlay; }
+	
+	void setSection( uint32_t section ) { mCurrentSection = section; }
+	uint32_t getSection() { return mCurrentSection; }
+	
+	ActivatableButtonRef& getActivatedButton() { return mActivatedButton; }
+	void setActivatedButton( const ActivatableButtonRef &button ) { mActivatedButton = button; }
+	
+	void removeFront();
+	
+private:
+	InfoDisplay( KioskId kioskId );
 
-	ci::Rectf				mBoundingBox;
-	DisplayStateRef			mDisplayState;
-	ci::gl::Texture2dRef	mTexture;
-	float					mMasterAlpha;
-	bool					mIsActivated;
-	float					mMinAngle, mMaxAngle;
-	const KioskId			mId;
+	ci::mat4						mInverse;
+	ci::gl::FboRef					mPresentationFbo;
+	Status							mStatus;
+	uint32_t						mCurrentSection;
+	
+	std::deque<DataPageRef>			mDataPages;
+	std::map<std::string, PageRef>	mPageCache;
+	OverlayPageRef					mOverlay;
+	ActivatableButtonRef			mActivatedButton;
+	std::vector<ButtonRef>			mHomeButtons,
+									mDataButtons;
+	
+	PageRef							mBackGround,
+									mLines;
+	
+	ci::Rectf						mPresentRect;
+	float							mMasterAlpha;
+	bool							mIsActivated;
+	int								mMinIndex, mMaxIndex;
+	
+	const KioskId					mId;
 };
 	
 }

@@ -76,6 +76,7 @@ public:
 	static const EventType TYPE;
 	
 	explicit TouchEvent( int index, float dist, const InteractionZonesRef &interactionZones );
+	explicit TouchEvent( const ci::vec2 &point );
 	~TouchEvent() {}
 	
 	int getIndex() { return mIndex; }

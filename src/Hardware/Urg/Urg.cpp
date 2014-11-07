@@ -54,6 +54,7 @@ bool Urg::open()
 		return false;
 	}
 	
+	
 	// It's open
 	mIsOpen = true;
 	

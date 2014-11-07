@@ -349,7 +349,7 @@ float InteractionZones::getZoneScalar( Zone zone )
 	
 void InteractionZones::process()
 {
-	static int captureFrames = 20;
+	static int captureFrames = 50;
 	if( ! mUrg ) {
 		static bool runOnce = false;
 		if( ! runOnce ) {
@@ -429,7 +429,7 @@ void InteractionZones::process()
 	
 	if( ! mSendEvents && ! ( captureFrames-- ) ) {
 		mSendEvents = true;
-		captureFrames = 10;
+		captureFrames = 50;
 		return;
 	}
 	
@@ -455,19 +455,15 @@ void InteractionZones::process()
 		if( activated && numDistances == 0 ) {
 			eventManager->queueEvent( EventDataRef( new DepartEvent( approachZone.getKiosk() ) ) );
 			approachZone.activate( false );
-			cout << "Deactivating" << endl;
 		}
 		else if( !activated && numDistances > 0 ) {
 			eventManager->queueEvent( EventDataRef( new ApproachEvent( approachZone.getKiosk() ) ) );
 			approachZone.activate( true );
-			cout << "Activating" << endl;
 		}
-		cout << "Approach Zone: " << getKiosk( approachZone.getKiosk() ) << " numEvents: " << approachZone.getNumDistances() << " isActivated: " << approachZone.getIsActivated() << endl;
 		approachZone.reset();
 	}
 	
 	for( auto touchIt = touchEvents.begin(); touchIt != touchEvents.end(); ++touchIt ) {
-		cout << "TOUCH EVENT: index: " << touchIt->mIndex << " dist: " << touchIt->mDistance << endl;
 		eventManager->queueEvent( EventDataRef( new TouchEvent( touchIt->mIndex, touchIt->mDistance, shared_from_this() ) ) );
 	}
 	

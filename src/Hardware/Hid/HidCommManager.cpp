@@ -73,35 +73,30 @@ void HidCommManager::initialize()
 	
 void HidCommManager::send( const Hid &hid, HidMessage &packet )
 {
-		ci::Timer time;
-		time.start();
-		packet.mBytesUsed = rawhid_send_by_id( hid.mId,
-										static_cast<void*>( &(packet.mBuffer[0]) ),
-										packet.mBytesUsed,
-										0 );
-		time.stop();
-		cout << "TIME: " << time.getSeconds() << endl;
-		if( packet.mBytesUsed == 0 )
-			CI_LOG_E("Transmitted nothing" << getKiosk( hid.mKioskId ) );
-		else if( packet.mBytesUsed == -1 )
-			CI_LOG_E("Returned -1 from: " << getKiosk( hid.mKioskId ) );
+	packet.mBytesUsed = rawhid_send_by_id( hid.mId,
+									static_cast<void*>( &(packet.mBuffer[0]) ),
+									packet.mBytesUsed,
+									0 );
+	if( packet.mBytesUsed == 0 )
+		CI_LOG_E("Transmitted nothing" << getKiosk( hid.mKioskId ) );
+	else if( packet.mBytesUsed == -1 )
+		CI_LOG_E("Returned -1 from: " << getKiosk( hid.mKioskId ) );
 }
 	
 HidMessage HidCommManager::recv( const Hid &hid )
 {
+	HidMessage ret;
+	// TODO: Figure out if I actually need that much info
+	ret.mBytesUsed = rawhid_recv_by_id( hid.mId,
+										static_cast<void*>( &(ret.mBuffer[0]) ),
+										ret.mBytesUsed,
+										0 );
+	if( ret.mBytesUsed == 0 )
+		CI_LOG_W("Received 0 bytes");
+	if( ret.mBytesUsed == -1 )
+		CI_LOG_E("Returned -1 from: " << getKiosk( hid.mKioskId ) );
 	
-		HidMessage ret;
-		// TODO: Figure out if I actually need that much info
-		ret.mBytesUsed = rawhid_recv_by_id( hid.mId,
-											static_cast<void*>( &(ret.mBuffer[0]) ),
-											ret.mBytesUsed,
-											0 );
-		if( ret.mBytesUsed == 0 )
-			CI_LOG_W("Received 0 bytes");
-		if( ret.mBytesUsed == -1 )
-			CI_LOG_E("Returned -1 from: " << getKiosk( hid.mKioskId ) );
-		
-		return ret;
+	return ret;
 }
 	
 void HidCommManager::activate( heartbeat::KioskId kioskId, bool activate )

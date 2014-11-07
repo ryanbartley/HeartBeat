@@ -3,7 +3,7 @@
 #define __DELAY_BACKWARD_COMPATIBLE__ 
 #include <util/delay.h>
 
-#define DEBUG 1
+#define DEBUG 0
 
 #include "usb_rawhid.h"
 
@@ -23,9 +23,9 @@
 #define DIT 80		/* unit time for morse code */
 
 const double PROGMEM fullCycle 		= 20.000;
-const double PROGMEM fullyOpen 		= 1.200;
-const double PROGMEM fullyClosed 	= 1.740;
-const double PROGMEM amountToMove 	= 1.750 - 1.200;
+const double PROGMEM fullyOpen 		= 0.855;
+const double PROGMEM fullyClosed 	= 1.666;
+const double PROGMEM amountToMove 	= 1.666 - 0.855;
 
 
 void on();

@@ -28,6 +28,8 @@ public:
 	
 	void initialize();
 	
+	std::array<InfoDisplayRef, 3>& getInfoDisplays() { return mDisplays; }
+	
 private:
 	KioskManager();
 	
