@@ -91,6 +91,10 @@ private:
 									mDataButtons;
 	std::map<std::string,
 	std::vector<ButtonRef>>			mOverlayButtons;
+
+#if defined( DEBUG )
+    std::vector<ci::vec2>			mPoints;
+#endif
 	
 	PageRef							mBackGround,
 									mLines;

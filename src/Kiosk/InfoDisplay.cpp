@@ -12,6 +12,8 @@
 #include "InteractionEvents.h"
 #include "EventManager.h"
 #include "ButtonTypes.h"
+#include "Engine.h"
+#include "Renderer.h"
 
 #include "cinder/Timeline.h"
 #include "cinder/gl/Texture.h"
@@ -112,6 +114,15 @@ void InfoDisplay::draw()
 		mBackGround->render();
 		
 		renderCurrentScene();
+#if defined( DEBUG )
+        {
+            gl::ScopedColor scopeColor( ColorA(1, 0, 0, 1) );
+        for( auto & point : mPoints ) {
+            gl::drawSolidCircle( point, 20 );
+        }
+        }
+        mPoints.clear();
+#endif
 		gl::disableAlphaBlending();
 	}
 	
@@ -119,6 +130,9 @@ void InfoDisplay::draw()
 	
 	gl::ScopedModelMatrix scopeModel;
 	gl::setModelMatrix( getModelMatrix() );
+    if( ! Engine::get()->getRenderer()->isHalfSize() ) {
+        gl::multModelMatrix( ci::scale( vec3( 2, 2, 2 ) ) );
+    }
 //	gl::ScopedTextureBind scopeTex( tex );
 	
 //	gl::drawSolidRect( mPresentRect );
@@ -212,6 +226,7 @@ void InfoDisplay::registerTouch( EventDataRef eventData )
 	
 	auto modelSpacePoint = mInverse * vec4( event->getWorldCoordinate(), 0, 1 );
 	auto twoDimPoint = vec2( modelSpacePoint.x, modelSpacePoint.y );
+    cout << "About to check this point: " << twoDimPoint << endl;
 	if( mPresentRect.contains( twoDimPoint ) ) {
 		std::vector<ButtonRef> *buttonSet;
 		switch ( mStatus) {
@@ -238,8 +253,12 @@ void InfoDisplay::registerTouch( EventDataRef eventData )
 				return;
 			break;
 		}
-		
+#if defined( DEBUG )
+        mPoints.push_back( twoDimPoint );
+#endif
+		cout << "I'm touching" << endl;
 		for( auto & button : *buttonSet ) {
+            cout << "checking button" << endl;
 			if( button->contains( twoDimPoint ) ) {
 				cout << "it's this button: " << button->getGroupName() << endl;
 				auto shared = shared_from_this();

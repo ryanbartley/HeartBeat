@@ -4,7 +4,7 @@
 		// RENDERER
 		//////////////////////////////////////////////////////
 		"screenRender" : {
-			"imageStencil" : "TableLayout.png",
+			"imageStencil" : "tableoutline_110714-V2.png",
 			"individualProjectorSize" : [
 				1920,
 				1080
@@ -31,7 +31,7 @@
 		// URG ATTRIBUTES
 		//////////////////////////////////////////////////////
 		"urg" : {
-			"address" : "/dev/tty.usbmodemfa131"
+			"address" : "/dev/tty.usbmodem1d11"
 		},
 		//////////////////////////////////////////////////////
 		// INTERACTION ZONE ATTRIBUTES
@@ -65,18 +65,18 @@
 			"inBetweenThresh" : 50,
 			"transforms" : {
 				"scales" : [
-					0.41, 0.41
+					1.0, 1.0
 				],
 				"rotations" : {
 					// This can either contain "quaternion" : []
 					// or "angle" : degree, axis is vec3( 0, 0, 1 )
-					"angle" : 14
+					"angle" : -24
 				},
 				"translations" : {
 					// This can either contain "coordinates" : []
 					// or "center" : boolean
 					// "center" : true //,
-					"coordinates" : [ 292.00, 383.44 ]
+					"coordinates" : [ 585.0, -860.0 ]
 				}
 			}
 		},
@@ -197,12 +197,12 @@
 				},
 				"top" : {
 					"transformation" : {
-						"scales" : [ 0.217, 0.217 ],
+						"scales" : [ 0.19, 0.19 ],
 						"translations" : {
-							"coordinates" : [ 644, 234 ] 
+							"coordinates" : [ 1535.86, 600.0 ] 
 						},
 						"rotations" : {
-							"angle" : 156
+							"angle" : 180
 						}
 					}
 				},
@@ -210,21 +210,21 @@
 					"transformation" : {
 						"scales" : [ 0.19, 0.19 ],
 						"translations" : {
-							"coordinates" : [ 517.19, 622.07 ] 
+							"coordinates" : [ 921.41, 1373.58 ] 
 						},
 						"rotations" : {
-							"angle" : -66
+							"angle" : -30
 						}
 					}
 				},
 				"bottom" : {
 					"transformation" : {
-						"scales" : [ 0.2, 0.2 ],
+						"scales" : [ 0.19, 0.19 ],
 						"translations" : {
-							"coordinates" : [ 177.94, 434.91 ] 
+							"coordinates" : [ 286.72, 829.85 ] 
 						},
 						"rotations" : {
-							"angle" : 31
+							"angle" : 45
 						}
 					}
 				}

@@ -98,12 +98,12 @@ void Engine::initialize()
 	
 void Engine::cleanup()
 {
-	for( auto & connection : mConnections ) {
-		connection.disconnect();
-	}
-	mRenderer.reset();
-	mJsonManager.reset();
-	mEventManager.reset();
+//	for( auto & connection : mConnections ) {
+//		connection.disconnect();
+//	}
+//	mRenderer.reset();
+//	mJsonManager.reset();
+//	mEventManager.reset();
 }
 	
 void Engine::keyDown( ci::app::KeyEvent event )

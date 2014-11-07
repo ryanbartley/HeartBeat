@@ -38,11 +38,11 @@ Renderer::~Renderer()
 	
 void Renderer::cleanup()
 {
-	mWindows[0] = nullptr;
-	mWindows[1] = nullptr;
-	for( auto & connection : mDrawSignals ) {
-		connection.disconnect();
-	}
+//	mWindows[0] = nullptr;
+//	mWindows[1] = nullptr;
+//	for( auto & connection : mDrawSignals ) {
+//		connection.disconnect();
+//	}
 	CI_LOG_V("Renderer being cleanedup");
 }
 	
@@ -425,7 +425,6 @@ void Renderer::renderToTopWindow()
 {
 	auto window = mWindows[TOP_PRESENT_TARGET];
 	if( mIsSplitWindow && window ) {
-		cout << "I'm in TOP" << endl;
 		auto renderer = window->getUserData<Renderer>();
 		gl::clear();
 		gl::ScopedViewport scopeView( vec2( 0 ), window->getSize() );
@@ -452,7 +451,6 @@ void Renderer::renderToBottomWindow()
 	auto window = mWindows[BOTTOM_PRESENT_TARGET];
 	if( mIsSplitWindow && window ) {
 		auto renderer = window->getUserData<Renderer>();
-		cout << "I'm in BOTTOM" << endl;
 		gl::clear();
 		gl::ScopedViewport scopeView( vec2( 0 ), window->getSize() );
 		gl::ScopedMatrices scopeMat;
