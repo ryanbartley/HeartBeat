@@ -89,6 +89,10 @@ private:
 	ActivatableButtonRef			mActivatedButton;
 	std::vector<ButtonRef>			mHomeButtons,
 									mDataButtons;
+    
+#if defined( DEBUG )
+    std::vector<ci::vec2>               mPoints;
+#endif
 	
 	PageRef							mBackGround,
 									mLines;

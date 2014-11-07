@@ -165,7 +165,9 @@ void InteractionDebugRenderable::draw()
 	if( ! mDrawDistanceData && ! mDrawZoneData ) return;
 	
 	gl::ScopedModelMatrix scopeModel;
-	gl::setModelMatrix( getModelMatrix() );
+	gl::setModelMatrix( mat4() );
+    gl::multModelMatrix( ci::toMat4( mInteractionZones->getFlip() ) );
+    gl::multModelMatrix( getModelMatrix() );
 	gl::ScopedColor scopeColor( Color( 1, 1, 1 ) );
 	
 	if( mDrawZoneData ) {

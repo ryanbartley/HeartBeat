@@ -23,6 +23,8 @@ class FullProjectApp : public AppNative {
 	void mouseDown( MouseEvent event ) override;
 	void update() override;
 	void draw() override;
+    
+    void keyDown( KeyEvent event ) override;
 	
 	heartbeat::EngineRef mEngine;
 	
@@ -124,7 +126,7 @@ void FullProjectApp::setup()
 	mParams->addParam( "Translation Kiosk 3", &mTranslations[2] ).updateFn( [&](){ mInfoDisplays[2]->setTranslation( vec2(mTranslations[2]) ); } );
 	mParams->addSeparator();
 	mParams->addText("Interaction Zone Transform");
-	mParams->addParam( "Rotation Interaction Zone", &mRotations[3] ).updateFn( [&](){ mInteractionDebug->setRotationDegree( mRotations[3] ); } );
+	mParams->addParam( "Rotation Interaction Zone", &mRotations[3] ).updateFn( [&](){ mInteractionDebug->setRotationDegree( mRotations[3] ); } );   
 	mParams->addParam( "Scale Interaction Zone", &mScales[3] ).updateFn( [&](){ mInteractionDebug->setScale( vec2(mScales[3]) ); } );
 	mParams->addParam( "Translation Interaction Zone", &mTranslations[3] ).updateFn( [&](){ mInteractionDebug->setTranslation( vec2(mTranslations[3]) ); } );
 	mParams->addButton( "Submit Interaction Zone Transform", [&]() {
@@ -214,6 +216,13 @@ void FullProjectApp::setup()
 	
 	mEngine->setParams( mParams );
 #endif
+}
+
+void FullProjectApp::keyDown(cinder::app::KeyEvent event)
+{
+    if( event.getCode() == KeyEvent::KEY_ESCAPE ) {
+        quit();
+    }
 }
 
 void FullProjectApp::mouseDown( MouseEvent event )
