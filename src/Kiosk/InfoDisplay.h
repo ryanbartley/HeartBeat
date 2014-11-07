@@ -103,6 +103,7 @@ private:
 	float							mMasterAlpha;
 	bool							mIsActivated;
 	int								mMinIndex, mMaxIndex;
+	bool							mIsHalfSized;
 	
 	const KioskId					mId;
 };

@@ -294,15 +294,9 @@ void StaticButton::debugRender()
 void StaticButton::render()
 {
 	gl::ScopedModelMatrix scopModel;
+	gl::setModelMatrix( ci::translate( vec3( mAbsolutePosition, 0 ) ) );
 	
-	if( mName == "BUTTON-STUDY-close" ) {
-		cout << "Here's button-study" << endl;
-		gl::draw( mTexture, vec2( 0 ) );
-	}
-	else {
-		gl::setModelMatrix( ci::translate( vec3( mAbsolutePosition, 0 ) ) );
-		gl::draw( mTexture );
-	}
+	gl::draw( mTexture );
 }
 	
 ///////////////////////////////////////////////////////////////////////////////////////

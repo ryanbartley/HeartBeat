@@ -166,6 +166,7 @@ PageRef OverlayPage::clone()
 	page->mButtons = mButtons;
 	page->mButton = mButton;
 	page->mTexture = mTexture;
+	page->mButtonGroup = mButtonGroup;
 	return page;
 }
 	
@@ -178,9 +179,9 @@ void OverlayPage::render()
 		gl::draw( mTexture );
 	}
 	
-	for( auto & button : mButtons ) {
-		button->render();
-	}
+//	for( auto & button : mButtons ) {
+//		button->render();
+//	}
 }
 	
 void OverlayPage::touch( InfoDisplayRef &display, const ci::vec2 &touch )
@@ -211,6 +212,7 @@ bool OverlaySection::initialize( const ci::JsonTree &root )
 	OverlayPage::initialize( root );
 	try {
 		mSection = root["section"].getValue<uint32_t>();
+		mButtonGroup = root["button"].getValue();
 	}
 	catch ( const JsonTree::ExcChildNotFound &ex ) {
 		CI_LOG_W("OverlaySection " << ex.what() );
@@ -228,6 +230,7 @@ PageRef OverlaySection::clone()
 	}
 	page->mButton = mButton;
 	page->mSection = mSection;
+	page->mButtonGroup = mButtonGroup;
 	return page;
 }
 	
@@ -279,6 +282,14 @@ bool OverlayPlus::initialize( const ci::JsonTree &root )
 		return false;
 	}
 	
+	try {
+		mButtonGroup = root["button"].getValue();
+	}
+	catch( const JsonTree::ExcChildNotFound &ex ) {
+		CI_LOG_E(ex.what());
+		return false;
+	}
+	
 	return true;
 }
 	
@@ -294,6 +305,7 @@ PageRef OverlayPlus::clone()
 	auto page = OverlayPlus::create( mGroup->getId() );
 	page->mTextures = mTextures;
 	page->mOverlays = mOverlays;
+	page->mButtonGroup = mButtonGroup;
 	NavigableButtonRef next, prev;
 	for( auto & button : mButtons ) {
 		auto newButton = button->clone();

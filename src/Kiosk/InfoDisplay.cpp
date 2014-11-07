@@ -27,7 +27,7 @@ using namespace std;
 namespace heartbeat {
 	
 InfoDisplay::InfoDisplay( KioskId kioskId )
-: mId( kioskId ), mMasterAlpha( 1.0f ), mStatus( Status::HOME_SCREEN ), mCurrentSection( 0 )
+: mId( kioskId ), mMasterAlpha( 1.0f ), mStatus( Status::HOME_SCREEN ), mCurrentSection( 0 ), mIsHalfSized( Engine::get()->getRenderer()->isHalfSize() )
 {
 }
 	
@@ -81,6 +81,15 @@ void InfoDisplay::renderOverlayScreen()
 	if( ! mOverlay ) return;
 	
 	mOverlay->render();
+	
+	auto & name = mOverlay->getButtonGroup();
+	auto & buttons = mOverlayButtons[name];
+	if( buttons.empty() ) {
+		CI_LOG_E("Couldn't find overlay buttons: " << name);
+	}
+	for( auto & button : buttons ) {
+		button->render();
+	}
 }
 	
 void InfoDisplay::toggleStatus()
@@ -117,9 +126,10 @@ void InfoDisplay::draw()
 #if defined( DEBUG )
         {
             gl::ScopedColor scopeColor( ColorA(1, 0, 0, 1) );
-        for( auto & point : mPoints ) {
-            gl::drawSolidCircle( point, 20 );
-        }
+			for( auto & point : mPoints ) {
+				cout << "I should be drawing this point" << endl;
+				gl::drawSolidCircle( point, 20 );
+			}
         }
         mPoints.clear();
 #endif
@@ -130,7 +140,7 @@ void InfoDisplay::draw()
 	
 	gl::ScopedModelMatrix scopeModel;
 	gl::setModelMatrix( getModelMatrix() );
-    if( ! Engine::get()->getRenderer()->isHalfSize() ) {
+    if( ! mIsHalfSized ) {
         gl::multModelMatrix( ci::scale( vec3( 2, 2, 2 ) ) );
     }
 //	gl::ScopedTextureBind scopeTex( tex );
@@ -241,7 +251,11 @@ void InfoDisplay::registerTouch( EventDataRef eventData )
 			break;
 			case Status::DATA_SCREEN: {
 				if( mOverlay ) {
-					buttonSet = &mOverlay->getButtons();
+					auto & name = mOverlay->getButtonGroup();
+					buttonSet = &mOverlayButtons[name];
+					if( buttonSet->empty() ) {
+						CI_LOG_E("Couldn't find button set: " << name);
+					}
 				}
 				else {
 					buttonSet = &mDataButtons;
@@ -258,7 +272,7 @@ void InfoDisplay::registerTouch( EventDataRef eventData )
 #endif
 		cout << "I'm touching" << endl;
 		for( auto & button : *buttonSet ) {
-            cout << "checking button" << endl;
+            cout << "checking button: " << button->getGroupName() << " bounding:  " << button->getRootGroup()->getBoundingBox() << " point: " << twoDimPoint << endl;
 			if( button->contains( twoDimPoint ) ) {
 				cout << "it's this button: " << button->getGroupName() << endl;
 				auto shared = shared_from_this();
@@ -274,7 +288,12 @@ void InfoDisplay::initiaize(const ci::JsonTree &root)
 	try {
 		auto svgManager = SvgManager::get();
 		
-		Renderable::initialize( root["transformation"] );
+		if( mIsHalfSized ) {
+			Renderable::initialize( root["halfSize"]["transformation"] );
+		}
+		else {
+			Renderable::initialize( root["fullSize"]["transformation"] );
+		}
 		
 		mInverse = ci::inverse( getModelMatrix() );
 		

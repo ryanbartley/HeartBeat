@@ -11,6 +11,7 @@
 #include "InteractionDebugRenderable.h"
 #include "InteractionEvents.h"
 #include "EventManager.h"
+#include "Renderer.h"
 #endif
 
 using namespace ci;
@@ -92,6 +93,7 @@ class FullProjectApp : public AppNative {
 	std::array<float, 4> mScales;
 	std::array<vec3, 4> mTranslations;
 	params::InterfaceGlRef mParams;
+	bool										mShowParams;
 #endif
 };
 
@@ -212,7 +214,8 @@ void FullProjectApp::setup()
 	mParams->addButton("Send Bottom Teensy Depart", [&](){
 		mEventManager->queueEvent( EventDataRef( new DepartEvent( KioskId::BOTTOM_KIOSK ) ) );
 	});
-	mParams->show();
+	mShowParams = true;
+	mParams->show( mShowParams );
 	
 	mEngine->setParams( mParams );
 #endif
@@ -223,11 +226,25 @@ void FullProjectApp::keyDown(cinder::app::KeyEvent event)
     if( event.getCode() == KeyEvent::KEY_ESCAPE ) {
         quit();
     }
+	if( event.getChar() == KeyEvent::KEY_p ) {
+		mShowParams = ! mShowParams;
+		mParams->show( mShowParams );
+	}
 }
 
 void FullProjectApp::mouseDown( MouseEvent event )
 {
-	mParams->setPosition( event.getPos() );
+	if( mShowParams ) {
+		mParams->setPosition( event.getPos() );
+	}
+	else {
+		ci::vec2 eventPosition = event.getPos();
+		auto renderer = mEngine->getRenderer();
+		if( event.getPos().y > renderer->getBottomPresentationTarget()->getSize().y  ) {
+			eventPosition.y = eventPosition.y - renderer->getNumPixelOverlap();
+		}
+		mEventManager->queueEvent( heartbeat::EventDataRef( new heartbeat::TouchEvent( eventPosition ) ) );
+	}
 }
 
 void FullProjectApp::update()
