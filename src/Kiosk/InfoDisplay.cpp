@@ -361,6 +361,50 @@ void InfoDisplay::initiaize(const ci::JsonTree &root)
 							CI_LOG_V(pageName << ": already cached");
 						}
 					}
+					
+					auto overlayButtons = overlay["buttons"];
+					
+					auto studyButtons = overlayButtons["STUDY"].getChildren();
+					std::vector<ButtonRef> studyButtonVector;
+					for( auto & studyButton : studyButtons ) {
+						auto buttonName = studyButton.getValue();
+						auto button = svgManager->getButton( buttonName );
+						if( button ) {
+							studyButtonVector.push_back( button->clone() );
+						}
+						else {
+							CI_LOG_E("Couldn't find button " << buttonName);
+						}
+					}
+					mOverlayButtons.insert( make_pair( "STUDY", std::move(studyButtonVector) ) );
+					
+					auto referenceButtons = overlayButtons["REFERENCE"].getChildren();
+					std::vector<ButtonRef> referenceButtonVector;
+					for( auto & referenceButton : referenceButtons ) {
+						auto buttonName = referenceButton.getValue();
+						auto button = svgManager->getButton( buttonName );
+						if( button ) {
+							referenceButtonVector.push_back( button->clone() );
+						}
+						else {
+							CI_LOG_E("Couldn't find button " << buttonName);
+						}
+					}
+					mOverlayButtons.insert( make_pair( "REFERENCE", std::move(referenceButtonVector) ) );
+					
+					auto isiButtons = overlayButtons["ISI"].getChildren();
+					std::vector<ButtonRef> isiButtonVector;
+					for( auto & isiButton : isiButtons ) {
+						auto buttonName = isiButton.getValue();
+						auto button = svgManager->getButton( buttonName );
+						if( button ) {
+							isiButtonVector.push_back( button->clone() );
+						}
+						else {
+							CI_LOG_E("Couldn't find button " << buttonName);
+						}
+					}
+					mOverlayButtons.insert( make_pair( "ISI", std::move(isiButtonVector) ) );
 				}
 				catch( const JsonTree::ExcChildNotFound &ex ) {
 					CI_LOG_E(ex.what());

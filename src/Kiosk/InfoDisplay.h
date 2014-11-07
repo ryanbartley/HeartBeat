@@ -89,6 +89,8 @@ private:
 	ActivatableButtonRef			mActivatedButton;
 	std::vector<ButtonRef>			mHomeButtons,
 									mDataButtons;
+	std::map<std::string,
+	std::vector<ButtonRef>>			mOverlayButtons;
 	
 	PageRef							mBackGround,
 									mLines;

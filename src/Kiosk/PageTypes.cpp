@@ -131,7 +131,7 @@ bool OverlayPage::initialize( const ci::JsonTree &root )
 {
 	
 	try {
-		mButton = root["button"].getValue();
+		mButtonGroup = root["button"].getValue();
 	}
 	catch ( const JsonTree::ExcChildNotFound &ex ) {
 		CI_LOG_E(ex.what());

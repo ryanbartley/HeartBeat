@@ -155,7 +155,7 @@ void Renderer::setupPresentation()
 		auto window = app->getWindow();
 		window->setSize( mIndividualProjectorSize );
 		window->setTitle( "BOTTOM_PRESENT_TARGET" );
-		window->setAlwaysOnTop();
+//		window->setAlwaysOnTop();
 		
 		// Hook up the engine draw methods to the "main window"
 		auto engine = Engine::get();
@@ -177,7 +177,7 @@ void Renderer::setupPresentation()
 		}
 		
 		Window::Format format;
-		format.size( mIndividualProjectorSize ).title( "TOP_PRESENT_TARGET" ).display( secondDisplay ).alwaysOnTop();
+		format.size( mIndividualProjectorSize ).title( "TOP_PRESENT_TARGET" ).display( secondDisplay ? secondDisplay : window->getDisplay() );//.alwaysOnTop();
 		window = app->createWindow( format );
 		
 		mDrawSignals.push_back( window->connectPostDraw( &Renderer::renderToTopWindow, this ) );
@@ -321,7 +321,7 @@ void Renderer::stencilTargetRenderFbo()
 
 	// now we only let pass those that are equal to 0xFF
 	gl::stencilFunc( GL_EQUAL, 1, 1 );
-	gl::stencilFunc( GL_KEEP, GL_KEEP, GL_KEEP );
+	gl::stencilOp( GL_KEEP, GL_KEEP, GL_KEEP );
 	// specifies that we don't want to write to any bits,
 	// essentially turns off the stencil writer.
 	gl::stencilMask( 0x00 );
@@ -376,7 +376,6 @@ void Renderer::renderToPresentTarget( uint32_t target )
 	gl::setMatricesWindow( mIndividualProjectorSize, true );
 	
 	if( target == BOTTOM_PRESENT_TARGET ) {
-		
 		auto offset = mIndividualProjectorSize.y - mNumPixelOverlap * 2;
 		auto offsetBottomLeft = vec2( 0, -offset );
 		auto offsetUpperRight = vec2( mTotalRenderSize.x, mTotalRenderSize.y - offset );
@@ -437,7 +436,7 @@ void Renderer::renderToTopWindow()
 		// This is the top Presentation Target using the edge Width on the bottom
 		renderer->mEdgeBlendGlsl->uniform( "edges", vec4( 0.0, 0.0, 0.0, renderer->mEdgeWidth ) );
 		{
-			auto tex = renderer->getTopPresentationTarget()->getColorTexture();
+			auto tex = renderer->getBottomPresentationTarget()->getColorTexture();
 			gl::ScopedTextureBind scopeTex( tex );
 			
 			gl::drawSolidRect( Rectf( vec2( 0 ), tex->getSize() ) );
@@ -463,7 +462,7 @@ void Renderer::renderToBottomWindow()
 		// This is the bottom Presentation Target using the edge Width on the top
 		renderer->mEdgeBlendGlsl->uniform( "edges", vec4( 0.0, renderer->mEdgeWidth, 0.0, 0.0 ) );
 		{
-			auto tex = renderer->getBottomPresentationTarget()->getColorTexture();
+			auto tex = renderer->getTopPresentationTarget()->getColorTexture();
 			gl::ScopedTextureBind scopeTex( tex );
 			
 			gl::drawSolidRect( Rectf( vec2( 0 ), tex->getSize() ) );

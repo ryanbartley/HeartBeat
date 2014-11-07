@@ -117,10 +117,13 @@ public:
 	
 	std::vector<ButtonRef>& getButtons() { return mButtons; }
 	
+	const std::string& getButtonGroup() const { return mButtonGroup; }
+	
 protected:
 	OverlayPage( const std::string &name );
 	
 	std::vector<ButtonRef>	mButtons;
+	std::string				mButtonGroup;
 };
 	
 /////////////////////////////////////////////////////////////////////////
