@@ -235,7 +235,7 @@
 						"transformation" : {
 							"scales" : [ 0.195, 0.195 ],
 							"translations" : {
-								"coordinates" : [ 517.19, 622.07 ] 
+								"coordinates" : [ 448.97, 680.00 ] 
 							},
 							"rotations" : {
 								"angle" : -30
@@ -257,12 +257,12 @@
 					},
 					"halfSize" : {
 						"transformation" : {
-							"scales" : [ 0.2, 0.2 ],
+							"scales" : [ 0.19, 0.19 ],
 							"translations" : {
-								"coordinates" : [ 177.94, 434.91 ] 
+								"coordinates" : [ 132.52, 434.91 ] 
 							},
 							"rotations" : {
-								"angle" : 31
+								"angle" : 42
 							}
 						}
 					}
@@ -294,42 +294,27 @@
 				"overlayPages" : {
 					"REFERENCE" : {
 						"type" : "overlay",
-						"button" : "REFERENCE",
-						"buttons" : [
-							"BUTTON-REFERENCE-close"
-						]
+						"button" : "REFERENCE"
 					},
 					"STUDY-1" : {
 						"type" : "overlaySection",
 						"button" : "STUDY",
-						"section" : 1,
-						"buttons" : [
-							"BUTTON-STUDY-close"
-						]
+						"section" : 1
 					},
 					"STUDY-2" : {
 						"type" : "overlaySection",
 						"button" : "STUDY",
-						"section" : 2,
-						"buttons" : [
-							"BUTTON-STUDY-close"
-						]
+						"section" : 2
 					},
 					"STUDY-3" : {
 						"type" : "overlaySection",
 						"button" : "STUDY",
-						"section" : 3,
-						"buttons" : [
-							"BUTTON-STUDY-close"
-						]
+						"section" : 3
 					},
 					"STUDY-4" : {
 						"type" : "overlaySection",
 						"button" : "STUDY",
-						"section" : 4,
-						"buttons" : [
-							"BUTTON-STUDY-close"
-						]
+						"section" : 4
 					},
 					"ISI" : {
 						"images" : [
@@ -340,12 +325,7 @@
 							"ISI-5"
 						],
 						"button" : "ISI",
-						"type" : "overlayPlus",
-						"buttons" : [
-							"BUTTON-ISI-close",
-							"BUTTON-ISI-Prev",
-							"BUTTON-ISI-Next"
-						]
+						"type" : "overlayPlus"
 					}
 				}
 			},
