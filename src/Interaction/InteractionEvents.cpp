@@ -62,6 +62,7 @@ void TouchEvent::calcWorldCoord()
 	}
 	
 	auto temp = mInteractionZones->getTransform().getModelMatrix() * vec4( urg->getPoint( mIndex, mDist ), 0, 1 );
+	cout << "temp: " << temp << " original point: " << urg->getPoint( mIndex, mDist ) << endl;
 	mWorldCoord = vec2( temp.x, temp.y );
 }
 	
