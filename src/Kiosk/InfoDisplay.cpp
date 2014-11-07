@@ -102,7 +102,7 @@ void InfoDisplay::toggleStatus()
 
 void InfoDisplay::draw()
 {
-	if( mMasterAlpha <= 0.0f ) return;
+	if( mMasterAlpha >= 1.0f ) return;
 	
 	{
 		auto fboSize = mPresentationFbo->getSize();
@@ -132,7 +132,11 @@ void InfoDisplay::draw()
 			}
         }
 #endif
-		gl::disableAlphaBlending();
+        {
+            gl::ScopedColor scopeColor( ColorA( 1, 1, 1, mMasterAlpha ) );
+            gl::drawSolidRect( Rectf( vec2( 0 ), fboSize ) );
+		}
+        gl::disableAlphaBlending();
 	}
 	
 	auto tex = mPresentationFbo->getColorTexture();
@@ -169,12 +173,12 @@ void InfoDisplay::activate( bool activate )
 	auto app = App::get();
 	
 	if( activate ) {
-		app->timeline().applyPtr( &mMasterAlpha, 1.0f, 1.0 );
+		app->timeline().applyPtr( &mMasterAlpha, 0.0f, 1.0 );
 		mIsActivated = activate;
 	}
 	else {
 		auto shared = shared_from_this();
-		app->timeline().applyPtr( &mMasterAlpha, 0.0f, 1.0 ).finishFn( std::bind( &InfoDisplay::reset, shared ) );
+		app->timeline().applyPtr( &mMasterAlpha, 1.0f, 1.0 ).finishFn( std::bind( &InfoDisplay::reset, shared ) );
 		
 	}
 }

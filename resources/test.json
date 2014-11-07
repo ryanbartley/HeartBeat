@@ -31,7 +31,7 @@
 		// URG ATTRIBUTES
 		//////////////////////////////////////////////////////
 		"urg" : {
-			"address" : "/dev/tty.usbmodem1d21"
+			"address" : "/dev/tty.usbmodem1d11"
 		},
 		//////////////////////////////////////////////////////
 		// INTERACTION ZONE ATTRIBUTES
@@ -42,9 +42,13 @@
 			"poleIndices" : [
 				0,
 				9, 10, 11, 12, 13, 14,
-				381, 382, 383, 384, 385, 386, 387, 388,  
-				585, 586, 587, 588, 589, 
-				725, 726, 727, 728, 729, 730
+				380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 
+				399, 400, 401, 402, 403, 404,
+				532, 533, 534, 535,
+				546, 547, 
+				588, 589, 590, 591, 592, 593, 594,  
+				727, 728, 729, 730, 731, 732, 733, 734, 735,
+				1079, 1080
 			],
 			// Edge
 			// Left Pole
@@ -84,18 +88,18 @@
 			// "fullSize" : {
 				"transforms" : {
 					"scales" : [
-						1.0, 1.0
+						0.975, 0.975
 					],
 					"rotations" : {
 						// This can either contain "quaternion" : []
 						// or "angle" : degree, axis is vec3( 0, 0, 1 )
-						"angle" : -24
+						"angle" : 27
 					},
 					"translations" : {
 						// This can either contain "coordinates" : []
 						// or "center" : boolean
 						// "center" : true //,
-						"coordinates" : [ 585.0, -860.0 ]
+						"coordinates" : [ 597.9, 888.93 ]
 					}
 				}
 			// }

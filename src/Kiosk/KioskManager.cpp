@@ -135,9 +135,9 @@ void KioskManager::initialize()
 			
 			gl::Fbo::Format format;
 			format.colorTexture( gl::Texture2d::Format()
-								.mipmap()
-								.maxAnisotropy( gl::Texture2d::getMaxMaxAnisotropy() )
-								.minFilter( GL_LINEAR_MIPMAP_LINEAR ) );
+								.mipmap() );
+//								.maxAnisotropy( gl::Texture2d::getMaxMaxAnisotropy() )
+//								.minFilter( GL_LINEAR_MIPMAP_LINEAR ) );
 			
 			auto size = svgManager->getDoc()->getSize();
 			cout << "Fbo size: " << size << endl;

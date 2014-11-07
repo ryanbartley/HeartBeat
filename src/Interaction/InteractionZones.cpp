@@ -401,7 +401,20 @@ void InteractionZones::process()
 			}
 			else if( data[i] < *barrierIt * APPROACH_SCALAR && data[i] > *barrierIt * DEAD_SCALAR ) {
 				// emit approaching event.
-				addEvent( approachEvents, i, data[i] );
+				if( mSendEvents ) {
+                    // emit touching event.
+					addEvent( approachEvents, i, data[i] );
+				}
+				else {
+					auto found = std::find( mIgnoreIndices.begin(), mIgnoreIndices.end(), i );
+					if ( found == mIgnoreIndices.end() ) {
+						mIgnoreIndices.push_back( i );
+						std::sort( mIgnoreIndices.begin(), mIgnoreIndices.end(), []( int i, int j ) {
+							return i < j;
+						});
+					}
+				}
+
 			}
 			else if( data[i] > *barrierIt * DEAD_SCALAR ) {
 				// do nothing

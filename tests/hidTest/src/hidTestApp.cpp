@@ -11,6 +11,7 @@
 #include "InteractionDebugRenderable.h"
 #include "KioskManager.h"
 #include "InteractionEvents.h"
+#include "SvgManager.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -83,6 +84,7 @@ class hidTestApp : public AppNative {
 	
 	heartbeat::HidCommManagerRef	mHidComm;
 	heartbeat::JsonManagerRef		mJsonManager;
+    heartbeat::SvgManagerRef        mSvgManager;
 	heartbeat::EventManagerRef		mEventManager;
 	heartbeat::InteractionZonesRef	mInteractionZones;
 	heartbeat::InteractionDebugRenderableRef mInteractionZonesDebug;
@@ -96,6 +98,8 @@ class hidTestApp : public AppNative {
 void hidTestApp::setup()
 {
 	mJsonManager				= heartbeat::JsonManager::create("test.json");
+    mSvgManager                 = heartbeat::SvgManager::create();
+    mSvgManager->initialize();
 	mEventManager				= heartbeat::EventManager::create( "global", true );
 	mInteractionZones			= heartbeat::InteractionZones::create();
 	mInteractionZonesDebug		= heartbeat::InteractionDebugRenderable::create( mInteractionZones );

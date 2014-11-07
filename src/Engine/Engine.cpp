@@ -142,9 +142,10 @@ void Engine::preDraw()
 void Engine::draw()
 {
 	gl::setMatricesWindow( getRenderer()->getTotalRenderSize() );
-	
-	gl::drawSolidRect( Rectf( vec2( 0, 0 ), getRenderer()->getTotalRenderSize() ) );
-	
+	{
+        gl::ScopedColor scopeColor( ColorA( 0, 0, 0, 1 ));
+        gl::drawSolidRect( Rectf( vec2( 0, 0 ), getRenderer()->getTotalRenderSize() ) );
+	}
 	mKioskManager->render();
 	
 #if defined( DEBUG )
