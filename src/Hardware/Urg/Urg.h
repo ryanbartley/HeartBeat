@@ -63,6 +63,8 @@ private:
 	std::string			mDeviceName;
 	std::vector<long>	mCurrentData;
 	bool				mIsOpen;
+	uint32_t			mSensorDataSize;
+	
 	
 	std::vector<long>& getCurrentData() { return mCurrentData; }
 	
@@ -76,7 +78,7 @@ ci::vec2 Urg::getPoint( int index, long length, float scalar )
 	double y;
 	double radian;
 	
-	radian = urg_index2rad( &(mSensor), index );
+	radian = urg_index2rad( &(mSensor), mSensorDataSize - index );
 	// \ Todo check length is valid
 	
 	x = (length * cos (radian)) * scalar;

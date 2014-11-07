@@ -28,7 +28,7 @@ void ApproachData::activate( bool enable )
 }
 	
 InteractionZones::InteractionZones()
-    : mZoneScalarsUpdated( false ), mInBetweenThreshold( 0 ), mSendEvents( true ), mFlip( ci::rotate( toRadians( 180.0f ), vec3( 1, 0, 0 ) ) )
+    : mZoneScalarsUpdated( false ), mInBetweenThreshold( 0 ), mSendEvents( true )
 {
 	
 }
