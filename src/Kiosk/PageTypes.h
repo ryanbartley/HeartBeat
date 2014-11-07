@@ -112,17 +112,11 @@ public:
 	//! Renders the current state of the DataPage
 	void render() override;
 	
-	//! Function that tests the touch against the buttons contained in the OverlayPage
-	void touch( InfoDisplayRef &display, const ci::vec2 &touch );
-	
-	std::vector<ButtonRef>& getButtons() { return mButtons; }
-	
 	const std::string& getButtonGroup() const { return mButtonGroup; }
 	
 protected:
 	OverlayPage( const std::string &name );
 	
-	std::vector<ButtonRef>	mButtons;
 	std::string				mButtonGroup;
 };
 	

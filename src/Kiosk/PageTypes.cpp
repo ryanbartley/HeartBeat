@@ -137,33 +137,12 @@ bool OverlayPage::initialize( const ci::JsonTree &root )
 		CI_LOG_E(ex.what());
 		return false;
 	}
-	
-	try {
-		auto buttons = root["buttons"].getChildren();
-		
-		for( auto & button : buttons ) {
-			auto buttonName = button.getValue();
-			auto found = SvgManager::get()->getButton( buttonName );
-			if( found ) {
-				cout << "Adding a button: " << found->getGroupName() << " to " << mName << endl;
-				mButtons.push_back( found->clone() );
-			}
-			else {
-				CI_LOG_E("Button not found: " << buttonName);
-			}
-		}
-	}
-	catch ( const JsonTree::ExcChildNotFound &ex ) {
-		CI_LOG_E(ex.what());
-		return false;
-	}
 	return true;
 }
 	
 PageRef OverlayPage::clone()
 {
 	auto page = OverlayPage::create( mGroup->getId() );
-	page->mButtons = mButtons;
 	page->mButton = mButton;
 	page->mTexture = mTexture;
 	page->mButtonGroup = mButtonGroup;
@@ -178,21 +157,8 @@ void OverlayPage::render()
 	
 		gl::draw( mTexture );
 	}
-	
-//	for( auto & button : mButtons ) {
-//		button->render();
-//	}
 }
 	
-void OverlayPage::touch( InfoDisplayRef &display, const ci::vec2 &touch )
-{
-	for( auto & button : mButtons ) {
-		if( button->contains( touch ) ) {
-			button->changeState( display );
-		}
-	}
-}
-
 /////////////////////////////////////////////////////////////////////////
 /// Overlay Section
 /////////////////////////////////////////////////////////////////////////
@@ -225,9 +191,6 @@ PageRef OverlaySection::clone()
 {
 	auto page = OverlaySection::create( mGroup->getId() );
 	page->mTexture = mTexture;
-	for( auto & button : mButtons ) {
-		page->mButtons.push_back( button->clone() );
-	}
 	page->mButton = mButton;
 	page->mSection = mSection;
 	page->mButtonGroup = mButtonGroup;
@@ -306,30 +269,6 @@ PageRef OverlayPlus::clone()
 	page->mTextures = mTextures;
 	page->mOverlays = mOverlays;
 	page->mButtonGroup = mButtonGroup;
-	NavigableButtonRef next, prev;
-	for( auto & button : mButtons ) {
-		auto newButton = button->clone();
-		if( newButton->getType() == NavigableButton::TYPE ) {
-			auto navButton = std::dynamic_pointer_cast<NavigableButton>(newButton);
-			if( navButton->getNavigationStatus() == NavigableButton::NavigationStatus::NEXT ) {
-				next = navButton;
-			}
-			else if( navButton->getNavigationStatus() == NavigableButton::NavigationStatus::PREV ) {
-				prev = navButton;
-			}
-		}
-		else {
-			page->mButtons.push_back( newButton );
-		}
-	}
-	prev->setOpposite( next );
-	next->setOpposite( prev );
-	page->mButtons.push_back( prev );
-	auto navigableButtonPrev = std::dynamic_pointer_cast<NavigableButton>(page->mButtons.back());
-	cout << "NOTICE PREV: " << navigableButtonPrev->getOpposite()->getGroupName() << endl;
-	page->mButtons.push_back( next );
-	navigableButtonPrev = std::dynamic_pointer_cast<NavigableButton>(page->mButtons.back());
-	cout << "NOTICE NEXT: " << navigableButtonPrev->getOpposite()->getGroupName() << endl;
 	return page;
 }
 	
@@ -340,10 +279,6 @@ void OverlayPlus::render()
 		gl::setModelMatrix( ci::translate( vec3( mCurrentPosition, 0.0f ) ) );
 		
 		gl::draw( mTextures[mCurrentIndex] );
-	}
-	
-	for( auto & button : mButtons ) {
-		button->render();
 	}
 }
 

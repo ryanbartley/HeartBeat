@@ -242,7 +242,11 @@ void InfoDisplay::registerTouch( EventDataRef eventData )
 		switch ( mStatus) {
 			case Status::HOME_SCREEN: {
 				if( mOverlay ) {
-					buttonSet = &mOverlay->getButtons();
+					auto & name = mOverlay->getButtonGroup();
+					buttonSet = &mOverlayButtons[name];
+					if( buttonSet->empty() ) {
+						CI_LOG_E("Couldn't find button set: " << name);
+					}
 				}
 				else {
 					buttonSet = &mHomeButtons;
