@@ -59,8 +59,8 @@ bool Urg::open()
 	mIsOpen = true;
 	
 	// Allocate the data array
-	auto sensorDataSize = urg_max_data_size( &mSensor );
-	mCurrentData.resize( sensorDataSize );
+	mSensorDataSize = urg_max_data_size( &mSensor );
+	mCurrentData.resize( mSensorDataSize );
 	
 	return true;
 }

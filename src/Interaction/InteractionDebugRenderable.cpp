@@ -166,7 +166,6 @@ void InteractionDebugRenderable::draw()
 	
 	gl::ScopedModelMatrix scopeModel;
 	gl::setModelMatrix( mat4() );
-    gl::multModelMatrix( ci::toMat4( mInteractionZones->getFlip() ) );
     gl::multModelMatrix( getModelMatrix() );
 	gl::ScopedColor scopeColor( Color( 1, 1, 1 ) );
 	

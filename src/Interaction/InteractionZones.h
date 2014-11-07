@@ -105,7 +105,6 @@ public:
 	inline const Transformation& getTransform() const { return mTransform; }
 	//! Returns the a transformation reference used to transform urg points into modelSpace.
 	inline Transformation& getTransform() { return mTransform; }
-    inline ci::quat& getFlip() { return mFlip; }
 	
 	inline std::map<KioskId, ApproachData>& getApproachZoneData() { return mApproachZones; }
 	
@@ -148,7 +147,6 @@ private:
 	std::function<void()>		mZoneUpdateFunc;
 	
 	Transformation				mTransform;
-    ci::quat                    mFlip;
 	
 	friend class InteractionManager;
 };
