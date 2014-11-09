@@ -21,14 +21,9 @@ using namespace ci::app;
 using namespace std;
 
 namespace heartbeat {
-	
-void ApproachData::activate( bool enable )
-{
-	mIsActivated = enable;
-}
-	
+
 InteractionZones::InteractionZones()
-    : mZoneScalarsUpdated( false ), mInBetweenThreshold( 0 ), mSendEvents( true )
+: mZoneScalarsUpdated( false ), mInBetweenThreshold( 0 ), mSendEvents( true )
 {
 	
 }

@@ -10,43 +10,11 @@
 
 #include "Common.h"
 #include "Transformation.h"
+#include "InteractionData.h"
 
 #include <deque>
 
 namespace heartbeat {
-	
-struct Interactor {
-	Interactor( int index, long distance )
-	: mDistance( distance ), mIndex( index )
-	{}
-	
-	int			mIndex;
-	long		mDistance;
-};
-	
-struct ApproachData {
-	
-	ApproachData( KioskId kiosk, int lowestIndex, int highestIndex )
-	: mKiosk( kiosk ), mLowestIndex( lowestIndex ), mHighestIndex( highestIndex ),
-	mIsActivated( false ), mNumEvents( 0 ), mActivationTime( 0.0 )
-	{}
-	
-	inline bool contains( int index ) { return mLowestIndex < index && mHighestIndex > index; }
-	inline void addEvent() { mNumEvents++; }
-	bool	getIsActivated() const { return mIsActivated; }
-	void	activate( bool enable );
-	size_t	getNumDistances() const { return mNumEvents; }
-	KioskId getKiosk() const { return mKiosk; }
-	void	reset() { mNumEvents = 0; }
-	inline const int getLowest() const { return mLowestIndex; }
-	inline const int getHighest() const { return mHighestIndex; }
-	
-	const KioskId		mKiosk;
-	const int			mLowestIndex, mHighestIndex;
-	int					mNumEvents;
-	bool				mIsActivated;
-	double				mActivationTime;
-};
 	
 class InteractionZones : public std::enable_shared_from_this<InteractionZones> {
 public:
@@ -115,14 +83,14 @@ public:
 	//! Sets the current scalar of \a zone.
 	void setZoneScalar( Zone zone, float scalar );
 	
+	inline void processApproach( int index, long distance );
+	
 private:
 	InteractionZones();
 	
 	//! This is a possible async implementation.
 	void processImpl( std::vector<long> &&newData );
-	
-	
-	
+
 	inline void processApproaches( const std::vector<Interactor> &events );
 	
 	inline void addEvent( std::vector<Interactor> &events, int index, long dist );

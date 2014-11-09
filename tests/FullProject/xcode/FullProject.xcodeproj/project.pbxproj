@@ -42,6 +42,7 @@
 		B3C3E6EE1A0BF5AC0037F6C2 /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3C3E6D31A0BF5AC0037F6C2 /* Renderer.cpp */; };
 		B3C3E6EF1A0BF5AC0037F6C2 /* SpringMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3C3E6D51A0BF5AC0037F6C2 /* SpringMesh.cpp */; };
 		B3C3E6F11A0BF7B10037F6C2 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3C3E6F01A0BF7B10037F6C2 /* IOKit.framework */; };
+		B3C641831A0FF510004AC2B9 /* InteractionData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3C641811A0FF510004AC2B9 /* InteractionData.cpp */; };
 		C8BB17D159D44FB3B0CB9B7A /* Cairo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 29DD3A548DCD46E0AFF0F30A /* Cairo.cpp */; };
 		E3823F52DD1F4888A25F130B /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = 8C3726CE804B403F98E2B6CA /* CinderApp.icns */; };
 		F5797D41443A4D56B103A184 /* FullProjectApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7AD29835EA634F249B7F29B4 /* FullProjectApp.cpp */; };
@@ -129,6 +130,8 @@
 		B3C3E6D61A0BF5AC0037F6C2 /* SpringMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpringMesh.h; sourceTree = "<group>"; };
 		B3C3E6D71A0BF5AC0037F6C2 /* Transformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Transformation.h; sourceTree = "<group>"; };
 		B3C3E6F01A0BF7B10037F6C2 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		B3C641811A0FF510004AC2B9 /* InteractionData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InteractionData.cpp; sourceTree = "<group>"; };
+		B3C641821A0FF510004AC2B9 /* InteractionData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InteractionData.h; sourceTree = "<group>"; };
 		F496AAA114AF497A97C0CE1E /* Cairo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Cairo.h; path = ../../../HeartBeat_Cinder/blocks/Cairo/include/cinder/cairo/Cairo.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -393,6 +396,8 @@
 				B3C3E6BA1A0BF5AC0037F6C2 /* InteractionEvents.h */,
 				B3C3E6BB1A0BF5AC0037F6C2 /* InteractionZones.cpp */,
 				B3C3E6BC1A0BF5AC0037F6C2 /* InteractionZones.h */,
+				B3C641811A0FF510004AC2B9 /* InteractionData.cpp */,
+				B3C641821A0FF510004AC2B9 /* InteractionData.h */,
 			);
 			path = Interaction;
 			sourceTree = "<group>";
@@ -514,6 +519,7 @@
 				B3C3E6EE1A0BF5AC0037F6C2 /* Renderer.cpp in Sources */,
 				B3C3E6DF1A0BF5AC0037F6C2 /* HidCommManager.cpp in Sources */,
 				C8BB17D159D44FB3B0CB9B7A /* Cairo.cpp in Sources */,
+				B3C641831A0FF510004AC2B9 /* InteractionData.cpp in Sources */,
 				B3C3E6DD1A0BF5AC0037F6C2 /* EventManagerBase.cpp in Sources */,
 				B3C3E6E81A0BF5AC0037F6C2 /* PageTypes.cpp in Sources */,
 				B3C3E6E61A0BF5AC0037F6C2 /* KioskManager.cpp in Sources */,
