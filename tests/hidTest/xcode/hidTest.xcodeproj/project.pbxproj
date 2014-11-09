@@ -33,7 +33,6 @@
 		B3274C2F19FE8E41007B4348 /* InteractionEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3274C0419FE8E41007B4348 /* InteractionEvents.cpp */; };
 		B3274C3019FE8E41007B4348 /* InteractionZones.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3274C0619FE8E41007B4348 /* InteractionZones.cpp */; };
 		B3274C3119FE8E41007B4348 /* ButtonTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3274C0919FE8E41007B4348 /* ButtonTypes.cpp */; };
-		B3274C3219FE8E41007B4348 /* DisplayState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3274C0B19FE8E41007B4348 /* DisplayState.cpp */; };
 		B3274C3319FE8E41007B4348 /* InfoDisplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3274C0D19FE8E41007B4348 /* InfoDisplay.cpp */; };
 		B3274C3419FE8E41007B4348 /* KioskManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3274C0F19FE8E41007B4348 /* KioskManager.cpp */; };
 		B3274C3519FE8E41007B4348 /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3274C1119FE8E41007B4348 /* Node.cpp */; };
@@ -104,8 +103,6 @@
 		B3274C0719FE8E41007B4348 /* InteractionZones.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InteractionZones.h; sourceTree = "<group>"; };
 		B3274C0919FE8E41007B4348 /* ButtonTypes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ButtonTypes.cpp; sourceTree = "<group>"; };
 		B3274C0A19FE8E41007B4348 /* ButtonTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonTypes.h; sourceTree = "<group>"; };
-		B3274C0B19FE8E41007B4348 /* DisplayState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DisplayState.cpp; sourceTree = "<group>"; };
-		B3274C0C19FE8E41007B4348 /* DisplayState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayState.h; sourceTree = "<group>"; };
 		B3274C0D19FE8E41007B4348 /* InfoDisplay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InfoDisplay.cpp; sourceTree = "<group>"; };
 		B3274C0E19FE8E41007B4348 /* InfoDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoDisplay.h; sourceTree = "<group>"; };
 		B3274C0F19FE8E41007B4348 /* KioskManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KioskManager.cpp; sourceTree = "<group>"; };
@@ -397,8 +394,6 @@
 			children = (
 				B3274C0919FE8E41007B4348 /* ButtonTypes.cpp */,
 				B3274C0A19FE8E41007B4348 /* ButtonTypes.h */,
-				B3274C0B19FE8E41007B4348 /* DisplayState.cpp */,
-				B3274C0C19FE8E41007B4348 /* DisplayState.h */,
 				B3274C0D19FE8E41007B4348 /* InfoDisplay.cpp */,
 				B3274C0E19FE8E41007B4348 /* InfoDisplay.h */,
 				B3274C0F19FE8E41007B4348 /* KioskManager.cpp */,
@@ -516,7 +511,6 @@
 				B3274C3619FE8E41007B4348 /* PageTypes.cpp in Sources */,
 				B3274C3119FE8E41007B4348 /* ButtonTypes.cpp in Sources */,
 				B3274C3019FE8E41007B4348 /* InteractionZones.cpp in Sources */,
-				B3274C3219FE8E41007B4348 /* DisplayState.cpp in Sources */,
 				B3274C3B19FE8E41007B4348 /* Renderable.cpp in Sources */,
 				B3274C3519FE8E41007B4348 /* Node.cpp in Sources */,
 				B3274C2C19FE8E41007B4348 /* HidCommManager.cpp in Sources */,
