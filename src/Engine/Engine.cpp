@@ -127,11 +127,12 @@ void Engine::keyDown( ci::app::KeyEvent event )
 	
 void Engine::update()
 {
-	mInteractionManager->process();
 	mEventManager->update();
+	mInteractionManager->preProcessData();
+	mInteractionManager->processData();
+	mInteractionManager->postProcessData();
 	mPond->update();
 	mKioskManager->update();
-	
 }
 	
 void Engine::preDraw()

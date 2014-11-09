@@ -342,24 +342,23 @@ float InteractionZones::getZoneScalar( Zone zone )
 		return 0.0f;
 }
 	
-void InteractionZones::process()
+void InteractionZones::preProcessData()
+{
+	mUrg->read();
+	mUrg->data( mCurrentFrameData );
+}
+	
+void InteractionZones::postProcessData()
+{
+	
+}
+	
+void InteractionZones::processData()
 {
 	static int captureFrames = 50;
-	if( ! mUrg ) {
-		static bool runOnce = false;
-		if( ! runOnce ) {
-			runOnce = true;
-			CI_LOG_V("Attempting to process Urg Interaction Data without an Urg");
-		}
-		return;
-	}
-	
-		
-	mUrg->read();
-	auto & data = mUrg->getCurrentData();
 	
 	if( mBarrier.empty() ) {
-		CI_LOG_V("Barrier empty, must capture data");
+		//		CI_LOG_V("Barrier empty, must capture data");
 		return;
 	}
 	
@@ -376,7 +375,6 @@ void InteractionZones::process()
 		mZoneScalarsUpdated = false;
 	}
 	
-	std::vector<Interactor> approachEvents, touchEvents;
 	bool checkPoleIndices = mSendEvents;
 	int i = 0, k = 0;
 	for( auto barrierIt = mBarrier.cbegin(); barrierIt != mBarrier.cend(); ++barrierIt, ++i ) {
@@ -390,47 +388,18 @@ void InteractionZones::process()
 			}
 		}
 		if( emitEvents ) {
-			if( data[i] == 1 ) data[i] = 100000;
-			if( data[i] > *barrierIt * APPROACH_SCALAR ) {
-				// do nothing
-			}
-			else if( data[i] < *barrierIt * APPROACH_SCALAR && data[i] > *barrierIt * DEAD_SCALAR ) {
+			if( mCurrentFrameData[i] == 1 ) mCurrentFrameData[i] = 100000;
+			if( mCurrentFrameData[i] < *barrierIt * APPROACH_SCALAR &&
+			   mCurrentFrameData[i] > *barrierIt * DEAD_SCALAR ) {
 				// emit approaching event.
-				if( mSendEvents ) {
-                    // emit touching event.
-					addEvent( approachEvents, i, data[i] );
-				}
-				else {
-					auto found = std::find( mIgnoreIndices.begin(), mIgnoreIndices.end(), i );
-					if ( found == mIgnoreIndices.end() ) {
-						mIgnoreIndices.push_back( i );
-						std::sort( mIgnoreIndices.begin(), mIgnoreIndices.end(), []( int i, int j ) {
-							return i < j;
-						});
-					}
-				}
-
-			}
-			else if( data[i] > *barrierIt * DEAD_SCALAR ) {
-				// do nothing
+				processApproach( i, mCurrentFrameData[i] );
+				
 			}
 			// I did something weird here. I care about the events below the
 			// table scalar value. If it gets to this place and it's lower than
 			// the scalar then I know someone's touching the table.
-			else if( data[i] < *barrierIt * TABLE_SCALAR ) {
-				if( mSendEvents ) {
-				// emit touching event.
-					addEvent( touchEvents, i, data[i] );
-				}
-				else {
-					auto found = std::find( mIgnoreIndices.begin(), mIgnoreIndices.end(), i );
-					if ( found == mIgnoreIndices.end() ) {
-						mIgnoreIndices.push_back( i );
-						std::sort( mIgnoreIndices.begin(), mIgnoreIndices.end(), []( int i, int j ) {
-							return i < j;
-						});
-					}
-				}
+			else if( mCurrentFrameData[i] < *barrierIt * TABLE_SCALAR ) {
+				processTouch( i, mCurrentFrameData[i] );
 			}
 		}
 	}
@@ -441,40 +410,8 @@ void InteractionZones::process()
 		return;
 	}
 	
-	auto eventManager = EventManagerBase::get();
-	
-	if( eventManager == nullptr ) {
-		static bool notified = false;
-		if( ! notified ) {
-			CI_LOG_E("No event manager even though I've processed all of the data");
-			notified = true;
-		}
-		return;
-	}
-	
-	if( ! approachEvents.empty() ) {
-		processApproaches( approachEvents );
-	}
-	
-	for( auto & zone : mApproachZones ) {
-		auto & approachZone = zone.second;
-		auto activated = approachZone.getIsActivated();
-		auto numDistances = approachZone.getNumDistances();
-		if( activated && numDistances == 0 ) {
-			eventManager->queueEvent( EventDataRef( new DepartEvent( approachZone.getKiosk() ) ) );
-			approachZone.activate( false );
-		}
-		else if( !activated && numDistances > 0 ) {
-			eventManager->queueEvent( EventDataRef( new ApproachEvent( approachZone.getKiosk() ) ) );
-			approachZone.activate( true );
-		}
-		approachZone.reset();
-	}
-	
-	for( auto touchIt = touchEvents.begin(); touchIt != touchEvents.end(); ++touchIt ) {
-		eventManager->queueEvent( EventDataRef( new TouchEvent( touchIt->mIndex, touchIt->mDistance, shared_from_this() ) ) );
-	}
-	
+	processApproaches();
+	processTouches();
 }
 
 	

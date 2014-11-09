@@ -51,7 +51,7 @@ public:
 	
 	//! This processes the urg data against the interaction data
 	//! contained in barrier and zone.
-	void process();
+	void processData();
 	
 	//! Returns the current scalar being used for this zone
 	float getZoneScalar( Zone zone );
@@ -84,14 +84,19 @@ public:
 	void setZoneScalar( Zone zone, float scalar );
 	
 	inline void processApproach( int index, long distance );
+	inline void processTouch( int index, long distance );
 	
 private:
 	InteractionZones();
 	
 	//! This is a possible async implementation.
 	void processImpl( std::vector<long> &&newData );
+	
+	void preProcessData();
+	void postProcessData();
 
-	inline void processApproaches( const std::vector<Interactor> &events );
+	inline void processApproaches();
+	inline void processTouches();
 	
 	inline void addEvent( std::vector<Interactor> &events, int index, long dist );
 	
@@ -103,11 +108,15 @@ private:
 	std::vector<long>			mBarrier;
 	
 	std::map<KioskId, ApproachData>		mApproachZones;
+	std::list<TouchData>				mCurrentTouches;
 	std::vector<uint32_t>				mIgnoreIndices;
+	std::vector<Interactor>				mApproachInteractors, mTouchInteractors;
 	
 	int							mInBetweenThreshold;
 	bool						mZoneScalarsUpdated;
 	bool						mSendEvents;
+	
+	std::vector<long>			mCurrentFrameData;
 	
 	//! Pointer to the urg
 	UrgRef						mUrg;
@@ -116,8 +125,42 @@ private:
 	
 	Transformation				mTransform;
 	
-	friend class InteractionManager;
+	friend class Engine;
 };
+	
+void InteractionZones::processApproach( int index, long distance )
+{
+	if( mSendEvents ) {
+		// emit touching event.
+		addEvent( mApproachInteractors, index, distance );
+	}
+	else {
+		auto found = std::find( mIgnoreIndices.begin(), mIgnoreIndices.end(), index );
+		if ( found == mIgnoreIndices.end() ) {
+			mIgnoreIndices.push_back( index );
+			std::sort( mIgnoreIndices.begin(), mIgnoreIndices.end(), []( int i, int j ) {
+				return i < j;
+			});
+		}
+	}
+}
+	
+void InteractionZones::processTouch( int index, long distance )
+{
+	if( mSendEvents ) {
+		// emit touching event.
+		addEvent( mTouchInteractors, index, distance );
+	}
+	else {
+		auto found = std::find( mIgnoreIndices.begin(), mIgnoreIndices.end(), index );
+		if ( found == mIgnoreIndices.end() ) {
+			mIgnoreIndices.push_back( index );
+			std::sort( mIgnoreIndices.begin(), mIgnoreIndices.end(), []( int i, int j ) {
+				return i < j;
+			});
+		}
+	}
+}
 	
 void InteractionZones::addEvent( std::vector<Interactor> &events, int index, long dist )
 {
@@ -141,15 +184,66 @@ void InteractionZones::addEvent( std::vector<Interactor> &events, int index, lon
 	}
 }
 	
-void InteractionZones::processApproaches( const std::vector<Interactor> &events )
+void InteractionZones::processApproaches()
 {
-	for( auto & event : events ) {
+	for( auto & event : mApproachInteractors ) {
 		for( auto & approachZone : mApproachZones ) {
 			if( approachZone.second.contains( event.mIndex ) ) {
 				approachZone.second.addEvent();
 			}
 		}
 	}
+	
+	for( auto & zone : mApproachZones ) {
+		auto & approachZone = zone.second;
+		auto activated = approachZone.getIsActivated();
+		auto numDistances = approachZone.getNumDistances();
+		if( activated && numDistances == 0 ) {
+			approachZone.activate( false );
+		}
+		else if( !activated && numDistances > 0 ) {
+			approachZone.activate( true );
+		}
+		approachZone.reset();
+	}
+	
+	mApproachInteractors.clear();
+}
+	
+void InteractionZones::processTouches()
+{
+	for( auto & touchIt : mTouchInteractors ) {
+		bool touchHandled = false;
+		//		eventManager->queueEvent( EventDataRef( new TouchEvent( touchIt->mIndex, touchIt->mDistance ) ) );
+		if( ! mCurrentTouches.empty() ) {
+			for( auto & currentTouch : mCurrentTouches ) {
+				if( currentTouch.contains( touchIt.mIndex, touchIt.mDistance ) ) {
+					touchHandled = true;
+					break;
+				}
+			}
+		}
+		if( ! touchHandled ) {
+			mCurrentTouches.emplace_back( touchIt.mIndex, touchIt.mDistance );
+		}
+	}
+	for( auto currentTouch = mCurrentTouches.begin(); currentTouch != mCurrentTouches.end(); ) {
+		bool deleteCurrentTouch = false;
+		if( ! currentTouch->reset() ) {
+			deleteCurrentTouch = true;
+		}
+		
+		currentTouch->createAndSendEvent();
+		
+		if( deleteCurrentTouch ) {
+			currentTouch = mCurrentTouches.erase( currentTouch );
+		}
+		else {
+			++currentTouch;
+		}
+	}
+	
+	mTouchInteractors.clear();
 }
 	
 }

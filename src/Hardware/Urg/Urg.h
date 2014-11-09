@@ -52,6 +52,7 @@ public:
 	inline ci::vec2 getPoint( int index, long dist, float scale = 1.0f );
 	
 	const std::vector<long>& getCurrentData() const { return mCurrentData; }
+	void data( std::vector<long>& writeableData );
 	
 private:
 	Urg();
@@ -64,7 +65,7 @@ private:
 	std::vector<long>	mCurrentData;
 	bool				mIsOpen;
 	uint32_t			mSensorDataSize;
-	
+	std::atomic<bool>	mReadReady;
 	
 	std::vector<long>& getCurrentData() { return mCurrentData; }
 	

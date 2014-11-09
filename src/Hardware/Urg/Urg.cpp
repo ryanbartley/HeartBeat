@@ -24,7 +24,7 @@ namespace heartbeat {
 const long CONNECT_BAUDRATE = 115200;
 	
 Urg::Urg()
-: mDeviceName("/dev/"), mIsOpen( false )
+: mDeviceName("/dev/"), mIsOpen( false ), mReadReady( false )
 {
 }
 	
@@ -97,14 +97,27 @@ bool Urg::initialize()
 		
 		try {
 			auto urgAddress = urgAttribs["address"].getValue();
-			mDeviceName = urgAddress;
 			
-			auto devices = Serial::getDevices();  
+			auto devices = Serial::getDevices();
+			bool found = false;
 			for( auto & device : devices ) {
 				auto & name = device.getName();
+				if( urgAddress == name ) {
+					found = true;
+				}
 				// If the devices name contains this fill out the rest of the
 				// address with it.
 				cout << "\t" << name << endl;
+			}
+		
+			if( found ) {
+				mDeviceName += urgAddress;
+			}
+			else {
+				auto deviceNameContains = Serial::findDeviceByNameContains( "tty.usbmodem" );
+				if( ! deviceNameContains.getName().empty() ) {
+					mDeviceName += deviceNameContains.getName();
+				}
 			}
 			
 			CI_LOG_V("Device Name Found: " << mDeviceName );
@@ -128,6 +141,11 @@ bool Urg::initialize()
 		CI_LOG_E(ex.what());
 		return false;
 	}
+}
+	
+void Urg::data( std::vector<long> &writeableData )
+{
+	writeableData = mCurrentData;
 }
 	
 std::vector<ci::vec2> Urg::getDrawablePoints()

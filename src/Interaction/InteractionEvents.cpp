@@ -12,6 +12,7 @@
 #include "Urg.h"
 #include "InteractionZones.h"
 #include "cinder/Log.h"
+#include "Engine.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -33,9 +34,9 @@ DepartEvent::DepartEvent( KioskId kioskId )
 {
 }
 	
-TouchEvent::TouchEvent( int index, float dist, const InteractionZonesRef &interactionZones )
-: EventData( ci::app::getElapsedSeconds() ), mInteractionZones( interactionZones ),
-	mIndex( index ), mDist( dist ), mCachedWorldCoord( false )
+TouchEvent::TouchEvent( int index, float dist )
+: EventData( ci::app::getElapsedSeconds() ), mIndex( index ),
+	mDist( dist ), mCachedWorldCoord( false )
 {
 }
 	
@@ -54,15 +55,16 @@ ci::vec2& TouchEvent::getWorldCoordinate()
 	
 void TouchEvent::calcWorldCoord()
 {
-	auto urg = mInteractionZones->getUrg();
-	if( ! urg ) {
+	static auto sInteractionZones = Engine::get()->getInteractionZones();
+	static auto sUrg = sInteractionZones->getUrg();
+	if( ! sUrg ) {
 		CI_LOG_E("Setting world coord without a working urg");
 		mWorldCoord = vec2( 0 );
 		return;
 	}
 	
-	auto temp = mInteractionZones->getTransform().getModelMatrix() * vec4( urg->getPoint( mIndex, mDist ), 0, 1 );
-	cout << "temp: " << temp << " original point: " << urg->getPoint( mIndex, mDist ) << endl;
+	auto temp = sInteractionZones->getTransform().getModelMatrix() * vec4( sUrg->getPoint( mIndex, mDist ), 0, 1 );
+	cout << "temp: " << temp << " original point: " << sUrg->getPoint( mIndex, mDist ) << endl;
 	mWorldCoord = vec2( temp.x, temp.y );
 }
 	

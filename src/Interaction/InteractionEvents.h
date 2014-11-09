@@ -75,7 +75,7 @@ public:
 	
 	static const EventType TYPE;
 	
-	explicit TouchEvent( int index, float dist, const InteractionZonesRef &interactionZones );
+	explicit TouchEvent( int index, float dist );
 	explicit TouchEvent( const ci::vec2 &point );
 	~TouchEvent() {}
 	
@@ -84,7 +84,7 @@ public:
 	
 	ci::vec2& getWorldCoordinate();
 	
-	EventDataRef copy() { return EventDataRef( new TouchEvent( mIndex, mDist, mInteractionZones ) ); }
+	EventDataRef copy() { return EventDataRef( new TouchEvent( mIndex, mDist ) ); }
 	const char* getName() { return "TouchEvent";}
 	virtual const EventType& getEventType() { return TYPE; }
 	
@@ -100,7 +100,6 @@ public:
 private:
 	void calcWorldCoord();
 	
-	InteractionZonesRef mInteractionZones;
 	ci::vec2	mWorldCoord;
 	bool		mCachedWorldCoord;
 	int			mIndex;

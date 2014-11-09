@@ -10,8 +10,8 @@
 				1080
 			],
 			"numPixelOverlap" : 200,
-			"splitWindow" : true,
-			"halfSize" : false
+			"splitWindow" : false,
+			"halfSize" : true
 		},
 		//////////////////////////////////////////////////////
 		// HID ATTRIBUTES
@@ -220,6 +220,8 @@
 					}
 				},
 				"top" : {
+					"minIndex" : 0,
+					"maxIndex" : 330,
 					"fullSize" : {
 						"transformation" : {
 							"scales" : [ 0.185, 0.185 ],
@@ -244,6 +246,8 @@
 					}
 				},
 				"middle" : {
+					"minIndex" : 331, 
+					"maxIndex" : 660,
 					"fullSize" : {
 						"transformation" : {
 							"scales" : [ 0.18, 0.18 ],
@@ -268,6 +272,8 @@
 					}
 				},
 				"bottom" : {
+					"minIndex" : 661, 
+					"maxIndex" : 1080,
 					"fullSize" : { 
 						"transformation" : {
 							"scales" : [ 0.18, 0.18 ],
