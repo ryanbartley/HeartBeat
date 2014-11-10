@@ -30,13 +30,14 @@ public:
 	inline void setTranslation( const ci::vec2 &position ) { mTransformation.setTranslation( ci::vec3( position, 0 ) ); }
 	inline void setScale( const ci::vec2 &scale ) {  mTransformation.setScale( ci::vec3( scale, 1 ) ); }
 	inline void setRotation( float radian ) { mTransformation.setRotation( ci::quat( ci::rotate( radian, ci::vec3( 0, 0, 1 ) ) ) ); }
-	inline void setRotationDegree( int degree ) { setRotation( ci::toRadians(float(degree)) ); }
+	inline void setRotationDegree( float degree ) { setRotation( ci::toRadians( degree ) ); }
 	
 	inline const ci::vec3& getTranslation() const { return mTransformation.getTranslation(); }
 	inline const ci::vec3& getScale() const { return mTransformation.getScale(); }
 	inline const ci::quat& getRotation() const { return mTransformation.getRotation(); }
 	inline const ci::mat4& getModelMatrix() const {
 		return mTransformation.getModelMatrix(); }
+	inline const ci::mat4& getInverseMatrix() const { return mTransformation.getInverseMatrix(); }
 	
 	virtual void initialize( const ci::JsonTree &root );
 	

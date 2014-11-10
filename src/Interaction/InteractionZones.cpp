@@ -13,6 +13,7 @@
 #include "InteractionEvents.h"
 #include "EventManager.h"
 #include "JsonManager.h"
+#include "Engine.h"
 
 #include "Urg.h"
 
@@ -308,8 +309,8 @@ void InteractionZones::captureBarrier()
 	
 	CI_LOG_V("Capturing Barrier");
 	
-	mUrg->read();
-	auto & data = mUrg->getCurrentData();
+	std::vector<long> data;
+	mUrg->readInto( data );
 		
 	if( data.size() != mBarrier.size() )
 		mBarrier.resize( data.size() );
@@ -344,21 +345,66 @@ float InteractionZones::getZoneScalar( Zone zone )
 	
 void InteractionZones::preProcessData()
 {
-	mUrg->read();
-	mUrg->data( mCurrentFrameData );
+	if( ! mUrg ) {
+		static bool notified = false;
+		if( ! notified ) {
+			CI_LOG_E("Attempting to process urg data but the urg isn't working");
+			notified = true;
+		}
+		return;
+	}
+	
+	mUrg->readInto( mCurrentFrameData );
+
+//	postProcessData();
+	mUrg->startMeasurement( 1 );
 }
 	
 void InteractionZones::postProcessData()
 {
-	
+	if( ! mUrg ) {
+		static bool notified = false;
+		if( ! notified ) {
+			CI_LOG_E("Attempting to launch async urg data but the urg isn't working");
+			notified = true;
+		}
+		return;
+	}
+	mFuture = std::async( std::launch::async, std::bind( [&](){
+		std::vector<long> ret( 1081 );
+		std::vector<std::vector<long>> mBuffer;
+		mBuffer.push_back(mUrg->readOnce());
+		mBuffer.push_back(mUrg->readOnce());
+		for( int i = 0; i < 1081; ++i ) {
+			double accum = 0.0;
+			for( int j = 0; j < 2; ++j ) {
+				accum += mBuffer[j][i];
+			}
+			 ret[i] = accum / float(2);
+		}
+		return ret;
+	} ) );
 }
 	
 void InteractionZones::processData()
 {
 	static int captureFrames = 50;
 	
+	if( ! mUrg ) {
+		static bool notified = false;
+		if( ! notified ) {
+			CI_LOG_E("Attempting to process data but urg isn't working");
+			notified = true;
+		}
+		return;
+	}
+	
 	if( mBarrier.empty() ) {
-		//		CI_LOG_V("Barrier empty, must capture data");
+		static bool notified = false;
+		if( ! notified ) {
+			CI_LOG_V("Barrier empty, must capture data");
+			notified = true;
+		}
 		return;
 	}
 	
@@ -414,5 +460,17 @@ void InteractionZones::processData()
 	processTouches();
 }
 
+	
+std::vector<ci::vec2> InteractionZones::getDrawablePoints()
+{
+	std::vector<ci::vec2> ret(mCurrentFrameData.size());
+	auto retIt = ret.begin();
+	int i = 0;
+	for( auto & length : mCurrentFrameData ) {
+		(*retIt++) = mUrg->getPoint( i++, length );
+	}
+	
+	return ret;
+}
 	
 }

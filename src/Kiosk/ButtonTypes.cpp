@@ -478,7 +478,7 @@ void NavigableButton::changeState( InfoDisplayRef &display )
 		if( dataPage ) {
 			if( mNavigationStatus == NavigationStatus::NEXT ) {
 				auto next = dataPage->next();
-				display->addDataPage( next, InfoDisplay::AnimateType::RIGHT_TO_LEFT );
+				display->addDataPage( next, InfoDisplay::AnimateType::CUT );
 				auto another = next->next();
 				if( ! another ) {
 					mButtonStatus = ButtonStatus::NONACTIVE;
@@ -489,7 +489,7 @@ void NavigableButton::changeState( InfoDisplayRef &display )
 			}
 			else if( mNavigationStatus == NavigationStatus::PREV ) {
 				auto prev = dataPage->prev();
-				display->addDataPage( prev, InfoDisplay::AnimateType::LEFT_TO_RIGHT );
+				display->addDataPage( prev, InfoDisplay::AnimateType::CUT );
 				auto another = prev->prev();
 				if( ! another ) {
 					mButtonStatus = ButtonStatus::NONACTIVE;

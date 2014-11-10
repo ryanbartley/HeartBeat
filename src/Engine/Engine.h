@@ -60,6 +60,7 @@ private:
 	InteractionZonesRef			mInteractionManager;
 	KioskManagerRef				mKioskManager;
 	PondRef						mPond;
+	double						mBeginningFrame, mEndingFrame;
 	
 #if defined( DEBUG )
 	InteractionDebugRenderableRef	mInteractionDebug;

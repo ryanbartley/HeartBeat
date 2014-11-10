@@ -102,7 +102,7 @@ void InfoDisplay::toggleStatus()
 
 void InfoDisplay::draw()
 {
-	if( mMasterAlpha >= 1.0f ) return;
+	if( mMasterAlpha <= 0.0f ) return;
 	
 	{
 		auto fboSize = mPresentationFbo->getSize();
@@ -116,10 +116,6 @@ void InfoDisplay::draw()
 		gl::clearColor( ColorA( 0, 0, 0, 1 ) );
 		
 		gl::enableAlphaBlending();
-//		{
-//			gl::ScopedColor scopeColor( ColorA( 1, 1, 1, 0 ) );
-//			gl::drawSolidRect( Rectf( vec2( 0 ), fboSize ) );
-//		}
 		mBackGround->render();
 		
 		renderCurrentScene();
@@ -132,10 +128,6 @@ void InfoDisplay::draw()
 			}
         }
 #endif
-        {
-            gl::ScopedColor scopeColor( ColorA( 1, 1, 1, mMasterAlpha ) );
-            gl::drawSolidRect( Rectf( vec2( 0 ), fboSize ) );
-		}
         gl::disableAlphaBlending();
 	}
 	
@@ -242,13 +234,13 @@ void InfoDisplay::registerTouch( EventDataRef eventData )
 //	if( ! mIsActivated )
 //		CI_LOG_E("Not activated, something went wrong");
 	
-	auto event = std::dynamic_pointer_cast<TouchEvent>( eventData );
+	auto event = std::dynamic_pointer_cast<TouchBeganEvent>( eventData );
 	if( ! event ) {
 		CI_LOG_E("Couldn't cast touch event from " << eventData->getName() );
 		return;
 	}
 	
-	auto modelSpacePoint = mInverse * vec4( event->getWorldCoordinate(), 0, 1 );
+	auto modelSpacePoint = getInverseMatrix() * vec4( event->getWorldCoordinate(), 0, 1 );
 	auto twoDimPoint = vec2( modelSpacePoint.x, modelSpacePoint.y );
     cout << "About to check this point: " << twoDimPoint << endl;
 	if( mPresentRect.contains( twoDimPoint ) ) {
@@ -288,7 +280,6 @@ void InfoDisplay::registerTouch( EventDataRef eventData )
 #if defined( DEBUG )
         mPoints.push_back( twoDimPoint );
 #endif
-		cout << "I'm touching" << endl;
 		for( auto & button : *buttonSet ) {
             cout << "checking button: " << button->getGroupName() << " bounding:  " << button->getRootGroup()->getBoundingBox() << " point: " << twoDimPoint << endl;
 			if( button->contains( twoDimPoint ) ) {
@@ -313,8 +304,6 @@ void InfoDisplay::initiaize(const ci::JsonTree &root)
 			Renderable::initialize( root["fullSize"]["transformation"] );
 		}
 		
-		mInverse = ci::inverse( getModelMatrix() );
-		
 		mPresentRect = svgManager->getDoc()->getBoundingBox();
 		
 		try {
@@ -326,7 +315,6 @@ void InfoDisplay::initiaize(const ci::JsonTree &root)
 			mMinIndex = 0;
 			mMaxIndex = 1080;
 		}
-		
 		
 		if( svgManager ) {
 			auto masterButtons = svgManager->getButtons();
@@ -449,16 +437,34 @@ void InfoDisplay::initiaize(const ci::JsonTree &root)
 					mOverlayButtons.insert( make_pair( "REFERENCE", std::move(referenceButtonVector) ) );
 					
 					auto isiButtons = overlayButtons["ISI"].getChildren();
+					NavigableButtonRef next, prev;
 					std::vector<ButtonRef> isiButtonVector;
 					for( auto & isiButton : isiButtons ) {
 						auto buttonName = isiButton.getValue();
 						auto button = svgManager->getButton( buttonName );
 						if( button ) {
-							isiButtonVector.push_back( button->clone() );
+							auto clonedButton = button->clone();
+							isiButtonVector.push_back( clonedButton );
+							if( clonedButton->getType() == NavigableButton::TYPE ) {
+								auto castButton = std::dynamic_pointer_cast<NavigableButton>(clonedButton);
+								if( castButton->getNavigationStatus() == NavigableButton::NavigationStatus::NEXT ) {
+									next = castButton;
+								}
+								else if( castButton->getNavigationStatus() == NavigableButton::NavigationStatus::PREV ) {
+									prev = castButton;
+								}
+							}
 						}
 						else {
 							CI_LOG_E("Couldn't find button " << buttonName);
 						}
+					}
+					if( next && prev ) {
+						next->setOpposite( prev );
+						prev->setOpposite( next );
+					}
+					else {
+						CI_LOG_E("NEXT and PREV weren't able to be opposites, next: " << next << "" << prev );
 					}
 					mOverlayButtons.insert( make_pair( "ISI", std::move(isiButtonVector) ) );
 				}

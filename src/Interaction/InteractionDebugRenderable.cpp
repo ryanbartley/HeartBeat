@@ -78,6 +78,7 @@ void InteractionDebugRenderable::setupZoneGlBuffers()
 {
 	CI_LOG_V("Setting Up the Buffer Zones");
 	auto urg = mInteractionZones->getUrg();
+	
 	if( ! urg ) {
 		CI_LOG_W("URG Not created");
 		return;
@@ -186,7 +187,8 @@ void InteractionDebugRenderable::draw()
 			}
 			return;
 		}
-		auto points = urg->getDrawablePoints();
+		
+		auto points = mInteractionZones->getDrawablePoints();
 		auto approachZones = mInteractionZones->getApproachZoneData();
 
 		int i = 0;

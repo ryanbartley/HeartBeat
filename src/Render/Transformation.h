@@ -38,12 +38,17 @@ public:
 			mModelMatrix *= ci::translate( mTranslation );
 			mModelMatrix *= ci::scale( mScale );
 			mModelMatrix *= ci::toMat4( mRotation );
+			mInverseMatrix = ci::inverse( mModelMatrix );
 			mUpdated = 0;
 		}
 		
 		inline ci::mat4& getModelMatrix() {
 			checkUpdated();
 			return mModelMatrix;
+		}
+		
+		inline ci::mat4& getInverseMatrix() {
+			return mInverseMatrix;
 		}
 		
 		inline void setTranslation( const ci::vec3 &translation ) {
@@ -70,7 +75,7 @@ public:
 		inline const ci::vec3& getScale() const { return mScale; }
 		inline const ci::quat& getRotation() const { return mRotation; }
 		
-		ci::mat4		mModelMatrix;
+		ci::mat4		mModelMatrix, mInverseMatrix;
 		ci::vec3		mTranslation, mScale;
 		ci::quat		mRotation;
 		uint32_t		mUpdated;
@@ -86,6 +91,9 @@ public:
 	
 	inline const ci::mat4& getModelMatrix() const {
 		return mComponents->getModelMatrix(); }
+	inline const ci::mat4& getInverseMatrix() const {
+		return mComponents->getInverseMatrix();
+	}
 	
 	//! Sets the Translation of the write component
 	inline void setTranslation( const ci::vec3 &translation ) {

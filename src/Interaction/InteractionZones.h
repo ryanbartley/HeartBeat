@@ -86,6 +86,8 @@ public:
 	inline void processApproach( int index, long distance );
 	inline void processTouch( int index, long distance );
 	
+	std::vector<ci::vec2> getDrawablePoints();
+	
 private:
 	InteractionZones();
 	
@@ -111,6 +113,10 @@ private:
 	std::list<TouchData>				mCurrentTouches;
 	std::vector<uint32_t>				mIgnoreIndices;
 	std::vector<Interactor>				mApproachInteractors, mTouchInteractors;
+	
+	std::thread						mThread;
+	std::future<std::vector<long>>	mFuture;
+	ci::Timer						mOverallTime;
 	
 	int							mInBetweenThreshold;
 	bool						mZoneScalarsUpdated;

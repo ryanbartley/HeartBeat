@@ -24,7 +24,7 @@ namespace heartbeat {
 const long CONNECT_BAUDRATE = 115200;
 	
 Urg::Urg()
-: mDeviceName("/dev/"), mIsOpen( false ), mReadReady( false )
+: mDeviceName("/dev/"), mIsOpen( false ), mIsMeasurmentStarted( false )
 {
 }
 	
@@ -60,7 +60,11 @@ bool Urg::open()
 	
 	// Allocate the data array
 	mSensorDataSize = urg_max_data_size( &mSensor );
-	mCurrentData.resize( mSensorDataSize );
+	
+	if( mSensorDataSize > 1081 ) {
+		CI_LOG_E("Sensor Data Size is larger than 1081, actual number: " << mSensorDataSize);
+		return false;
+	}
 	
 	return true;
 }
@@ -71,22 +75,27 @@ void Urg::close()
 	mIsOpen = false;
 }
 	
-void Urg::read()
+void Urg::startMeasurement( int numTimes )
 {
-	if( !mIsOpen ) return;
-	
 	int errorVal = 0;
 	
-	errorVal = urg_start_measurement( &mSensor, URG_DISTANCE, 1, 0 );
+	errorVal = urg_start_measurement( &mSensor, URG_DISTANCE, numTimes, 0 );
+	
+	mIsMeasurmentStarted = true;
 	
 	if( errorVal < 0 ) {
 		CI_LOG_E( urg_error(&mSensor) );
 	}
+}
+
+void Urg::getDistance( std::vector<long> &data, long *timestamp )
+{
+	int amountOfDistanceData = urg_get_distance( &mSensor, data.data(), timestamp );
 	
-	int amountOfDistanceData = urg_get_distance( &mSensor, mCurrentData.data(), nullptr );
+	mIsMeasurmentStarted = false;
 	
-	if( amountOfDistanceData != mCurrentData.size() ) {
-		CI_LOG_W("Didn't receive as much data as specified");
+	if( amountOfDistanceData != mSensorDataSize ) {
+		CI_LOG_W("Didn't receive as much data as specified" << amountOfDistanceData );
 	}
 }
 	
@@ -143,32 +152,14 @@ bool Urg::initialize()
 	}
 }
 	
-void Urg::data( std::vector<long> &writeableData )
+void Urg::readInto( std::vector<long> &writeableData )
 {
-	writeableData = mCurrentData;
-}
-	
-std::vector<ci::vec2> Urg::getDrawablePoints()
-{
-	std::vector<ci::vec2> ret(mCurrentData.size());
-	auto retIt = ret.begin();
-	int i = 0;
-	for( auto & length : mCurrentData ) {
-		(*retIt++) = getPoint( i++, length );
+	if( mCurrentData.empty() ) {
+		writeableData = readOnce();
 	}
-
-	return ret;
-}
-	
-std::vector<ci::vec2> Urg::getDrawablePoints( const std::vector<long> &data, float scalar )
-{
-	std::vector<ci::vec2> ret(data.size());
-	auto retIt = ret.begin();
-	int i = 0;
-	for( auto & length : mCurrentData ) {
-		(*retIt++) = getPoint( i++, length, scalar );
+	else {
+		writeableData = std::move(mCurrentData);
 	}
-	return ret;
 }
 	
 }

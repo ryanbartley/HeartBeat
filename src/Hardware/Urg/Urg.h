@@ -10,17 +10,12 @@
 
 #include "urg_sensor.h"
 #include "urg_utils.h"
-#include "cinder/ConcurrentCircularBuffer.h"
+
+#include "cinder/Log.h"
 
 #include "Common.h"
 
 namespace heartbeat {
-	
-struct DistanceData {
-	
-	long mCurrentReading, mLastReading;
-	bool mGettingCloser;
-};
 
 class Urg {
 public:
@@ -35,8 +30,14 @@ public:
 	void close();
 	
 	//! Reads in one full revolution of data from the laser.
-	void read();
+	inline std::vector<long> readOnce();
+	inline void readMultiple( int numTimes );
 	void readInto( std::vector<long> &outData );
+	
+	void start();
+	void stop();
+	
+	void readIntoThread( std::promise<std::vector<long>> &&promise, int numTimes );
 	
 	//! Returns a boolean of whether the connection is open.
 	bool isOpen() { return mIsOpen; }
@@ -45,14 +46,11 @@ public:
 	
 	inline double getRadian( int index ) { return urg_index2deg( &(mSensor), index); }
 	
-	//! Returns a vector of points to draw from \a urg. These locations expect a 0,0 origin. You can return two types of points, TABLE_DATA, and DISTANCE_DATA.
-	std::vector<ci::vec2> getDrawablePoints();
-	std::vector<ci::vec2> getDrawablePoints( const std::vector<long> &data, float scalar = 1.0f );
-	
 	inline ci::vec2 getPoint( int index, long dist, float scale = 1.0f );
 	
-	const std::vector<long>& getCurrentData() const { return mCurrentData; }
-	void data( std::vector<long>& writeableData );
+	inline void processAverages( int numTimes );
+	
+	void asyncReadMany();
 	
 private:
 	Urg();
@@ -60,17 +58,33 @@ private:
 	//! Loads settings from JsonManager.
 	bool initialize();
 	
+	void startMeasurement( int numTimes );
+	void getDistance( std::vector<long> &data, long * timestamp = nullptr );
+	
 	urg_t				mSensor;
 	std::string			mDeviceName;
 	std::vector<long>	mCurrentData;
-	bool				mIsOpen;
 	uint32_t			mSensorDataSize;
-	std::atomic<bool>	mReadReady;
-	
-	std::vector<long>& getCurrentData() { return mCurrentData; }
+	bool				mIsOpen;
+	bool				mIsMeasurmentStarted;
 	
 	friend class InteractionZones;
 };
+	
+std::vector<long> Urg::readOnce()
+{
+	if( !mIsOpen ) return std::vector<long>();
+	
+	std::vector<long> ret( mSensorDataSize );
+	
+	if( ! mIsMeasurmentStarted ) {
+		startMeasurement( 1 );
+	}
+	
+	getDistance( ret );
+	
+	return ret;
+}
 	
 ci::vec2 Urg::getPoint( int index, long length, float scalar )
 {
@@ -87,5 +101,6 @@ ci::vec2 Urg::getPoint( int index, long length, float scalar )
 	ret = ci::vec2( x, y );
 	return ret;
 }
+	
 
 }

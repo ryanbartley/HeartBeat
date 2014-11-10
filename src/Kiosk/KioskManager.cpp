@@ -29,7 +29,7 @@ KioskManager::KioskManager()
 	if( eventManager ) {
 		eventManager->addListener( std::bind( &KioskManager::approachDelegate, this, std::placeholders::_1 ), ApproachEvent::TYPE );
 		eventManager->addListener( std::bind( &KioskManager::departDelegate, this, std::placeholders::_1 ), DepartEvent::TYPE );
-		eventManager->addListener( std::bind( &KioskManager::touchDelegate, this, std::placeholders::_1 ), TouchEvent::TYPE );
+		eventManager->addListener( std::bind( &KioskManager::touchDelegate, this, std::placeholders::_1 ), TouchBeganEvent::TYPE );
 		CI_LOG_V("KioskManager has registered it's event listeners");
 	}
 	else
@@ -83,7 +83,7 @@ void KioskManager::departDelegate( EventDataRef departEvent )
 	
 void KioskManager::touchDelegate( EventDataRef touchEvent )
 {
-	auto event = std::dynamic_pointer_cast<TouchEvent>( touchEvent );
+	auto event = std::dynamic_pointer_cast<TouchBeganEvent>( touchEvent );
 	
 	if( ! event ) {
 		CI_LOG_V("Not an touchEvent " << touchEvent->getName() );

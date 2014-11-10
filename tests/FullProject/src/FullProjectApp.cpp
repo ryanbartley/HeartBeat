@@ -22,6 +22,7 @@ class FullProjectApp : public AppNative {
   public:
 	void setup() override;
 	void mouseDown( MouseEvent event ) override;
+	void mouseDrag( MouseEvent event ) override;
 	void update() override;
 	void draw() override;
     
@@ -223,28 +224,47 @@ void FullProjectApp::setup()
 
 void FullProjectApp::keyDown(cinder::app::KeyEvent event)
 {
+
     if( event.getCode() == KeyEvent::KEY_ESCAPE ) {
         quit();
     }
+#if defined( DEBUG )
 	if( event.getChar() == KeyEvent::KEY_p ) {
 		mShowParams = ! mShowParams;
 		mParams->show( mShowParams );
 	}
+#endif
 }
 
 void FullProjectApp::mouseDown( MouseEvent event )
 {
+#if defined( DEBUG )
 	if( mShowParams ) {
 		mParams->setPosition( event.getPos() );
-	}
+	} 
 	else {
 		ci::vec2 eventPosition = event.getPos();
 		auto renderer = mEngine->getRenderer();
 		if( event.getPos().y > renderer->getBottomPresentationTarget()->getSize().y  ) {
 			eventPosition.y = eventPosition.y - renderer->getNumPixelOverlap();
 		}
-		mEventManager->queueEvent( heartbeat::EventDataRef( new heartbeat::TouchEvent( eventPosition ) ) );
+		mEventManager->queueEvent( heartbeat::EventDataRef( new heartbeat::TouchBeganEvent( 1, eventPosition ) ) );
 	}
+#endif
+}
+
+void FullProjectApp::mouseDrag( cinder::app::MouseEvent event )
+{
+#if defined( DEBUG )
+	if( ! mShowParams ) {
+		ci::vec2 eventPosition = event.getPos();
+		auto renderer = mEngine->getRenderer();
+		if( event.getPos().y > renderer->getBottomPresentationTarget()->getSize().y  ) {
+			eventPosition.y = eventPosition.y - renderer->getNumPixelOverlap();
+		}
+		mEventManager->queueEvent( heartbeat::EventDataRef( new heartbeat::TouchMoveEvent( 1, eventPosition ) ) );
+	}
+#endif
 }
 
 void FullProjectApp::update()

@@ -39,15 +39,15 @@ void TouchData::createAndSendEvent()
 	EventDataRef event;
 	switch (mEmitType) {
 		case EventTypeToEmit::BEGAN: {
-			event.reset( new TouchEvent( mCurrentIndex, mCurrentDistance ) );
+			event.reset( new TouchBeganEvent( mId, mCurrentIndex, mCurrentDistance ) );
 		}
 		break;
 		case EventTypeToEmit::MOVED: {
-			event.reset( new TouchEvent( mCurrentIndex, mCurrentDistance ) );
+			event.reset( new TouchMoveEvent( mId, mCurrentIndex, mCurrentDistance ) );
 		}
 		break;
 		case EventTypeToEmit::ENDED: {
-			event.reset( new TouchEvent( mCurrentIndex, mCurrentDistance ) );
+			event.reset( new TouchEndedEvent( mId, mCurrentIndex, mCurrentDistance ) );
 		}
 		break;
 		case EventTypeToEmit::NONE: {

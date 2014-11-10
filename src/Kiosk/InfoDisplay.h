@@ -78,7 +78,6 @@ public:
 private:
 	InfoDisplay( KioskId kioskId );
 
-	ci::mat4						mInverse;
 	ci::gl::FboRef					mPresentationFbo;
 	Status							mStatus;
 	uint32_t						mCurrentSection;

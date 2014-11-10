@@ -127,10 +127,18 @@ void Engine::keyDown( ci::app::KeyEvent event )
 	
 void Engine::update()
 {
+	mBeginningFrame = app::App::get()->getElapsedSeconds();
 	mEventManager->update();
+	
+	ci::Timer time;
+	time.start();
 	mInteractionManager->preProcessData();
+	time.stop();
+	cout << "Time for Urg: " << time.getSeconds() << endl;
+	time.start();
 	mInteractionManager->processData();
-	mInteractionManager->postProcessData();
+	time.stop();
+	cout << "Time to Process: " << time.getSeconds() << endl;
 	mPond->update();
 	mKioskManager->update();
 }
@@ -168,7 +176,10 @@ void Engine::postDraw()
 {
 	mRenderer->endFrame();
 	mRenderer->presentRender();
-	
+	auto app = app::App::get();
+	mEndingFrame = app->getElapsedSeconds();
+	cout << "Time for this frame: " << mEndingFrame - mBeginningFrame << endl;
+	app->getWindow()->setTitle( to_string( app->getAverageFps() ) );
 }
 
 }
