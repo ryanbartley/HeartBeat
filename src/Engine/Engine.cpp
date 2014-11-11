@@ -158,8 +158,10 @@ void Engine::draw()
 	auto pondRenderer = getRenderer()->getPondTarget();
 	{
 		gl::ScopedFramebuffer scopeFBO( pondRenderer );
-//		gl::clear( GL_COLOR_BUFFER_B IT );
+		gl::clearColor( ColorA( 0.30196f, 0.49019f, 0.72941f, 1.0f ) );
+		gl::clear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 		mPond->renderPondElements();
+		gl::clearColor( ColorA( 1, 1, 1, 1 ) );
 	}
 //    gl::draw( pondRenderer->getColorTexture() );
 	mPond->projectPondElements( pondRenderer->getColorTexture() );
