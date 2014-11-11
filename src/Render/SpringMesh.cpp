@@ -32,7 +32,7 @@ const int TEXCOORD_INDEX	= 4;
 
 	
 SpringMesh::SpringMesh()
-: mIterationsPerFrame(1), mIterationIndex( 0 ), mLineIndices( 0 ), mTriangleIndices( 0 ), mDrawDebug( true ), mDrawTexture( true )
+: mIterationsPerFrame(1), mIterationIndex( 0 ), mLineIndices( 0 ), mTriangleIndices( 0 ), mDrawDebug( false ), mDrawTexture( true )
 {
 	
 }
@@ -54,8 +54,8 @@ void SpringMesh::update()
 		mUpdateGlsl->uniform( "touchesMoved", mTouchesMoved.data(), mTouchesMoved.size() );
 	}
 	
-	mUpdateGlsl->uniform( "numTouchesBegan", (int)mTouchesBegan.size() );
-	mUpdateGlsl->uniform( "numTouchesMoved", (int)mTouchesMoved.size() );
+	mUpdateGlsl->uniform( "numTouchesBegan", (float)mTouchesBegan.size() );
+	mUpdateGlsl->uniform( "numTouchesMoved", (float)mTouchesMoved.size() );
 	
 	// This for loop allows iteration on the gpu of solving the
 	// physics of the cloth.
@@ -122,6 +122,15 @@ void SpringMesh::initialize( const ci::JsonTree &root, const ci::vec2 &size )
 		mNumRows = root["numRows"].getValue<uint32_t>();
 		mNumColumns = root["numColumns"].getValue<uint32_t>();
 		mNumIterations = root["numIterations"].getValue<uint32_t>();
+	}
+	catch ( JsonTree::ExcChildNotFound &ex ) {
+		CI_LOG_E("No SpringMesh attributes found" << ex.what() );
+	}
+	
+	try {
+		auto threshes = root["threshes"];
+		mTouchesBeganDistThresh = threshes["beganDist"].getValue<float>();
+		mTouchesMovedDistThresh = threshes["movedDist"].getValue<float>();
 	}
 	catch ( JsonTree::ExcChildNotFound &ex ) {
 		CI_LOG_E("No SpringMesh attributes found" << ex.what() );
@@ -332,16 +341,8 @@ void SpringMesh::loadShaders()
 		CI_LOG_E("Unknown exception " << ex.what() );
 	}
 	
-//	std::array<float, 8> amplitude{ 1, 1, .4, .03, .05, .1, .5, .3 };
-//	std::array<float, 8> wavelength{ .8, .2, .1, .01, .1, .4, .5, .8 };
-//	std::array<float, 8> speed{ 1, 1, .4, .01, .6, .9, .1, .4 };
-//	std::array<vec2, 8> direction{ randVec2f(), randVec2f(), randVec2f(), randVec2f(), randVec2f(), randVec2f(), randVec2f(), randVec2f() };
-//
-//	mUpdateGlsl->uniform( "amplitude", amplitude.data(), amplitude.size() );
-//	mUpdateGlsl->uniform( "wavelength", wavelength.data(), wavelength.size() );
-//	mUpdateGlsl->uniform( "speed", speed.data(), speed.size() );
-//	mUpdateGlsl->uniform( "direction", direction.data(), direction.size() * 2 );
-//	mUpdateGlsl->uniform( "mouse_pos", vec2(640, 480) );
+	mUpdateGlsl->uniform("touchBeganDistThreshold", mTouchesBeganDistThresh );
+	mUpdateGlsl->uniform("touchMovedDistThreshold", mTouchesMovedDistThresh );
 	
 	gl::GlslProg::Format debugRenderFormat;
 	debugRenderFormat.vertex( getFileContents( "SpringMeshDebugrender.vert" ) )
@@ -374,6 +375,17 @@ void SpringMesh::loadShaders()
 	catch ( const ci::Exception &ex ) {
 		CI_LOG_E("Unknown Exception " << ex.what());
 	}
+	
+	std::array<float, 8> amplitude{ 1, 1, .4, .03, .05, .1, .5, .3 };
+	std::array<float, 8> wavelength{ .8, .2, .1, .01, .1, .4, .5, .8 };
+	std::array<float, 8> speed{ 1, 1, .4, .01, .6, .9, .1, .4 };
+	std::array<vec2, 8> direction{ randVec2f(), randVec2f(), randVec2f(), randVec2f(), randVec2f(), randVec2f(), randVec2f(), randVec2f() };
+	
+	mRenderGlsl->uniform( "amplitude", amplitude.data(), amplitude.size() );
+	mRenderGlsl->uniform( "wavelength", wavelength.data(), wavelength.size() );
+	mRenderGlsl->uniform( "speed", speed.data(), speed.size() );
+	mRenderGlsl->uniform( "direction", direction.data(), direction.size() * 2 );
+	mRenderGlsl->uniform( "mouse_pos", vec2(640, 480) );
 }
 	
 	

@@ -93,6 +93,7 @@ class FullProjectApp : public AppNative {
 	heartbeat::InteractionZonesRef				mInteractionZones;
 	heartbeat::InteractionDebugRenderableRef	mInteractionDebug;
 	heartbeat::EventManagerRef					mEventManager;
+	heartbeat::KioskManagerRef					mKioskManager;
 	std::array<int, 2>							mThreshes;
 	std::array<float, 7>						mRotations;
 	std::array<float, 7>						mScales;
@@ -106,9 +107,9 @@ void FullProjectApp::setup()
 {
 	mEngine = heartbeat::Engine::create();
 #if defined( DEBUG )
-	auto kioskMan = mEngine->getKioskManager();
-	mInfoDisplays = kioskMan->getInfoDisplays();
-	mLilyPads = kioskMan->getLilyPads();
+	mKioskManager = mEngine->getKioskManager();
+	mInfoDisplays = mKioskManager->getInfoDisplays();
+	mLilyPads = mKioskManager->getLilyPads();
     mInteractionDebug = mEngine->getInteractionDebug();
 	mInteractionZones = mEngine->getInteractionZones();
 	mEventManager = mEngine->getEventManager();
@@ -168,6 +169,10 @@ void FullProjectApp::setup()
 	mThreshes[1] = mInteractionZones->getNumIndicesThreshTouch();
 	mParams->addParam( "Set Thresh Approach", &mThreshes[0] ).updateFn( [&](){ mInteractionZones->setNumIndicesThreshApproach( mThreshes[0] ); });
 	mParams->addParam( "Set Thresh Touch", &mThreshes[1] ).updateFn( [&](){ mInteractionZones->setNumIndicesThreshTouch( mThreshes[1] ); });
+	mParams->addSeparator();
+	mParams->addButton( "Toggle Debug Info Display", [&]() {
+		mKioskManager->toggleDebugRenderInfoDisplay();
+	});
 	mParams->addSeparator();
 	
 	using namespace heartbeat;
@@ -282,6 +287,8 @@ void FullProjectApp::mouseDown( MouseEvent event )
 			eventPosition.y = eventPosition.y - renderer->getNumPixelOverlap();
 		}
 		mEventManager->queueEvent( heartbeat::EventDataRef( new heartbeat::TouchBeganEvent( 1, eventPosition ) ) );
+		eventPosition.y += 100.0f;
+		mEventManager->queueEvent( heartbeat::EventDataRef( new heartbeat::TouchBeganEvent( 1, eventPosition ) ) );
 	}
 #endif
 }
@@ -292,9 +299,11 @@ void FullProjectApp::mouseDrag( cinder::app::MouseEvent event )
 	if( ! mShowParams ) {
 		ci::vec2 eventPosition = event.getPos();
 		auto renderer = mEngine->getRenderer();
-		if( event.getPos().y > renderer->getBottomPresentationTarget()->getSize().y  ) {
-			eventPosition.y = eventPosition.y - renderer->getNumPixelOverlap();
-		}
+//		if( event.getPos().y > renderer->getBottomPresentationTarget()->getSize().y  ) {
+//			eventPosition.y = eventPosition.y - renderer->getNumPixelOverlap();
+//		}
+		mEventManager->queueEvent( heartbeat::EventDataRef( new heartbeat::TouchMoveEvent( 1, eventPosition ) ) );
+		eventPosition.y += 100.0f;
 		mEventManager->queueEvent( heartbeat::EventDataRef( new heartbeat::TouchMoveEvent( 1, eventPosition ) ) );
 	}
 #endif

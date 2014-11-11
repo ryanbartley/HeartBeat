@@ -33,6 +33,13 @@ public:
 	
     void enableDrawDebug( bool enable ) { mDrawDebug = enable; }
     bool drawDebug() { return mDrawDebug; }
+	
+	float getTouchesMovedDistThresh() const { return mTouchesMovedDistThresh; }
+	float getTouchesBeganDistThresh() const { return mTouchesBeganDistThresh; }
+	
+	void setTouchesMovedDistThresh( float thresh ) { mTouchesMovedDistThresh = thresh;}
+	void setTouchesBeganDistThresh( float thresh ) { mTouchesBeganDistThresh = thresh; }
+	
 private:
 	SpringMesh();
 	
@@ -53,6 +60,7 @@ private:
 	bool							mDrawDebug, mDrawTexture;
 	
 	uint32_t						mNumRows, mNumColumns, mNumIterations;
+	float							mTouchesBeganDistThresh, mTouchesMovedDistThresh;
 	
 	std::vector<ci::vec2>			mTouchesBegan, mTouchesMoved;
 	

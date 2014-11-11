@@ -99,49 +99,46 @@ void InfoDisplay::toggleStatus()
 	else if ( mStatus == Status::DATA_SCREEN )
 		mStatus = Status::HOME_SCREEN;
 }
+	
+void InfoDisplay::renderToFbo()
+{
+	auto fboSize = mPresentationFbo->getSize();
+	gl::ScopedFramebuffer	scopeFbo( mPresentationFbo );
+	gl::ScopedViewport		scopeView( vec2( 0 ), fboSize );
+	gl::ScopedMatrices		scopeMat;
+	gl::setMatricesWindow( fboSize );
+	
+	gl::clearColor( ColorA( 0, 0, 0, 0 ) );
+	gl::clear( GL_COLOR_BUFFER_BIT );
+	gl::clearColor( ColorA( 0, 0, 0, 1 ) );
+	
+	mBackGround->render();
+	
+	renderCurrentScene();
+#if defined( DEBUG )
+	{
+		gl::ScopedColor scopeColor( ColorA(1, 0, 0, 1) );
+		for( auto & point : mPoints ) {
+			cout << "I should be drawing this point" << endl;
+			gl::drawSolidCircle( point, 30 );
+		}
+	}
+#endif
+}
 
 void InfoDisplay::draw()
 {
 	if( mMasterAlpha <= 0.0f ) return;
 	
-	{
-		auto fboSize = mPresentationFbo->getSize();
-		gl::ScopedFramebuffer	scopeFbo( mPresentationFbo );
-		gl::ScopedViewport		scopeView( vec2( 0 ), fboSize );
-		gl::ScopedMatrices		scopeMat;
-		gl::setMatricesWindow( fboSize );
-		
-		gl::clearColor( ColorA( 0, 0, 0, 0 ) );
-		gl::clear( GL_COLOR_BUFFER_BIT );
-		gl::clearColor( ColorA( 0, 0, 0, 1 ) );
-		
-		gl::enableAlphaBlending();
-		mBackGround->render();
-		
-		renderCurrentScene();
-#if defined( DEBUG )
-        {
-            gl::ScopedColor scopeColor( ColorA(1, 0, 0, 1) );
-			for( auto & point : mPoints ) {
-				cout << "I should be drawing this point" << endl;
-				gl::drawSolidCircle( point, 30 );
-			}
-        }
-#endif
-        gl::disableAlphaBlending();
-	}
+	gl::enableAlphaBlending();
+	
+	renderToFbo();
 	
 	auto tex = mPresentationFbo->getColorTexture();
 	
 	gl::ScopedModelMatrix scopeModel;
 	gl::setModelMatrix( getModelMatrix() );
-    if( ! mIsHalfSized ) {
-        gl::multModelMatrix( ci::scale( vec3( 2, 2, 2 ) ) );
-    }
-//	gl::ScopedTextureBind scopeTex( tex );
 	
-//	gl::drawSolidRect( mPresentRect );
-	gl::enableAlphaBlending();
 	gl::draw( tex );
 	
 #if defined( DEBUG )

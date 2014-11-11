@@ -136,16 +136,10 @@ void Engine::update()
     
     auto window = mRenderer->getPrimaryWindow();
     window->getRenderer()->makeCurrentContext();
-    ci::Timer time;
-    time.start();
+    
 	mEventManager->update();
-	time.stop();
-    cout << "Event Manager took: " << time.getSeconds() << endl;
-    time.start();
-    mInteractionManager->preProcessData();
+	mInteractionManager->preProcessData();
 	mInteractionManager->processData();
-    time.stop();
-    cout << "Interaction Manager took: " << time.getSeconds() << endl;
 	mPond->update();
 	mKioskManager->update();
 }
@@ -166,10 +160,9 @@ void Engine::draw()
 		gl::ScopedFramebuffer scopeFBO( pondRenderer );
 		gl::clearColor( ColorA( 0.30196f, 0.49019f, 0.72941f, 1.0f ) );
 		gl::clear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-		mPond->renderPondElements();
+//		mPond->renderPondElements();
 		gl::clearColor( ColorA( 1, 1, 1, 1 ) );
 	}
-//    gl::draw( pondRenderer->getColorTexture() );
 	mPond->projectPondElements( pondRenderer->getColorTexture() );
 	
 	mKioskManager->render();

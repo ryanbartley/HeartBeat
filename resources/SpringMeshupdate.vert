@@ -17,11 +17,14 @@ in vec2 tex_coord;
 uniform samplerBuffer tex_position;
 
 #define MAX_TOUCHES 5
+#define M_PI 3.1415926535897932384626433832795
 
-uniform vec2 touchesBegan[MAX_TOUCHES];
-uniform int	numTouchesBegan;
-uniform vec2 touchesMoved[MAX_TOUCHES];
-uniform int numTouchesMoved;
+uniform vec2	touchesBegan[MAX_TOUCHES];
+uniform float	numTouchesBegan;
+uniform vec2	touchesMoved[MAX_TOUCHES];
+uniform float	numTouchesMoved;
+uniform float	touchBeganDistThreshold;
+uniform float	touchMovedDistThreshold;
 
 // The outputs of the vertex shader are the same as the inputs
 out vec4 tf_position_mass;
@@ -30,8 +33,6 @@ out vec3 tf_normal;
 
 // A uniform to hold the timestep. The application can update this
 uniform float t = 0.07;
-
-uniform float elapsedSeconds;
 
 // The global spring constant
 uniform float k = 10.0;
@@ -46,28 +47,6 @@ uniform float c = 2.8;
 
 // Spring resting length
 uniform float rest_length = 0.88;
-
-const float pi = 3.14159;
-uniform float waterHeight = 10;
-uniform int numWaves = 1;
-uniform float amplitude[8];
-uniform float wavelength[8];
-uniform float speed[8];
-uniform vec2 direction[8];
-
-float wave(int i, float x, float y) {
-	float frequency = 2*pi/wavelength[i];
-	float phase = speed[i] * frequency;
-	float theta = dot(direction[i], vec2(x, y));
-	return amplitude[i] * sin(theta * frequency + elapsedSeconds * phase);
-}
-
-float waveHeight(float x, float y) {
-	float height = 0.0;
-	for (int i = 0; i < numWaves; ++i)
-		height += wave(i, x, y);
-	return height;
-}
 
 vec3 calcNormal( vec3 v0, vec3 v1, vec3 v2 )
 {
@@ -133,20 +112,26 @@ void main(void)
 		m = 1;
 	}
 	else {
-		bool found = false;
-		for( int i = 0; i < MAX_TOUCHES && i < numTouchesBegan; i++ ) {
-			if( containsPoint( touchesBegan[i], p, 10 ) ) {
-				p = vec3( touchesBegan[i], -30 );
-				found = true;
+		int localNumTouchesBegan = int(numTouchesBegan);
+		int localNumTouchesMoved = int(numTouchesMoved);
+		for( int i = 0; i < MAX_TOUCHES && i < localNumTouchesBegan; i++ ) {
+			float dist = distance( vec3(touchesBegan[i], 0), p);
+			if( dist < touchBeganDistThreshold ) {
+				float yDiff = (cos(dist * M_PI / touchBeganDistThreshold) / 2) * 20;
+				float xDiff = (sin(dist * M_PI / touchBeganDistThreshold) / 2) * 20;
+				float zDiff = -(xDiff * yDiff);
+				p += vec3( xDiff, yDiff, zDiff );
 				break;
 			}
 		}
-		if( ! found ) {
-			for( int i = 0; i < MAX_TOUCHES && i < numTouchesMoved; i++ ) {
-				if( containsPoint( touchesMoved[i], p, 10 ) ) {
-					p = vec3( touchesMoved[i], -20 );
-					break;
-				}
+		for( int i = 0; i < MAX_TOUCHES && i < localNumTouchesMoved; i++ ) {
+			float dist = distance(vec3(touchesMoved[i], 0), p);
+			if( dist < touchMovedDistThreshold ) {
+				float yDiff = (cos(dist * M_PI / touchMovedDistThreshold) / 2) * 20;
+				float xDiff = (sin(dist * M_PI / touchMovedDistThreshold) / 2) * 20;
+				float zDiff = -(xDiff * yDiff);
+				p += vec3( xDiff, yDiff, zDiff );
+				break;
 			}
 		}
 	}

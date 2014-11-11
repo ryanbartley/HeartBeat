@@ -14,6 +14,8 @@
 #include "JsonManager.h"
 #include "ButtonTypes.h"
 #include "LilyPadOverlay.h"
+#include "Engine.h"
+#include "Renderer.h"
 
 
 #include "cinder/gl/Fbo.h"
@@ -26,6 +28,7 @@ using namespace std;
 namespace heartbeat {
 	
 KioskManager::KioskManager()
+: mDebugRenderInfoDisplay( false )
 {
 	auto eventManager = EventManagerBase::get();
 	if( eventManager ) {
@@ -135,6 +138,11 @@ void KioskManager::touchEndedDelegate( EventDataRef touchEvent )
 	}
 }
 	
+void KioskManager::toggleDebugRenderInfoDisplay()
+{
+	mDebugRenderInfoDisplay = ! mDebugRenderInfoDisplay;
+}
+	
 void KioskManager::update()
 {
 	for( auto & kiosk : mDisplays ) {
@@ -144,12 +152,21 @@ void KioskManager::update()
 	
 void KioskManager::render()
 {
-	for( auto & kiosk : mDisplays ) {
-		kiosk->draw();
+	if( ! mDebugRenderInfoDisplay ) {
+		for( auto & kiosk : mDisplays ) {
+			kiosk->draw();
+		}
+		
+		for ( auto & lilyPad : mLilyPads ) {
+			lilyPad->draw();
+		}
 	}
-	
-	for ( auto & lilyPad : mLilyPads ) {
-		lilyPad->draw();
+	else {
+		mDisplays[0]->renderToFbo();
+		auto fbo = mDisplays[0]->getPresentationFbo();
+		gl::ScopedMatrices scopeMatrix;
+		gl::multModelMatrix( ci::scale( vec3( .5, .5, 0 ) ) );
+		gl::draw( fbo->getColorTexture() );
 	}
 }
 	

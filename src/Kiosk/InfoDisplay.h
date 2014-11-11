@@ -76,6 +76,10 @@ public:
 	
 	void removeFront();
 	
+	void renderToFbo();
+	
+	ci::gl::FboRef& getPresentationFbo() { return mPresentationFbo; }
+	
 private:
 	InfoDisplay( KioskId kioskId );
 

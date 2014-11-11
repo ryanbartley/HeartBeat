@@ -27,8 +27,8 @@ vec3 ads( ) {
 	return
 	lightIntensity *
 	( Ka +
-	 Kd * max( dot(s, n), 0.0 ) +
-	 Ks * pow( max( dot(r,v), 0.0 ), shininess ) );
+	 Kd * abs( dot(s, n) ) +
+	 Ks * pow( abs( dot(r,v) ), shininess ) );
 }
 void main() {
 	vec3 texColor = texture( tex, fs_in.texCoord ).xyz;

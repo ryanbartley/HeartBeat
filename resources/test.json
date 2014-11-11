@@ -10,8 +10,8 @@
 				1080
 			],
 			"numPixelOverlap" : 200,
-			"splitWindow" : true,
-			"halfSize" : false
+			"splitWindow" : false,
+			"halfSize" : true
 		},
 		//////////////////////////////////////////////////////
 		// HID ATTRIBUTES
@@ -91,22 +91,22 @@
 			// 	}
 			// },
 			// "fullSize" : {
-				"transforms" : {
-					"scales" : [
-						0.975, 0.975
-					],
-					"rotations" : {
-						// This can either contain "quaternion" : []
-						// or "angle" : degree, axis is vec3( 0, 0, 1 )
-						"angle" : 27
-					},
-					"translations" : {
-						// This can either contain "coordinates" : []
-						// or "center" : boolean
-						// "center" : true //,
-						"coordinates" : [ 597.9, 888.93 ]
-					}
+			"transforms" : {
+				"scales" : [
+					0.975, 0.975
+				],
+				"rotations" : {
+					// This can either contain "quaternion" : []
+					// or "angle" : degree, axis is vec3( 0, 0, 1 )
+					"angle" : 27
+				},
+				"translations" : {
+					// This can either contain "coordinates" : []
+					// or "center" : boolean
+					// "center" : true //,
+					"coordinates" : [ 597.9, 888.93 ]
 				}
+			}
 			// }
 		},
 		//////////////////////////////////////////////////////
@@ -179,9 +179,13 @@
 			// SPRING MESH SETTINGS
 			//////////////////////////////////////////////////////
 			"springMesh" : {
-				"numRows" : 100,
-				"numColumns" : 100,
-				"numIterations" : 1
+				"numRows" : 150,
+				"numColumns" : 150,
+				"numIterations" : 32,
+				"threshes" : { 
+					"beganDist" : 40,
+					"movedDist" : 50
+				}
 			}
 		},
 		//////////////////////////////////////////////////////
