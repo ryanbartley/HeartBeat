@@ -93,10 +93,11 @@ class FullProjectApp : public AppNative {
 	heartbeat::InteractionZonesRef				mInteractionZones;
 	heartbeat::InteractionDebugRenderableRef	mInteractionDebug;
 	heartbeat::EventManagerRef					mEventManager;
-	std::array<float, 7> mRotations;
-	std::array<float, 7> mScales;
-	std::array<vec3, 7> mTranslations;
-	params::InterfaceGlRef mParams;
+	std::array<int, 2>							mThreshes;
+	std::array<float, 7>						mRotations;
+	std::array<float, 7>						mScales;
+	std::array<vec3, 7>							mTranslations;
+	params::InterfaceGlRef						mParams;
 	bool										mShowParams;
 #endif
 };
@@ -160,6 +161,12 @@ void FullProjectApp::setup()
 	mParams->addParam( "Translation LilyPad 3", &mTranslations[6] ).updateFn( [&](){ mLilyPads[2]->setTranslation( vec2(mTranslations[6]) ); } );
 	
 	mParams->addSeparator();
+	mThreshes[0] = mInteractionZones->getNumIndicesThreshApproach();
+	mThreshes[1] = mInteractionZones->getNumIndicesThreshTouch();
+	mParams->addParam( "Set Thresh Approach", &mThreshes[0] ).updateFn( [&](){ mInteractionZones->setNumIndicesThreshApproach( mThreshes[0] ); });
+	mParams->addParam( "Set Thresh Touch", &mThreshes[1] ).updateFn( [&](){ mInteractionZones->setNumIndicesThreshTouch( mThreshes[1] ); });
+	mParams->addSeparator();
+	
 	using namespace heartbeat;
 	
 	mInteractionDebug = mEngine->getInteractionDebug();

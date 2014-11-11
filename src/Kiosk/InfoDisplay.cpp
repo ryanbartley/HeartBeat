@@ -124,7 +124,7 @@ void InfoDisplay::draw()
             gl::ScopedColor scopeColor( ColorA(1, 0, 0, 1) );
 			for( auto & point : mPoints ) {
 				cout << "I should be drawing this point" << endl;
-				gl::drawSolidCircle( point, 20 );
+				gl::drawSolidCircle( point, 30 );
 			}
         }
 #endif
@@ -229,7 +229,7 @@ void InfoDisplay::addOverlayPage( OverlayPageRef &page )
 	mOverlay = page;
 }
 	
-void InfoDisplay::registerTouch( EventDataRef eventData )
+void InfoDisplay::registerTouchBegan( EventDataRef eventData )
 {
 //	if( ! mIsActivated )
 //		CI_LOG_E("Not activated, something went wrong");
@@ -288,6 +288,25 @@ void InfoDisplay::registerTouch( EventDataRef eventData )
 				button->changeState( shared );
 			}
 		}
+		event->setIsHandled( true );
+	}
+}
+
+void InfoDisplay::registerTouchMoved( EventDataRef eventData )
+{
+	auto event = std::dynamic_pointer_cast<TouchBeganEvent>( eventData );
+	if( ! event ) {
+		CI_LOG_E("Couldn't cast touch event from " << eventData->getName() );
+		return;
+	}
+	
+	auto modelSpacePoint = getInverseMatrix() * vec4( event->getWorldCoordinate(), 0, 1 );
+	auto twoDimPoint = vec2( modelSpacePoint.x, modelSpacePoint.y );
+	cout << "About to check this point: " << twoDimPoint << endl;
+	if( mPresentRect.contains( twoDimPoint ) ) {
+#if defined( DEBUG )
+		mPoints.push_back( twoDimPoint );
+#endif
 		event->setIsHandled( true );
 	}
 }

@@ -24,7 +24,7 @@ using namespace std;
 namespace heartbeat {
 
 InteractionZones::InteractionZones()
-: mZoneScalarsUpdated( false ), mInBetweenThreshold( 0 ), mSendEvents( true )
+: mZoneScalarsUpdated( false ), mInBetweenThreshold( 0 ), mSendEvents( true ), mAverageBuffer( 1081, 0 )
 {
 	
 }
@@ -129,6 +129,24 @@ void InteractionZones::initialize()
 		catch( const JsonTree::ExcChildNotFound &ex ) {
 			CI_LOG_E("PoleIndices not found, using default");
 			mSendEvents = false;
+		}
+		
+		auto threshes = interactionAttribs["threshes"];
+		
+		try {
+			mNumIndicesThreshTouches = threshes["touches"].getValue<int>();
+		}
+		catch( const JsonTree::ExcChildNotFound &ex ) {
+			CI_LOG_E(ex.what() << ", setting to default 5");
+			mNumIndicesThreshTouches = 5;
+		}
+		
+		try {
+			mNumIndicesThreshApproach = threshes["approaches"].getValue<int>();
+		}
+		catch( const JsonTree::ExcChildNotFound &ex ) {
+			CI_LOG_E(ex.what() << ", setting to default 20");
+			mNumIndicesThreshTouches = 20;
 		}
 		
 		// Now cache scales for barrier zones
@@ -256,7 +274,7 @@ void InteractionZones::initialize()
 		}
 		
 		try {
-			auto inBetweenThresh = interactionAttribs["inBetweenThresh"].getValue<uint32_t>();
+			auto inBetweenThresh = threshes["inBetween"].getValue<uint32_t>();
 			mInBetweenThreshold = inBetweenThresh;
 		}
 		catch ( JsonTree::ExcChildNotFound &ex ) {
@@ -435,6 +453,7 @@ void InteractionZones::processData()
 		}
 		if( emitEvents ) {
 			if( mCurrentFrameData[i] == 1 ) mCurrentFrameData[i] = 100000;
+			
 			if( mCurrentFrameData[i] < *barrierIt * APPROACH_SCALAR &&
 			   mCurrentFrameData[i] > *barrierIt * DEAD_SCALAR ) {
 				// emit approaching event.

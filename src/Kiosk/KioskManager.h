@@ -21,7 +21,9 @@ public:
 	
 	void approachDelegate( EventDataRef approachEvent );
 	void departDelegate( EventDataRef departEvent );
-	void touchDelegate( EventDataRef touchEvent );
+	void touchBeganDelegate( EventDataRef touchEvent );
+	void touchMovedDelegate( EventDataRef touchEvent );
+	void touchEndedDelegate( EventDataRef touchEvent );
 	
 	void update();
 	void render();

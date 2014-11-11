@@ -56,7 +56,6 @@ public:
 	//! Returns the current scalar being used for this zone
 	float getZoneScalar( Zone zone );
 	
-	//! Returns 
 	
 	//! Initialize moved to public for use in the TestApp, shouldn't be
 	//! called normally. Engine should handle the initialization.
@@ -83,10 +82,17 @@ public:
 	//! Sets the current scalar of \a zone.
 	void setZoneScalar( Zone zone, float scalar );
 	
+	int getNumIndicesThreshApproach() const { return mNumIndicesThreshApproach; }
+	int getNumIndicesThreshTouch() const { return mNumIndicesThreshTouches; }
+	void setNumIndicesThreshApproach( float thresh ) { mNumIndicesThreshApproach = thresh; }
+	void setNumIndicesThreshTouch( float thresh ) { mNumIndicesThreshTouches = thresh; }
+	
 	inline void processApproach( int index, long distance );
 	inline void processTouch( int index, long distance );
 	
 	std::vector<ci::vec2> getDrawablePoints();
+	
+	inline void checkAverages( int index, long &distance );
 	
 private:
 	InteractionZones();
@@ -118,11 +124,13 @@ private:
 	std::future<std::vector<long>>	mFuture;
 	ci::Timer						mOverallTime;
 	
-	int							mInBetweenThreshold;
+	int							mInBetweenThreshold,
+								mNumIndicesThreshTouches,
+								mNumIndicesThreshApproach;
 	bool						mZoneScalarsUpdated;
 	bool						mSendEvents;
 	
-	std::vector<long>			mCurrentFrameData;
+	std::vector<long>			mAverageBuffer, mCurrentFrameData;
 	
 	//! Pointer to the urg
 	UrgRef						mUrg;
@@ -168,6 +176,11 @@ void InteractionZones::processTouch( int index, long distance )
 	}
 }
 	
+void InteractionZones::checkAverages( int index, long &distance )
+{
+	
+}
+	
 void InteractionZones::addEvent( std::vector<Interactor> &events, int index, long dist )
 {
 	if( events.empty() )
@@ -178,6 +191,7 @@ void InteractionZones::addEvent( std::vector<Interactor> &events, int index, lon
 		// middle point
 		if( index == back.mIndex + 1 ) {
 			if(  dist <= back.mDistance ) {
+				back.mNumIndicesPast++;
 				back.mIndex = index;
 				back.mDistance = dist;
 			}
@@ -194,7 +208,7 @@ void InteractionZones::processApproaches()
 {
 	for( auto & event : mApproachInteractors ) {
 		for( auto & approachZone : mApproachZones ) {
-			if( approachZone.second.contains( event.mIndex ) ) {
+			if( approachZone.second.contains( event.mIndex ) && event.mNumIndicesPast > 20 ) {
 				approachZone.second.addEvent();
 			}
 		}
@@ -220,10 +234,9 @@ void InteractionZones::processTouches()
 {
 	for( auto & touchIt : mTouchInteractors ) {
 		bool touchHandled = false;
-		//		eventManager->queueEvent( EventDataRef( new TouchEvent( touchIt->mIndex, touchIt->mDistance ) ) );
 		if( ! mCurrentTouches.empty() ) {
 			for( auto & currentTouch : mCurrentTouches ) {
-				if( currentTouch.contains( touchIt.mIndex, touchIt.mDistance ) ) {
+				if( currentTouch.contains( touchIt.mIndex, touchIt.mDistance ) && touchIt.mNumIndicesPast < mNumIndicesThreshTouches ) {
 					touchHandled = true;
 					break;
 				}

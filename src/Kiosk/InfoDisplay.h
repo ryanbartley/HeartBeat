@@ -50,7 +50,8 @@ public:
 	
 	void toggleStatus();
 	
-	void registerTouch( EventDataRef eventData );
+	void registerTouchBegan( EventDataRef eventData );
+	void registerTouchMoved( EventDataRef eventData );
 	
 	void addDataPage( DataPageRef &page, AnimateType type );
 	void addOverlayPage( OverlayPageRef &page );

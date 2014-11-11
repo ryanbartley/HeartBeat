@@ -17,6 +17,7 @@ struct Interactor {
 	: mDistance( distance ), mIndex( index )
 	{}
 	
+	int			mNumIndicesPast;
 	int			mIndex;
 	long		mDistance;
 };

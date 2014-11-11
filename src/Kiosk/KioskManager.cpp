@@ -31,7 +31,9 @@ KioskManager::KioskManager()
 	if( eventManager ) {
 		eventManager->addListener( std::bind( &KioskManager::approachDelegate, this, std::placeholders::_1 ), ApproachEvent::TYPE );
 		eventManager->addListener( std::bind( &KioskManager::departDelegate, this, std::placeholders::_1 ), DepartEvent::TYPE );
-		eventManager->addListener( std::bind( &KioskManager::touchDelegate, this, std::placeholders::_1 ), TouchBeganEvent::TYPE );
+		eventManager->addListener( std::bind( &KioskManager::touchBeganDelegate, this, std::placeholders::_1 ), TouchBeganEvent::TYPE );
+		eventManager->addListener( std::bind( &KioskManager::touchMovedDelegate, this, std::placeholders::_1 ), TouchMoveEvent::TYPE );
+		eventManager->addListener( std::bind( &KioskManager::touchEndedDelegate, this, std::placeholders::_1 ), TouchEndedEvent::TYPE );
 		CI_LOG_V("KioskManager has registered it's event listeners");
 	}
 	else
@@ -85,7 +87,7 @@ void KioskManager::departDelegate( EventDataRef departEvent )
 	mDisplays[kioskIndex]->activate( false );
 }
 	
-void KioskManager::touchDelegate( EventDataRef touchEvent )
+void KioskManager::touchBeganDelegate( EventDataRef touchEvent )
 {
 	auto event = std::dynamic_pointer_cast<TouchBeganEvent>( touchEvent );
 	
@@ -96,7 +98,39 @@ void KioskManager::touchDelegate( EventDataRef touchEvent )
 	
 	for( auto & kiosk : mDisplays ) {
 		if( kiosk->insideAngle( event->getIndex() ) ) {
-			kiosk->registerTouch( event );
+			kiosk->registerTouchBegan( event );
+		}
+	}
+}
+	
+void KioskManager::touchMovedDelegate( EventDataRef touchEvent )
+{
+	auto event = std::dynamic_pointer_cast<TouchBeganEvent>( touchEvent );
+	
+	if( ! event ) {
+		CI_LOG_V("Not an touchEvent " << touchEvent->getName() );
+		return;
+	}
+	
+	for( auto & kiosk : mDisplays ) {
+		if( kiosk->insideAngle( event->getIndex() ) ) {
+			kiosk->registerTouchMoved( event );
+		}
+	}
+}
+	
+void KioskManager::touchEndedDelegate( EventDataRef touchEvent )
+{
+	auto event = std::dynamic_pointer_cast<TouchBeganEvent>( touchEvent );
+	
+	if( ! event ) {
+		CI_LOG_V("Not an touchEvent " << touchEvent->getName() );
+		return;
+	}
+	
+	for( auto & kiosk : mDisplays ) {
+		if( kiosk->insideAngle( event->getIndex() ) ) {
+			kiosk->registerTouchBegan( event );
 		}
 	}
 }

@@ -66,7 +66,12 @@
 				"approach" : 1.0,
 				"far" : 1.2
 			},
-			"inBetweenThresh" : 50,
+			"threshes" : {
+				"approaches" : 20,
+				"touches" : 5,
+				"inBetween" : 50,
+				"averages" : 30
+			}
 			// "halfSize" : {
 			// 	"transforms" : {
 			// 		"scales" : [
