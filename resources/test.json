@@ -10,8 +10,8 @@
 				1080
 			],
 			"numPixelOverlap" : 200,
-			"splitWindow" : true,
-			"halfSize" : false
+			"splitWindow" : false,
+			"halfSize" : true
 		},
 		//////////////////////////////////////////////////////
 		// HID ATTRIBUTES
@@ -68,7 +68,7 @@
 			},
 			"threshes" : {
 				"approaches" : 20,
-				"touches" : 5,
+				"touches" : 10,
 				"inBetween" : 50,
 				"averages" : 10
 			},

@@ -117,6 +117,8 @@ public:
 	void setButtonStatus( ButtonStatus status ) { mButtonStatus = status; }
 	NavigationStatus getNavigationStatus() { return mNavigationStatus; }
 	
+	void render() override;
+	
 private:
 	NavigableButton( const std::string &buttonId );
 
@@ -227,7 +229,6 @@ protected:
 	OverlayPageButton( const std::string &buttonId );
 	
 	OverlayPageRef				 mNavigation;
-	std::vector<StaticButtonRef> mButtons;
 };
 	
 class OverlayPageSectionButton : public OverlayPageButton {

@@ -35,7 +35,7 @@ KioskManager::KioskManager()
 		eventManager->addListener( std::bind( &KioskManager::approachDelegate, this, std::placeholders::_1 ), ApproachEvent::TYPE );
 		eventManager->addListener( std::bind( &KioskManager::departDelegate, this, std::placeholders::_1 ), DepartEvent::TYPE );
 		eventManager->addListener( std::bind( &KioskManager::touchBeganDelegate, this, std::placeholders::_1 ), TouchBeganEvent::TYPE );
-		eventManager->addListener( std::bind( &KioskManager::touchMovedDelegate, this, std::placeholders::_1 ), TouchMoveEvent::TYPE );
+//		eventManager->addListener( std::bind( &KioskManager::touchMovedDelegate, this, std::placeholders::_1 ), TouchMoveEvent::TYPE );
 		eventManager->addListener( std::bind( &KioskManager::touchEndedDelegate, this, std::placeholders::_1 ), TouchEndedEvent::TYPE );
 		CI_LOG_V("KioskManager has registered it's event listeners");
 	}

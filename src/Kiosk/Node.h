@@ -88,7 +88,7 @@ public:
 	virtual ButtonId		getType() const = 0;
 	
 	//! Returns whether the point is contained within this node.
-	inline bool contains( const ci::vec2 &point ) { return mGroup->getBoundingBox().contains( point ); }
+	inline bool contains( const ci::vec2 &point ) { return mBoundingBox.contains( point ); }
 	//! Abstract method used to change the state of the infodisplay
 	virtual void changeState( InfoDisplayRef &display ) = 0;
 	
@@ -97,6 +97,8 @@ public:
 	
 protected:
 	Button( const std::string &name );
+	
+	ci::Rectf mBoundingBox;
 	
 };
 	

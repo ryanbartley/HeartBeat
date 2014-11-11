@@ -296,8 +296,8 @@ void FullProjectApp::mouseDown( MouseEvent event )
 			eventPosition.y = eventPosition.y - renderer->getNumPixelOverlap();
 		}
 		mEventManager->queueEvent( heartbeat::EventDataRef( new heartbeat::TouchBeganEvent( 1, eventPosition ) ) );
-		eventPosition.y += 100.0f;
-		mEventManager->queueEvent( heartbeat::EventDataRef( new heartbeat::TouchBeganEvent( 1, eventPosition ) ) );
+//		eventPosition.y += 100.0f;
+//		mEventManager->queueEvent( heartbeat::EventDataRef( new heartbeat::TouchBeganEvent( 1, eventPosition ) ) );
 	}
 #endif
 }
@@ -312,8 +312,8 @@ void FullProjectApp::mouseDrag( cinder::app::MouseEvent event )
 //			eventPosition.y = eventPosition.y - renderer->getNumPixelOverlap();
 //		}
 		mEventManager->queueEvent( heartbeat::EventDataRef( new heartbeat::TouchMoveEvent( 1, eventPosition ) ) );
-		eventPosition.y += 100.0f;
-		mEventManager->queueEvent( heartbeat::EventDataRef( new heartbeat::TouchMoveEvent( 1, eventPosition ) ) );
+//		eventPosition.y += 100.0f;
+//		mEventManager->queueEvent( heartbeat::EventDataRef( new heartbeat::TouchMoveEvent( 1, eventPosition ) ) );
 	}
 #endif
 }

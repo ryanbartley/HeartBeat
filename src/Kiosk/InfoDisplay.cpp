@@ -64,8 +64,10 @@ void InfoDisplay::renderHomeScreen()
 	
 void InfoDisplay::renderDataScreen()
 {
+	if( ! mOverlay ) {
 	for( auto & page : mDataPages ) {
 		page->render();
+	}
 	}
 	
 	for( auto & button : mDataButtons ) {
@@ -283,6 +285,7 @@ void InfoDisplay::registerTouchBegan( EventDataRef eventData )
 				cout << "it's this button: " << button->getGroupName() << endl;
 				auto shared = shared_from_this();
 				button->changeState( shared );
+				break;
 			}
 		}
 		event->setIsHandled( true );

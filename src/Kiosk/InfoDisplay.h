@@ -73,6 +73,9 @@ public:
 	
 	ActivatableButtonRef& getActivatedButton() { return mActivatedButton; }
 	void setActivatedButton( const ActivatableButtonRef &button ) { mActivatedButton = button; }
+	void setOverlayActivatedButton( const ActivatableButtonRef &button ) { mOverlayActiveButton = button; }
+	ActivatableButtonRef& getOverlayActivatedButton() { return mOverlayActiveButton; }
+	std::map<std::string, std::vector<ButtonRef>>& getOverlayButtons() { return mOverlayButtons; }
 	
 	void removeFront();
 	
@@ -90,6 +93,7 @@ private:
 	std::deque<DataPageRef>			mDataPages;
 	std::map<std::string, PageRef>	mPageCache;
 	OverlayPageRef					mOverlay;
+	ActivatableButtonRef			mOverlayActiveButton;
 	ActivatableButtonRef			mActivatedButton;
 	std::vector<ButtonRef>			mHomeButtons,
 									mDataButtons;

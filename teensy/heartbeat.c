@@ -24,8 +24,11 @@
 
 const double PROGMEM fullCycle 		= 20.000;
 const double PROGMEM fullyOpen 		= 0.855;
-const double PROGMEM fullyClosed 	= 1.666;
-const double PROGMEM amountToMove 	= 1.666 - 0.855;
+// 1.800 a
+// 1.550 c
+// 1.600 b
+const double PROGMEM fullyClosed 	= 1.600;
+const double PROGMEM amountToMove 	= 1.600 - 0.855;
 
 
 void on();

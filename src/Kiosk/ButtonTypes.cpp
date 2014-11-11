@@ -132,6 +132,22 @@ void DataPageButton::changeState( InfoDisplayRef &infoDisplay )
 {
 	cout << "DATA_PAGE_BUTTON: " << mName << endl;
 	ActivatableButton::changeState( infoDisplay );
+	auto buttons = infoDisplay->getDataButtons();
+	for( auto & button : buttons ) {
+		if( button->getType() == NavigableButton::TYPE ) {
+			auto cast = std::dynamic_pointer_cast<NavigableButton>(button);
+			if( cast ) {
+				if( cast->getNavigationStatus() == NavigableButton::NavigationStatus::PREV ) {
+					cout << "Changing state of " << cast->getGroupName() << " to none active because it's prev" << endl;
+					cast->setButtonStatus( ButtonStatus::NONACTIVE );
+				}
+				else if( cast->getNavigationStatus() == NavigableButton::NavigationStatus::NEXT ) {
+					cout << "Changing state of " << cast->getGroupName() << " to active because it's next" << endl;
+					cast->setButtonStatus( ButtonStatus::ACTIVE );
+				}
+			}
+		}
+	}
 	infoDisplay->addDataPage( mNavigation, InfoDisplay::AnimateType::CUT );
 	infoDisplay->setSection( mSection );
 }
@@ -192,7 +208,29 @@ bool OverlayPageButton::initialize( const ci::JsonTree &root )
 void OverlayPageButton::changeState( InfoDisplayRef &display )
 {
 	cout << "Overlay_PAGE_BUTTON: " << mName << endl;
-	ActivatableButton::changeState( display );
+	
+	mStatus = ButtonStatus::ACTIVE;
+	auto overlayButtonMap = display->getOverlayButtons();
+	auto found = overlayButtonMap.find( mNavigation->getButtonGroup() );
+	if( found != overlayButtonMap.end() ) {
+		for( auto & button : found->second ) {
+			if( button->getType() == NavigableButton::TYPE ) {
+				auto cast = std::dynamic_pointer_cast<NavigableButton>( button );
+				if( cast ) {
+					if( cast->getNavigationStatus() == NavigableButton::NavigationStatus::PREV ) {
+						cout << "Changing state of " << cast->getGroupName() << " to none active because it's prev" << endl;
+						cast->setButtonStatus( ButtonStatus::NONACTIVE );
+					}
+					else if( cast->getNavigationStatus() == NavigableButton::NavigationStatus::NEXT ) {
+						cout << "Changing state of " << cast->getGroupName() << " to active because it's next" << endl;
+						cast->setButtonStatus( ButtonStatus::ACTIVE );
+					}
+				}
+			}
+		}
+	}
+	
+	display->setOverlayActivatedButton( shared_from_this() );
 	display->addOverlayPage( mNavigation );
 }
 	
@@ -242,6 +280,8 @@ bool OverlayPageSectionButton::initialize( const ci::JsonTree &root )
 	
 void OverlayPageSectionButton::changeState( InfoDisplayRef &display )
 {
+	mStatus = ButtonStatus::ACTIVE;
+	display->setOverlayActivatedButton( shared_from_this() );
 	auto navigateSection = mPrefix + std::to_string( display->getSection() );
 	auto pageCache = display->getPageCache();
 	auto found = pageCache.find( navigateSection );
@@ -381,12 +421,10 @@ void ReturnButton::changeState( InfoDisplayRef &display )
 		break;
 		case ReturnStatus::CLOSE_OVERLAY: {
 			auto null = OverlayPageRef();
+			auto overlayButton = display->getOverlayActivatedButton();
+			overlayButton->setStatus(ButtonStatus::NONACTIVE);
+			display->setOverlayActivatedButton( nullptr );
 			display->addOverlayPage( null );
-			auto button = display->getActivatedButton();
-			if( button ) {
-				button->setStatus( ButtonStatus::NONACTIVE );
-				display->setActivatedButton( nullptr );
-			}
 		}
 		default:
 		break;
@@ -454,15 +492,14 @@ void NavigableButton::changeState( InfoDisplayRef &display )
 			auto plus = std::dynamic_pointer_cast<OverlayPlus>(overlay);
 			if( mNavigationStatus == NavigationStatus::NEXT ) {
 				if( ! plus->nextIndex() ) {
-//					mButtonStatus = ButtonStatus::NONACTIVE;
+					mButtonStatus = ButtonStatus::NONACTIVE;
 				}
 			}
 			else if( mNavigationStatus == NavigationStatus::PREV ) {
 				if( ! plus->prevIndex() ) {
-//					mButtonStatus = ButtonStatus::NONACTIVE;
+					mButtonStatus = ButtonStatus::NONACTIVE;
 				}
 			}
-			// TODO: COME BACK TO THIS, there's something wrong here.
 			if( mOpposite ) {
 				if ( mOpposite->getButtonStatus() == ButtonStatus::NONACTIVE ) {
 					mOpposite->setButtonStatus( ButtonStatus::ACTIVE );
@@ -500,6 +537,16 @@ void NavigableButton::changeState( InfoDisplayRef &display )
 			}
 		}
 	}
+}
+	
+void NavigableButton::render()
+{
+	if( mButtonStatus == ButtonStatus::NONACTIVE ) return;
+	
+	gl::ScopedModelMatrix scopModel;
+	gl::setModelMatrix( ci::translate( vec3( mAbsolutePosition, 0 ) ) );
+	
+	gl::draw( mTexture );
 }
 	
 ButtonRef NavigableButton::clone()
