@@ -136,10 +136,16 @@ void Engine::update()
     
     auto window = mRenderer->getPrimaryWindow();
     window->getRenderer()->makeCurrentContext();
-    
+    ci::Timer time;
+    time.start();
 	mEventManager->update();
-	mInteractionManager->preProcessData();
+	time.stop();
+    cout << "Event Manager took: " << time.getSeconds() << endl;
+    time.start();
+    mInteractionManager->preProcessData();
 	mInteractionManager->processData();
+    time.stop();
+    cout << "Interaction Manager took: " << time.getSeconds() << endl;
 	mPond->update();
 	mKioskManager->update();
 }

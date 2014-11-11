@@ -14,7 +14,7 @@ namespace heartbeat {
 	
 struct Interactor {
 	Interactor( int index, long distance )
-	: mDistance( distance ), mIndex( index )
+	: mDistance( distance ), mIndex( index ), mNumIndicesPast( 0 )
 	{}
 	
 	int			mNumIndicesPast;

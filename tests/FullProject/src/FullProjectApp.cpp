@@ -109,6 +109,9 @@ void FullProjectApp::setup()
 	auto kioskMan = mEngine->getKioskManager();
 	mInfoDisplays = kioskMan->getInfoDisplays();
 	mLilyPads = kioskMan->getLilyPads();
+    mInteractionDebug = mEngine->getInteractionDebug();
+	mInteractionZones = mEngine->getInteractionZones();
+	mEventManager = mEngine->getEventManager();
 	
 	mScales.fill( 1.0f );
 	mRotations.fill( 0 );
@@ -169,9 +172,7 @@ void FullProjectApp::setup()
 	
 	using namespace heartbeat;
 	
-	mInteractionDebug = mEngine->getInteractionDebug();
-	mInteractionZones = mEngine->getInteractionZones();
-	mEventManager = mEngine->getEventManager();
+
 	mTranslations[3] = mInteractionDebug->getTranslation();
 	
 	mFar = mInteractionZones->getZoneScalar( InteractionZones::Zone::FAR );
