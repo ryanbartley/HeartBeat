@@ -173,7 +173,7 @@ void SpringMesh::loadBuffers( const ci::vec2 &size )
 								(fj) * (float)size.y,	// y coordinate
 								0,						// z coordinate
 								1.0f);					// mass
-			texCoords[n] = vec2( fi, fj );
+			texCoords[n] = vec2( fi, 1.0f - fj );
 			// This allows us to figure out the indices of the four points
 			// surrounding the current point. This will be used to index
 			// into the texture buffer.
