@@ -126,7 +126,8 @@ private:
 	
 	int							mInBetweenThreshold,
 								mNumIndicesThreshTouches,
-								mNumIndicesThreshApproach;
+								mNumIndicesThreshApproach,
+								mAveragesThresh;
 	bool						mZoneScalarsUpdated;
 	bool						mSendEvents;
 	
@@ -178,7 +179,12 @@ void InteractionZones::processTouch( int index, long distance )
 	
 void InteractionZones::checkAverages( int index, long &distance )
 {
-	
+	if( (distance < mAverageBuffer[index] + 10) || (distance > mAverageBuffer[index] - 10) ) {
+		distance = mAverageBuffer[index] = (mAverageBuffer[index] + distance) / 2;
+	}
+	else {
+		mAverageBuffer[index] = distance;
+	}
 }
 	
 void InteractionZones::addEvent( std::vector<Interactor> &events, int index, long dist )

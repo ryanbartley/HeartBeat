@@ -149,6 +149,14 @@ void InteractionZones::initialize()
 			mNumIndicesThreshTouches = 20;
 		}
 		
+		try {
+			mAveragesThresh = threshes["averages"].getValue<int>();
+		}
+		catch( const JsonTree::ExcChildNotFound &ex ) {
+			CI_LOG_E(ex.what() << ", setting to default 20");
+			mAveragesThresh = 10;
+		}
+		
 		// Now cache scales for barrier zones
 		try {
 			auto scales = interactionAttribs["scales"];
@@ -453,6 +461,8 @@ void InteractionZones::processData()
 		}
 		if( emitEvents ) {
 			if( mCurrentFrameData[i] == 1 ) mCurrentFrameData[i] = 100000;
+			
+			checkAverages( i, mCurrentFrameData[i] );
 			
 			if( mCurrentFrameData[i] < *barrierIt * APPROACH_SCALAR &&
 			   mCurrentFrameData[i] > *barrierIt * DEAD_SCALAR ) {

@@ -70,7 +70,7 @@
 				"approaches" : 20,
 				"touches" : 5,
 				"inBetween" : 50,
-				"averages" : 30
+				"averages" : 10
 			}
 			// "halfSize" : {
 			// 	"transforms" : {
