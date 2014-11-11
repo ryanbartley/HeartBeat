@@ -164,12 +164,12 @@ void InfoDisplay::activate( bool activate )
 	auto app = App::get();
 	
 	if( activate ) {
-		app->timeline().applyPtr( &mMasterAlpha, 0.0f, 1.0 );
+		app->timeline().applyPtr( &mMasterAlpha, 1.0f, 1.0 ).easeFn( EaseInCubic() );
 		mIsActivated = activate;
 	}
 	else {
 		auto shared = shared_from_this();
-		app->timeline().applyPtr( &mMasterAlpha, 1.0f, 1.0 ).finishFn( std::bind( &InfoDisplay::reset, shared ) );
+		app->timeline().applyPtr( &mMasterAlpha, 0.0f, 1.0 ).easeFn( EaseInCubic() ).finishFn( std::bind( &InfoDisplay::reset, shared ) );
 		
 	}
 }
