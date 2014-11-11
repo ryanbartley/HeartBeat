@@ -184,6 +184,8 @@
 		//////////////////////////////////////////////////////
 		"kioskManagerAttribs" : {
 			"infoDisplays" : { 
+				"lilyTexLightName" : "lilyLight.png",
+				"lilyTexDarkName" : "lilyDark.png",
 				"structure" : {
 					"staticPages" : {
 						"lines" : "TopLines",
@@ -220,6 +222,11 @@
 					}
 				},
 				"top" : {
+					"lilyPad" : {
+						"transformation" : {
+
+						}
+					},
 					"minIndex" : 0,
 					"maxIndex" : 330,
 					"fullSize" : {
@@ -246,6 +253,11 @@
 					}
 				},
 				"middle" : {
+					"lilyPad" : {
+						"transformation" : {
+							
+						}
+					},
 					"minIndex" : 331, 
 					"maxIndex" : 660,
 					"fullSize" : {
@@ -272,6 +284,24 @@
 					}
 				},
 				"bottom" : {
+					"lilyPad" : {
+						"halfSize" : {
+							"transformation" : {
+								"scales" : [ 0.195, 0.195 ],
+								"translations" : {
+									"coordinates" : [ 448.97, 680.00 ] 
+								},
+								"rotations" : {
+									"angle" : -30
+								}
+							}
+						},
+						"fullSize" : {
+							"transformation" : {
+
+							}
+						}
+					},
 					"minIndex" : 661, 
 					"maxIndex" : 1080,
 					"fullSize" : { 

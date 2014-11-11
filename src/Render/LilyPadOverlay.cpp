@@ -9,6 +9,7 @@
 #include "LilyPadOverlay.h"
 #include "JsonManager.h"
 #include "cinder/Log.h"
+#include "cinder/Timeline.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -16,9 +17,14 @@ using namespace std;
 
 namespace heartbeat {
 	
-LilyPad::LilyPad( KioskId kioskId, const ci::gl::Texture2dRef &texture )
-: mKiosk( kioskId ), mLilyPad( texture ), mVisibility( 0.0f )
+LilyPad::LilyPad( KioskId kioskId, const ci::gl::Texture2dRef &lightTexture, const ci::gl::Texture2dRef &darkTex )
+: mKiosk( kioskId ), mLightTex( lightTexture ), mDarkTex( darkTex ), mVisibility( 0.0f )
 {
+}
+	
+LilyPadRef LilyPad::create( heartbeat::KioskId kioskId, const ci::gl::Texture2dRef &lightTexture, const ci::gl::Texture2dRef &darkTexture )
+{
+	return LilyPadRef( new LilyPad( kioskId, lightTexture, darkTexture ) );
 }
 	
 void LilyPad::initialize( const ci::JsonTree &root )
@@ -31,28 +37,33 @@ void LilyPad::initialize( const ci::JsonTree &root )
 	}
 }
 	
-void LilyPad::update()
-{
-	
-}
-	
 void LilyPad::draw()
 {
 	gl::ScopedModelMatrix scopeModel;
 	gl::setModelMatrix( getModelMatrix() );
 	{
 		gl::ScopedColor scopeColor( ColorA( 1, 1, 1, mVisibility ) );
-		gl::draw( mLilyPad );
+		gl::draw( mLightTex );
 	}
 	{
-		gl::ScopedColor scopeColor( ColorA( 0, 0, 0, 1.0 - mVisibility ) );
-		gl::draw( mLilyPad );
+		gl::ScopedColor scopeColor( ColorA( 1, 1, 1, 1.0 - mVisibility ) );
+		gl::draw( mDarkTex );
 	}
 }
 	
 void LilyPad::activate( bool activate )
 {
+	if ( mIsActivated == activate ) return;
 	
+	auto& timeline = app::App::get()->timeline();
+	
+	if( activate ) {
+		timeline.applyPtr( &mVisibility, 1.0f, 1.0f );
+	}
+	else {
+		timeline.applyPtr( &mVisibility, 0.0f, 1.0f );
+	}
+	mIsActivated = activate;
 }
 	
 }

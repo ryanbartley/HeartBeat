@@ -12,6 +12,7 @@
 #include "InteractionEvents.h"
 #include "EventManager.h"
 #include "Renderer.h"
+#include "LilyPadOverlay.h"
 #endif
 
 using namespace ci;
@@ -87,12 +88,13 @@ class FullProjectApp : public AppNative {
 	float							mFar, mApproach, mDead, mTable;
 	
 	std::array<heartbeat::InfoDisplayRef, 3>	mInfoDisplays;
+	std::array<heartbeat::LilyPadRef, 3>		mLilyPads;
 	heartbeat::InteractionZonesRef				mInteractionZones;
 	heartbeat::InteractionDebugRenderableRef	mInteractionDebug;
 	heartbeat::EventManagerRef					mEventManager;
-	std::array<float, 4> mRotations;
-	std::array<float, 4> mScales;
-	std::array<vec3, 4> mTranslations;
+	std::array<float, 7> mRotations;
+	std::array<float, 7> mScales;
+	std::array<vec3, 7> mTranslations;
 	params::InterfaceGlRef mParams;
 	bool										mShowParams;
 #endif
@@ -104,6 +106,8 @@ void FullProjectApp::setup()
 #if defined( DEBUG )
 	auto kioskMan = mEngine->getKioskManager();
 	mInfoDisplays = kioskMan->getInfoDisplays();
+	mLilyPads = kioskMan->getLilyPads();
+	
 	mScales.fill( 1.0f );
 	mRotations.fill( 0 );
 	
@@ -138,6 +142,21 @@ void FullProjectApp::setup()
 		transform.setScale( mInteractionDebug->getScale() );
 		transform.setTranslation( mInteractionDebug->getTranslation() );
 	});
+	mParams->addSeparator();
+	mParams->addText("LilyPad 1 Transform");
+	mParams->addParam( "Rotation LilyPad 1", &mRotations[4] ).updateFn( [&](){ mLilyPads[0]->setRotationDegree( mRotations[4] ); } );
+	mParams->addParam( "Scale LilyPad 1", &mScales[4] ).updateFn( [&](){ mLilyPads[0]->setScale( vec2(mScales[4]) ); } );
+	mParams->addParam( "Translation LilyPad 1", &mTranslations[4] ).updateFn( [&](){ mLilyPads[0]->setTranslation( vec2(mTranslations[4]) ); } );
+	mParams->addSeparator();
+	mParams->addText("LilyPad 2 Transform");
+	mParams->addParam( "Rotation LilyPad 2", &mRotations[5] ).updateFn( [&](){ mLilyPads[1]->setRotationDegree( mRotations[5] ); } );
+	mParams->addParam( "Scale LilyPad 2", &mScales[5] ).updateFn( [&](){ mLilyPads[1]->setScale( vec2(mScales[5]) ); } );
+	mParams->addParam( "Translation LilyPad 2", &mTranslations[5] ).updateFn( [&](){ mLilyPads[1]->setTranslation( vec2(mTranslations[5]) ); } );
+	mParams->addSeparator();
+	mParams->addText("LilyPad 3 Transform");
+	mParams->addParam( "Rotation LilyPad 3", &mRotations[6] ).updateFn( [&](){ mLilyPads[2]->setRotationDegree( mRotations[6] ); } );
+	mParams->addParam( "Scale LilyPad 3", &mScales[6] ).updateFn( [&](){ mLilyPads[2]->setScale( vec2(mScales[6]) ); } );
+	mParams->addParam( "Translation LilyPad 3", &mTranslations[6] ).updateFn( [&](){ mLilyPads[2]->setTranslation( vec2(mTranslations[6]) ); } );
 	
 	mParams->addSeparator();
 	using namespace heartbeat;

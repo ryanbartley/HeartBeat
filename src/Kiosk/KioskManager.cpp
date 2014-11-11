@@ -13,6 +13,8 @@
 #include "HidCommManager.h"
 #include "JsonManager.h"
 #include "ButtonTypes.h"
+#include "LilyPadOverlay.h"
+
 
 #include "cinder/gl/Fbo.h"
 #include "cinder/Log.h"
@@ -58,9 +60,10 @@ void KioskManager::approachDelegate( EventDataRef approachEvent )
 	auto kioskId = event->getKiosk();
 	auto kioskIndex = static_cast<int>(kioskId);
 	
-	CI_LOG_V("Got a approachEvent for " << getKiosk( kioskId ) );
+	CI_LOG_V("Got a approachEvent for " << getKiosk( kioskId ));
 	
 	mHidCommManager->activate( kioskId, true );
+	mLilyPads[kioskIndex]->activate( true );
 	mDisplays[kioskIndex]->activate( true );
 }
 	
@@ -75,9 +78,10 @@ void KioskManager::departDelegate( EventDataRef departEvent )
 	auto kioskId = event->getKiosk();
 	auto kioskIndex = static_cast<int>(kioskId);
 	
-	CI_LOG_V("Got a departEvent for " << static_cast<int>( kioskId ) );
+	CI_LOG_V("Got a departEvent for " << static_cast<int>( kioskId ));
 	
 	mHidCommManager->activate( kioskId, false );
+	mLilyPads[kioskIndex]->activate( false );
 	mDisplays[kioskIndex]->activate( false );
 }
 	
@@ -106,9 +110,12 @@ void KioskManager::update()
 	
 void KioskManager::render()
 {
-	
 	for( auto & kiosk : mDisplays ) {
 		kiosk->draw();
+	}
+	
+	for ( auto & lilyPad : mLilyPads ) {
+		lilyPad->draw();
 	}
 }
 	
@@ -133,24 +140,50 @@ void KioskManager::initialize()
 			auto middleIndex = static_cast<int>(KioskId::MIDDLE_KIOSK);
 			auto bottomIndex = static_cast<int>(KioskId::BOTTOM_KIOSK);
 			
+			ci::gl::Texture2dRef lightTex, darkTex;
+			
+			try {
+				auto lilyTexLightName = infoDisplays["lilyTexLightName"].getValue();
+				lightTex = gl::Texture2d::create( loadImage( getFileContents( lilyTexLightName ) ) );
+				auto lilyTexDarkName = infoDisplays["lilyTexDarkName"].getValue();
+				darkTex = gl::Texture2d::create( loadImage( getFileContents( lilyTexDarkName ) ) );
+			}
+			catch( const JsonTree::ExcChildNotFound &ex ) {
+				CI_LOG_E(ex.what());
+			}
+			
 			gl::Fbo::Format format;
 			format.colorTexture( gl::Texture2d::Format()
-								.mipmap() );
-//								.maxAnisotropy( gl::Texture2d::getMaxMaxAnisotropy() )
-//								.minFilter( GL_LINEAR_MIPMAP_LINEAR ) );
+								.mipmap()
+								.minFilter( GL_LINEAR_MIPMAP_NEAREST ) );
+								//.maxAnisotropy( gl::Texture2d::getMaxMaxAnisotropy() )
+			
 			
 			auto size = svgManager->getDoc()->getSize();
-			cout << "Fbo size: " << size << endl;
 			auto globalFbo = gl::Fbo::create( size.x, size.y, format );
 			
 			try {
 				auto top = infoDisplays["top"];
+				try {
+					auto topDisplay = InfoDisplay::create( KioskId::TOP_KIOSK );
+					topDisplay->initiaize( top );
+					topDisplay->setPresentFbo( globalFbo );
+					
+					mDisplays[topIndex] = topDisplay;
+				}
+				catch ( const JsonTree::ExcChildNotFound &ex ) {
+					CI_LOG_E(ex.what());
+				}
 				
-				auto topDisplay = InfoDisplay::create( KioskId::TOP_KIOSK );
-				topDisplay->initiaize( top );
-				topDisplay->setPresentFbo( globalFbo );
-				
-				mDisplays[topIndex] = topDisplay;
+				try {
+					auto topLilyPad = LilyPad::create( KioskId::TOP_KIOSK, lightTex, darkTex );
+					topLilyPad->initialize( top["lilyPad"] );
+					mLilyPads[topIndex] = topLilyPad;
+				}
+				catch ( const JsonTree::ExcChildNotFound &ex ) {
+					CI_LOG_E(ex.what());
+				}
+			
 			}
 			catch ( const JsonTree::ExcChildNotFound &ex ) {
 				CI_LOG_E(ex.what());
@@ -159,43 +192,65 @@ void KioskManager::initialize()
 			try {
 				auto middle = infoDisplays["middle"];
 				
-				auto middleDisplay = InfoDisplay::create( KioskId::TOP_KIOSK );
-				middleDisplay->initiaize( middle );
-				middleDisplay->setPresentFbo( globalFbo );
+				try {
+					auto middleDisplay = InfoDisplay::create( KioskId::TOP_KIOSK );
+					middleDisplay->initiaize( middle );
+					middleDisplay->setPresentFbo( globalFbo );
+					
+					mDisplays[middleIndex] = middleDisplay;
+				}
+				catch ( const JsonTree::ExcChildNotFound &ex ) {
+					CI_LOG_E(ex.what());
+				}
 				
-				mDisplays[middleIndex] = middleDisplay;
+				try {
+					auto middleLilyPad = LilyPad::create( KioskId::MIDDLE_KIOSK, lightTex, darkTex );
+					middleLilyPad->initialize( middle["lilyPad"] );
+					mLilyPads[middleIndex] = middleLilyPad;
+				}
+				catch ( const JsonTree::ExcChildNotFound &ex ) {
+					CI_LOG_E(ex.what());
+				}
 			}
-			catch ( const JsonTree::ExcChildNotFound &ex ) {
+			catch( const JsonTree::ExcChildNotFound &ex ) {
 				CI_LOG_E(ex.what());
 			}
 			
 			try {
 				auto bottom = infoDisplays["bottom"];
 				
-				auto bottomDisplay = InfoDisplay::create( KioskId::TOP_KIOSK );
-				bottomDisplay->initiaize( bottom );
-				bottomDisplay->setPresentFbo( globalFbo );
+				try {
+					auto bottomDisplay = InfoDisplay::create( KioskId::TOP_KIOSK );
+					bottomDisplay->initiaize( bottom );
+					bottomDisplay->setPresentFbo( globalFbo );
+					
+					mDisplays[bottomIndex] = bottomDisplay;
+				}
+				catch ( const JsonTree::ExcChildNotFound &ex ) {
+					CI_LOG_E(ex.what());
+				}
 				
-				mDisplays[bottomIndex] = bottomDisplay;
+				try {
+					auto bottomLilyPad = LilyPad::create( KioskId::MIDDLE_KIOSK, lightTex, darkTex );
+					bottomLilyPad->initialize( bottom["lilyPad"] );
+					mLilyPads[bottomIndex] = bottomLilyPad;
+				}
+				catch ( const JsonTree::ExcChildNotFound &ex ) {
+					CI_LOG_E(ex.what());
+				}
 			}
-			catch ( const JsonTree::ExcChildNotFound &ex ) {
+			catch( const JsonTree::ExcChildNotFound &ex ) {
 				CI_LOG_E(ex.what());
 			}
 			
 			auto svgPages = svgManager->getPages();
 			
-			cout << "Checking SvgManager Pages: " << endl;
 			for( auto & svgPage : svgPages ) {
 				auto currentPage = svgPage.second;
-				cout << "\t" << currentPage->getGroupName();
 				if( currentPage->getType() == DataPage::TYPE ) {
 					auto dataPage = std::dynamic_pointer_cast<DataPage>(currentPage);
 					auto nextDataPage = dataPage->next();
-					if( nextDataPage ) {
-						cout << " -\t" << nextDataPage->getGroupName();
-					}
 				}
-				cout << endl;
 			}
 		}
 		catch ( const JsonTree::ExcChildNotFound &ex ) {

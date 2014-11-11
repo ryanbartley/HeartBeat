@@ -16,21 +16,23 @@ namespace heartbeat {
 class LilyPad : public Renderable {
 public:
 	
-	static LilyPadRef create( const ci::gl::Texture2dRef &texture );
+	static LilyPadRef create( KioskId kioskId, const ci::gl::Texture2dRef &lightTexture, const ci::gl::Texture2dRef &darkTexture );
 	
-	void update() override;
+	void update() override {}
 	void draw() override;
 	
 	void activate( bool activate );
 	
 	void initialize( const ci::JsonTree &root ) override;
+	bool isActivated() const { return mIsActivated; }
 	
 private:
-	LilyPad( KioskId kiosk, const ci::gl::Texture2dRef &texture );
+	LilyPad( KioskId kioskId, const ci::gl::Texture2dRef &lightTexture, const ci::gl::Texture2dRef &darkTexture );
 	
-	ci::gl::Texture2dRef	mLilyPad;
+	ci::gl::Texture2dRef	mLightTex, mDarkTex;
 	float					mVisibility;
 	const KioskId			mKiosk;
+	bool					mIsActivated;
 };
 	
 }
