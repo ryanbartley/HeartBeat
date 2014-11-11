@@ -34,7 +34,8 @@ public:
 	
 	void touchBeganDelegate( EventDataRef touchEvent );
 	void touchMovedDelegate( EventDataRef touchEvent );
-	
+	void enableDebug( bool enable ) { mSpringMesh->enableDrawDebug( enable ); }
+    bool isDebugEnabled() { return mSpringMesh->drawDebug(); }
 	void initialize();
 	
 	SpringMeshRef& getSpringMesh() { return mSpringMesh; }

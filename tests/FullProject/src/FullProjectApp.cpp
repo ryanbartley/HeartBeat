@@ -13,6 +13,7 @@
 #include "EventManager.h"
 #include "Renderer.h"
 #include "LilyPadOverlay.h"
+#include "Pond.h"
 #endif
 
 using namespace ci;
@@ -186,6 +187,11 @@ void FullProjectApp::setup()
 	mParams->addButton( "Toggle Table Barrier", [&](){
 		mInteractionDebug->enableZone( ! mInteractionDebug->isZoneEnabled() );
 	});
+    mParams->addSeparator();
+    mParams->addButton( "Toggle Pond Debug", [&](){
+        auto pond = mEngine->getPond();
+        pond->enableDebug( ! pond->isDebugEnabled() ) ;
+    });
 	mParams->addSeparator();
 	mParams->addButton( "Query/Store Ignore Indices(Poles)", std::bind( &InteractionZones::queryIgnoreIndices, mInteractionZones ) );
 	mParams->addButton( "Print Current Ignore Indices(Poles)", [&](){

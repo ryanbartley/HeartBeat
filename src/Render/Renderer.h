@@ -35,7 +35,7 @@ public:
 	const float					getEdgeWidth() const { return mEdgeWidth; }
 	const uint32_t				getNumPixelOverlap() const { return mNumPixelOverlap; }
 	const ci::vec2&				getTotalRenderSize() const { return mTotalRenderSize; }
-    
+    ci::app::WindowRef          getPrimaryWindow() const;
     bool isHalfSize() { return mIsHalfSized; }
 	
 private:

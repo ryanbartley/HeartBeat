@@ -41,6 +41,7 @@ public:
 	const EventManagerRef& getEventManager() const { return mEventManager; }
 	KioskManagerRef& getKioskManager() { return mKioskManager; }
 	InteractionZonesRef& getInteractionZones() { return mInteractionManager; }
+    PondRef& getPond() { return mPond; }
 	
 #if defined( DEBUG )
 	InteractionDebugRenderableRef& getInteractionDebug() { return mInteractionDebug; }

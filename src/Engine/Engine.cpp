@@ -68,20 +68,25 @@ void Engine::initialize()
 	mEventManager = heartbeat::EventManager::create( "Global", true );
 	mJsonManager = heartbeat::JsonManager::create( "test.json" );
 	
+    mRenderer = heartbeat::Renderer::create();
+	mRenderer->initialize();
+    
+    auto window = mRenderer->getPrimaryWindow();
+    window->getRenderer()->makeCurrentContext();
+    
 	mInteractionManager = heartbeat::InteractionZones::create();
 #if defined( DEBUG )
 	mInteractionDebug = heartbeat::InteractionDebugRenderable::create( mInteractionManager );
 #endif
+    
 	mInteractionManager->initialize();
+    
 #if defined( DEBUG )
 	mInteractionDebug->initialize();
 #endif
 	
 	mSvgManager = heartbeat::SvgManager::create();
 	mSvgManager->initialize();
-	
-	mRenderer = heartbeat::Renderer::create();
-	mRenderer->initialize();
 	
 	mKioskManager = heartbeat::KioskManager::create();
 	mKioskManager->initialize();
@@ -128,6 +133,10 @@ void Engine::keyDown( ci::app::KeyEvent event )
 void Engine::update()
 {
 	mBeginningFrame = app::App::get()->getElapsedSeconds();
+    
+    auto window = mRenderer->getPrimaryWindow();
+    window->getRenderer()->makeCurrentContext();
+    
 	mEventManager->update();
 	mInteractionManager->preProcessData();
 	mInteractionManager->processData();
@@ -142,17 +151,17 @@ void Engine::preDraw()
 	
 void Engine::draw()
 {
+    auto window = mRenderer->getPrimaryWindow();
+    window->getRenderer()->makeCurrentContext();
+    
 	gl::setMatricesWindow( getRenderer()->getTotalRenderSize() );
-	{
-        gl::ScopedColor scopeColor( ColorA( 0, 0, 0, 1 ));
-        gl::drawSolidRect( Rectf( vec2( 0, 0 ), getRenderer()->getTotalRenderSize() ) );
-	}
 	auto pondRenderer = getRenderer()->getPondTarget();
 	{
 		gl::ScopedFramebuffer scopeFBO( pondRenderer );
-		gl::clear();
+//		gl::clear( GL_COLOR_BUFFER_B IT );
 		mPond->renderPondElements();
 	}
+//    gl::draw( pondRenderer->getColorTexture() );
 	mPond->projectPondElements( pondRenderer->getColorTexture() );
 	
 	mKioskManager->render();
@@ -180,6 +189,9 @@ void Engine::postDraw()
 	mEndingFrame = app->getElapsedSeconds();
 	cout << "Time for this frame: " << mEndingFrame - mBeginningFrame << endl;
 	app->getWindow()->setTitle( to_string( app->getAverageFps() ) );
+    
+    auto window = mRenderer->getPrimaryWindow();
+    window->getRenderer()->makeCurrentContext();
 }
 
 }

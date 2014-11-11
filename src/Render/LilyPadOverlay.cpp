@@ -30,6 +30,7 @@ LilyPadRef LilyPad::create( heartbeat::KioskId kioskId, const ci::gl::Texture2dR
 void LilyPad::initialize( const ci::JsonTree &root )
 {
 	try {
+        cout << root << endl;
 		Renderable::initialize( root["transformation"] );
 	}
 	catch ( const JsonTree::ExcChildNotFound &ex ) {

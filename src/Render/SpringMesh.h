@@ -31,6 +31,8 @@ public:
 	void registerTouchBegan( ci::vec2 touch );
 	void registerTouchMoved( ci::vec2 touch );
 	
+    void enableDrawDebug( bool enable ) { mDrawDebug = enable; }
+    bool drawDebug() { return mDrawDebug; }
 private:
 	SpringMesh();
 	

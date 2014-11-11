@@ -140,6 +140,7 @@ void Renderer::setupPresentation()
 {
 	if( ! mIsSplitWindow ) {
 		auto app = app::App::get();
+        mWindows[BOTTOM_PRESENT_TARGET] = app->getWindow();
 		app->setWindowSize( ivec2( mIndividualProjectorSize.x, mIndividualProjectorSize.y * 2 ) );
 		auto engine = Engine::get();
 		mDrawSignals.push_back( app->getWindow()->connectDraw( &Engine::preDraw, engine.get() ) );
@@ -191,6 +192,11 @@ void Renderer::setupPresentation()
 		}
 	}
 }
+    
+ci::app::WindowRef Renderer::getPrimaryWindow() const
+{
+    return mWindows[BOTTOM_PRESENT_TARGET];
+}
 	
 void Renderer::setTargetRenderSize( const ci::vec2 &totalSize )
 {
@@ -226,7 +232,7 @@ void Renderer::setupFbos()
 	CI_LOG_V("Setup left target");
 	mFbos[BOTTOM_PRESENT_TARGET] = gl::Fbo::create( mIndividualProjectorSize.x, mIndividualProjectorSize.y, fboFormat );
 	CI_LOG_V("Setup right target");
-	mFbos[POND_RENDERER] = gl::Fbo::create( mTotalRenderSize.x, mTotalRenderSize.y, fboFormat );
+	mFbos[POND_RENDERER] = gl::Fbo::create( mTotalRenderSize.x, mTotalRenderSize.y, fboFormat.samples( 0 ) );
 	CI_LOG_V("Setup pond target");
 }
 	
@@ -293,8 +299,16 @@ void Renderer::stencilTargetRenderFbo()
 {
 	if( ! mStencilImageUpdated ) return;
 	
+    for( int i = 0; i < 2; i++ ) {
 	// bind the fbo
-	gl::ScopedFramebuffer fboScope( mFbos[RENDER_TARGET] );
+        uint32_t renderer = 0;
+        if( i == 0 ) {
+            renderer = RENDER_TARGET;
+        }
+        else if( i == 1 ){
+            renderer = POND_RENDERER;
+        }
+	gl::ScopedFramebuffer fboScope( mFbos[renderer] );
 	gl::ScopedGlslProg	  glslScope( mAlphaDiscard );
 	
 	// The texture should have alpha
@@ -337,6 +351,7 @@ void Renderer::stencilTargetRenderFbo()
 	// Turn the color and depth masks back on
 	gl::colorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
 	gl::depthMask( GL_TRUE );
+    }
 	
 	mStencilImageUpdated = false;
 }

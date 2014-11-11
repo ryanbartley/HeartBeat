@@ -191,7 +191,7 @@ void Pond::renderPondElements()
 void Pond::projectPondElements( const gl::Texture2dRef &pond )
 {
 	gl::ScopedMatrices scopeMat;
-	gl::setMatricesWindowPersp( mPondSize, 60.0f, .01f, 1000.0f );
+	gl::setMatricesWindowPersp( mPondSize, 60.0f, .01f, 10000.0f );
 	if( pond ) {
 		// Need to send it the fbo or texture of the rendered pond from above.
 		mSpringMesh->project( pond );

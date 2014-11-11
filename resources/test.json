@@ -10,8 +10,8 @@
 				1080
 			],
 			"numPixelOverlap" : 200,
-			"splitWindow" : false,
-			"halfSize" : true
+			"splitWindow" : true,
+			"halfSize" : false
 		},
 		//////////////////////////////////////////////////////
 		// HID ATTRIBUTES
@@ -224,7 +224,13 @@
 				"top" : {
 					"lilyPad" : {
 						"transformation" : {
-
+							"scales" : [ 0.0896, 0.0896 ],
+							"translations" : {
+								"coordinates" : [ 1000.35, 554.58 ] 
+							},
+							"rotations" : {
+								"angle" : 0
+							}
 						}
 					},
 					"minIndex" : 0,
@@ -255,7 +261,13 @@
 				"middle" : {
 					"lilyPad" : {
 						"transformation" : {
-							
+							"scales" : [ 0.0892, 0.0892 ],
+							"translations" : {
+								"coordinates" : [ 1247.05, 932.26 ] 
+							},
+							"rotations" : {
+								"angle" : 0
+							}
 						}
 					},
 					"minIndex" : 331, 
@@ -285,22 +297,15 @@
 				},
 				"bottom" : {
 					"lilyPad" : {
-						"halfSize" : {
 							"transformation" : {
-								"scales" : [ 0.195, 0.195 ],
+								"scales" : [ 0.0896, 0.0896 ],
 								"translations" : {
-									"coordinates" : [ 448.97, 680.00 ] 
+									"coordinates" : [ 400.0, 1000.0 ] 
 								},
 								"rotations" : {
-									"angle" : -30
+									"angle" : 0
 								}
 							}
-						},
-						"fullSize" : {
-							"transformation" : {
-
-							}
-						}
 					},
 					"minIndex" : 661, 
 					"maxIndex" : 1080,

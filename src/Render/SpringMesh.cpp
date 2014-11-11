@@ -14,6 +14,9 @@
 #include "cinder/Log.h"
 #include "cinder/Rand.h"
 #include "JsonManager.h"
+#include "Engine.h"
+#include "Renderer.h"
+#include "cinder/app/Window.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -41,8 +44,6 @@ SpringMeshRef SpringMesh::create()
 	
 void SpringMesh::update()
 {
-	ci::Timer time;
-	time.start();
 	gl::ScopedGlslProg	updateScope( mUpdateGlsl );
 	gl::ScopedState		stateScope( GL_RASTERIZER_DISCARD, true );
 	
@@ -108,7 +109,7 @@ void SpringMesh::debugRender()
 	
 	gl::setDefaultShaderVars();
 	
-	glPointSize( 4.0f );
+	glPointSize( 6.0f );
 	gl::drawArrays( GL_POINTS, 0, mPointTotal );
 	gl::ScopedBuffer bufferScope( mLineElementBuffer );
 	gl::drawElements( GL_LINES, mLineIndices, GL_UNSIGNED_INT, nullptr );
@@ -143,6 +144,10 @@ void SpringMesh::loadBuffers( const ci::vec2 &size )
 {
 	int n = 0;
 	
+    auto renderer = Engine::get()->getRenderer();
+    auto window = renderer->getPrimaryWindow();
+    window->getRenderer()->makeCurrentContext();
+    
 	const int POINTS_X			= mNumRows + 1;
 	const int POINTS_Y			= mNumColumns + 1;
 	const int POINTS_TOTAL		= (POINTS_X * POINTS_Y);
@@ -157,7 +162,7 @@ void SpringMesh::loadBuffers( const ci::vec2 &size )
 	// We set all connections to -1, because these will only be updated
 	// if there are connection indices. Explanation below.
 	vector<ivec4> connections( mPointTotal, ivec4( -1 ) );
-	
+	cout << "THE SIZE OF THE POND: " <<size << endl;
 	for( int j = 0; j < POINTS_Y; j++ ) {
 		float fj = (float)j / (float)(POINTS_Y - 1);
 		for( int i = 0; i < POINTS_X; i++ ) {
