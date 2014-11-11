@@ -24,6 +24,7 @@ namespace heartbeat {
 const uint32_t BOTTOM_PRESENT_TARGET = 0;
 const uint32_t TOP_PRESENT_TARGET = 1;
 const uint32_t RENDER_TARGET = 2;
+const uint32_t POND_RENDERER = 3;
 
 Renderer::Renderer()
 : mEdgeWidth( 0.0f ), mStencilImageUpdated( false )
@@ -225,6 +226,8 @@ void Renderer::setupFbos()
 	CI_LOG_V("Setup left target");
 	mFbos[BOTTOM_PRESENT_TARGET] = gl::Fbo::create( mIndividualProjectorSize.x, mIndividualProjectorSize.y, fboFormat );
 	CI_LOG_V("Setup right target");
+	mFbos[POND_RENDERER] = gl::Fbo::create( mTotalRenderSize.x, mTotalRenderSize.y, fboFormat );
+	CI_LOG_V("Setup pond target");
 }
 	
 void Renderer::setupGlsl()
@@ -279,6 +282,11 @@ const gl::FboRef& Renderer::getBottomPresentationTarget() const
 const gl::FboRef& Renderer::getTopPresentationTarget() const
 {
 	return mFbos[TOP_PRESENT_TARGET];
+}
+	
+const gl::FboRef& Renderer::getPondTarget() const
+{
+	return mFbos[POND_RENDERER];
 }
 	
 void Renderer::stencilTargetRenderFbo()

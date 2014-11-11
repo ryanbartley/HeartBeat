@@ -41,17 +41,28 @@ SpringMeshRef SpringMesh::create()
 	
 void SpringMesh::update()
 {
+	ci::Timer time;
+	time.start();
 	gl::ScopedGlslProg	updateScope( mUpdateGlsl );
 	gl::ScopedState		stateScope( GL_RASTERIZER_DISCARD, true );
+	
+	if( ! mTouchesBegan.empty() ) {
+		mUpdateGlsl->uniform( "touchesBegan", mTouchesBegan.data(), mTouchesBegan.size() );
+	}
+	if( ! mTouchesMoved.empty() ) {
+		mUpdateGlsl->uniform( "touchesMoved", mTouchesMoved.data(), mTouchesMoved.size() );
+	}
+	
+	mUpdateGlsl->uniform( "numTouchesBegan", (int)mTouchesBegan.size() );
+	mUpdateGlsl->uniform( "numTouchesMoved", (int)mTouchesMoved.size() );
 	
 	// This for loop allows iteration on the gpu of solving the
 	// physics of the cloth.
 	// Change mIterationsPerFrame to see the difference it makes
 	for( int i = mIterationsPerFrame; i != 0; --i ) {
+		ci::Timer updatetime;
+		updatetime.start();
 		// Pick using the mouse if it's pressed
-		if( mTouchMoving ) {
-			mUpdateGlsl->uniform( "mouse_pos", mCurrentTouch );
-		}
 		mUpdateGlsl->uniform( "elapsedSeconds", float(getElapsedSeconds()) );
 		
 		gl::ScopedVao			vaoScope( mVaos[mIterationIndex & 1] );
@@ -66,10 +77,9 @@ void SpringMesh::update()
 		gl::drawArrays( GL_POINTS, 0, mPointTotal );
 		gl::endTransformFeedback();
 	}
-	if( mTouchMoving ) {
-		mUpdateGlsl->uniform( "mouse_pos", vec2( 1000, 1000 ) );
-		mTouchMoving = false;
-	}
+	
+	mTouchesMoved.clear();
+	mTouchesBegan.clear();
 }
 
 void SpringMesh::project( const ci::gl::Texture2dRef &tex )
@@ -119,10 +129,14 @@ void SpringMesh::initialize( const ci::JsonTree &root, const ci::vec2 &size )
 	loadBuffers( size );
 }
 	
-void SpringMesh::registerTouch( ci::vec2 currentTouch )
+void SpringMesh::registerTouchBegan( ci::vec2 currentTouch )
 {
-	mTouchMoving = true;
-	mCurrentTouch = currentTouch;
+	mTouchesBegan.push_back( currentTouch );
+}
+	
+void SpringMesh::registerTouchMoved( ci::vec2 touch )
+{
+	mTouchesMoved.push_back( touch );
 }
 
 void SpringMesh::loadBuffers( const ci::vec2 &size )
@@ -313,16 +327,16 @@ void SpringMesh::loadShaders()
 		CI_LOG_E("Unknown exception " << ex.what() );
 	}
 	
-	std::array<float, 8> amplitude{ 1, 1, .4, .03, .05, .1, .5, .3 };
-	std::array<float, 8> wavelength{ .8, .2, .1, .01, .1, .4, .5, .8 };
-	std::array<float, 8> speed{ 1, 1, .4, .01, .6, .9, .1, .4 };
-	std::array<vec2, 8> direction{ randVec2f(), randVec2f(), randVec2f(), randVec2f(), randVec2f(), randVec2f(), randVec2f(), randVec2f() };
-	
-	mUpdateGlsl->uniform( "amplitude", amplitude.data(), amplitude.size() );
-	mUpdateGlsl->uniform( "wavelength", wavelength.data(), wavelength.size() );
-	mUpdateGlsl->uniform( "speed", speed.data(), speed.size() );
-	mUpdateGlsl->uniform( "direction", direction.data(), direction.size() * 2 );
-	mUpdateGlsl->uniform( "mouse_pos", vec2(640, 480) );
+//	std::array<float, 8> amplitude{ 1, 1, .4, .03, .05, .1, .5, .3 };
+//	std::array<float, 8> wavelength{ .8, .2, .1, .01, .1, .4, .5, .8 };
+//	std::array<float, 8> speed{ 1, 1, .4, .01, .6, .9, .1, .4 };
+//	std::array<vec2, 8> direction{ randVec2f(), randVec2f(), randVec2f(), randVec2f(), randVec2f(), randVec2f(), randVec2f(), randVec2f() };
+//
+//	mUpdateGlsl->uniform( "amplitude", amplitude.data(), amplitude.size() );
+//	mUpdateGlsl->uniform( "wavelength", wavelength.data(), wavelength.size() );
+//	mUpdateGlsl->uniform( "speed", speed.data(), speed.size() );
+//	mUpdateGlsl->uniform( "direction", direction.data(), direction.size() * 2 );
+//	mUpdateGlsl->uniform( "mouse_pos", vec2(640, 480) );
 	
 	gl::GlslProg::Format debugRenderFormat;
 	debugRenderFormat.vertex( getFileContents( "SpringMeshDebugrender.vert" ) )
@@ -341,7 +355,6 @@ void SpringMesh::loadShaders()
 	
 	gl::GlslProg::Format renderFormat;
 	renderFormat.vertex( getFileContents( "SpringMeshrender.vert" ) )
-//	.geometry( getFileContents( "SpringMeshrender.geom" ) )
 	.fragment( getFileContents( "SpringMeshrender.frag" ) )
 	.attribLocation( "position",	POSITION_INDEX )
 	.attribLocation( "normal",		NORMAL_INDEX )

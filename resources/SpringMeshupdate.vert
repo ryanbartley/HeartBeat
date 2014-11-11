@@ -11,13 +11,17 @@ in ivec4 connection;
 // This is to use for the waves
 in vec2 tex_coord;
 
-uniform vec2 resolution;
 
 // This is a TBO that will be bound to the same buffer as the
 // position_mass input attribute
 uniform samplerBuffer tex_position;
 
-uniform vec2 mouse_pos;
+#define MAX_TOUCHES 5
+
+uniform vec2 touchesBegan[MAX_TOUCHES];
+uniform int	numTouchesBegan;
+uniform vec2 touchesMoved[MAX_TOUCHES];
+uniform int numTouchesMoved;
 
 // The outputs of the vertex shader are the same as the inputs
 out vec4 tf_position_mass;
@@ -72,6 +76,11 @@ vec3 calcNormal( vec3 v0, vec3 v1, vec3 v2 )
 	return normalize(cross(ab, ac));
 }
 
+bool containsPoint( vec2 touch, vec3 point, float range )
+{
+	return touch.x > point.x - range && touch.x < point.x + range && touch.y > point.y - range && touch.y < point.y + range;
+}
+
 void main(void)
 {
 	vec3 p = position_mass.xyz;		// p can be our position
@@ -80,8 +89,6 @@ void main(void)
 	vec3 u = velocity;				// u is the initial velocity
 	vec3 F = gravity * m - c * u;	// F is the force on the mass
 	bool fixed_node = true;			// Becomes false when force is applied
-	
-	float globalOffset = float(gl_VertexID) / size;
 	
 	vec3 connectionPositions[4];
 	
@@ -99,30 +106,50 @@ void main(void)
 			connectionPositions[i] = vec3( -1, -1, -1 );
 	}
 	
+	vec3 normal;
+	vec3 v0 = connectionPositions[0];
+	vec3 v1 = connectionPositions[1];
+	vec3 v2 = connectionPositions[2];
+	vec3 v3 = connectionPositions[3];
+	
+	if ( v0[0] != -1 && v1[0] != -1 ) {
+		normal += calcNormal( p, v0, v1 );
+	}
+	if ( v1[0] != -1 && v2[0] != -1 ) {
+		normal += calcNormal( p, v1, v2 );
+	}
+	if ( v2[0] != -1 && v3[0] != -1 ) {
+		normal += calcNormal( p, v2, v3 );
+	}
+	if ( v3[0] != -1 && v0[0] != -1 ) {
+		normal += calcNormal( p, v3, v0 );
+	}
+	
+	normal = normalize( normal );
+	
 	// If this is a fixed node, reset force to zero
 	if(fixed_node) {
 		F = vec3(0.0);
 		m = 1;
 	}
 	else {
-		if (mouse_pos.x > p.x - 10 && mouse_pos.x < p.x + 10 && mouse_pos.y > p.y - 10 && mouse_pos.y < p.y + 10 ) {
-			p = vec3(mouse_pos, -30);
+		bool found = false;
+		for( int i = 0; i < MAX_TOUCHES && i < numTouchesBegan; i++ ) {
+			if( containsPoint( touchesBegan[i], p, 10 ) ) {
+				p = vec3( touchesBegan[i], -30 );
+				found = true;
+				break;
+			}
 		}
-		else {
-
+		if( ! found ) {
+			for( int i = 0; i < MAX_TOUCHES && i < numTouchesMoved; i++ ) {
+				if( containsPoint( touchesMoved[i], p, 10 ) ) {
+					p = vec3( touchesMoved[i], -20 );
+					break;
+				}
+			}
 		}
 	}
-	
-	vec3 normal;
-	for ( int i = 0; i < 4; ++i ) {
-		vec3 v0 = connectionPositions[i%4];
-		vec3 v1 = connectionPositions[(i+1)%4];
-		if ( v0[0] != -1 && v1[0] != -1 ) {
-			normal += calcNormal( p, v0, v1 );
-		}
-	}
-	
-	normal = normalize( normal );
 	
 	// Accelleration due to force
 	vec3 a = F / m;

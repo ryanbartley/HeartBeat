@@ -28,6 +28,7 @@ public:
 	~Renderer();
 	
 	const ci::gl::FboRef&		getRenderTarget() const;
+	const ci::gl::FboRef&		getPondTarget() const;
 	const ci::gl::FboRef&		getBottomPresentationTarget() const;
 	const ci::gl::FboRef&		getTopPresentationTarget() const;
 	const ci::gl::TextureRef&	getImageStencil() const { return mImageStencil; }
@@ -99,8 +100,8 @@ private:
 	//! Used when config.json's splitWindow is true.
 	void renderToTopWindow();
 	
-	//! 0 - BOTTOM_PRESENT_TARGET, 1 - TOP_PRESENT_TARGET, 2 - RENDER_TARGET
-	std::array<ci::gl::FboRef, 3>				mFbos;
+	//! 0 - BOTTOM_PRESENT_TARGET, 1 - TOP_PRESENT_TARGET, 2 - RENDER_TARGET, 3 - POND_RENDERER
+	std::array<ci::gl::FboRef, 4>				mFbos;
 	//! 0 - BOTTOM_PRESENT_TARGET, 1 - TOP_PRESENT_TARGET
 	std::array<ci::app::WindowRef, 2>			mWindows;
 	

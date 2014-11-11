@@ -129,16 +129,8 @@ void Engine::update()
 {
 	mBeginningFrame = app::App::get()->getElapsedSeconds();
 	mEventManager->update();
-	
-	ci::Timer time;
-	time.start();
 	mInteractionManager->preProcessData();
-	time.stop();
-	cout << "Time for Urg: " << time.getSeconds() << endl;
-	time.start();
 	mInteractionManager->processData();
-	time.stop();
-	cout << "Time to Process: " << time.getSeconds() << endl;
 	mPond->update();
 	mKioskManager->update();
 }
@@ -155,6 +147,14 @@ void Engine::draw()
         gl::ScopedColor scopeColor( ColorA( 0, 0, 0, 1 ));
         gl::drawSolidRect( Rectf( vec2( 0, 0 ), getRenderer()->getTotalRenderSize() ) );
 	}
+	auto pondRenderer = getRenderer()->getPondTarget();
+	{
+		gl::ScopedFramebuffer scopeFBO( pondRenderer );
+		gl::clear();
+		mPond->renderPondElements();
+	}
+	mPond->projectPondElements( pondRenderer->getColorTexture() );
+	
 	mKioskManager->render();
 	
 #if defined( DEBUG )

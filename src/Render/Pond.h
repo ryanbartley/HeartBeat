@@ -32,7 +32,8 @@ public:
 	void renderPondElements();
 	void projectPondElements( const ci::gl::Texture2dRef &pond );
 	
-	void touchDelegate( EventDataRef touchEvent );
+	void touchBeganDelegate( EventDataRef touchEvent );
+	void touchMovedDelegate( EventDataRef touchEvent );
 	
 	void initialize();
 	

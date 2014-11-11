@@ -35,7 +35,12 @@ PondElementFactoryMap Pond::PondElementCreators = {
 Pond::Pond( const ci::vec2 &pondSize )
 : mPondSize( pondSize )
 {
+	auto eventManager = EventManagerBase::get();
 	
+	if( eventManager ) {
+		eventManager->addListener( std::bind( &Pond::touchBeganDelegate, this, std::placeholders::_1 ), TouchBeganEvent::TYPE );
+		eventManager->addListener( std::bind( &Pond::touchMovedDelegate, this, std::placeholders::_1 ), TouchMoveEvent::TYPE );
+	}
 }
 	
 PondRef Pond::create( const ci::vec2 &pondSize )
@@ -119,27 +124,42 @@ void Pond::initialize()
 	catch ( const JsonTree::ExcChildNotFound &ex ) {
 		CI_LOG_E("Couldn't Find " << ex.what() );
 	}
-	
-	auto eventManager = EventManagerBase::get();
-	
-	if( eventManager ) {
-		eventManager->addListener( std::bind( &Pond::touchDelegate, this, std::placeholders::_1 ), TouchEvent::TYPE );
-	}
 
 }
 	
-void Pond::touchDelegate( EventDataRef touchEvent )
+void Pond::touchBeganDelegate( EventDataRef touchEvent )
 {
 	if( touchEvent->isHandled() )
 		return;
 	
-	auto event = std::dynamic_pointer_cast<TouchEvent>(touchEvent);
+	auto event = std::dynamic_pointer_cast<TouchBeganEvent>(touchEvent);
 	if( !event ) {
 		CI_LOG_W("Not a TouchEvent " << touchEvent->getName() );
 		return;
 	}
 	
-	mSpringMesh->registerTouch( mPondSize / 2.0f );
+	mSpringMesh->registerTouchBegan( event->getWorldCoordinate() );
+	
+	for( auto & element : mPondElements ) {
+		if( element->getType() == Fish::TYPE ) {
+			auto fish = std::dynamic_pointer_cast<Fish>(element);
+			fish->registerTouch( touchEvent );
+		}
+	}
+}
+
+void Pond::touchMovedDelegate( EventDataRef touchEvent )
+{
+	if( touchEvent->isHandled() )
+		return;
+	
+	auto event = std::dynamic_pointer_cast<TouchMoveEvent>(touchEvent);
+	if( !event ) {
+		CI_LOG_W("Not a TouchEvent " << touchEvent->getName() );
+		return;
+	}
+	
+	mSpringMesh->registerTouchMoved( event->getWorldCoordinate() );
 	
 	for( auto & element : mPondElements ) {
 		if( element->getType() == Fish::TYPE ) {
@@ -176,7 +196,8 @@ void Pond::projectPondElements( const gl::Texture2dRef &pond )
 		// Need to send it the fbo or texture of the rendered pond from above.
 		mSpringMesh->project( pond );
 	}
-//	mSpringMesh->debugRender();
+	
+	mSpringMesh->debugRender();
 }
 	
 }

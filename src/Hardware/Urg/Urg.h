@@ -74,15 +74,11 @@ private:
 std::vector<long> Urg::readOnce()
 {
 	if( !mIsOpen ) return std::vector<long>();
-	
 	std::vector<long> ret( mSensorDataSize );
-	
 	if( ! mIsMeasurmentStarted ) {
 		startMeasurement( 1 );
 	}
-	
 	getDistance( ret );
-	
 	return ret;
 }
 	

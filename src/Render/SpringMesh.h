@@ -28,7 +28,8 @@ public:
 	
 	~SpringMesh() {}
 	
-	void registerTouch( ci::vec2 touch );
+	void registerTouchBegan( ci::vec2 touch );
+	void registerTouchMoved( ci::vec2 touch );
 	
 private:
 	SpringMesh();
@@ -47,10 +48,11 @@ private:
 	ci::gl::BufferTextureRef		mPosBufferTextures[2];
 	uint32_t						mIterationsPerFrame, mIterationIndex,
 									mLineIndices, mTriangleIndices, mPointTotal;
-	bool							mDrawDebug, mTouchMoving, mDrawTexture;
-	ci::vec2						mCurrentTouch;
+	bool							mDrawDebug, mDrawTexture;
 	
 	uint32_t						mNumRows, mNumColumns, mNumIterations;
+	
+	std::vector<ci::vec2>			mTouchesBegan, mTouchesMoved;
 	
 	friend class Pond;
 };

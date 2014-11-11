@@ -38,6 +38,7 @@ using InfoDisplayRef	= std::shared_ptr<class InfoDisplay>;
 using SpringMeshRef		= std::shared_ptr<class SpringMesh>;
 using PondElementRef	= std::shared_ptr<class PondElement>;
 using PondRef			= std::shared_ptr<class Pond>;
+using LilyPadRef		= std::shared_ptr<class LilyPad>;
 
 using NodeRef			= std::shared_ptr<class Node>;
 using PageRef			= std::shared_ptr<class Page>;
