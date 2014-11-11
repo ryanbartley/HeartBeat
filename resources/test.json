@@ -10,8 +10,8 @@
 				1080
 			],
 			"numPixelOverlap" : 200,
-			"splitWindow" : false,
-			"halfSize" : true
+			"splitWindow" : true,
+			"halfSize" : false
 		},
 		//////////////////////////////////////////////////////
 		// HID ATTRIBUTES
@@ -93,18 +93,18 @@
 			// "fullSize" : {
 			"transforms" : {
 				"scales" : [
-					0.975, 0.975
+					1.0, 1.0
 				],
 				"rotations" : {
 					// This can either contain "quaternion" : []
 					// or "angle" : degree, axis is vec3( 0, 0, 1 )
-					"angle" : 27
+					"angle" : 26
 				},
 				"translations" : {
 					// This can either contain "coordinates" : []
 					// or "center" : boolean
 					// "center" : true //,
-					"coordinates" : [ 597.9, 888.93 ]
+					"coordinates" : [ 568.39, 889.35 ]
 				}
 			}
 			// }
@@ -235,10 +235,10 @@
 						"transformation" : {
 							"scales" : [ 0.0896, 0.0896 ],
 							"translations" : {
-								"coordinates" : [ 1000.35, 554.58 ] 
+								"coordinates" : [ 1313.54, 594.48 ] 
 							},
 							"rotations" : {
-								"angle" : 0
+								"angle" : -260
 							}
 						}
 					},
@@ -246,12 +246,12 @@
 					"maxIndex" : 330,
 					"fullSize" : {
 						"transformation" : {
-							"scales" : [ 0.185, 0.185 ],
+							"scales" : [ 0.35, 0.35 ],
 							"translations" : {
-								"coordinates" : [ 1547.48, 599.65 ] 
+								"coordinates" : [ 1532.62, 493.66 ] 
 							},
 							"rotations" : {
-								"angle" : 180
+								"angle" : 170
 							}
 						}
 					},
@@ -270,12 +270,12 @@
 				"middle" : {
 					"lilyPad" : {
 						"transformation" : {
-							"scales" : [ 0.0892, 0.0892 ],
+							"scales" : [ 0.0898, 0.0898 ],
 							"translations" : {
-								"coordinates" : [ 1247.05, 932.26 ] 
+								"coordinates" : [ 1332.65, 882.59 ] 
 							},
 							"rotations" : {
-								"angle" : 0
+								"angle" : 25
 							}
 						}
 					},
@@ -283,12 +283,12 @@
 					"maxIndex" : 660,
 					"fullSize" : {
 						"transformation" : {
-							"scales" : [ 0.18, 0.18 ],
+							"scales" : [ 0.345, 0.345 ],
 							"translations" : {
-								"coordinates" : [ 962.0, 1252.0 ] 
+								"coordinates" : [ 997.36, 1231.56 ] 
 							},
 							"rotations" : {
-								"angle" : -10
+								"angle" : -5
 							}
 						}
 					},
@@ -307,12 +307,12 @@
 				"bottom" : {
 					"lilyPad" : {
 							"transformation" : {
-								"scales" : [ 0.0896, 0.0896 ],
+								"scales" : [ 0.0893, 0.0893 ],
 								"translations" : {
-									"coordinates" : [ 400.0, 1000.0 ] 
+									"coordinates" : [ 559.62, 1200.00 ] 
 								},
 								"rotations" : {
-									"angle" : 0
+									"angle" : -40
 								}
 							}
 					},
@@ -320,12 +320,12 @@
 					"maxIndex" : 1080,
 					"fullSize" : { 
 						"transformation" : {
-							"scales" : [ 0.18, 0.18 ],
+							"scales" : [ 0.35, 0.35 ],
 							"translations" : {
-								"coordinates" : [ 454.05, 859.81 ] 
+								"coordinates" : [ 414.67, 880.9 ] 
 							},
 							"rotations" : {
-								"angle" : 67
+								"angle" : 63
 							}
 						}
 					},

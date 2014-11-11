@@ -119,6 +119,9 @@ void FullProjectApp::setup()
 	
 	mParams = params::InterfaceGl::create( "fullProject", ivec2( 400, 400 ) );
 	mParams->setPosition( getWindowCenter() );
+    mScales[0] = mInfoDisplays[0]->getScale().x;
+    mScales[1] = mInfoDisplays[1]->getScale().x;
+    mScales[2] = mInfoDisplays[2]->getScale().x;
 	mTranslations[0] = mInfoDisplays[0]->getTranslation();
 	mTranslations[1] = mInfoDisplays[1]->getTranslation();
 	mTranslations[2] = mInfoDisplays[2]->getTranslation();
@@ -148,6 +151,12 @@ void FullProjectApp::setup()
 		transform.setScale( mInteractionDebug->getScale() );
 		transform.setTranslation( mInteractionDebug->getTranslation() );
 	});
+    mScales[4] = mLilyPads[0]->getScale().x;
+    mScales[5] = mLilyPads[1]->getScale().x;
+    mScales[6] = mLilyPads[2]->getScale().x;
+    mTranslations[4] = mLilyPads[0]->getTranslation();
+    mTranslations[5] = mLilyPads[1]->getTranslation();
+    mTranslations[6] = mLilyPads[2]->getTranslation();
 	mParams->addSeparator();
 	mParams->addText("LilyPad 1 Transform");
 	mParams->addParam( "Rotation LilyPad 1", &mRotations[4] ).updateFn( [&](){ mLilyPads[0]->setRotationDegree( mRotations[4] ); } );
@@ -177,7 +186,7 @@ void FullProjectApp::setup()
 	
 	using namespace heartbeat;
 	
-
+    mScales[3] = mInteractionDebug->getScale().x;
 	mTranslations[3] = mInteractionDebug->getTranslation();
 	
 	mFar = mInteractionZones->getZoneScalar( InteractionZones::Zone::FAR );

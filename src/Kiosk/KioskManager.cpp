@@ -165,7 +165,8 @@ void KioskManager::render()
 		mDisplays[0]->renderToFbo();
 		auto fbo = mDisplays[0]->getPresentationFbo();
 		gl::ScopedMatrices scopeMatrix;
-		gl::multModelMatrix( ci::scale( vec3( .5, .5, 0 ) ) );
+        auto scale = Engine::get()->getRenderer()->isHalfSize();
+		gl::multModelMatrix( ci::scale( vec3( scale ? 0.5 : 1, scale ? 0.5 : 1, 0 ) ) );
 		gl::draw( fbo->getColorTexture() );
 	}
 }
