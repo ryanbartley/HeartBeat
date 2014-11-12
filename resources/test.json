@@ -183,8 +183,8 @@
 				"numColumns" : 150,
 				"numIterations" : 32,
 				"threshes" : { 
-					"beganDist" : 40,
-					"movedDist" : 50
+					"beganDist" : 80,
+					"movedDist" : 60
 				}
 			}
 		},

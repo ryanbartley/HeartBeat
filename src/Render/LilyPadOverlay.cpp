@@ -59,10 +59,10 @@ void LilyPad::activate( bool activate )
 	auto& timeline = app::App::get()->timeline();
 	
 	if( activate ) {
-		timeline.applyPtr( &mVisibility, 1.0f, 1.0f );
+		timeline.applyPtr( &mVisibility, 1.0f, 3.0f );
 	}
 	else {
-		timeline.applyPtr( &mVisibility, 0.0f, 1.0f );
+		timeline.applyPtr( &mVisibility, 0.0f, 3.0f );
 	}
 	mIsActivated = activate;
 }

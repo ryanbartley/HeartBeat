@@ -9,7 +9,9 @@ in VS_OUT
 
 uniform sampler2D tex;
 
-uniform vec4 lightPosition = vec4( 0, 0, 5, 1 );
+uniform mat4 ciModelView;
+
+uniform vec4 lightPosition = vec4( 0, 0, 2000, 1 );
 uniform vec3 lightIntensity = vec3( 1.0 );
 uniform vec3 Kd = vec3( 0.6, 0.6, 0.6 );	// Diffuse reflectivity
 uniform vec3 Ka = vec3( 0.2, 0.2, 0.2 );	// Ambient reflectivity
