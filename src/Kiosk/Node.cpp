@@ -52,7 +52,7 @@ Page::Page( const std::string &name )
 }
 	
 Button::Button( const std::string &name )
-: Node(name), mBoundingBox( Rectf( mGroup->getBoundingBox().x1 - 15, mGroup->getBoundingBox().y1 - 15, mGroup->getBoundingBox().x2 + 15, mGroup->getBoundingBox().y2 + 15 ) )
+: Node(name), mBoundingBox( Rectf( mGroup->getBoundingBox().x1 - 40, mGroup->getBoundingBox().y1 - 40, mGroup->getBoundingBox().x2 + 40, mGroup->getBoundingBox().y2 + 40 ) )
 {
 }
 	

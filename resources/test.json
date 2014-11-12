@@ -10,8 +10,8 @@
 				1080
 			],
 			"numPixelOverlap" : 200,
-			"splitWindow" : false,
-			"halfSize" : true
+			"splitWindow" : true,
+			"halfSize" : false
 		},
 		//////////////////////////////////////////////////////
 		// HID ATTRIBUTES
@@ -20,9 +20,9 @@
 			// Right now built on 0x0300, 0x0301, 0x0302
 			"numToOpen" : 3,
 			// defaults to opening in order
-			"top" : 768,	
+			"top" : 769,	
 			"middle" : 770,
-			"bottom" : 769
+			"bottom" : 768
 			// 768 index for 0x0300
 			// 1 index for 0x0301
 			// 2 index for 0x0302
@@ -56,9 +56,9 @@
 			// Right Pole
 			// Edge
 			"approachZones" : {
-				"top" : [ 0 ,330 ],
+				"top" : [ 661, 1080 ],
 				"middle" : [ 331, 660 ],
-				"bottom" : [ 661, 1080 ]
+				"bottom" : [ 0 ,330 ]
 			},
 			"scales" : {
 				"table" : 0.85,
@@ -242,8 +242,8 @@
 							}
 						}
 					},
-					"minIndex" : 0,
-					"maxIndex" : 330,
+					"minIndex" : 661,
+					"maxIndex" : 1080,
 					"fullSize" : {
 						"transformation" : {
 							"scales" : [ 0.35, 0.35 ],
@@ -316,8 +316,8 @@
 								}
 							}
 					},
-					"minIndex" : 661, 
-					"maxIndex" : 1080,
+					"minIndex" : 0, 
+					"maxIndex" : 330,
 					"fullSize" : { 
 						"transformation" : {
 							"scales" : [ 0.35, 0.35 ],

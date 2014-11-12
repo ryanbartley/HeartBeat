@@ -27,7 +27,7 @@ using namespace std;
 namespace heartbeat {
 	
 InfoDisplay::InfoDisplay( KioskId kioskId )
-: mId( kioskId ), mMasterAlpha( 1.0f ), mStatus( Status::HOME_SCREEN ), mCurrentSection( 0 ), mIsHalfSized( Engine::get()->getRenderer()->isHalfSize() )
+: mId( kioskId ), mMasterAlpha( 0.0f ), mStatus( Status::HOME_SCREEN ), mCurrentSection( 0 ), mIsHalfSized( Engine::get()->getRenderer()->isHalfSize() )
 {
 }
 	
@@ -114,7 +114,7 @@ void InfoDisplay::renderToFbo()
 	gl::clear( GL_COLOR_BUFFER_BIT );
 	gl::clearColor( ColorA( 0, 0, 0, 1 ) );
 	
-	mBackGround->render();
+//	mBackGround->render();
 	
 	renderCurrentScene();
 #if defined( DEBUG )
@@ -140,9 +140,10 @@ void InfoDisplay::draw()
 	
 	gl::ScopedModelMatrix scopeModel;
 	gl::setModelMatrix( getModelMatrix() );
-	
-	gl::draw( tex );
-	
+	{
+        gl::ScopedColor scopeColor( ColorA( 1, 1, 1, mMasterAlpha ) );
+        gl::draw( tex );
+	}
 #if defined( DEBUG )
 	{
 		gl::ScopedColor scopeColor( ColorA(1, 0, 0, 1) );
@@ -170,6 +171,7 @@ void InfoDisplay::activate( bool activate )
 	else {
 		auto shared = shared_from_this();
 		app->timeline().applyPtr( &mMasterAlpha, 0.0f, 1.0 ).easeFn( EaseInCubic() ).finishFn( std::bind( &InfoDisplay::reset, shared ) );
+        mIsActivated = false;
 		
 	}
 }
