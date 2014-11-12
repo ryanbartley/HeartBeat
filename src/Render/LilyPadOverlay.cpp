@@ -10,6 +10,8 @@
 #include "JsonManager.h"
 #include "cinder/Log.h"
 #include "cinder/Timeline.h"
+#include "Engine.h"
+#include "Renderer.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -18,7 +20,7 @@ using namespace std;
 namespace heartbeat {
 	
 LilyPad::LilyPad( KioskId kioskId, const ci::gl::Texture2dRef &lightTexture, const ci::gl::Texture2dRef &darkTex )
-: mKiosk( kioskId ), mLightTex( lightTexture ), mDarkTex( darkTex ), mVisibility( 0.0f )
+: mKiosk( kioskId ), mLightTex( lightTexture ), mDarkTex( darkTex ), mVisibility( 0.0f ), mFadeTime( 5.0f )
 {
 }
 	
@@ -30,8 +32,13 @@ LilyPadRef LilyPad::create( heartbeat::KioskId kioskId, const ci::gl::Texture2dR
 void LilyPad::initialize( const ci::JsonTree &root )
 {
 	try {
-        cout << root << endl;
-		Renderable::initialize( root["transformation"] );
+		auto halfSize = Engine::get()->getRenderer()->isHalfSize();
+		if( halfSize ) {
+			Renderable::initialize( root["fullSize"]["transformation"] );
+		}
+		else {
+			Renderable::initialize( root["halfSize"]["transformation"] );
+		}
 	}
 	catch ( const JsonTree::ExcChildNotFound &ex ) {
 		CI_LOG_E(ex.what());
@@ -59,10 +66,10 @@ void LilyPad::activate( bool activate )
 	auto& timeline = app::App::get()->timeline();
 	
 	if( activate ) {
-		timeline.applyPtr( &mVisibility, 1.0f, 3.0f );
+		timeline.applyPtr( &mVisibility, 1.0f, mFadeTime ).easeFn( EaseInCubic() );
 	}
 	else {
-		timeline.applyPtr( &mVisibility, 0.0f, 3.0f );
+		timeline.applyPtr( &mVisibility, 0.0f, mFadeTime ).easeFn( EaseInCubic() );
 	}
 	mIsActivated = activate;
 }

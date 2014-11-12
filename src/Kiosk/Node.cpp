@@ -52,8 +52,13 @@ Page::Page( const std::string &name )
 }
 	
 Button::Button( const std::string &name )
-: Node(name), mBoundingBox( Rectf( mGroup->getBoundingBox().x1 - 20, mGroup->getBoundingBox().y1 - 20, mGroup->getBoundingBox().x2 + 20, mGroup->getBoundingBox().y2 + 20 ) )
+: Node(name), mBoundingBox( Rectf( mGroup->getBoundingBox().x1 - 40, mGroup->getBoundingBox().y1 - 40, mGroup->getBoundingBox().x2 + 40, mGroup->getBoundingBox().y2 + 40 ) )
 {
+}
+	
+void Button::renderBoundingBox()
+{
+	gl::drawStrokedRect( mBoundingBox, 5 );
 }
 	
 }

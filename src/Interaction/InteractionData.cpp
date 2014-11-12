@@ -17,9 +17,8 @@ namespace heartbeat {
 uint64_t TouchData::sCurrentId = 0;
 	
 TouchData::TouchData( int index, long distance )
-: mId( idGenerator() ), mCurrentIndex( index ),
-	mCurrentDistance( distance ), mEmitType( EventTypeToEmit::BEGAN ),
-	mExistsThisFrame( true )
+: mId( idGenerator() ), mCurrentDistance( distance ), mCurrentIndex( index ), mShouldEmit( false ),
+	mNumUpdates( 0 ), mEmitType( EventTypeToEmit::BEGAN ), mExistsThisFrame( true )
 {
 }
 	

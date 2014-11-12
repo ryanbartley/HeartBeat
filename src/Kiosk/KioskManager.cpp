@@ -131,11 +131,11 @@ void KioskManager::touchEndedDelegate( EventDataRef touchEvent )
 		return;
 	}
 	
-	for( auto & kiosk : mDisplays ) {
-		if( kiosk->insideAngle( event->getIndex() ) ) {
-			kiosk->registerTouchBegan( event );
-		}
-	}
+//	for( auto & kiosk : mDisplays ) {
+//		if( kiosk->insideAngle( event->getIndex() ) ) {
+//			kiosk->registerTouchBegan( event );
+//		}
+//	}
 }
 	
 void KioskManager::toggleDebugRenderInfoDisplay()

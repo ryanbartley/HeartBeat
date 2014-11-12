@@ -30,7 +30,7 @@ private:
 	LilyPad( KioskId kioskId, const ci::gl::Texture2dRef &lightTexture, const ci::gl::Texture2dRef &darkTexture );
 	
 	ci::gl::Texture2dRef	mLightTex, mDarkTex;
-	float					mVisibility;
+	float					mVisibility, mFadeTime;
 	const KioskId			mKiosk;
 	bool					mIsActivated;
 };

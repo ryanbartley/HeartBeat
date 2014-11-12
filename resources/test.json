@@ -20,9 +20,9 @@
 			// Right now built on 0x0300, 0x0301, 0x0302
 			"numToOpen" : 3,
 			// defaults to opening in order
-			"top" : 768,	
+			"top" : 769,	
 			"middle" : 770,
-			"bottom" : 769
+			"bottom" : 768
 			// 768 index for 0x0300
 			// 1 index for 0x0301
 			// 2 index for 0x0302
@@ -56,15 +56,15 @@
 			// Right Pole
 			// Edge
 			"approachZones" : {
-				"top" : [ 0 ,330 ],
+				"top" : [ 661, 1080 ],
 				"middle" : [ 331, 660 ],
-				"bottom" : [ 661, 1080 ]
+				"bottom" : [ 0 ,330 ]
 			},
 			"scales" : {
 				"table" : 0.85,
-				"dead" : 0.9,
-				"approach" : 1.0,
-				"far" : 1.2
+				"dead" : 1.1,
+				"approach" : 1.2,
+				"far" : 1.8
 			},
 			"threshes" : {
 				"approaches" : 20,
@@ -183,8 +183,8 @@
 				"numColumns" : 150,
 				"numIterations" : 32,
 				"threshes" : { 
-					"beganDist" : 40,
-					"movedDist" : 20
+					"beganDist" : 80,
+					"movedDist" : 60
 				}
 			}
 		},
@@ -232,18 +232,31 @@
 				},
 				"top" : {
 					"lilyPad" : {
-						"transformation" : {
-							"scales" : [ 0.0896, 0.0896 ],
-							"translations" : {
-								"coordinates" : [ 1313.54, 594.48 ] 
-							},
-							"rotations" : {
-								"angle" : -260
+						"fullSize" : { 
+							"transformation" : {
+								"scales" : [ 0.0896, 0.0896 ],
+								"translations" : {
+									"coordinates" : [ 1313.54, 594.48 ] 
+								},
+								"rotations" : {
+									"angle" : -260
+								}
+							}
+						},
+						"halfSize" : {
+							"transformation" : {
+								"scales" : [ 0.0448, 0.0448 ],
+								"translations" : {
+									"coordinates" : [ 1313.54, 594.48 ] 
+								},
+								"rotations" : {
+									"angle" : -260
+								}
 							}
 						}
 					},
-					"minIndex" : 0,
-					"maxIndex" : 330,
+					"minIndex" : 661,
+					"maxIndex" : 1080,
 					"fullSize" : {
 						"transformation" : {
 							"scales" : [ 0.35, 0.35 ],
@@ -269,13 +282,26 @@
 				},
 				"middle" : {
 					"lilyPad" : {
-						"transformation" : {
-							"scales" : [ 0.0898, 0.0898 ],
-							"translations" : {
-								"coordinates" : [ 1332.65, 882.59 ] 
-							},
-							"rotations" : {
-								"angle" : 25
+						"fullSize" : { 
+							"transformation" : {
+								"scales" : [ 0.0449, 0.0449 ],
+								"translations" : {
+									"coordinates" : [ 1332.65, 882.59 ] 
+								},
+								"rotations" : {
+									"angle" : 25
+								}
+							}
+						},
+						"halfSize" : {
+							"transformation" : {
+								"scales" : [ 0.0898, 0.0898 ],
+								"translations" : {
+									"coordinates" : [ 1332.65, 882.59 ] 
+								},
+								"rotations" : {
+									"angle" : 25
+								}
 							}
 						}
 					},
@@ -306,6 +332,7 @@
 				},
 				"bottom" : {
 					"lilyPad" : {
+						"fullSize" : {
 							"transformation" : {
 								"scales" : [ 0.0893, 0.0893 ],
 								"translations" : {
@@ -315,9 +342,21 @@
 									"angle" : -40
 								}
 							}
+						},
+						"halfSize" : {
+							"transformation" : {
+								"scales" : [ 0.04465, 0.04465 ],
+								"translations" : {
+									"coordinates" : [ 559.62, 1200.00 ] 
+								},
+								"rotations" : {
+									"angle" : -40
+								}
+							}
+						}
 					},
-					"minIndex" : 661, 
-					"maxIndex" : 1080,
+					"minIndex" : 0, 
+					"maxIndex" : 330,
 					"fullSize" : { 
 						"transformation" : {
 							"scales" : [ 0.35, 0.35 ],

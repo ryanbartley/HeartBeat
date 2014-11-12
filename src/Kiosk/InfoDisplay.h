@@ -77,6 +77,8 @@ public:
 	ActivatableButtonRef& getOverlayActivatedButton() { return mOverlayActiveButton; }
 	std::map<std::string, std::vector<ButtonRef>>& getOverlayButtons() { return mOverlayButtons; }
 	
+	void enableBoundingBoxRender( bool enable ) { mShouldDrawBoundingBoxes = enable; }
+	
 	void removeFront();
 	
 	void renderToFbo();
@@ -108,10 +110,10 @@ private:
 									mLines;
 	
 	ci::Rectf						mPresentRect;
-	float							mMasterAlpha;
-	bool							mIsActivated;
+	float							mMasterAlpha, mFadeTime;
 	int								mMinIndex, mMaxIndex;
-	bool							mIsHalfSized;
+	bool							mIsHalfSized, mIsActivated,
+									mShouldDrawBoundingBoxes;
 	
 	const KioskId					mId;
 };

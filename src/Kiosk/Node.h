@@ -95,6 +95,8 @@ public:
 	//! Copies things that need to be copied.
 	virtual ButtonRef clone() = 0;
 	
+	void renderBoundingBox();
+	
 protected:
 	Button( const std::string &name );
 	

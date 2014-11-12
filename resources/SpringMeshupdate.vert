@@ -63,6 +63,7 @@ bool containsPoint( vec2 touch, vec3 point, float range )
 vec3 calcTouchAccel( vec3 pos, vec3 touch, float dist, float maxAccel )
 {
 	vec3 diff = pos - touch;
+	
 	diff = normalize( diff );
 	diff *= pow( dist, 3.0 );
 //	return clamp( diff, vec3(), vec3(maxAccel) );
@@ -133,7 +134,7 @@ void main(void)
 //				float xDiff = (sin(dist * M_PI / touchBeganDistThreshold) / 2) * 20;
 //				float zDiff = -(xDiff * yDiff);
 //				p += vec3( xDiff, yDiff, zDiff );
-				touchAccel += calcTouchAccel( p, vec3(touchesBegan[i], 120), dist, 50.0 );
+				touchAccel += calcTouchAccel( p, vec3(touchesBegan[i], 100), dist, 500.0 );
 				break;
 			}
 		}
@@ -144,7 +145,7 @@ void main(void)
 //				float xDiff = (sin(dist * M_PI / touchMovedDistThreshold) / 2) * 20;
 //				float zDiff = -(xDiff * yDiff);
 //				p += vec3( xDiff, yDiff, zDiff );
-				touchAccel += calcTouchAccel( p, vec3(touchesMoved[i], 80), dist, 20.0 );
+				touchAccel += calcTouchAccel( p, vec3(touchesMoved[i], 100), dist, 200.0 );
 				break;
 			}
 		}

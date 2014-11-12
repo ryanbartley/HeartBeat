@@ -117,6 +117,8 @@ void FullProjectApp::setup()
 	mScales.fill( 1.0f );
 	mRotations.fill( 0 );
 	
+	using namespace heartbeat;
+	
 	mParams = params::InterfaceGl::create( "fullProject", ivec2( 400, 400 ) );
 	mParams->setPosition( getWindowCenter() );
     mScales[0] = mInfoDisplays[0]->getScale().x;
@@ -125,7 +127,83 @@ void FullProjectApp::setup()
 	mTranslations[0] = mInfoDisplays[0]->getTranslation();
 	mTranslations[1] = mInfoDisplays[1]->getTranslation();
 	mTranslations[2] = mInfoDisplays[2]->getTranslation();
+	mScales[4] = mLilyPads[0]->getScale().x;
+	mScales[5] = mLilyPads[1]->getScale().x;
+	mScales[6] = mLilyPads[2]->getScale().x;
+	mTranslations[4] = mLilyPads[0]->getTranslation();
+	mTranslations[5] = mLilyPads[1]->getTranslation();
+	mTranslations[6] = mLilyPads[2]->getTranslation();
+	mThreshes[0] = mInteractionZones->getNumIndicesThreshApproach();
+	mThreshes[1] = mInteractionZones->getNumIndicesThreshTouch();
+	mScales[3] = mInteractionDebug->getScale().x;
+	mTranslations[3] = mInteractionDebug->getTranslation();
 	
+	
+	mFar = mInteractionZones->getZoneScalar( InteractionZones::Zone::FAR );
+	mApproach = mInteractionZones->getZoneScalar( InteractionZones::Zone::APPROACH );
+	mDead = mInteractionZones->getZoneScalar( InteractionZones::Zone::DEAD );
+	mTable = mInteractionZones->getZoneScalar( InteractionZones::Zone::TABLE );
+	
+	mParams->addSeparator();
+	mParams->addText("Teensy Settings");
+	mParams->addButton("Send Top Teensy Approach", [&](){
+		mEventManager->queueEvent( EventDataRef( new ApproachEvent( KioskId::TOP_KIOSK ) ) );
+	});
+	mParams->addButton("Send Top Teensy Depart", [&](){
+		mEventManager->queueEvent( EventDataRef( new DepartEvent( KioskId::TOP_KIOSK ) ) );
+	});
+	mParams->addButton("Send Middle Teensy Approach", [&](){
+		mEventManager->queueEvent( EventDataRef( new ApproachEvent( KioskId::MIDDLE_KIOSK ) ) );
+	});
+	mParams->addButton("Send Middle Teensy Depart", [&](){
+		mEventManager->queueEvent( EventDataRef( new DepartEvent( KioskId::MIDDLE_KIOSK ) ) );
+	});
+	mParams->addButton("Send Bottom Teensy Approach", [&](){
+		mEventManager->queueEvent( EventDataRef( new ApproachEvent( KioskId::BOTTOM_KIOSK ) ) );
+	});
+	mParams->addButton("Send Bottom Teensy Depart", [&](){
+		mEventManager->queueEvent( EventDataRef( new DepartEvent( KioskId::BOTTOM_KIOSK ) ) );
+	});
+	
+	mParams->addSeparator();
+	mParams->addText("Zone Scalars (No Overlapping)");
+	mParams->addParam("Set Far Zone", &mFar).updateFn( std::bind( &FullProjectApp::updateFar, this ) );
+	mParams->addParam("Set Approach Zone", &mApproach).updateFn( std::bind( &FullProjectApp::updateApproach, this ) );
+	mParams->addParam("Set Dead Zone", &mDead).updateFn( std::bind( &FullProjectApp::updateDead, this ) );
+	mParams->addParam("Set Table Zone", &mTable).updateFn( std::bind( &FullProjectApp::updateTable, this ) );
+	mParams->addButton("Submit Zone Changes", std::bind( &FullProjectApp::updateZones, this ) );
+	
+	mParams->addSeparator();
+	mParams->addButton( "Toggle Live Distance", [&](){
+		mInteractionDebug->enableDistance( ! mInteractionDebug->isDistanceEnabled() );
+	});
+	mParams->addButton( "Toggle Table Barrier", [&](){
+		mInteractionDebug->enableZone( ! mInteractionDebug->isZoneEnabled() );
+	});
+	
+	mParams->addSeparator();
+	mParams->addButton( "Query/Store Ignore Indices(Poles)", std::bind( &InteractionZones::queryIgnoreIndices, mInteractionZones ) );
+	mParams->addButton( "Print Current Ignore Indices(Poles)", [&](){
+		std::cout << "Printing ignore indices: ";
+		auto ignoreIndices = mInteractionZones->getIgnoreIndices();
+		int last = 0;
+		for( auto & indice : ignoreIndices ) {
+			if( last == 0 ) {
+				last = indice;
+			}
+			if( last != indice-1 ) {
+				cout << endl << "  New Ignore Zone: ";
+			}
+			cout << indice << ", ";
+			last = indice;
+		}
+		std::cout << std::endl;
+	});
+	mParams->addButton( "Clear Current Ignore Indices(Poles)", [&](){
+		const_cast<std::vector<uint32_t>&>(mInteractionZones->getIgnoreIndices()).clear();
+	});
+
+	mParams->addSeparator();
 	mParams->addText("Kiosk 1 Transform");
 	mParams->addParam( "Rotation Kiosk 1", &mRotations[0] ).updateFn( [&](){ mInfoDisplays[0]->setRotationDegree( mRotations[0] ); } );
 	mParams->addParam( "Scale Kiosk 1", &mScales[0] ).updateFn( [&](){ mInfoDisplays[0]->setScale( vec2(mScales[0]) ); } );
@@ -151,12 +229,7 @@ void FullProjectApp::setup()
 		transform.setScale( mInteractionDebug->getScale() );
 		transform.setTranslation( mInteractionDebug->getTranslation() );
 	});
-    mScales[4] = mLilyPads[0]->getScale().x;
-    mScales[5] = mLilyPads[1]->getScale().x;
-    mScales[6] = mLilyPads[2]->getScale().x;
-    mTranslations[4] = mLilyPads[0]->getTranslation();
-    mTranslations[5] = mLilyPads[1]->getTranslation();
-    mTranslations[6] = mLilyPads[2]->getTranslation();
+	
 	mParams->addSeparator();
 	mParams->addText("LilyPad 1 Transform");
 	mParams->addParam( "Rotation LilyPad 1", &mRotations[4] ).updateFn( [&](){ mLilyPads[0]->setRotationDegree( mRotations[4] ); } );
@@ -174,26 +247,14 @@ void FullProjectApp::setup()
 	mParams->addParam( "Translation LilyPad 3", &mTranslations[6] ).updateFn( [&](){ mLilyPads[2]->setTranslation( vec2(mTranslations[6]) ); } );
 	
 	mParams->addSeparator();
-	mThreshes[0] = mInteractionZones->getNumIndicesThreshApproach();
-	mThreshes[1] = mInteractionZones->getNumIndicesThreshTouch();
 	mParams->addParam( "Set Thresh Approach", &mThreshes[0] ).updateFn( [&](){ mInteractionZones->setNumIndicesThreshApproach( mThreshes[0] ); });
 	mParams->addParam( "Set Thresh Touch", &mThreshes[1] ).updateFn( [&](){ mInteractionZones->setNumIndicesThreshTouch( mThreshes[1] ); });
 	mParams->addSeparator();
 	mParams->addButton( "Toggle Debug Info Display", [&]() {
 		mKioskManager->toggleDebugRenderInfoDisplay();
 	});
+	
 	mParams->addSeparator();
-	
-	using namespace heartbeat;
-	
-    mScales[3] = mInteractionDebug->getScale().x;
-	mTranslations[3] = mInteractionDebug->getTranslation();
-	
-	mFar = mInteractionZones->getZoneScalar( InteractionZones::Zone::FAR );
-	mApproach = mInteractionZones->getZoneScalar( InteractionZones::Zone::APPROACH );
-	mDead = mInteractionZones->getZoneScalar( InteractionZones::Zone::DEAD );
-	mTable = mInteractionZones->getZoneScalar( InteractionZones::Zone::TABLE );
-	
 	// Unsafe but needed.
 	mParams->addButton( "Capture Table Barrier", [&]() {
 		mInteractionZones->captureBarrier();
@@ -203,65 +264,12 @@ void FullProjectApp::setup()
 		mInteractionZones->writeInteractionZone();
 	});
 	
-	mParams->addButton( "Toggle Live Distance", [&](){
-		mInteractionDebug->enableDistance( ! mInteractionDebug->isDistanceEnabled() );
-	});
-	mParams->addButton( "Toggle Table Barrier", [&](){
-		mInteractionDebug->enableZone( ! mInteractionDebug->isZoneEnabled() );
-	});
     mParams->addSeparator();
     mParams->addButton( "Toggle Pond Debug", [&](){
         auto pond = mEngine->getPond();
         pond->enableDebug( ! pond->isDebugEnabled() ) ;
     });
-	mParams->addSeparator();
-	mParams->addButton( "Query/Store Ignore Indices(Poles)", std::bind( &InteractionZones::queryIgnoreIndices, mInteractionZones ) );
-	mParams->addButton( "Print Current Ignore Indices(Poles)", [&](){
-		std::cout << "Printing ignore indices: ";
-		auto ignoreIndices = mInteractionZones->getIgnoreIndices();
-		int last = 0;
-		for( auto & indice : ignoreIndices ) {
-			if( last == 0 ) {
-				last = indice;
-			}
-			if( last != indice-1 ) {
-				cout << endl << "  New Ignore Zone: ";
-			}
-			cout << indice << ", ";
-			last = indice;
-		}
-		std::cout << std::endl;
-	});
-	mParams->addButton( "Clear Current Ignore Indices(Poles)", [&](){
-		const_cast<std::vector<uint32_t>&>(mInteractionZones->getIgnoreIndices()).clear();
-	});
-	mParams->addSeparator();
-	mParams->addText("Zone Scalars (No Overlapping)");
-	mParams->addParam("Set Far Zone", &mFar).updateFn( std::bind( &FullProjectApp::updateFar, this ) );
-	mParams->addParam("Set Approach Zone", &mApproach).updateFn( std::bind( &FullProjectApp::updateApproach, this ) );
-	mParams->addParam("Set Dead Zone", &mDead).updateFn( std::bind( &FullProjectApp::updateDead, this ) );
-	mParams->addParam("Set Table Zone", &mTable).updateFn( std::bind( &FullProjectApp::updateTable, this ) );
-	mParams->addButton("Submit Zone Changes", std::bind( &FullProjectApp::updateZones, this ) );
-	mParams->addSeparator();
-	mParams->addText("Teensy Settings");
-	mParams->addButton("Send Top Teensy Approach", [&](){
-		mEventManager->queueEvent( EventDataRef( new ApproachEvent( KioskId::TOP_KIOSK ) ) );
-	});
-	mParams->addButton("Send Top Teensy Depart", [&](){
-		mEventManager->queueEvent( EventDataRef( new DepartEvent( KioskId::TOP_KIOSK ) ) );
-	});
-	mParams->addButton("Send Middle Teensy Approach", [&](){
-		mEventManager->queueEvent( EventDataRef( new ApproachEvent( KioskId::MIDDLE_KIOSK ) ) );
-	});
-	mParams->addButton("Send Middle Teensy Depart", [&](){
-		mEventManager->queueEvent( EventDataRef( new DepartEvent( KioskId::MIDDLE_KIOSK ) ) );
-	});
-	mParams->addButton("Send Bottom Teensy Approach", [&](){
-		mEventManager->queueEvent( EventDataRef( new ApproachEvent( KioskId::BOTTOM_KIOSK ) ) );
-	});
-	mParams->addButton("Send Bottom Teensy Depart", [&](){
-		mEventManager->queueEvent( EventDataRef( new DepartEvent( KioskId::BOTTOM_KIOSK ) ) );
-	});
+	
 	mShowParams = true;
 	mParams->show( mShowParams );
 	
@@ -296,8 +304,6 @@ void FullProjectApp::mouseDown( MouseEvent event )
 			eventPosition.y = eventPosition.y - renderer->getNumPixelOverlap();
 		}
 		mEventManager->queueEvent( heartbeat::EventDataRef( new heartbeat::TouchBeganEvent( 1, eventPosition ) ) );
-//		eventPosition.y += 100.0f;
-//		mEventManager->queueEvent( heartbeat::EventDataRef( new heartbeat::TouchBeganEvent( 1, eventPosition ) ) );
 	}
 #endif
 }
@@ -308,12 +314,8 @@ void FullProjectApp::mouseDrag( cinder::app::MouseEvent event )
 	if( ! mShowParams ) {
 		ci::vec2 eventPosition = event.getPos();
 		auto renderer = mEngine->getRenderer();
-//		if( event.getPos().y > renderer->getBottomPresentationTarget()->getSize().y  ) {
-//			eventPosition.y = eventPosition.y - renderer->getNumPixelOverlap();
-//		}
+
 		mEventManager->queueEvent( heartbeat::EventDataRef( new heartbeat::TouchMoveEvent( 1, eventPosition ) ) );
-//		eventPosition.y += 100.0f;
-//		mEventManager->queueEvent( heartbeat::EventDataRef( new heartbeat::TouchMoveEvent( 1, eventPosition ) ) );
 	}
 #endif
 }
@@ -324,9 +326,6 @@ void FullProjectApp::update()
 
 void FullProjectApp::draw()
 {
-//	gl::clear( Color( 0, 0, 0 ) );
-//	gl::setMatricesWindow( getWindowSize() );
-//	mParams->draw();
 }
 
 CINDER_APP_NATIVE( FullProjectApp, RendererGl )

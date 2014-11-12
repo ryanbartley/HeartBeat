@@ -214,7 +214,7 @@ void InteractionZones::processApproaches()
 {
 	for( auto & event : mApproachInteractors ) {
 		for( auto & approachZone : mApproachZones ) {
-			if( approachZone.second.contains( event.mIndex ) && event.mNumIndicesPast > mNumIndicesThreshApproach ) {
+			if( approachZone.second.contains( event.mIndex ) ) {
 				approachZone.second.addEvent();
 			}
 		}

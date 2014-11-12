@@ -22,7 +22,7 @@ struct Interactor {
 	long		mDistance;
 };
 	
-
+const uint32_t NUM_UPDATES_TO_EMIT = 2;
 	
 struct TouchData {
 public:
@@ -40,23 +40,22 @@ public:
 	void		createAndSendEvent();
 	
 	inline bool existsThisFrame() { return mExistsThisFrame; }
-	uint64_t getId() const { return mId; }
+	inline uint64_t getId() const { return mId; }
 	
 private:
 	const uint64_t		mId;
-	int					mCurrentIndex;
 	long				mCurrentDistance;
-	bool				mExistsThisFrame;
+	int					mCurrentIndex, mNumUpdates;
 	EventTypeToEmit		mEmitType;
+	bool				mExistsThisFrame, mShouldEmit;
 	
 	static uint64_t sCurrentId;
-	static uint64_t idGenerator()	{ return sCurrentId++; }
-	
+	inline static uint64_t idGenerator()	{ return sCurrentId++; }
 };
 	
 bool TouchData::contains( int index, long distance )
 {
-	if( (index > mCurrentIndex - 5 || index < mCurrentIndex + 5) &&
+	if( (index > mCurrentIndex - 8 || index < mCurrentIndex + 8 ) &&
 	   ( distance > mCurrentDistance - 40 || distance < mCurrentDistance + 40 ) ) {
 		mExistsThisFrame = true;
 		update( index, distance );
@@ -68,23 +67,29 @@ bool TouchData::contains( int index, long distance )
 	
 void TouchData::update( int index, long distance )
 {
+	static const float scalar = 1.0f / 2.0f;
 	if( index != mCurrentIndex || distance != mCurrentDistance ) {
-		mCurrentIndex = index;
-		mCurrentDistance = distance;
-		mEmitType = EventTypeToEmit::MOVED;
+		mCurrentIndex = (index + mCurrentIndex) * scalar;
+		mCurrentDistance = (distance + mCurrentDistance) * scalar;
 	}
-	else {
-		mEmitType = EventTypeToEmit::NONE;
+	mNumUpdates++;
+	if( mNumUpdates > 1 ) {
+		mShouldEmit = true;
 	}
 }
 	
 bool TouchData::reset()
 {
 	if( mExistsThisFrame ) {
+		if( mShouldEmit ) {
+			mNumUpdates = 0;
+			mShouldEmit = false;
+		}
 		mExistsThisFrame = false;
 		return true;
 	}
 	else {
+		mShouldEmit = true;
 		mEmitType = EventTypeToEmit::ENDED;
 		return false;
 	}

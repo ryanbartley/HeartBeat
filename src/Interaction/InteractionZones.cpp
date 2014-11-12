@@ -24,7 +24,7 @@ using namespace std;
 namespace heartbeat {
 
 InteractionZones::InteractionZones()
-: mZoneScalarsUpdated( false ), mInBetweenThreshold( 0 ), mSendEvents( true ), mAverageBuffer( 1081, 0 )
+: mZoneScalarsUpdated( false ), mInBetweenThreshold( 0 ), mSendEvents( false ), mAverageBuffer( 1081, 0 )
 {
 	
 }
@@ -414,7 +414,7 @@ void InteractionZones::postProcessData()
 	
 void InteractionZones::processData()
 {
-	static int captureFrames = 50;
+	static int captureFrames = 100;
 	
 	if( ! mUrg ) {
 		static bool notified = false;
@@ -462,9 +462,6 @@ void InteractionZones::processData()
 		if( emitEvents ) {
 			if( mCurrentFrameData[i] == 1 ) mCurrentFrameData[i] = 100000;
 			
-			//
-//			checkAverages( i, mCurrentFrameData[i] );
-			
 			if( mCurrentFrameData[i] < *barrierIt * APPROACH_SCALAR &&
 			   mCurrentFrameData[i] > *barrierIt * DEAD_SCALAR ) {
 				// emit approaching event.
@@ -482,7 +479,7 @@ void InteractionZones::processData()
 	
 	if( ! mSendEvents && ! ( captureFrames-- ) ) {
 		mSendEvents = true;
-		captureFrames = 50;
+		captureFrames = 100;
 		return;
 	}
 	
