@@ -462,6 +462,7 @@ void InteractionZones::processData()
 		if( emitEvents ) {
 			if( mCurrentFrameData[i] == 1 ) mCurrentFrameData[i] = 100000;
 			
+			//
 //			checkAverages( i, mCurrentFrameData[i] );
 			
 			if( mCurrentFrameData[i] < *barrierIt * APPROACH_SCALAR &&

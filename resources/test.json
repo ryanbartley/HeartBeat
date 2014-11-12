@@ -184,7 +184,7 @@
 				"numIterations" : 32,
 				"threshes" : { 
 					"beganDist" : 40,
-					"movedDist" : 50
+					"movedDist" : 20
 				}
 			}
 		},

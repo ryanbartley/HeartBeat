@@ -65,10 +65,13 @@ void InfoDisplay::renderHomeScreen()
 void InfoDisplay::renderDataScreen()
 {
 	if( ! mOverlay ) {
-	for( auto & page : mDataPages ) {
-		page->render();
+		for( auto & page : mDataPages ) {
+			page->render();
+		}
 	}
-	}
+	
+	// Variable for animation of this needed.
+	gl::ScopedColor scopeColor( ColorA( 1, 1, 1, mOverlay ? .5 : 1.0 ) );
 	
 	for( auto & button : mDataButtons ) {
 		if( button )
@@ -164,12 +167,12 @@ void InfoDisplay::activate( bool activate )
 	auto app = App::get();
 	
 	if( activate ) {
-		app->timeline().applyPtr( &mMasterAlpha, 1.0f, 1.0 ).easeFn( EaseInCubic() );
+		app->timeline().applyPtr( &mMasterAlpha, 1.0f, 3.0 ).easeFn( EaseInCubic() );
 		mIsActivated = activate;
 	}
 	else {
 		auto shared = shared_from_this();
-		app->timeline().applyPtr( &mMasterAlpha, 0.0f, 1.0 ).easeFn( EaseInCubic() ).finishFn( std::bind( &InfoDisplay::reset, shared ) );
+		app->timeline().applyPtr( &mMasterAlpha, 0.0f, 3.0 ).easeFn( EaseInCubic() ).finishFn( std::bind( &InfoDisplay::reset, shared ) );
 		
 	}
 }
@@ -179,6 +182,17 @@ void InfoDisplay::reset()
 	mStatus = Status::HOME_SCREEN;
 	mIsActivated = false;
 	mMasterAlpha = 0.0f;
+	mDataPages.clear();
+	mOverlay = nullptr;
+	if( mActivatedButton ) {
+		mActivatedButton->setStatus( ButtonStatus::NONACTIVE );
+		mActivatedButton = nullptr;
+	}
+	if( mOverlayActiveButton ) {
+		mOverlayActiveButton->setStatus( ButtonStatus::ACTIVE );
+		mOverlayActiveButton = nullptr;
+	}
+	mCurrentSection = 0;
 }
 	
 void InfoDisplay::addDataPage( DataPageRef &nextPage, AnimateType type )

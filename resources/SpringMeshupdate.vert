@@ -60,6 +60,16 @@ bool containsPoint( vec2 touch, vec3 point, float range )
 	return touch.x > point.x - range && touch.x < point.x + range && touch.y > point.y - range && touch.y < point.y + range;
 }
 
+vec3 calcTouchAccel( vec3 pos, vec3 touch, float dist, float maxAccel )
+{
+	vec3 diff = pos - touch;
+	diff = normalize( diff );
+	diff *= pow( dist, 3.0 );
+//	return clamp( diff, vec3(), vec3(maxAccel) );
+	return clamp( diff, vec3( - maxAccel ), vec3( maxAccel ) );
+//	return diff;
+}
+
 void main(void)
 {
 	vec3 p = position_mass.xyz;		// p can be our position
@@ -106,6 +116,8 @@ void main(void)
 	
 	normal = normalize( normal );
 	
+	vec3 touchAccel = vec3( 0 );
+	
 	// If this is a fixed node, reset force to zero
 	if(fixed_node) {
 		F = vec3(0.0);
@@ -117,27 +129,29 @@ void main(void)
 		for( int i = 0; i < MAX_TOUCHES && i < localNumTouchesBegan; i++ ) {
 			float dist = distance( vec3(touchesBegan[i], 0), p);
 			if( dist < touchBeganDistThreshold ) {
-				float yDiff = (cos(dist * M_PI / touchBeganDistThreshold) / 2) * 20;
-				float xDiff = (sin(dist * M_PI / touchBeganDistThreshold) / 2) * 20;
-				float zDiff = -(xDiff * yDiff);
-				p += vec3( xDiff, yDiff, zDiff );
+//				float yDiff = (cos(dist * M_PI / touchBeganDistThreshold) / 2) * 20;
+//				float xDiff = (sin(dist * M_PI / touchBeganDistThreshold) / 2) * 20;
+//				float zDiff = -(xDiff * yDiff);
+//				p += vec3( xDiff, yDiff, zDiff );
+				touchAccel += calcTouchAccel( p, vec3(touchesBegan[i], 120), dist, 50.0 );
 				break;
 			}
 		}
 		for( int i = 0; i < MAX_TOUCHES && i < localNumTouchesMoved; i++ ) {
 			float dist = distance(vec3(touchesMoved[i], 0), p);
 			if( dist < touchMovedDistThreshold ) {
-				float yDiff = (cos(dist * M_PI / touchMovedDistThreshold) / 2) * 20;
-				float xDiff = (sin(dist * M_PI / touchMovedDistThreshold) / 2) * 20;
-				float zDiff = -(xDiff * yDiff);
-				p += vec3( xDiff, yDiff, zDiff );
+//				float yDiff = (cos(dist * M_PI / touchMovedDistThreshold) / 2) * 20;
+//				float xDiff = (sin(dist * M_PI / touchMovedDistThreshold) / 2) * 20;
+//				float zDiff = -(xDiff * yDiff);
+//				p += vec3( xDiff, yDiff, zDiff );
+				touchAccel += calcTouchAccel( p, vec3(touchesMoved[i], 80), dist, 20.0 );
 				break;
 			}
 		}
 	}
 	
 	// Accelleration due to force
-	vec3 a = F / m;
+	vec3 a = (F + touchAccel) / m;
 	
 	// Displacement
 	vec3 s = u * t + 0.5 * a * t * t;
