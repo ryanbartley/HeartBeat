@@ -204,13 +204,14 @@ void InfoDisplay::renderOverlayScreenSvg( ci::cairo::Context &context )
 	
 void InfoDisplay::renderToSvg()
 {
-	cairo::Context context( mSurface );
-	mSurface.flush();
+	cairo::SurfaceImage surface( mTranslatedPresentRect.getWidth(), mTranslatedPresentRect.getHeight(), true );
+	cairo::Context context( surface );
 	context.setMatrix( mCairoMat );
-	context.setAntiAlias( 16 );
+	context.setAntiAlias( 12 );
 	renderCurrentSceneSvg( context );
 	
-	mCairoTex->update( mSurface.getSurface() );
+	mCairoTex->update( surface.getSurface() );
+	mStateChanged = false;
 #if defined( DEBUG )
 	{
 		gl::ScopedColor scopeColor( ColorA(1, 0, 0, 1) );
@@ -476,7 +477,6 @@ void InfoDisplay::initiaize(const ci::JsonTree &root)
 		mTranslatedPresentRect.include( Rectf( translated1.x, translated1.y, translated2.x, translated2.y ) );
 		cout << "Translated rect with include: " << mTranslatedPresentRect << " width: " << mTranslatedPresentRect.getWidth() << " height: " << mTranslatedPresentRect.getHeight() << endl;
 		
-		mSurface = cairo::SurfaceImage( mTranslatedPresentRect.getWidth(), mTranslatedPresentRect.getHeight(), true );
 		mCairoTex = gl::Texture2d::create( mTranslatedPresentRect.getWidth(), mTranslatedPresentRect.getHeight() );
 		auto & mM = getModelMatrix();
 		mCairoMat = MatrixAffine2<float>( mM[0][0], mM[0][1], mM[1][0], mM[1][1], mM[3][0], mM[3][1] );

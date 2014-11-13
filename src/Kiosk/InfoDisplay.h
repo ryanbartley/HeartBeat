@@ -105,7 +105,6 @@ private:
 	Status							mStatus;
 	uint32_t						mCurrentSection;
 	
-	ci::cairo::SurfaceImage			mSurface;
 	ci::gl::TextureRef				mCairoTex;
 	ci::Rectf						mTranslatedPresentRect;
 	ci::MatrixAffine2<float>		mCairoMat;
