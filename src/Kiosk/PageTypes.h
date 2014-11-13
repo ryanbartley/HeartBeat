@@ -183,6 +183,8 @@ public:
 		}
 		return true;
 	}
+    
+    const ci::svg::Group* getCurrentGroup() { return mOverlays[mCurrentIndex]; }
 	
 	bool moreNext();
 	bool morePrev();

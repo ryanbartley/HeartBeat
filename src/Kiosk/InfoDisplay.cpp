@@ -153,8 +153,21 @@ void InfoDisplay::renderHomeScreenSvg( ci::cairo::Context &context )
 	
 	
 	for( auto & button : mHomeButtons ) {
-		context.render( *button->getRootGroup() );
-	}
+        if( button->getType() == OverlayPageButton::TYPE ) {
+            auto cast = std::dynamic_pointer_cast<OverlayPageButton>( button );
+            if( cast ) {
+                if( cast->getStatus() == ButtonStatus::ACTIVE ) {
+                    context.render( *cast->getActive() );
+                }
+                else if( cast->getStatus() == ButtonStatus::NONACTIVE ) {
+                    context.render( *cast->getNonActive() );
+                }
+            }
+        }
+        else {
+            context.render( *button->getRootGroup() );
+        }
+    }
 }
 
 void InfoDisplay::renderDataScreenSvg( ci::cairo::Context &context )
@@ -171,16 +184,27 @@ void InfoDisplay::renderDataScreenSvg( ci::cairo::Context &context )
 	for( auto & button : mDataButtons ) {
 		// TODO: Why did I have this?
 		// if( button )
-		auto cast = std::dynamic_pointer_cast<DataPageButton>( button );
-		if( cast ) {
-			if( cast->getStatus() == ButtonStatus::ACTIVE ) {
-				context.render( *cast->getActive() );
-			}
-			else {
-				context.render( *cast->getNonActive() );
-			}
-		}
-	}
+            auto cast = std::dynamic_pointer_cast<ActivatableButton>( button );
+            if( cast ) {
+                if( cast->getStatus() == ButtonStatus::ACTIVE ) {
+                    context.render( *cast->getActive() );
+                }
+                else {
+                    context.render( *cast->getNonActive() );
+                }
+            }
+            else {
+                auto doubleCast = std::dynamic_pointer_cast<NavigableButton>( button );
+                if( doubleCast ) {
+                    if( doubleCast->getButtonStatus() == ButtonStatus::ACTIVE ) {
+                        context.render( *doubleCast->getRootGroup() );
+                    }
+                }
+                else {
+                    context.render( *button->getRootGroup() );
+                }
+            }
+    }
 	
 	context.render( *mLines->getRootGroup() );
 }
@@ -188,8 +212,13 @@ void InfoDisplay::renderDataScreenSvg( ci::cairo::Context &context )
 void InfoDisplay::renderOverlayScreenSvg( ci::cairo::Context &context )
 {
 	if( ! mOverlay ) return;
-	
-	context.render( *mOverlay->getRootGroup() );
+	auto cast = std::dynamic_pointer_cast<OverlayPlus>(mOverlay);
+    if( cast ) {
+        context.render( *cast->getCurrentGroup() );
+    }
+    else {
+        context.render( *mOverlay->getRootGroup() );
+    }
 	
 	auto & name = mOverlay->getButtonGroup();
 	auto & buttons = mOverlayButtons[name];
@@ -198,7 +227,17 @@ void InfoDisplay::renderOverlayScreenSvg( ci::cairo::Context &context )
 	}
 	
 	for( auto & button : buttons ) {
-		context.render( *button->getRootGroup() );
+        if( button->getType() == NavigableButton::TYPE ) {
+            auto cast = std::dynamic_pointer_cast<NavigableButton>(button);
+            if( cast ) {
+                if( cast->getButtonStatus() == ButtonStatus::ACTIVE ) {
+                    context.render( *cast->getRootGroup() );
+                }
+            }
+        }
+        else {
+            context.render( *button->getRootGroup() );
+        }
 	}
 }
 	

@@ -38,7 +38,7 @@
 		//////////////////////////////////////////////////////
 		"interactionZones" : {
 			"barrierFile" : "tableData.bin",
-			"runUrg" : true,
+			"runUrg" : false,
 			"poleIndices" : [
 				0,
 				9, 10, 11, 12, 13, 14,
@@ -193,7 +193,7 @@
 		//////////////////////////////////////////////////////
 		"kioskManagerAttribs" : {
 			"infoDisplays" : {
-				"renderWithSVG" : false,
+				"renderWithSVG" : true,
 				"lilyTexLightName" : "lilyYellow.png",
 				"lilyTexDarkName" : "lilyDark.png",
 				"structure" : {
@@ -260,9 +260,9 @@
 					"maxIndex" : 1080,
 					"fullSize" : {
 						"transformation" : {
-							"scales" : [ 0.35, 0.35 ],
+							"scales" : [ 0.355, 0.355 ],
 							"translations" : {
-								"coordinates" : [ 1532.62, 493.66 ] 
+								"coordinates" : [ 1538.11, 579.90 ] 
 							},
 							"rotations" : {
 								"angle" : 180
@@ -310,12 +310,12 @@
 					"maxIndex" : 660,
 					"fullSize" : {
 						"transformation" : {
-							"scales" : [ 0.345, 0.345 ],
+							"scales" : [ 0.355, 0.355 ],
 							"translations" : {
-								"coordinates" : [ 997.36, 1231.56 ] 
+								"coordinates" : [ 973.05, 1183.67 ] 
 							},
 							"rotations" : {
-								"angle" : -5
+								"angle" : 0
 							}
 						}
 					},
@@ -360,12 +360,12 @@
 					"maxIndex" : 330,
 					"fullSize" : { 
 						"transformation" : {
-							"scales" : [ 0.35, 0.35 ],
+							"scales" : [ 0.355, 0.355 ],
 							"translations" : {
-								"coordinates" : [ 414.67, 880.9 ] 
+								"coordinates" : [ 414.67, 880.90 ] 
 							},
 							"rotations" : {
-								"angle" : 63
+								"angle" : 60
 							}
 						}
 					},
@@ -387,7 +387,7 @@
 		// SVG MANAGER SETTINGS
 		//////////////////////////////////////////////////////
 		"svgAttribs" : {
-			"fileName" : "ACTEMRA_PondCharts_111214-0.svg",
+			"fileName" : "ACTEMRA_PondCharts_111214-1TEST W PNG_current.svg",
 			"pageAttribs" : {
 				"staticPages" : {
 					"pages" : [
