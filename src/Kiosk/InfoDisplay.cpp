@@ -26,16 +26,16 @@ using namespace std;
 
 namespace heartbeat {
 	
-InfoDisplay::InfoDisplay( KioskId kioskId )
+InfoDisplay::InfoDisplay( KioskId kioskId, bool shouldRenderSvgs )
 : mId( kioskId ), mMasterAlpha( 0.0f ), mFadeTime( 5.0f ), mStatus( Status::HOME_SCREEN ), mIsActivated( false ),
 	mCurrentSection( 0 ), mIsHalfSized( Engine::get()->getRenderer()->isHalfSize() ),
-	mShouldDrawBoundingBoxes( false ), mRenderWithCairo( true ), mStateChanged( true )
+	mShouldDrawBoundingBoxes( false ), mRenderWithCairo( shouldRenderSvgs ), mStateChanged( true )
 {
 }
 	
-InfoDisplayRef InfoDisplay::create( heartbeat::KioskId kioskId )
+InfoDisplayRef InfoDisplay::create( heartbeat::KioskId kioskId, bool shouldRenderSvgs )
 {
-	return InfoDisplayRef( new InfoDisplay( kioskId ) );
+	return InfoDisplayRef( new InfoDisplay( kioskId, shouldRenderSvgs ) );
 }
 
 void InfoDisplay::update()
@@ -461,6 +461,7 @@ void InfoDisplay::initiaize(const ci::JsonTree &root)
 {
 	try {
 		auto svgManager = SvgManager::get();
+        
 		
 		if( mIsHalfSized ) {
 			Renderable::initialize( root["halfSize"]["transformation"] );

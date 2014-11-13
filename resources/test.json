@@ -10,8 +10,8 @@
 				1080
 			],
 			"numPixelOverlap" : 200,
-			"splitWindow" : false,
-			"halfSize" : true
+			"splitWindow" : true,
+			"halfSize" : false
 		},
 		//////////////////////////////////////////////////////
 		// HID ATTRIBUTES
@@ -192,7 +192,8 @@
 		// Info Display SETTINGS
 		//////////////////////////////////////////////////////
 		"kioskManagerAttribs" : {
-			"infoDisplays" : { 
+			"infoDisplays" : {
+				"renderWithSVG" : false,
 				"lilyTexLightName" : "lilyYellow.png",
 				"lilyTexDarkName" : "lilyDark.png",
 				"structure" : {
@@ -264,7 +265,7 @@
 								"coordinates" : [ 1532.62, 493.66 ] 
 							},
 							"rotations" : {
-								"angle" : 170
+								"angle" : 180
 							}
 						}
 					},
@@ -289,7 +290,7 @@
 									"coordinates" : [ 1332.65, 882.59 ] 
 								},
 								"rotations" : {
-									"angle" : 25
+									"angle" : 0
 								}
 							}
 						},
@@ -300,7 +301,7 @@
 									"coordinates" : [ 1332.65, 882.59 ] 
 								},
 								"rotations" : {
-									"angle" : 25
+									"angle" : 0
 								}
 							}
 						}

@@ -30,7 +30,7 @@ public:
 		CUT
 	};
 	
-	static InfoDisplayRef create( KioskId kioskId );
+	static InfoDisplayRef create( KioskId kioskId, bool shouldRenderSvgs );
 	
 	~InfoDisplay() {}
 	
@@ -59,6 +59,7 @@ public:
 	void renderToSvg();
 	
 	void toggleStatus();
+    void toggleRenderSvgs() { mRenderWithCairo = !mRenderWithCairo; }
 	
 	void registerTouchBegan( EventDataRef eventData );
 	void registerTouchMoved( EventDataRef eventData );
@@ -99,7 +100,7 @@ public:
 	ci::gl::FboRef& getPresentationFbo() { return mPresentationFbo; }
 	
 private:
-	InfoDisplay( KioskId kioskId );
+	InfoDisplay( KioskId kioskId, bool shouldRenderSvgs );
 
 	ci::gl::FboRef					mPresentationFbo;
 	Status							mStatus;

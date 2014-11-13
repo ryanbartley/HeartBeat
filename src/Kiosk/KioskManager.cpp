@@ -232,14 +232,21 @@ void KioskManager::initialize()
 			auto size = svgManager->getDoc()->getSize();
 			CI_LOG_V("Size of doc is: " << size);
 			auto globalFbo = gl::Fbo::create( size.x, size.y, format );
+            bool shouldRenderSvgs = false;
+            
+            try {
+				shouldRenderSvgs = infoDisplays["renderWithSvg"].getValue<bool>();
+			}
+			catch( const JsonTree::ExcChildNotFound &ex ) {
+				CI_LOG_E(ex.what());
+			}
 			
 			try {
 				auto top = infoDisplays["top"];
 				try {
-					auto topDisplay = InfoDisplay::create( KioskId::TOP_KIOSK );
+					auto topDisplay = InfoDisplay::create( KioskId::TOP_KIOSK, shouldRenderSvgs );
 					topDisplay->initiaize( top );
 					topDisplay->setPresentFbo( globalFbo );
-					
 					mDisplays[topIndex] = topDisplay;
 				}
 				catch ( const JsonTree::ExcChildNotFound &ex ) {
@@ -264,10 +271,10 @@ void KioskManager::initialize()
 				auto middle = infoDisplays["middle"];
 				
 				try {
-					auto middleDisplay = InfoDisplay::create( KioskId::TOP_KIOSK );
+					auto middleDisplay = InfoDisplay::create( KioskId::TOP_KIOSK, shouldRenderSvgs );
 					middleDisplay->initiaize( middle );
 					middleDisplay->setPresentFbo( globalFbo );
-					
+					middleDisplay->setRotationDegree( 0.0f );
 					mDisplays[middleIndex] = middleDisplay;
 				}
 				catch ( const JsonTree::ExcChildNotFound &ex ) {
@@ -291,7 +298,7 @@ void KioskManager::initialize()
 				auto bottom = infoDisplays["bottom"];
 				
 				try {
-					auto bottomDisplay = InfoDisplay::create( KioskId::TOP_KIOSK );
+					auto bottomDisplay = InfoDisplay::create( KioskId::TOP_KIOSK, shouldRenderSvgs );
 					bottomDisplay->initiaize( bottom );
 					bottomDisplay->setPresentFbo( globalFbo );
 					
