@@ -32,21 +32,19 @@ out vec3 tf_velocity;
 out vec3 tf_normal;
 
 // A uniform to hold the timestep. The application can update this
-uniform float t = 0.07;
+uniform float t; //= 0.07;
 
 // The global spring constant
-uniform float k = 10.0;
+uniform float k = 80.0;
 
 // Gravity
 const vec3 gravity = vec3(0.0, 0.0, 0.0);
 
-const float size = 50.0 * 50.0;
-
 // Global damping constant
-uniform float c = 2.8;
+uniform float c = 6.0;
 
 // Spring resting length
-uniform float rest_length = 0.88;
+uniform float rest_length = 0.0001;
 
 vec3 calcNormal( vec3 v0, vec3 v1, vec3 v2 )
 {
@@ -65,7 +63,7 @@ vec3 calcTouchAccel( vec3 pos, vec3 touch, float dist, float maxAccel )
 	vec3 diff = pos - touch;
 	
 	diff = normalize( diff );
-	diff *= pow( dist, 3.0 );
+	diff *= pow( dist, 2.0 );
 //	return clamp( diff, vec3(), vec3(maxAccel) );
 	return clamp( diff, vec3( - maxAccel ), vec3( maxAccel ) );
 //	return diff;
@@ -129,23 +127,15 @@ void main(void)
 		int localNumTouchesMoved = int(numTouchesMoved);
 		for( int i = 0; i < MAX_TOUCHES && i < localNumTouchesBegan; i++ ) {
 			float dist = distance( vec3(touchesBegan[i], 0), p);
-			if( dist < touchBeganDistThreshold ) {
-//				float yDiff = (cos(dist * M_PI / touchBeganDistThreshold) / 2) * 20;
-//				float xDiff = (sin(dist * M_PI / touchBeganDistThreshold) / 2) * 20;
-//				float zDiff = -(xDiff * yDiff);
-//				p += vec3( xDiff, yDiff, zDiff );
-				touchAccel += calcTouchAccel( p, vec3(touchesBegan[i], 100), dist, 500.0 );
+			if( dist < 70 ) {
+				touchAccel += calcTouchAccel( p, vec3(touchesBegan[i], 100), dist, 600.0 );
 				break;
 			}
 		}
 		for( int i = 0; i < MAX_TOUCHES && i < localNumTouchesMoved; i++ ) {
 			float dist = distance(vec3(touchesMoved[i], 0), p);
-			if( dist < touchMovedDistThreshold ) {
-//				float yDiff = (cos(dist * M_PI / touchMovedDistThreshold) / 2) * 20;
-//				float xDiff = (sin(dist * M_PI / touchMovedDistThreshold) / 2) * 20;
-//				float zDiff = -(xDiff * yDiff);
-//				p += vec3( xDiff, yDiff, zDiff );
-				touchAccel += calcTouchAccel( p, vec3(touchesMoved[i], 100), dist, 200.0 );
+			if( dist < 30) {
+				touchAccel += calcTouchAccel( p, vec3(touchesMoved[i], 100), dist, 600.0 );
 				break;
 			}
 		}

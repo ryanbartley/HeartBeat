@@ -193,7 +193,7 @@
 		//////////////////////////////////////////////////////
 		"kioskManagerAttribs" : {
 			"infoDisplays" : { 
-				"lilyTexLightName" : "lilyLight.png",
+				"lilyTexLightName" : "lilyYellow.png",
 				"lilyTexDarkName" : "lilyDark.png",
 				"structure" : {
 					"staticPages" : {

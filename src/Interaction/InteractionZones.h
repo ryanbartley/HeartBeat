@@ -240,6 +240,7 @@ void InteractionZones::processTouches()
 {
 	for( auto & touchIt : mTouchInteractors ) {
 		bool touchHandled = false;
+		bool inNonActiveArea = false;
 		if( ! mCurrentTouches.empty() ) {
 			for( auto & currentTouch : mCurrentTouches ) {
 				if( currentTouch.contains( touchIt.mIndex, touchIt.mDistance ) && touchIt.mNumIndicesPast < mNumIndicesThreshTouches ) {
@@ -247,8 +248,15 @@ void InteractionZones::processTouches()
 					break;
 				}
 			}
+			for( auto & approachZone : mApproachZones ) {
+				if( approachZone.second.contains( touchIt.mIndex ) ) {
+					if( ! approachZone.second.getIsActivated() ) {
+						inNonActiveArea = true;
+					}
+				}
+			}
 		}
-		if( ! touchHandled ) {
+		if( ! touchHandled && ! inNonActiveArea ) {
 			mCurrentTouches.emplace_back( touchIt.mIndex, touchIt.mDistance );
 		}
 	}

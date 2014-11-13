@@ -174,20 +174,19 @@ void InfoDisplay::activate( bool activate )
 	if( mIsActivated == activate ) return;
 
 	auto app = App::get();
+	auto shared = shared_from_this();
 	
 	if( activate ) {
-		cout << getKiosk( mId ) << " Received activate True, beginning: " << app::getElapsedSeconds() << endl;
 		app->timeline().applyPtr( &mMasterAlpha, 1.0f, mFadeTime ).easeFn( EaseInCubic() );
-		mIsActivated = activate;
+		mIsActivated = true;
 	}
 	else {
-		cout << getKiosk( mId ) << " Received activate False, beginning: " << app::getElapsedSeconds() << endl;
-		auto shared = shared_from_this();
-		app->timeline().applyPtr( &mMasterAlpha, 0.0f, mFadeTime ).easeFn( EaseInCubic() ).finishFn( std::bind( &InfoDisplay::reset, shared ) );
+		app->timeline().applyPtr( &mMasterAlpha, 0.0f, mFadeTime ).easeFn( EaseInCubic() ).finishFn( std::bind( &InfoDisplay::finished, shared ) );
+		mIsActivated = false;
 	}
 }
 	
-void InfoDisplay::reset()
+void InfoDisplay::finished()
 {
 	mStatus = Status::HOME_SCREEN;
 	mIsActivated = false;

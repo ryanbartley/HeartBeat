@@ -33,6 +33,8 @@ public:
 		NONE
 	};
 	
+	~TouchData() = default;
+	
 	TouchData( int index, long distance );
 	inline bool contains( int index, long distance );
 	inline void update( int index, long distance );
@@ -100,8 +102,9 @@ public:
 	
 	ApproachData( KioskId kiosk, int lowestIndex, int highestIndex )
 	: mKiosk( kiosk ), mLowestIndex( lowestIndex ), mHighestIndex( highestIndex ),
-	mIsActivated( false ), mNumEvents( 0 ), mActivationTime( 0.0 )
+	mIsActivated( false ), mNumEvents( 0 )
 	{}
+	~ApproachData() = default;
 	
 	enum class EventTypeToEmit {
 		APPROACH,
@@ -119,14 +122,16 @@ public:
 	inline const int getLowest() const { return mLowestIndex; }
 	inline const int getHighest() const { return mHighestIndex; }
 	void createAndSendEvent();
+	void endFrame();
 	
 private:
+	
+	EventTypeToEmit		mEmitType;
 	const KioskId		mKiosk;
 	const int			mLowestIndex, mHighestIndex;
 	int					mNumEvents;
 	bool				mIsActivated;
-	double				mActivationTime;
-	EventTypeToEmit		mEmitType;
+	
 };
 	
 void ApproachData::activate( bool enable )

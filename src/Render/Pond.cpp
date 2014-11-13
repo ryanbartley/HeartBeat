@@ -190,8 +190,11 @@ void Pond::renderPondElements()
 	
 void Pond::projectPondElements( const gl::Texture2dRef &pond )
 {
+	static float rot = 0.0f;
 	gl::ScopedMatrices scopeMat;
 	gl::setMatricesWindowPersp( mPondSize, 60.0f, .01f, 10000.0f );
+//	gl::multModelMatrix( ci::rotate( rot -= .01f, vec3( 0, 1, 0 ) ) );
+//	gl::multModelMatrix( ci::translate( vec3( - mPondSize.x, 0, 0 ) ) );
 	if( pond ) {
 		// Need to send it the fbo or texture of the rendered pond from above.
 		mSpringMesh->project( pond );

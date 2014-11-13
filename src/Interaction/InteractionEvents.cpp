@@ -43,8 +43,8 @@ TouchEvent::TouchEvent( uint64_t touchId, int index, float dist )
 {
 }
 	
-TouchEvent::TouchEvent( uint64_t touchId, const ci::vec2 &point )
-: EventData( ci::app::getElapsedSeconds() ), mTouchId( touchId ), mIndex( 100 ),
+TouchEvent::TouchEvent( uint64_t touchId, int index, const ci::vec2 &point )
+: EventData( ci::app::getElapsedSeconds() ), mTouchId( touchId ), mIndex( index ),
 	mDist( 0 ), mWorldCoord( point ), mCachedWorldCoord( true )
 {
 }
@@ -54,8 +54,8 @@ TouchBeganEvent::TouchBeganEvent( uint64_t touchId, int index, float dist )
 {
 }
 	
-TouchBeganEvent::TouchBeganEvent( uint64_t touchId, const ci::vec2 &point )
-: TouchEvent( touchId, point )
+TouchBeganEvent::TouchBeganEvent( uint64_t touchId, int index, const ci::vec2 &point )
+: TouchEvent( touchId, index, point )
 {
 }
 
@@ -64,8 +64,8 @@ TouchMoveEvent::TouchMoveEvent( uint64_t touchId, int index, float dist )
 {
 }
 
-TouchMoveEvent::TouchMoveEvent( uint64_t touchId, const ci::vec2 &point )
-: TouchEvent( touchId, point )
+TouchMoveEvent::TouchMoveEvent( uint64_t touchId, int index, const ci::vec2 &point )
+: TouchEvent( touchId, index, point )
 {
 }
 
@@ -74,8 +74,8 @@ TouchEndedEvent::TouchEndedEvent( uint64_t touchId, int index, float dist )
 {
 }
 
-TouchEndedEvent::TouchEndedEvent( uint64_t touchId, const ci::vec2 &point )
-: TouchEvent( touchId, point )
+TouchEndedEvent::TouchEndedEvent( uint64_t touchId, int index, const ci::vec2 &point )
+: TouchEvent( touchId, index, point )
 {
 }
 	

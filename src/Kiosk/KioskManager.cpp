@@ -28,7 +28,9 @@ using namespace std;
 namespace heartbeat {
 	
 KioskManager::KioskManager()
+#if defined( DEBUG )
 : mDebugRenderInfoDisplay( false )
+#endif
 {
 	auto eventManager = EventManagerBase::get();
 	if( eventManager ) {
@@ -100,7 +102,7 @@ void KioskManager::touchBeganDelegate( EventDataRef touchEvent )
 	}
 	
 	for( auto & kiosk : mDisplays ) {
-		if( kiosk->insideAngle( event->getIndex() ) ) {
+		if( kiosk->insideAngle( event->getIndex() ) && kiosk->isActivated() ) {
 			kiosk->registerTouchBegan( event );
 		}
 	}
@@ -116,7 +118,7 @@ void KioskManager::touchMovedDelegate( EventDataRef touchEvent )
 	}
 	
 	for( auto & kiosk : mDisplays ) {
-		if( kiosk->insideAngle( event->getIndex() ) ) {
+		if( kiosk->insideAngle( event->getIndex() && kiosk->isActivated() ) ) {
 			kiosk->registerTouchMoved( event );
 		}
 	}
@@ -137,11 +139,20 @@ void KioskManager::touchEndedDelegate( EventDataRef touchEvent )
 //		}
 //	}
 }
-	
+
+#if defined( DEBUG )
 void KioskManager::toggleDebugRenderInfoDisplay()
 {
 	mDebugRenderInfoDisplay = ! mDebugRenderInfoDisplay;
 }
+	
+void KioskManager::toggleDebugBoundingBoxes()
+{
+	for( auto & kiosk : mDisplays ) {
+		kiosk->enableBoundingBoxRender( ! kiosk->getBoundingBoxRender() );
+	}
+}
+#endif
 	
 void KioskManager::update()
 {
@@ -153,7 +164,9 @@ void KioskManager::update()
 void KioskManager::render()
 {
 	gl::enableAlphaBlending();
+#if defined( DEBUG )
 	if( ! mDebugRenderInfoDisplay ) {
+#endif
 		for( auto & kiosk : mDisplays ) {
 			kiosk->draw();
 		}
@@ -161,6 +174,7 @@ void KioskManager::render()
 		for ( auto & lilyPad : mLilyPads ) {
 			lilyPad->draw();
 		}
+#if defined( DEBUG )
 	}
 	else {
 		mDisplays[0]->renderToFbo();
@@ -170,6 +184,8 @@ void KioskManager::render()
 		gl::multModelMatrix( ci::scale( vec3( scale ? 0.5 : 1, scale ? 0.5 : 1, 0 ) ) );
 		gl::draw( fbo->getColorTexture() );
 	}
+#endif
+	
 	gl::disableAlphaBlending();
 }
 	
@@ -214,6 +230,7 @@ void KioskManager::initialize()
 			
 			
 			auto size = svgManager->getDoc()->getSize();
+			CI_LOG_V("Size of doc is: " << size);
 			auto globalFbo = gl::Fbo::create( size.x, size.y, format );
 			
 			try {

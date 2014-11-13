@@ -14,6 +14,7 @@
 #include "Renderer.h"
 #include "LilyPadOverlay.h"
 #include "Pond.h"
+#include "SpringMesh.h"
 #endif
 
 using namespace ci;
@@ -94,6 +95,7 @@ class FullProjectApp : public AppNative {
 	heartbeat::InteractionDebugRenderableRef	mInteractionDebug;
 	heartbeat::EventManagerRef					mEventManager;
 	heartbeat::KioskManagerRef					mKioskManager;
+	heartbeat::PondRef							mPond;
 	std::array<int, 2>							mThreshes;
 	std::array<float, 7>						mRotations;
 	std::array<float, 7>						mScales;
@@ -113,6 +115,7 @@ void FullProjectApp::setup()
     mInteractionDebug = mEngine->getInteractionDebug();
 	mInteractionZones = mEngine->getInteractionZones();
 	mEventManager = mEngine->getEventManager();
+	mPond = mEngine->getPond();
 	
 	mScales.fill( 1.0f );
 	mRotations.fill( 0 );
@@ -164,6 +167,12 @@ void FullProjectApp::setup()
 	mParams->addButton("Send Bottom Teensy Depart", [&](){
 		mEventManager->queueEvent( EventDataRef( new DepartEvent( KioskId::BOTTOM_KIOSK ) ) );
 	});
+	
+	mParams->addSeparator();
+	mParams->addButton( "Reload SpringMesh Updater", [&](){  mPond->getSpringMesh()->loadShaders(); } );
+	
+	mParams->addSeparator();
+	mParams->addButton( "Enable Bounding Boxes", [&](){ mKioskManager->toggleDebugBoundingBoxes(); } );
 	
 	mParams->addSeparator();
 	mParams->addText("Zone Scalars (No Overlapping)");
@@ -303,7 +312,7 @@ void FullProjectApp::mouseDown( MouseEvent event )
 		if( event.getPos().y > renderer->getBottomPresentationTarget()->getSize().y  ) {
 			eventPosition.y = eventPosition.y - renderer->getNumPixelOverlap();
 		}
-		mEventManager->queueEvent( heartbeat::EventDataRef( new heartbeat::TouchBeganEvent( 1, eventPosition ) ) );
+		mEventManager->queueEvent( heartbeat::EventDataRef( new heartbeat::TouchBeganEvent( 1, 900, eventPosition ) ) );
 	}
 #endif
 }
@@ -315,7 +324,7 @@ void FullProjectApp::mouseDrag( cinder::app::MouseEvent event )
 		ci::vec2 eventPosition = event.getPos();
 		auto renderer = mEngine->getRenderer();
 
-		mEventManager->queueEvent( heartbeat::EventDataRef( new heartbeat::TouchMoveEvent( 1, eventPosition ) ) );
+		mEventManager->queueEvent( heartbeat::EventDataRef( new heartbeat::TouchMoveEvent( 1, 900, eventPosition ) ) );
 	}
 #endif
 }

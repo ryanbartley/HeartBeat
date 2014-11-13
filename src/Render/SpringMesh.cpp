@@ -61,10 +61,11 @@ void SpringMesh::update()
 	// physics of the cloth.
 	// Change mIterationsPerFrame to see the difference it makes
 	for( int i = mIterationsPerFrame; i != 0; --i ) {
-		ci::Timer updatetime;
-		updatetime.start();
+		mUpdateTimer.stop();
 		// Pick using the mouse if it's pressed
 		mUpdateGlsl->uniform( "elapsedSeconds", float(getElapsedSeconds()) );
+		mUpdateGlsl->uniform( "t", (float)mUpdateTimer.getSeconds() );
+		mUpdateTimer.start();
 		
 		gl::ScopedVao			vaoScope( mVaos[mIterationIndex & 1] );
 		gl::ScopedTextureBind	textureBind( mPosBufferTextures[mIterationIndex & 1]->getTarget(),

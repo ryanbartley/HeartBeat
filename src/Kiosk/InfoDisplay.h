@@ -38,7 +38,7 @@ public:
 	const ci::Rectf getPresentationRect() { return mPresentRect; }
 	
 	void activate( bool activate );
-	void reset();
+	void finished();
 	
 	bool isActivated() { return mIsActivated; }
 	bool insideAngle( int index ) { return mMinIndex < index && mMaxIndex > index; }
@@ -78,7 +78,7 @@ public:
 	std::map<std::string, std::vector<ButtonRef>>& getOverlayButtons() { return mOverlayButtons; }
 	
 	void enableBoundingBoxRender( bool enable ) { mShouldDrawBoundingBoxes = enable; }
-	
+	bool getBoundingBoxRender() {return mShouldDrawBoundingBoxes; }
 	void removeFront();
 	
 	void renderToFbo();

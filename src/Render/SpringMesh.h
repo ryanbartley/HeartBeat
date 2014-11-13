@@ -40,14 +40,16 @@ public:
 	void setTouchesMovedDistThresh( float thresh ) { mTouchesMovedDistThresh = thresh;}
 	void setTouchesBeganDistThresh( float thresh ) { mTouchesBeganDistThresh = thresh; }
 	
+	void loadShaders();
+	
 private:
 	SpringMesh();
 	
 	void initialize( const ci::JsonTree &root, const ci::vec2 &size );
 	
-	void loadShaders();
-	void loadBuffers( const ci::vec2 &size );
 	
+	void loadBuffers( const ci::vec2 &size );
+
 	ci::gl::GlslProgRef				mUpdateGlsl, mDebugRenderGlsl, mRenderGlsl;
 	ci::gl::VaoRef					mVaos[2];
 	ci::gl::VboRef					mPositions[2], mVelocities[2], mNormals, mTexCoords,
@@ -58,6 +60,7 @@ private:
 	uint32_t						mIterationsPerFrame, mIterationIndex,
 									mLineIndices, mTriangleIndices, mPointTotal;
 	bool							mDrawDebug, mDrawTexture;
+	ci::Timer						mUpdateTimer;
 	
 	uint32_t						mNumRows, mNumColumns, mNumIterations;
 	float							mTouchesBeganDistThresh, mTouchesMovedDistThresh;

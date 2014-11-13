@@ -18,7 +18,7 @@ public:
 	static const EventType TYPE;
 	
 	explicit ApproachEvent( KioskId kioskId );
-	~ApproachEvent() {}
+	virtual ~ApproachEvent() {}
 	
 	//! Returns the index of the approaching entity
 	
@@ -47,7 +47,7 @@ public:
 	static const EventType TYPE;
 	
 	explicit DepartEvent( KioskId kioskId );
-	~DepartEvent() {}
+	virtual ~DepartEvent() {}
 	
 	//! Returns the index of the approaching entity
 	
@@ -76,8 +76,8 @@ public:
 	static const EventType TYPE;
 	
 	explicit TouchEvent( uint64_t touchId, int index, float dist );
-	explicit TouchEvent( uint64_t touchId, const ci::vec2 &point );
-	~TouchEvent() {}
+	explicit TouchEvent( uint64_t touchId, int index, const ci::vec2 &point );
+	virtual ~TouchEvent() {}
 	
 	int getIndex() { return mIndex; }
 	float getDistance() { return mDist; }
@@ -114,7 +114,8 @@ public:
 	static const EventType TYPE;
 	
 	explicit TouchBeganEvent( uint64_t touchId, int index, float distance );
-	explicit TouchBeganEvent( uint64_t touchId, const ci::vec2 &point );
+	explicit TouchBeganEvent( uint64_t touchId, int index, const ci::vec2 &point );
+	virtual ~TouchBeganEvent() {}
 	
 	EventDataRef copy() { return EventDataRef( new TouchBeganEvent( mTouchId, mIndex, mDist ) ); }
 	const char* getName() override { return "TouchBeganEvent"; }
@@ -139,7 +140,8 @@ public:
 	static const EventType TYPE;
 	
 	explicit TouchMoveEvent( uint64_t touchId, int index, float distance );
-	explicit TouchMoveEvent( uint64_t touchId, const ci::vec2 &point );
+	explicit TouchMoveEvent( uint64_t touchId, int index, const ci::vec2 &point );
+	virtual ~TouchMoveEvent() {}
 	
 	EventDataRef copy() { return EventDataRef( new TouchMoveEvent( mTouchId, mIndex, mDist ) ); }
 	const char* getName() override { return "TouchMoveEvent"; }
@@ -164,7 +166,8 @@ public:
 	static const EventType TYPE;
 	
 	explicit TouchEndedEvent( uint64_t touchId, int index, float distance );
-	explicit TouchEndedEvent( uint64_t touchId, const ci::vec2 &point );
+	explicit TouchEndedEvent( uint64_t touchId, int index, const ci::vec2 &point );
+	virtual ~TouchEndedEvent() {}
 	
 	EventDataRef copy() { return EventDataRef( new TouchEndedEvent( mTouchId, mIndex, mDist ) ); }
 	const char* getName() override { return "TouchEndedEvent"; }

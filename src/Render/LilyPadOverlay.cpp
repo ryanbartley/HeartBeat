@@ -34,10 +34,10 @@ void LilyPad::initialize( const ci::JsonTree &root )
 	try {
 		auto halfSize = Engine::get()->getRenderer()->isHalfSize();
 		if( halfSize ) {
-			Renderable::initialize( root["fullSize"]["transformation"] );
+			Renderable::initialize( root["halfSize"]["transformation"] );
 		}
 		else {
-			Renderable::initialize( root["halfSize"]["transformation"] );
+			Renderable::initialize( root["fullSize"]["transformation"] );
 		}
 	}
 	catch ( const JsonTree::ExcChildNotFound &ex ) {

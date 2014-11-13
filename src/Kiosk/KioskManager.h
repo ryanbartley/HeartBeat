@@ -24,9 +24,10 @@ public:
 	void touchBeganDelegate( EventDataRef touchEvent );
 	void touchMovedDelegate( EventDataRef touchEvent );
 	void touchEndedDelegate( EventDataRef touchEvent );
-	
+#if defined( DEBUG )
 	void toggleDebugRenderInfoDisplay();
-	
+	void toggleDebugBoundingBoxes();
+#endif
 	void update();
 	void render();
 	
@@ -41,7 +42,9 @@ private:
 	std::array<InfoDisplayRef, 3>	mDisplays;
 	std::array<LilyPadRef, 3>		mLilyPads;
 	HidCommManagerRef				mHidCommManager;
+#if defined( DEBUG )
 	bool							mDebugRenderInfoDisplay;
+#endif
 	
 	friend class Engine;
 };
