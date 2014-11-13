@@ -29,7 +29,7 @@ namespace heartbeat {
 InfoDisplay::InfoDisplay( KioskId kioskId )
 : mId( kioskId ), mMasterAlpha( 0.0f ), mFadeTime( 5.0f ), mStatus( Status::HOME_SCREEN ), mIsActivated( false ),
 	mCurrentSection( 0 ), mIsHalfSized( Engine::get()->getRenderer()->isHalfSize() ),
-	mShouldDrawBoundingBoxes( false )
+	mShouldDrawBoundingBoxes( false ), mRenderWithCairo( true )
 {
 }
 	
@@ -57,12 +57,23 @@ void InfoDisplay::renderCurrentScene()
 void InfoDisplay::renderHomeScreen()
 {
 	auto home = mPageCache.find("HOME");
-	home->second->render();
+	if( mRenderWithCairo ) {
+		mContext.render( *home->second->getRootGroup() );
+	}
+	else {
+		home->second->render();
+	}
+	
 	
 	for( auto & button : mHomeButtons ) {
-		button->render();
-		if( mShouldDrawBoundingBoxes ) {
-			button->renderBoundingBox();
+		if( mRenderWithCairo ) {
+			mContext.render( *home->second->getRootGroup() );
+		}
+		else {
+			button->render();
+			if( mShouldDrawBoundingBoxes ) {
+				button->renderBoundingBox();
+			}
 		}
 	}
 }
@@ -71,7 +82,12 @@ void InfoDisplay::renderDataScreen()
 {
 	if( ! mOverlay ) {
 		for( auto & page : mDataPages ) {
-			page->render();
+			if( mRenderWithCairo ) {
+				mContext.render( *page->getRootGroup() );
+			}
+			else {
+				page->render();
+			}
 		}
 	}
 	
@@ -81,20 +97,43 @@ void InfoDisplay::renderDataScreen()
 	for( auto & button : mDataButtons ) {
 		// TODO: Why did I have this?
 		// if( button )
-		button->render();
-		if( mShouldDrawBoundingBoxes ) {
-			button->renderBoundingBox();
+		if( mRenderWithCairo ) {
+			auto cast = std::dynamic_pointer_cast<DataPageButton>( button );
+			if( cast ) {
+				if( cast->getStatus() == ButtonStatus::ACTIVE ) {
+					mContext.render( *cast->getActive() );
+				}
+				else {
+					mContext.render( *cast->getNonActive() );
+				}
+			}
+		}
+		else {
+			button->render();
+			if( mShouldDrawBoundingBoxes ) {
+				button->renderBoundingBox();
+			}
 		}
 	}
 	
-	mLines->render();
+	if( mRenderWithCairo ) {
+		mContext.render( *mLines->getRootGroup() );
+	}
+	else {
+		mLines->render();
+	}
 }
 	
 void InfoDisplay::renderOverlayScreen()
 {
 	if( ! mOverlay ) return;
 	
-	mOverlay->render();
+	if( mRenderWithCairo ) {
+		mContext.render( *mOverlay->getRootGroup() );
+	}
+	else {
+		mOverlay->render();
+	}
 	
 	auto & name = mOverlay->getButtonGroup();
 	auto & buttons = mOverlayButtons[name];
@@ -103,9 +142,14 @@ void InfoDisplay::renderOverlayScreen()
 	}
 	
 	for( auto & button : buttons ) {
-		button->render();
-		if( mShouldDrawBoundingBoxes ) {
-			button->renderBoundingBox();
+		if( mRenderWithCairo ) {
+			mContext.render( *button->getRootGroup() );
+		}
+		else {
+			button->render();
+			if( mShouldDrawBoundingBoxes ) {
+				button->renderBoundingBox();
+			}
 		}
 	}
 }
@@ -147,26 +191,31 @@ void InfoDisplay::draw()
 {
 	if( mMasterAlpha <= 0.0f ) return;
 	
-	renderToFbo();
-	
-	auto tex = mPresentationFbo->getColorTexture();
-	
-	gl::ScopedModelMatrix scopeModel;
-	gl::setModelMatrix( getModelMatrix() );
-	{
-        gl::ScopedColor scopeColor( ColorA( 1, 1, 1, mMasterAlpha ) );
-        gl::draw( tex );
+	if( mRenderWithCairo ) {
+		
 	}
-#if defined( DEBUG )
-	{
-		gl::ScopedColor scopeColor( ColorA(1, 0, 0, 1) );
-		for( auto & point : mPoints ) {
-			cout << "I should be drawing this point" << endl;
-			gl::drawSolidCircle( point, 20 );
+	else {
+		renderToFbo();
+	
+		auto tex = mPresentationFbo->getColorTexture();
+	
+		gl::ScopedModelMatrix scopeModel;
+		gl::setModelMatrix( getModelMatrix() );
+		{
+			gl::ScopedColor scopeColor( ColorA( 1, 1, 1, mMasterAlpha ) );
+			gl::draw( tex );
 		}
-	}
-	mPoints.clear();
+#if defined( DEBUG )
+		{
+			gl::ScopedColor scopeColor( ColorA(1, 0, 0, 1) );
+			for( auto & point : mPoints ) {
+				cout << "I should be drawing this point" << endl;
+				gl::drawSolidCircle( point, 20 );
+			}
+		}
+		mPoints.clear();
 #endif
+	}
 }
 	
 void InfoDisplay::activate( bool activate )
