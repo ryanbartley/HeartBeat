@@ -75,8 +75,8 @@ private:
 	
 bool TouchData::contains( int index, long distance )
 {
-	if( (index > mCurrentIndex - 8 || index < mCurrentIndex + 8 ) &&
-	   ( distance > mCurrentDistance - 40 || distance < mCurrentDistance + 40 ) ) {
+	if( ( index > mCurrentIndex - 8 && index < mCurrentIndex + 8 ) &&
+	   ( distance > mCurrentDistance - 40 && distance < mCurrentDistance + 40 ) ) {
 		mExistsThisFrame = true;
 		update( index, distance );
 		return true;

@@ -150,13 +150,13 @@ void InteractionZones::processApproach( int index, long distance )
 		addEvent( mApproachInteractors, index, distance );
 	}
 	else {
-		auto found = std::find( mIgnoreIndices.begin(), mIgnoreIndices.end(), index );
-		if ( found == mIgnoreIndices.end() ) {
-			mIgnoreIndices.push_back( index );
-			std::sort( mIgnoreIndices.begin(), mIgnoreIndices.end(), []( int i, int j ) {
-				return i < j;
-			});
-		}
+//		auto found = std::find( mIgnoreIndices.begin(), mIgnoreIndices.end(), index );
+//		if ( found == mIgnoreIndices.end() ) {
+//			mIgnoreIndices.push_back( index );
+//			std::sort( mIgnoreIndices.begin(), mIgnoreIndices.end(), []( int i, int j ) {
+//				return i < j;
+//			});
+//		}
 	}
 }
 	
@@ -167,13 +167,13 @@ void InteractionZones::processTouch( int index, long distance )
 		addEvent( mTouchInteractors, index, distance );
 	}
 	else {
-		auto found = std::find( mIgnoreIndices.begin(), mIgnoreIndices.end(), index );
-		if ( found == mIgnoreIndices.end() ) {
-			mIgnoreIndices.push_back( index );
-			std::sort( mIgnoreIndices.begin(), mIgnoreIndices.end(), []( int i, int j ) {
-				return i < j;
-			});
-		}
+//		auto found = std::find( mIgnoreIndices.begin(), mIgnoreIndices.end(), index );
+//		if ( found == mIgnoreIndices.end() ) {
+//			mIgnoreIndices.push_back( index );
+//			std::sort( mIgnoreIndices.begin(), mIgnoreIndices.end(), []( int i, int j ) {
+//				return i < j;
+//			});
+//		}
 	}
 }
 	
@@ -195,7 +195,7 @@ void InteractionZones::addEvent( std::vector<Interactor> &events, int index, lon
 		auto & back = events.back();
 		// if we're one more and our distance is less than, this is a more precise
 		// middle point
-		if( index == back.mIndex + 1 ) {
+		if( index == back.mIndex + back.mNumIndicesPast + 1 ) {
 			if(  dist < back.mCurrentDistance + 40 && dist > back.mCurrentDistance - 40 ) {
 				back.mNumIndicesPast++;
 				back.checkMinMax( dist );
@@ -251,13 +251,13 @@ void InteractionZones::processTouches()
 					break;
 				}
 			}
-			for( auto & approachZone : mApproachZones ) {
-				if( approachZone.second.contains( currentCenterIndex ) ) {
-					if( ! approachZone.second.getIsActivated() ) {
-						inNonActiveArea = true;
-					}
-				}
-			}
+//			for( auto & approachZone : mApproachZones ) {
+//				if( approachZone.second.contains( currentCenterIndex ) ) {
+//					if( ! approachZone.second.getIsActivated() ) {
+//						inNonActiveArea = true;
+//					}
+//				}
+//			}
 		}
 		if( ! touchHandled && ! inNonActiveArea ) {
 			mCurrentTouches.emplace_back( currentCenterIndex, currentCenterDistance );
