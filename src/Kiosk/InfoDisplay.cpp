@@ -206,7 +206,13 @@ void InfoDisplay::renderToSvg()
 {
 	cairo::SurfaceImage surface( mTranslatedPresentRect.getWidth(), mTranslatedPresentRect.getHeight(), true );
 	cairo::Context context( surface );
+	
+#if defined( DEBUG )
+	auto & mM = getModelMatrix();
+	mCairoMat = MatrixAffine2<float>( mM[0][0], mM[0][1], mM[1][0], mM[1][1], mM[3][0], mM[3][1] );
+#endif
 	context.setMatrix( mCairoMat );
+	
 	context.setAntiAlias( 12 );
 	renderCurrentSceneSvg( context );
 	
@@ -474,9 +480,10 @@ void InfoDisplay::initiaize(const ci::JsonTree &root)
 		auto translated1 = getModelMatrix() * vec4(mPresentRect.x1, mPresentRect.y1, 0, 1);
 		auto translated2 = getModelMatrix() * vec4(mPresentRect.x2, mPresentRect.y2, 0, 1);
 		cout << "Original point1: " << vec4(mPresentRect.x1, mPresentRect.y1, 0, 1) << " Translated point 1: " << translated1 << endl << " Original point2: " << vec4(mPresentRect.x2, mPresentRect.y2, 0, 1) << " Translated point 2: " << translated2 << endl;
-		mTranslatedPresentRect.include( Rectf( translated1.x, translated1.y, translated2.x, translated2.y ) );
+		mTranslatedPresentRect = Rectf( -1000, -1000, 1000, 1000 );
+		mTranslatedPresentRect.getCenteredFill( Rectf( translated1.x, translated1.y, translated2.x, translated2.y ), true );
 		cout << "Translated rect with include: " << mTranslatedPresentRect << " width: " << mTranslatedPresentRect.getWidth() << " height: " << mTranslatedPresentRect.getHeight() << endl;
-		
+
 		mCairoTex = gl::Texture2d::create( mTranslatedPresentRect.getWidth(), mTranslatedPresentRect.getHeight() );
 		auto & mM = getModelMatrix();
 		mCairoMat = MatrixAffine2<float>( mM[0][0], mM[0][1], mM[1][0], mM[1][1], mM[3][0], mM[3][1] );
