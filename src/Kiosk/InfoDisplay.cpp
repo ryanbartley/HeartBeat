@@ -303,9 +303,6 @@ void InfoDisplay::addOverlayPage( OverlayPageRef &page )
 	
 void InfoDisplay::registerTouchBegan( EventDataRef eventData )
 {
-//	if( ! mIsActivated )
-//		CI_LOG_E("Not activated, something went wrong");
-	
 	auto event = std::dynamic_pointer_cast<TouchBeganEvent>( eventData );
 	if( ! event ) {
 		CI_LOG_E("Couldn't cast touch event from " << eventData->getName() );
@@ -316,52 +313,53 @@ void InfoDisplay::registerTouchBegan( EventDataRef eventData )
 	auto twoDimPoint = vec2( modelSpacePoint.x, modelSpacePoint.y );
     cout << "About to check this point: " << twoDimPoint << endl;
 	if( mPresentRect.contains( twoDimPoint ) ) {
-		std::vector<ButtonRef> *buttonSet;
-		switch ( mStatus) {
-			case Status::HOME_SCREEN: {
-				if( mOverlay ) {
-					auto & name = mOverlay->getButtonGroup();
-					buttonSet = &mOverlayButtons[name];
-					if( buttonSet->empty() ) {
-						CI_LOG_E("Couldn't find button set: " << name);
-					}
-				}
-				else {
-					buttonSet = &mHomeButtons;
-				}
-			}
-			break;
-			case Status::DATA_SCREEN: {
-				if( mOverlay ) {
-					auto & name = mOverlay->getButtonGroup();
-					buttonSet = &mOverlayButtons[name];
-					if( buttonSet->empty() ) {
-						CI_LOG_E("Couldn't find button set: " << name);
-					}
-				}
-				else {
-					buttonSet = &mDataButtons;
+		mPointMap[event->getTouchId()].push_back( twoDimPoint );
+	}
+}
+	
+void InfoDisplay::checkInteraction( const ci::vec2 &point )
+{
+	std::vector<ButtonRef> *buttonSet;
+	switch ( mStatus) {
+		case Status::HOME_SCREEN: {
+			if( mOverlay ) {
+				auto & name = mOverlay->getButtonGroup();
+				buttonSet = &mOverlayButtons[name];
+				if( buttonSet->empty() ) {
+					CI_LOG_E("Couldn't find button set: " << name);
 				}
 			}
-			break;
-			default:
-				CI_LOG_E("Status is incorrect " << static_cast<int>(mStatus));
-				return;
-			break;
-		}
-#if defined( DEBUG )
-        mPoints.push_back( twoDimPoint );
-#endif
-		for( auto & button : *buttonSet ) {
-            cout << "checking button: " << button->getGroupName() << " bounding:  " << button->getRootGroup()->getBoundingBox() << " point: " << twoDimPoint << endl;
-			if( button->contains( twoDimPoint ) ) {
-				cout << "it's this button: " << button->getGroupName() << endl;
-				auto shared = shared_from_this();
-				button->changeState( shared );
-				break;
+			else {
+				buttonSet = &mHomeButtons;
 			}
 		}
-		event->setIsHandled( true );
+			break;
+		case Status::DATA_SCREEN: {
+			if( mOverlay ) {
+				auto & name = mOverlay->getButtonGroup();
+				buttonSet = &mOverlayButtons[name];
+				if( buttonSet->empty() ) {
+					CI_LOG_E("Couldn't find button set: " << name);
+				}
+			}
+			else {
+				buttonSet = &mDataButtons;
+			}
+		}
+			break;
+		default:
+			CI_LOG_E("Status is incorrect " << static_cast<int>(mStatus));
+			return;
+			break;
+	}
+	for( auto & button : *buttonSet ) {
+		cout << "checking button: " << button->getGroupName() << " bounding:  " << button->getRootGroup()->getBoundingBox() << " point: " << point << endl;
+		if( button->contains( point ) ) {
+			cout << "it's this button: " << button->getGroupName() << endl;
+			auto shared = shared_from_this();
+			button->changeState( shared );
+			break;
+		}
 	}
 }
 
@@ -373,14 +371,37 @@ void InfoDisplay::registerTouchMoved( EventDataRef eventData )
 		return;
 	}
 	
-	auto modelSpacePoint = getInverseMatrix() * vec4( event->getWorldCoordinate(), 0, 1 );
-	auto twoDimPoint = vec2( modelSpacePoint.x, modelSpacePoint.y );
-	cout << "About to check this point: " << twoDimPoint << endl;
-	if( mPresentRect.contains( twoDimPoint ) ) {
-#if defined( DEBUG )
-		mPoints.push_back( twoDimPoint );
-#endif
-		event->setIsHandled( true );
+	auto found = mPointMap.find( event->getTouchId() );
+	if( found != mPointMap.end() ) {
+		found->second.push_back( event->getWorldCoordinate() );
+	}
+}
+	
+void InfoDisplay::registerTouchEnded( EventDataRef eventData )
+{
+	auto event = std::dynamic_pointer_cast<TouchMoveEvent>( eventData );
+	if( ! event ) {
+		CI_LOG_E("Couldn't cast touch event from " << eventData->getName() );
+		return;
+	}
+	
+	auto found = mPointMap.find( event->getTouchId() );
+	if( found != mPointMap.end() ) {
+		auto & pointVec = found->second;
+		if( pointVec.size() > 5 ) {
+			vec2 accum( 0.0f );
+			int i = 0;
+			for( auto pointIt = pointVec.rbegin(); pointIt != pointVec.rend(); ++pointIt ) {
+				if( i < 5 ) {
+					accum += *pointIt;
+				}
+				else {
+					break;
+				}
+			}
+			checkInteraction( accum / 5.0f );
+		}
+		mPointMap.erase( found );
 	}
 }
 	

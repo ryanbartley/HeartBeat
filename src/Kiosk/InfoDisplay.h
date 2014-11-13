@@ -53,6 +53,7 @@ public:
 	
 	void registerTouchBegan( EventDataRef eventData );
 	void registerTouchMoved( EventDataRef eventData );
+	void registerTouchEnded( EventDataRef eventData );
 	
 	void addDataPage( DataPageRef &page, AnimateType type );
 	void addOverlayPage( OverlayPageRef &page );
@@ -84,6 +85,8 @@ public:
 	
 	void renderToFbo();
 	
+	void checkInteraction( const ci::vec2 &point );
+	
 	ci::gl::FboRef& getPresentationFbo() { return mPresentationFbo; }
 	
 private:
@@ -109,6 +112,8 @@ private:
 #if defined( DEBUG )
     std::vector<ci::vec2>			mPoints;
 #endif
+	std::map<uint64_t,
+	std::vector<ci::vec2>>			mPointMap;
 	
 	PageRef							mBackGround,
 									mLines;
