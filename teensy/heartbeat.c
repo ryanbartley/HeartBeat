@@ -27,8 +27,8 @@ const double PROGMEM fullyOpen 		= 0.855;
 // 1.800 a
 // 1.550 c
 // 1.600 b
-const double PROGMEM fullyClosed 	= 1.800;
-const double PROGMEM amountToMove 	= 1.800 - 0.855;
+const double PROGMEM fullyClosed 	= 1.700;
+const double PROGMEM amountToMove 	= 1.700 - 0.855;
 static const double totalSteps = 400.0;
 
 void on();

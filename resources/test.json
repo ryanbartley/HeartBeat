@@ -386,7 +386,7 @@
 		// SVG MANAGER SETTINGS
 		//////////////////////////////////////////////////////
 		"svgAttribs" : {
-			"fileName" : "ACTEMRA_PondCharts_PattenLayout_Outlined.svg",
+			"fileName" : "ACTEMRA_PondCharts_111214-0.svg",
 			"pageAttribs" : {
 				"staticPages" : {
 					"pages" : [
@@ -493,6 +493,10 @@
 					"type" : "overlayPageButton",
 					"overlayPage" : "ISI"
 				},
+				"BUTTON-HOMEISI" : {
+					"type" : "overlayPageButton",
+					"overlayPage" : "ISI"
+				},
 				"BUTTON-STUDY" : {
 					"type" : "overlayPageSectionButton",
 					"overlayPage" : "STUDY-",
@@ -532,15 +536,6 @@
 					"buttonActive" : "BUTTON-D5",
 					"statusChange" : "data",
 					"section" : 5
-				},
-				"BUTTON-HOMEISI" : {
-					"type" : "returnButton",
-					"navigation" : "reset",
-					"buttonActive" : "",
-					"section" : 0,
-					"overlayPage" : "OVERLAYS-ISI",
-					"activateButton" : "BUTTON-ISI",
-					"statusChange" : "home"
 				},
 				"BUTTON-REFERENCE-close" : {
 					"type" : "returnButton",
