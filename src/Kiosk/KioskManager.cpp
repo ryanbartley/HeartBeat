@@ -110,7 +110,7 @@ void KioskManager::touchBeganDelegate( EventDataRef touchEvent )
 	
 void KioskManager::touchMovedDelegate( EventDataRef touchEvent )
 {
-	auto event = std::dynamic_pointer_cast<TouchBeganEvent>( touchEvent );
+	auto event = std::dynamic_pointer_cast<TouchMoveEvent>( touchEvent );
 	
 	if( ! event ) {
 		CI_LOG_V("Not an touchEvent " << touchEvent->getName() );

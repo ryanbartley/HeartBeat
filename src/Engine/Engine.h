@@ -33,6 +33,10 @@ public:
 	void draw();
 	void postDraw();
 	
+	void touchBeganDelegate( EventDataRef event );
+	void touchMovedDelegate( EventDataRef event );
+	void touchEndedDelegate( EventDataRef event );
+	
 	void keyDown( ci::app::KeyEvent event );
 	
 	const RendererRef& getRenderer() { return mRenderer; }
@@ -66,6 +70,9 @@ private:
 #if defined( DEBUG )
 	InteractionDebugRenderableRef	mInteractionDebug;
 	ci::params::InterfaceGlRef		mParams;
+	std::vector<ci::vec2>			mTouchesBegan;
+	std::vector<ci::vec2>			mTouchesEnded;
+	std::vector<ci::vec2>			mTouchesMoved;
 #endif
 	
 	std::vector<boost::signals2::connection> mConnections;
