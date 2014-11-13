@@ -207,7 +207,7 @@ void InfoDisplay::renderToSvg()
 	cairo::Context context( mSurface );
 	mSurface.flush();
 	context.setMatrix( mCairoMat );
-	
+	context.setAntiAlias( 16 );
 	renderCurrentSceneSvg( context );
 	
 	mCairoTex->update( mSurface.getSurface() );
