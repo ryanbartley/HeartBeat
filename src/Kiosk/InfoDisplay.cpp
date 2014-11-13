@@ -374,6 +374,9 @@ void InfoDisplay::registerTouchMoved( EventDataRef eventData )
 	auto found = mPointMap.find( event->getTouchId() );
 	if( found != mPointMap.end() ) {
 		found->second.push_back( event->getWorldCoordinate() );
+		if( found->second.size() > 20 ) {
+			found->second.pop_front();
+		}
 	}
 }
 	

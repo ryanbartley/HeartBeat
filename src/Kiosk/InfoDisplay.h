@@ -11,6 +11,7 @@
 #include "Renderable.h"
 #include "Node.h"
 #include "Cairo.h"
+#include "deque"
 
 namespace heartbeat {
 	
@@ -113,7 +114,7 @@ private:
     std::vector<ci::vec2>			mPoints;
 #endif
 	std::map<uint64_t,
-	std::vector<ci::vec2>>			mPointMap;
+	std::deque<ci::vec2>>			mPointMap;
 	
 	PageRef							mBackGround,
 									mLines;
