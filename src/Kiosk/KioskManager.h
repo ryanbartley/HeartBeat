@@ -9,6 +9,7 @@
 #pragma once
 
 #include "Common.h"
+#include "Cairo.h"
 
 namespace heartbeat {
 	
@@ -42,8 +43,10 @@ private:
 	std::array<InfoDisplayRef, 3>	mDisplays;
 	std::array<LilyPadRef, 3>		mLilyPads;
 	HidCommManagerRef				mHidCommManager;
+	
 #if defined( DEBUG )
 	bool							mDebugRenderInfoDisplay;
+	
 #endif
 	
 	friend class Engine;

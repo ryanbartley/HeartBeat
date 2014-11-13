@@ -326,6 +326,7 @@ void FullProjectApp::mouseDrag( cinder::app::MouseEvent event )
 
 		mEventManager->queueEvent( heartbeat::EventDataRef( new heartbeat::TouchMoveEvent( 1, 900, eventPosition ) ) );
 	}
+	
 #endif
 }
 

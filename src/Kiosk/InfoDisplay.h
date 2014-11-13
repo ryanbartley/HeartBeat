@@ -45,10 +45,18 @@ public:
 	bool isActivated() { return mIsActivated; }
 	bool insideAngle( int index ) { return mMinIndex < index && mMaxIndex > index; }
 	
-	void renderCurrentScene();
-	void renderHomeScreen();
-	void renderDataScreen();
-	void renderOverlayScreen();
+	void renderCurrentSceneTex();
+	void renderHomeScreenTex();
+	void renderDataScreenTex();
+	void renderOverlayScreenTex();
+	
+	void renderCurrentSceneSvg( ci::cairo::Context &context );
+	void renderHomeScreenSvg( ci::cairo::Context &context );
+	void renderDataScreenSvg( ci::cairo::Context &context );
+	void renderOverlayScreenSvg( ci::cairo::Context &context );
+	
+	void renderToFbo();
+	void renderToSvg();
 	
 	void toggleStatus();
 	
@@ -84,7 +92,7 @@ public:
 	bool getBoundingBoxRender() {return mShouldDrawBoundingBoxes; }
 	void removeFront();
 	
-	void renderToFbo();
+	
 	
 	void checkInteraction( const ci::vec2 &point );
 	
@@ -98,8 +106,10 @@ private:
 	uint32_t						mCurrentSection;
 	
 	ci::cairo::SurfaceImage			mSurface;
-	ci::cairo::Context				mContext;
-	bool							mRenderWithCairo;
+	ci::gl::TextureRef				mCairoTex;
+	ci::Rectf						mTranslatedPresentRect;
+	ci::MatrixAffine2<float>		mCairoMat;
+	bool							mRenderWithCairo, mStateChanged;
 	
 	std::deque<DataPageRef>			mDataPages;
 	std::map<std::string, PageRef>	mPageCache;

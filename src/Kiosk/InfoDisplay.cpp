@@ -29,7 +29,7 @@ namespace heartbeat {
 InfoDisplay::InfoDisplay( KioskId kioskId )
 : mId( kioskId ), mMasterAlpha( 0.0f ), mFadeTime( 5.0f ), mStatus( Status::HOME_SCREEN ), mIsActivated( false ),
 	mCurrentSection( 0 ), mIsHalfSized( Engine::get()->getRenderer()->isHalfSize() ),
-	mShouldDrawBoundingBoxes( false ), mRenderWithCairo( false )
+	mShouldDrawBoundingBoxes( false ), mRenderWithCairo( true ), mStateChanged( true )
 {
 }
 	
@@ -43,51 +43,35 @@ void InfoDisplay::update()
 	
 }
 	
-void InfoDisplay::renderCurrentScene()
+void InfoDisplay::renderCurrentSceneTex()
 {
 	if( mStatus == Status::HOME_SCREEN ) {
-		renderHomeScreen();
+		renderHomeScreenTex();
 	}
 	else if( mStatus == Status::DATA_SCREEN ) {
-		renderDataScreen();
+		renderDataScreenTex();
 	}
-	renderOverlayScreen();
+	renderOverlayScreenTex();
 }
 	
-void InfoDisplay::renderHomeScreen()
+void InfoDisplay::renderHomeScreenTex()
 {
 	auto home = mPageCache.find("HOME");
-	if( mRenderWithCairo ) {
-		mContext.render( *home->second->getRootGroup() );
-	}
-	else {
-		home->second->render();
-	}
-	
+	home->second->render();
 	
 	for( auto & button : mHomeButtons ) {
-		if( mRenderWithCairo ) {
-			mContext.render( *home->second->getRootGroup() );
-		}
-		else {
-			button->render();
-			if( mShouldDrawBoundingBoxes ) {
-				button->renderBoundingBox();
-			}
+		button->render();
+		if( mShouldDrawBoundingBoxes ) {
+			button->renderBoundingBox();
 		}
 	}
 }
 	
-void InfoDisplay::renderDataScreen()
+void InfoDisplay::renderDataScreenTex()
 {
 	if( ! mOverlay ) {
 		for( auto & page : mDataPages ) {
-			if( mRenderWithCairo ) {
-				mContext.render( *page->getRootGroup() );
-			}
-			else {
-				page->render();
-			}
+			page->render();
 		}
 	}
 	
@@ -97,43 +81,20 @@ void InfoDisplay::renderDataScreen()
 	for( auto & button : mDataButtons ) {
 		// TODO: Why did I have this?
 		// if( button )
-		if( mRenderWithCairo ) {
-			auto cast = std::dynamic_pointer_cast<DataPageButton>( button );
-			if( cast ) {
-				if( cast->getStatus() == ButtonStatus::ACTIVE ) {
-					mContext.render( *cast->getActive() );
-				}
-				else {
-					mContext.render( *cast->getNonActive() );
-				}
-			}
-		}
-		else {
 			button->render();
 			if( mShouldDrawBoundingBoxes ) {
 				button->renderBoundingBox();
 			}
-		}
 	}
 	
-	if( mRenderWithCairo ) {
-		mContext.render( *mLines->getRootGroup() );
-	}
-	else {
-		mLines->render();
-	}
+	mLines->render();
 }
 	
-void InfoDisplay::renderOverlayScreen()
+void InfoDisplay::renderOverlayScreenTex()
 {
 	if( ! mOverlay ) return;
-	
-	if( mRenderWithCairo ) {
-		mContext.render( *mOverlay->getRootGroup() );
-	}
-	else {
-		mOverlay->render();
-	}
+
+	mOverlay->render();
 	
 	auto & name = mOverlay->getButtonGroup();
 	auto & buttons = mOverlayButtons[name];
@@ -142,24 +103,11 @@ void InfoDisplay::renderOverlayScreen()
 	}
 	
 	for( auto & button : buttons ) {
-		if( mRenderWithCairo ) {
-			mContext.render( *button->getRootGroup() );
-		}
-		else {
-			button->render();
-			if( mShouldDrawBoundingBoxes ) {
-				button->renderBoundingBox();
-			}
+		button->render();
+		if( mShouldDrawBoundingBoxes ) {
+			button->renderBoundingBox();
 		}
 	}
-}
-	
-void InfoDisplay::toggleStatus()
-{
-	if( mStatus == Status::HOME_SCREEN )
-		mStatus = Status::DATA_SCREEN;
-	else if ( mStatus == Status::DATA_SCREEN )
-		mStatus = Status::HOME_SCREEN;
 }
 	
 void InfoDisplay::renderToFbo()
@@ -174,9 +122,95 @@ void InfoDisplay::renderToFbo()
 	gl::clear( GL_COLOR_BUFFER_BIT );
 	gl::clearColor( ColorA( 0, 0, 0, 1 ) );
 	
-//	mBackGround->render();
+	//	mBackGround->render();
 	
-	renderCurrentScene();
+	renderCurrentSceneTex();
+#if defined( DEBUG )
+	{
+		gl::ScopedColor scopeColor( ColorA(1, 0, 0, 1) );
+		for( auto & point : mPoints ) {
+			gl::drawSolidCircle( point, 30 );
+		}
+	}
+#endif
+}
+	
+void InfoDisplay::renderCurrentSceneSvg( ci::cairo::Context &context )
+{
+	if( mStatus == Status::HOME_SCREEN ) {
+		renderHomeScreenSvg( context );
+	}
+	else if( mStatus == Status::DATA_SCREEN ) {
+		renderDataScreenSvg( context );
+	}
+	renderOverlayScreenSvg( context );
+}
+
+void InfoDisplay::renderHomeScreenSvg( ci::cairo::Context &context )
+{
+	auto home = mPageCache.find("HOME");
+	context.render( *home->second->getRootGroup() );
+	
+	
+	for( auto & button : mHomeButtons ) {
+		context.render( *button->getRootGroup() );
+	}
+}
+
+void InfoDisplay::renderDataScreenSvg( ci::cairo::Context &context )
+{
+	if( ! mOverlay ) {
+		for( auto & page : mDataPages ) {
+			context.render( *page->getRootGroup() );
+		}
+	}
+	
+	// Variable for animation of this needed.
+	gl::ScopedColor scopeColor( ColorA( 1, 1, 1, mOverlay ? .5 : 1.0 ) );
+	
+	for( auto & button : mDataButtons ) {
+		// TODO: Why did I have this?
+		// if( button )
+		auto cast = std::dynamic_pointer_cast<DataPageButton>( button );
+		if( cast ) {
+			if( cast->getStatus() == ButtonStatus::ACTIVE ) {
+				context.render( *cast->getActive() );
+			}
+			else {
+				context.render( *cast->getNonActive() );
+			}
+		}
+	}
+	
+	context.render( *mLines->getRootGroup() );
+}
+
+void InfoDisplay::renderOverlayScreenSvg( ci::cairo::Context &context )
+{
+	if( ! mOverlay ) return;
+	
+	context.render( *mOverlay->getRootGroup() );
+	
+	auto & name = mOverlay->getButtonGroup();
+	auto & buttons = mOverlayButtons[name];
+	if( buttons.empty() ) {
+		CI_LOG_E("Couldn't find overlay buttons: " << name);
+	}
+	
+	for( auto & button : buttons ) {
+		context.render( *button->getRootGroup() );
+	}
+}
+	
+void InfoDisplay::renderToSvg()
+{
+	cairo::Context context( mSurface );
+	mSurface.flush();
+	context.setMatrix( mCairoMat );
+	
+	renderCurrentSceneSvg( context );
+	
+	mCairoTex->update( mSurface.getSurface() );
 #if defined( DEBUG )
 	{
 		gl::ScopedColor scopeColor( ColorA(1, 0, 0, 1) );
@@ -187,12 +221,24 @@ void InfoDisplay::renderToFbo()
 #endif
 }
 
+	
+void InfoDisplay::toggleStatus()
+{
+	if( mStatus == Status::HOME_SCREEN )
+		mStatus = Status::DATA_SCREEN;
+	else if ( mStatus == Status::DATA_SCREEN )
+		mStatus = Status::HOME_SCREEN;
+}
+
 void InfoDisplay::draw()
 {
 	if( mMasterAlpha <= 0.0f ) return;
 	
 	if( mRenderWithCairo ) {
-		
+		if( mStateChanged ) {
+			renderToSvg();
+		}
+		gl::draw( mCairoTex );
 	}
 	else {
 		renderToFbo();
@@ -317,7 +363,7 @@ void InfoDisplay::addOverlayPage( OverlayPageRef &page )
 				buttonSet = &mHomeButtons;
 			}
 		}
-			break;
+		break;
 		case Status::DATA_SCREEN: {
 			if( mOverlay ) {
 				auto & name = mOverlay->getButtonGroup();
@@ -330,7 +376,7 @@ void InfoDisplay::addOverlayPage( OverlayPageRef &page )
 				buttonSet = &mDataButtons;
 			}
 		}
-			break;
+		break;
 		default:
 			CI_LOG_E("Status is incorrect " << static_cast<int>(mStatus));
 			return;
@@ -342,6 +388,9 @@ void InfoDisplay::addOverlayPage( OverlayPageRef &page )
 			cout << "it's this button: " << button->getGroupName() << endl;
 			auto shared = shared_from_this();
 			button->changeState( shared );
+			if( mRenderWithCairo ) {
+				mStateChanged = true;
+			}
 			break;
 		}
 	}
@@ -424,20 +473,15 @@ void InfoDisplay::initiaize(const ci::JsonTree &root)
 		auto translated1 = getModelMatrix() * vec4(mPresentRect.x1, mPresentRect.y1, 0, 1);
 		auto translated2 = getModelMatrix() * vec4(mPresentRect.x2, mPresentRect.y2, 0, 1);
 		cout << "Original point1: " << vec4(mPresentRect.x1, mPresentRect.y1, 0, 1) << " Translated point 1: " << translated1 << endl << " Original point2: " << vec4(mPresentRect.x2, mPresentRect.y2, 0, 1) << " Translated point 2: " << translated2 << endl;
-		Rectf translatedRect;
-		translatedRect.include( Rectf( translated1.x, translated1.y, translated2.x, translated2.y ) );
-		cout << "Translated rect with include: " << translatedRect << endl;
+		mTranslatedPresentRect.include( Rectf( translated1.x, translated1.y, translated2.x, translated2.y ) );
+		cout << "Translated rect with include: " << mTranslatedPresentRect << " width: " << mTranslatedPresentRect.getWidth() << " height: " << mTranslatedPresentRect.getHeight() << endl;
 		
-		mSurface = cairo::SurfaceImage( translatedRect.getWidth(), translatedRect.getHeight(), true );
-		mContext = cairo::Context( mSurface );
+		mSurface = cairo::SurfaceImage( mTranslatedPresentRect.getWidth(), mTranslatedPresentRect.getHeight(), true );
+		mCairoTex = gl::Texture2d::create( mTranslatedPresentRect.getWidth(), mTranslatedPresentRect.getHeight() );
+		auto & mM = getModelMatrix();
+		mCairoMat = MatrixAffine2<float>( mM[0][0], mM[0][1], mM[1][0], mM[1][1], mM[3][0], mM[3][1] );
 		
-		mContext.setAntiAlias( 4 );
-		auto & scale = getScale();
-		auto & translation = getTranslation();
-		mContext.translate( translation.x, translation.y );
-		mContext.scale(  scale.x, scale.y );
-		mContext.rotate( angle( getRotation() ) );
-		cout << "Context Matrix: " << endl << mContext.getMatrix() << " Model Matrix: " << endl << getModelMatrix() << endl;
+		cout << "Context Matrix: " << endl << mCairoMat << " Model Matrix: " << endl << getModelMatrix() << endl;
 		
 		try {
 			mMinIndex = root["minIndex"].getValue<int>();
