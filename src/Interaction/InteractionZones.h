@@ -203,7 +203,7 @@ void InteractionZones::addEvent( std::vector<Interactor> &events, int index, lon
 		}
 		// otherwise if there's some space between this index and the last then
 		// it's another object
-		else if( index > back.mIndex + mInBetweenThreshold ){
+		else {
 			events.emplace_back( index, dist );
 		}
 	}
