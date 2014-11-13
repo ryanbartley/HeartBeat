@@ -196,10 +196,9 @@ void InteractionZones::addEvent( std::vector<Interactor> &events, int index, lon
 		// if we're one more and our distance is less than, this is a more precise
 		// middle point
 		if( index == back.mIndex + 1 ) {
-			if(  dist <= back.mDistance ) {
+			if(  dist < back.mCurrentDistance + 40 && dist > back.mCurrentDistance - 40 ) {
 				back.mNumIndicesPast++;
-				back.mIndex = index;
-				back.mDistance = dist;
+				back.checkMinMax( dist );
 			}
 		}
 		// otherwise if there's some space between this index and the last then
@@ -239,17 +238,21 @@ void InteractionZones::processApproaches()
 void InteractionZones::processTouches()
 {
 	for( auto & touchIt : mTouchInteractors ) {
+		int currentCenterIndex = 0;
+		long currentCenterDistance = 0;
+		touchIt.getCenterIndexDistance( currentCenterIndex, currentCenterDistance );
 		bool touchHandled = false;
 		bool inNonActiveArea = false;
 		if( ! mCurrentTouches.empty() ) {
 			for( auto & currentTouch : mCurrentTouches ) {
-				if( currentTouch.contains( touchIt.mIndex, touchIt.mDistance ) && touchIt.mNumIndicesPast < mNumIndicesThreshTouches ) {
+				if( currentTouch.contains( currentCenterIndex, currentCenterDistance ) ) {
+					//&& touchIt.mNumIndicesPast < mNumIndicesThreshTouches ) {
 					touchHandled = true;
 					break;
 				}
 			}
 			for( auto & approachZone : mApproachZones ) {
-				if( approachZone.second.contains( touchIt.mIndex ) ) {
+				if( approachZone.second.contains( currentCenterIndex ) ) {
 					if( ! approachZone.second.getIsActivated() ) {
 						inNonActiveArea = true;
 					}
@@ -257,7 +260,7 @@ void InteractionZones::processTouches()
 			}
 		}
 		if( ! touchHandled && ! inNonActiveArea ) {
-			mCurrentTouches.emplace_back( touchIt.mIndex, touchIt.mDistance );
+			mCurrentTouches.emplace_back( currentCenterIndex, currentCenterDistance );
 		}
 	}
 	for( auto currentTouch = mCurrentTouches.begin(); currentTouch != mCurrentTouches.end(); ) {

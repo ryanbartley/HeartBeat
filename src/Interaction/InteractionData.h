@@ -14,12 +14,30 @@ namespace heartbeat {
 	
 struct Interactor {
 	Interactor( int index, long distance )
-	: mDistance( distance ), mIndex( index ), mNumIndicesPast( 0 )
+	: mCurrentDistance( distance ), mMinDistance( distance ), mMaxDistance( distance ),
+		mIndex( index ), mNumIndicesPast( 0 )
 	{}
+	
+	inline void checkMinMax( long distance )
+	{
+		mCurrentDistance = distance;
+		if( distance < mMinDistance ) {
+			mMinDistance = distance;
+		}
+		else if( distance > mMaxDistance ) {
+			mMaxDistance = distance;
+		}
+	}
+	
+	inline void getCenterIndexDistance( int & index, long & distance )
+	{
+		index = (mIndex + (mIndex + mNumIndicesPast)) / 2.0f;
+		distance = (mMinDistance + mMaxDistance) / 2.0f;
+	}
 	
 	int			mNumIndicesPast;
 	int			mIndex;
-	long		mDistance;
+	long		mCurrentDistance, mMinDistance, mMaxDistance;
 };
 	
 const uint32_t NUM_UPDATES_TO_EMIT = 2;
