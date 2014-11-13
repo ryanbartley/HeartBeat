@@ -251,13 +251,13 @@ void InteractionZones::processTouches()
 					break;
 				}
 			}
-//			for( auto & approachZone : mApproachZones ) {
-//				if( approachZone.second.contains( currentCenterIndex ) ) {
-//					if( ! approachZone.second.getIsActivated() ) {
-//						inNonActiveArea = true;
-//					}
-//				}
-//			}
+			for( auto & approachZone : mApproachZones ) {
+				if( approachZone.second.contains( currentCenterIndex ) ) {
+					if( ! approachZone.second.getIsActivated() ) {
+						inNonActiveArea = true;
+					}
+				}
+			}
 		}
 		if( ! touchHandled && ! inNonActiveArea ) {
 			mCurrentTouches.emplace_back( currentCenterIndex, currentCenterDistance );

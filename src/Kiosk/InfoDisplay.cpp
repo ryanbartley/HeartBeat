@@ -301,23 +301,7 @@ void InfoDisplay::addOverlayPage( OverlayPageRef &page )
 	mOverlay = page;
 }
 	
-void InfoDisplay::registerTouchBegan( EventDataRef eventData )
-{
-	auto event = std::dynamic_pointer_cast<TouchBeganEvent>( eventData );
-	if( ! event ) {
-		CI_LOG_E("Couldn't cast touch event from " << eventData->getName() );
-		return;
-	}
-	
-	auto modelSpacePoint = getInverseMatrix() * vec4( event->getWorldCoordinate(), 0, 1 );
-	auto twoDimPoint = vec2( modelSpacePoint.x, modelSpacePoint.y );
-    cout << "About to check this point: " << twoDimPoint << endl;
-	if( mPresentRect.contains( twoDimPoint ) ) {
-		mPointMap[event->getTouchId()].push_back( twoDimPoint );
-	}
-}
-	
-void InfoDisplay::checkInteraction( const ci::vec2 &point )
+   void InfoDisplay::checkInteraction( const ci::vec2 &point )
 {
 	std::vector<ButtonRef> *buttonSet;
 	switch ( mStatus) {
@@ -362,6 +346,23 @@ void InfoDisplay::checkInteraction( const ci::vec2 &point )
 		}
 	}
 }
+    
+void InfoDisplay::registerTouchBegan( EventDataRef eventData )
+{
+    auto event = std::dynamic_pointer_cast<TouchBeganEvent>( eventData );
+    if( ! event ) {
+        CI_LOG_E("Couldn't cast touch event from " << eventData->getName() );
+        return;
+    }
+    
+    auto modelSpacePoint = getInverseMatrix() * vec4( event->getWorldCoordinate(), 0, 1 );
+    auto twoDimPoint = vec2( modelSpacePoint.x, modelSpacePoint.y );
+    cout << "About to check this point: " << twoDimPoint << endl;
+    if( mPresentRect.contains( twoDimPoint ) ) {
+        std::deque<ci::vec2> vec({vec2(event->getWorldCoordinate())});
+        mPointMap.insert( make_pair( event->getTouchId(), vec ) );
+    }
+}
 
 void InfoDisplay::registerTouchMoved( EventDataRef eventData )
 {
@@ -382,7 +383,7 @@ void InfoDisplay::registerTouchMoved( EventDataRef eventData )
 	
 void InfoDisplay::registerTouchEnded( EventDataRef eventData )
 {
-	auto event = std::dynamic_pointer_cast<TouchMoveEvent>( eventData );
+	auto event = std::dynamic_pointer_cast<TouchEndedEvent>( eventData );
 	if( ! event ) {
 		CI_LOG_E("Couldn't cast touch event from " << eventData->getName() );
 		return;
@@ -393,16 +394,13 @@ void InfoDisplay::registerTouchEnded( EventDataRef eventData )
 		auto & pointVec = found->second;
 		if( pointVec.size() > 5 ) {
 			vec2 accum( 0.0f );
-			int i = 0;
-			for( auto pointIt = pointVec.rbegin(); pointIt != pointVec.rend(); ++pointIt ) {
-				if( i < 5 ) {
-					accum += *pointIt;
-				}
-				else {
-					break;
-				}
-			}
-			checkInteraction( accum / 5.0f );
+            auto middle = pointVec.size() / 2;
+            auto index = middle - 2;
+			while( index < middle + 2 ) {
+                accum += pointVec[index++];
+            }
+            auto average = accum / 5.0f;
+			checkInteraction( vec2( getInverseMatrix() * vec4( average.x, average.y, 0, 1 ) ) );
 		}
 		mPointMap.erase( found );
 	}

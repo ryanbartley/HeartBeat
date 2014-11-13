@@ -102,7 +102,7 @@ void KioskManager::touchBeganDelegate( EventDataRef touchEvent )
 	}
 	
 	for( auto & kiosk : mDisplays ) {
-		if( kiosk->insideAngle( event->getIndex() ) && kiosk->isActivated() ) {
+		if( kiosk->insideAngle( event->getIndex() ) ) {
 			kiosk->registerTouchBegan( event );
 		}
 	}
@@ -118,7 +118,7 @@ void KioskManager::touchMovedDelegate( EventDataRef touchEvent )
 	}
 	
 	for( auto & kiosk : mDisplays ) {
-		if( kiosk->insideAngle( event->getIndex() && kiosk->isActivated() ) ) {
+		if( kiosk->insideAngle( event->getIndex() ) ) {
 			kiosk->registerTouchMoved( event );
 		}
 	}
@@ -126,18 +126,18 @@ void KioskManager::touchMovedDelegate( EventDataRef touchEvent )
 	
 void KioskManager::touchEndedDelegate( EventDataRef touchEvent )
 {
-	auto event = std::dynamic_pointer_cast<TouchBeganEvent>( touchEvent );
+	auto event = std::dynamic_pointer_cast<TouchEndedEvent>( touchEvent );
 	
 	if( ! event ) {
 		CI_LOG_V("Not an touchEvent " << touchEvent->getName() );
 		return;
 	}
 	
-//	for( auto & kiosk : mDisplays ) {
-//		if( kiosk->insideAngle( event->getIndex() ) ) {
-//			kiosk->registerTouchBegan( event );
-//		}
-//	}
+	for( auto & kiosk : mDisplays ) {
+		if( kiosk->insideAngle( event->getIndex() ) ) {
+			kiosk->registerTouchEnded( event );
+		}
+	}
 }
 
 #if defined( DEBUG )
