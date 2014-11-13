@@ -18,7 +18,7 @@ namespace heartbeat {
 	
 Node::Node( const std::string &group )
 : mGroup( dynamic_cast<const svg::Group*>( SvgManager::get()->getDoc()->findNode( group ) ) ),
-	mName(group), mAntiAlias( 0 ), mOffset( vec2( 10 ) ), mCurrentAlpha( 1.0f ), mIsAnimating( false ), 
+	mName(group), mAntiAlias( 16 ), mOffset( vec2( 10 ) ), mCurrentAlpha( 1.0f ), mIsAnimating( false ),
 	mCurrentPosition( vec2( mGroup->getBoundingBox().x1, mGroup->getBoundingBox().y1 ) ), mAbsolutePosition( vec2( mGroup->getBoundingBox().x1 - mOffset.x / 2.0f, mGroup->getBoundingBox().y1 - mOffset.y / 2.0f ) )
 {
 	if( ! mGroup ) {

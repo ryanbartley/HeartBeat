@@ -89,11 +89,11 @@ ci::vec2 Urg::getPoint( int index, long length, float scalar )
 	double y;
 	double radian;
 	
-	radian = urg_index2rad( &(mSensor), mSensorDataSize - index );
+	radian = urg_index2rad( &(mSensor), index );
 	// \ Todo check length is valid
 	
-	x = (length * cos (radian)) * scalar;
-	y = (length * sin (radian)) * scalar;
+	x = ((length * scalar) * sin (radian)) ;
+	y = ((length * scalar) * cos (radian));
 	ret = ci::vec2( x, y );
 	return ret;
 }

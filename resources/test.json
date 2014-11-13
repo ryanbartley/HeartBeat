@@ -98,13 +98,13 @@
 				"rotations" : {
 					// This can either contain "quaternion" : []
 					// or "angle" : degree, axis is vec3( 0, 0, 1 )
-					"angle" : 26
+					"angle" : 294
 				},
 				"translations" : {
 					// This can either contain "coordinates" : []
 					// or "center" : boolean
 					// "center" : true //,
-					"coordinates" : [ 568.39, 889.35 ]
+					"coordinates" : [ 577.01, 935.36 ]
 				}
 			}
 			// }

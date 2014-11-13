@@ -225,8 +225,8 @@ void KioskManager::initialize()
 			gl::Fbo::Format format;
 			format.colorTexture( gl::Texture2d::Format()
 								.mipmap()
-								.minFilter( GL_LINEAR_MIPMAP_NEAREST ) );
-								//.maxAnisotropy( gl::Texture2d::getMaxMaxAnisotropy() )
+								.minFilter( GL_LINEAR_MIPMAP_LINEAR ) 
+            .maxAnisotropy( gl::Texture2d::getMaxMaxAnisotropy() ) );
 			
 			
 			auto size = svgManager->getDoc()->getSize();
