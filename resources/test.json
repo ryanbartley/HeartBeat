@@ -10,8 +10,8 @@
 				1080
 			],
 			"numPixelOverlap" : 200,
-			"splitWindow" : true,
-			"halfSize" : false
+			"splitWindow" : false,
+			"halfSize" : true
 		},
 		//////////////////////////////////////////////////////
 		// HID ATTRIBUTES
@@ -386,7 +386,7 @@
 		// SVG MANAGER SETTINGS
 		//////////////////////////////////////////////////////
 		"svgAttribs" : {
-			"fileName" : "ACTEMRA_PondCharts_111214-0.svg",
+			"fileName" : "ACTEMRA_PondCharts_PattenLayout_Outlined.svg",
 			"pageAttribs" : {
 				"staticPages" : {
 					"pages" : [

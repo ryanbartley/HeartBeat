@@ -361,6 +361,7 @@ void InfoDisplay::registerTouchBegan( EventDataRef eventData )
     if( mPresentRect.contains( twoDimPoint ) ) {
         std::deque<ci::vec2> vec({vec2(event->getWorldCoordinate())});
         mPointMap.insert( make_pair( event->getTouchId(), vec ) );
+		checkInteraction( twoDimPoint );
     }
 }
 
@@ -419,6 +420,24 @@ void InfoDisplay::initiaize(const ci::JsonTree &root)
 		}
 		
 		mPresentRect = svgManager->getDoc()->getBoundingBox();
+		
+		auto translated1 = getModelMatrix() * vec4(mPresentRect.x1, mPresentRect.y1, 0, 1);
+		auto translated2 = getModelMatrix() * vec4(mPresentRect.x2, mPresentRect.y2, 0, 1);
+		cout << "Original point1: " << vec4(mPresentRect.x1, mPresentRect.y1, 0, 1) << " Translated point 1: " << translated1 << endl << " Original point2: " << vec4(mPresentRect.x2, mPresentRect.y2, 0, 1) << " Translated point 2: " << translated2 << endl;
+		Rectf translatedRect;
+		translatedRect.include( Rectf( translated1.x, translated1.y, translated2.x, translated2.y ) );
+		cout << "Translated rect with include: " << translatedRect << endl;
+		
+		mSurface = cairo::SurfaceImage( translatedRect.getWidth(), translatedRect.getHeight(), true );
+		mContext = cairo::Context( mSurface );
+		
+		mContext.setAntiAlias( 4 );
+		auto & scale = getScale();
+		auto & translation = getTranslation();
+		mContext.translate( translation.x, translation.y );
+		mContext.scale(  scale.x, scale.y );
+		mContext.rotate( angle( getRotation() ) );
+		cout << "Context Matrix: " << endl << mContext.getMatrix() << " Model Matrix: " << endl << getModelMatrix() << endl;
 		
 		try {
 			mMinIndex = root["minIndex"].getValue<int>();

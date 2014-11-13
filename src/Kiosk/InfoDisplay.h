@@ -96,7 +96,8 @@ private:
 	ci::gl::FboRef					mPresentationFbo;
 	Status							mStatus;
 	uint32_t						mCurrentSection;
-	ci::cairo::SurfaceSvg			mSurface;
+	
+	ci::cairo::SurfaceImage			mSurface;
 	ci::cairo::Context				mContext;
 	bool							mRenderWithCairo;
 	
