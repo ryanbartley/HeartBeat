@@ -451,14 +451,14 @@ void InteractionZones::processData()
 	int i = 0, k = 0;
 	for( auto barrierIt = mBarrier.cbegin(); barrierIt != mBarrier.cend(); ++barrierIt, ++i ) {
 		bool emitEvents = true;
-		if( checkPoleIndices ) {
-			if( mIgnoreIndices[k] == i ) {
-				emitEvents = false;
-				++k;
-				if( mIgnoreIndices.size() - 1 < k )
-					checkPoleIndices = false;
-			}
-		}
+//		if( checkPoleIndices ) {
+//			if( mIgnoreIndices[k] == i ) {
+//				emitEvents = false;
+//				++k;
+//				if( mIgnoreIndices.size() - 1 < k )
+//					checkPoleIndices = false;
+//			}
+//		}
 		if( emitEvents ) {
 			if( mCurrentFrameData[i] == 1 ) mCurrentFrameData[i] = 100000;
 			
