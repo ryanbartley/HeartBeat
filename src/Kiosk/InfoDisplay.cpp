@@ -367,7 +367,7 @@ void InfoDisplay::registerTouchBegan( EventDataRef eventData )
 
 void InfoDisplay::registerTouchMoved( EventDataRef eventData )
 {
-	auto event = std::dynamic_pointer_cast<TouchBeganEvent>( eventData );
+	auto event = std::dynamic_pointer_cast<TouchMoveEvent>( eventData );
 	if( ! event ) {
 		CI_LOG_E("Couldn't cast touch event from " << eventData->getName() );
 		return;
