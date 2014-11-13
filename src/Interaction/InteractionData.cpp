@@ -58,7 +58,7 @@ void TouchData::createAndSendEvent()
 	if( event ) {
 		eventManager->queueEvent( event );
 	}
-	mEmitType = EventTypeToEmit::NONE;
+	mEmitType = EventTypeToEmit::MOVED;
 }
 
 void ApproachData::createAndSendEvent()

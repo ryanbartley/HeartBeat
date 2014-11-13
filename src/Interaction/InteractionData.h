@@ -32,7 +32,7 @@ struct Interactor {
 	
 	inline void getCenterIndexDistance( int & index, long & distance )
 	{
-		index = mMinIndex;
+		index = (mIndex + (mIndex + mNumIndicesPast)) / 2.0f;
 		distance = mMinDistance;
 	}
 	
@@ -76,8 +76,8 @@ private:
 	
 bool TouchData::contains( int index, long distance )
 {
-	if( (index > mCurrentIndex - 8 && index < mCurrentIndex + 8 ) &&
-	   ( distance > mCurrentDistance - 40 && distance < mCurrentDistance + 40 ) ) {
+	if( ( index > mCurrentIndex - 16 && index < mCurrentIndex + 16 ) &&
+	   ( distance > mCurrentDistance - 200 && distance < mCurrentDistance + 200 ) ) {
 		mExistsThisFrame = true;
 		update( index, distance );
 		return true;

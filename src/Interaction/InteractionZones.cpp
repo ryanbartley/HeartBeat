@@ -123,7 +123,7 @@ void InteractionZones::initialize()
 			auto poleIndices = interactionAttribs["poleIndices"];
 			
 			for( auto & index : poleIndices ) {
-				mIgnoreIndices.push_back( index.getValue<uint32_t>() );
+//				mIgnoreIndices.push_back( index.getValue<uint32_t>() );
 			}
 		}
 		catch( const JsonTree::ExcChildNotFound &ex ) {

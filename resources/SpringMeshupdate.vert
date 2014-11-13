@@ -35,16 +35,16 @@ out vec3 tf_normal;
 uniform float t; //= 0.07;
 
 // The global spring constant
-uniform float k = 30.0;
+uniform float k = 20.0;
 
 // Gravity
 const vec3 gravity = vec3(0.0, 0.0, 0.0);
 
 // Global damping constant
-uniform float c =4.0;
+uniform float c = 2.8;
 
 // Spring resting length
-uniform float rest_length = 0.88;
+uniform float rest_length = 5.0;
 
 vec3 calcNormal( vec3 v0, vec3 v1, vec3 v2 )
 {
