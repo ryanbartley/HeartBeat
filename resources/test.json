@@ -61,9 +61,9 @@
 				"bottom" : [ 0 ,330 ]
 			},
 			"scales" : {
-				"table" : 0.85,
+				"table" : 1.0,
 				"dead" : 1.1,
-				"approach" : 1.2,
+				"approach" : 1.4,
 				"far" : 1.8
 			},
 			"threshes" : {

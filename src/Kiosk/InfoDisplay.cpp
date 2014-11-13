@@ -29,7 +29,7 @@ namespace heartbeat {
 InfoDisplay::InfoDisplay( KioskId kioskId )
 : mId( kioskId ), mMasterAlpha( 0.0f ), mFadeTime( 5.0f ), mStatus( Status::HOME_SCREEN ), mIsActivated( false ),
 	mCurrentSection( 0 ), mIsHalfSized( Engine::get()->getRenderer()->isHalfSize() ),
-	mShouldDrawBoundingBoxes( false ), mRenderWithCairo( true )
+	mShouldDrawBoundingBoxes( false ), mRenderWithCairo( false )
 {
 }
 	
