@@ -10,6 +10,7 @@
 
 #include "Renderable.h"
 #include "Node.h"
+#include "Cairo.h"
 
 namespace heartbeat {
 	
@@ -91,6 +92,9 @@ private:
 	ci::gl::FboRef					mPresentationFbo;
 	Status							mStatus;
 	uint32_t						mCurrentSection;
+	ci::cairo::SurfaceSvg			mSurface;
+	ci::cairo::Context				mContext;
+	bool							mRenderWithCairo;
 	
 	std::deque<DataPageRef>			mDataPages;
 	std::map<std::string, PageRef>	mPageCache;
