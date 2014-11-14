@@ -95,9 +95,11 @@ public:
 	void checkInteraction( const ci::vec2 &point );
 	ci::gl::FboRef& getPresentationFbo() { return mPresentationFbo; }
 	
+	inline ci::vec2 getCoordinateSpacePoint( const ci::vec2 &point );
+	
 	struct TouchData {
 		
-		TouchData( ci::vec2 &point )
+		TouchData( ci::vec2 &point, bool contained )
 		{
 			mHistory.push_back( point );
 		}
@@ -119,7 +121,8 @@ public:
 			}
 			return ret;
 		}
-
+		
+		bool mContained;
 		std::vector<ci::vec2> mHistory;
 	};
 	
@@ -161,5 +164,13 @@ private:
 	
 	const KioskId					mId;
 };
+	
+ci::vec2 InfoDisplay::getCoordinateSpacePoint( const ci::vec2 &point )
+{
+	ci::vec2 ret;
+	auto modelSpacePoint = getInverseMatrix() * vec4( point, 0, 1 );
+	ret = vec2( modelSpacePoint.x, modelSpacePoint.y );
+	return ret;
+}
 	
 }

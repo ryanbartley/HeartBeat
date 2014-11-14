@@ -454,13 +454,15 @@ void InfoDisplay::registerTouchBegan( EventDataRef eventData )
         CI_LOG_E("Couldn't cast touch event from " << eventData->getName() );
         return;
     }
-    
-    auto modelSpacePoint = getInverseMatrix() * vec4( event->getWorldCoordinate(), 0, 1 );
-    auto twoDimPoint = vec2( modelSpacePoint.x, modelSpacePoint.y );
+	auto eventWorldCoord = event->getWorldCoordinate();
+	auto twoDimPoint = getCoordinateSpacePoint( eventWorldCoord );
     cout << "About to check this point: " << twoDimPoint << endl;
     if( mPresentRect.contains( twoDimPoint ) ) {
-        mPointMap.insert( make_pair( event->getTouchId(), TouchData( event->getWorldCoordinate() ) ) );
+        mPointMap.insert( make_pair( event->getTouchId(), TouchData( eventWorldCoord, true ) ) );
     }
+	else {
+		mPointMap.insert( make_pair( event->getTouchId(), TouchData( eventWorldCoord, false ) ) );
+	}
 }
 
 void InfoDisplay::registerTouchMoved( EventDataRef eventData )
@@ -473,7 +475,18 @@ void InfoDisplay::registerTouchMoved( EventDataRef eventData )
 	cout << "Finding in point map" << endl;
 	auto found = mPointMap.find( event->getTouchId() );
 	if( found != mPointMap.end() ) {
-		found->second.mHistory.push_back( event->getWorldCoordinate() );
+		if( ! found->second.mContained ) {
+			auto twoDimPoint = getCoordinateSpacePoint( event->getWorldCoordinate() );
+			if( mPresentRect.contains( twoDimPoint ) ) {
+				found->second.mContained = true;
+			}
+			else {
+				mPointMap.erase( found );
+			}
+		}
+		else {
+			found->second.mHistory.push_back( event->getWorldCoordinate() );
+		}
 	}
 }
 	
