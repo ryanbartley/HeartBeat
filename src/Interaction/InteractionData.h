@@ -21,6 +21,7 @@ struct Interactor {
 	inline void checkMinMax( long distance )
 	{
 		mCurrentDistance = distance;
+		mDistances.push_back( distance );
 		if( distance < mMinDistance ) {
 			mMinDistance = distance;
 			mMinIndex = mIndex + mNumIndicesPast;
@@ -30,20 +31,34 @@ struct Interactor {
 		}
 	}
 	
+	double average()
+	{
+		double accum = 0.0f;
+		int numAccum = 0;
+		for( auto & distance : mDistances ) {
+			if( distance < mMinDistance + 50 ) {
+				accum += distance;
+				numAccum++;
+			}
+		}
+		return accum / numAccum;
+	}
+	
 	inline void getCenterIndexDistance( int & index, long & distance )
 	{
 		index = (mIndex + (mIndex + mNumIndicesPast)) / 2.0f;
-		distance = mMinDistance;
+		distance = average();
 	}
 	
 	int			mNumIndicesPast;
+	std::vector<long>	mDistances;
 	int			mIndex, mMinIndex;
 	long		mCurrentDistance, mMinDistance, mMaxDistance;
 };
 	
 const uint32_t NUM_UPDATES_TO_EMIT = 2;
 const uint32_t UPDATE_DISTANCE_THRESH = 300;
-const uint32_t UPDATE_INDEX_THRESH = 300;
+const uint32_t UPDATE_INDEX_THRESH = 16;
 	
 struct TouchData {
 public:
@@ -68,7 +83,7 @@ public:
 private:
 	
 	const uint64_t		mId;
-	long				mCurrentDistance;
+	long				mClosestDistance, mCurrentDistance;
 	int					mCurrentIndex;
 	EventTypeToEmit		mEmitType;
 	bool				mExistsThisFrame;
@@ -95,11 +110,9 @@ bool TouchData::contains( int index, long distance )
 void TouchData::update( int index, long distance )
 {
 	static const float scalar = 1.0f / 2.0f;
-	if( index != mCurrentIndex || distance != mCurrentDistance ) {
-		if( distance < mCurrentDistance + 50 ) {
-			mCurrentIndex = (index + mCurrentIndex) * scalar;
-			mCurrentDistance = (distance + mCurrentDistance) * scalar;
-		}
+	if( distance < mCurrentDistance + 50 ) {
+		mCurrentIndex = (index + mCurrentIndex) * scalar;
+		mCurrentDistance = (distance + mCurrentDistance) * scalar;
 		mEmitType = EventTypeToEmit::MOVED;
 	}
 	else {
