@@ -101,6 +101,13 @@ public:
 	
 	void renderBoundingBox( ci::cairo::Context &context );
 	
+	inline ci::vec2 getCenter()
+	{
+		ci::vec2 ret;
+		ret = mGroup->getBoundingBox().getCenter();
+		return ret;
+	}
+	
 protected:
 	Button( const std::string &name );
 	

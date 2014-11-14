@@ -409,17 +409,23 @@ void InfoDisplay::addOverlayPage( OverlayPageRef &page )
 			return;
 			break;
 	}
+	float minDistance = 100000.0f;
+	ButtonRef closestButton;
 	for( auto & button : *buttonSet ) {
-		cout << "checking button: " << button->getGroupName() << " bounding:  " << button->getRootGroup()->getBoundingBox() << " point: " << point << endl;
-		if( button->contains( point ) ) {
-			cout << "it's this button: " << button->getGroupName() << endl;
-			auto shared = shared_from_this();
-			button->changeState( shared );
-			if( mRenderWithCairo ) {
-				mStateChanged = true;
-			}
-			break;
+		auto buttonCenter = button->getCenter();
+		auto distance = ci::distance( point, buttonCenter );
+		if( distance < minDistance ) {
+			closestButton = button;
+			minDistance = distance;
 		}
+		cout << "checking button: " << button->getGroupName() << " bounding:  " << button->getRootGroup()->getBoundingBox() << " point: " << point << " distance: " << distance << endl;
+	}
+	
+	if( minDistance < 150 ) {
+		cout << "it's this button: " << closestButton->getGroupName() << endl;
+		auto shared = shared_from_this();
+		closestButton->changeState( shared );
+		mStateChanged = true;
 	}
 }
     
@@ -446,7 +452,7 @@ void InfoDisplay::registerTouchMoved( EventDataRef eventData )
 		CI_LOG_E("Couldn't cast touch event from " << eventData->getName() );
 		return;
 	}
-	
+	cout << "Finding in point map" << endl;
 	auto found = mPointMap.find( event->getTouchId() );
 	if( found != mPointMap.end() ) {
 		found->second++;

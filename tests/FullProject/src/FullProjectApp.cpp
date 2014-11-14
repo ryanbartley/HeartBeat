@@ -26,6 +26,7 @@ class FullProjectApp : public AppNative {
 	void setup() override;
 	void mouseDown( MouseEvent event ) override;
 	void mouseDrag( MouseEvent event ) override;
+	void mouseUp( MouseEvent event ) override;
 	void update() override;
 	void draw() override;
     
@@ -103,6 +104,7 @@ class FullProjectApp : public AppNative {
     std::array<float, 3>                        mPondUniforms;
 	params::InterfaceGlRef						mParams;
 	bool										mShowParams;
+	int											mCurrentId;
 #endif
 };
 
@@ -120,6 +122,8 @@ void FullProjectApp::setup()
 	
 	mScales.fill( 1.0f );
 	mRotations.fill( 0 );
+	
+	mCurrentId = 1;
 	
 	using namespace heartbeat;
 	
@@ -328,7 +332,7 @@ void FullProjectApp::mouseDown( MouseEvent event )
 		if( event.getPos().y > renderer->getBottomPresentationTarget()->getSize().y  ) {
 			eventPosition.y = eventPosition.y - renderer->getNumPixelOverlap();
 		}
-		mEventManager->queueEvent( heartbeat::EventDataRef( new heartbeat::TouchBeganEvent( 1, 900, eventPosition ) ) );
+		mEventManager->queueEvent( heartbeat::EventDataRef( new heartbeat::TouchBeganEvent( mCurrentId, 900, eventPosition ) ) );
 	}
 #endif
 }
@@ -340,10 +344,15 @@ void FullProjectApp::mouseDrag( cinder::app::MouseEvent event )
 		ci::vec2 eventPosition = event.getPos();
 		auto renderer = mEngine->getRenderer();
 
-		mEventManager->queueEvent( heartbeat::EventDataRef( new heartbeat::TouchMoveEvent( 1, 900, eventPosition ) ) );
+		mEventManager->queueEvent( heartbeat::EventDataRef( new heartbeat::TouchMoveEvent( mCurrentId, 900, eventPosition ) ) );
 	}
 	
 #endif
+}
+
+void FullProjectApp::mouseUp( cinder::app::MouseEvent event )
+{
+	mCurrentId++;
 }
 
 void FullProjectApp::update()
