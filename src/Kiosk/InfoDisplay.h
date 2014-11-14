@@ -99,7 +99,8 @@ public:
 	
 	struct TouchData {
 		
-		TouchData( ci::vec2 &point, bool contained )
+		TouchData( ci::vec2 &point, ci::vec2 &cached, bool contained )
+		: mContained( contained ), mCachedCoordinateSpacePoint( cached )
 		{
 			mHistory.push_back( point );
 		}
@@ -122,7 +123,13 @@ public:
 			return ret;
 		}
 		
+		inline ci::vec2& getLastPoint()
+		{
+			return mCachedCoordinateSpacePoint;
+		}
+		
 		bool mContained;
+		ci::vec2 mCachedCoordinateSpacePoint;
 		std::vector<ci::vec2> mHistory;
 	};
 	
@@ -168,8 +175,8 @@ private:
 ci::vec2 InfoDisplay::getCoordinateSpacePoint( const ci::vec2 &point )
 {
 	ci::vec2 ret;
-	auto modelSpacePoint = getInverseMatrix() * vec4( point, 0, 1 );
-	ret = vec2( modelSpacePoint.x, modelSpacePoint.y );
+	auto modelSpacePoint = getInverseMatrix() * ci::vec4( point, 0, 1 );
+	ret = ci::vec2( modelSpacePoint.x, modelSpacePoint.y );
 	return ret;
 }
 	
