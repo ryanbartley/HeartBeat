@@ -64,7 +64,7 @@ void SpringMesh::update()
 	for( int i = mIterationsPerFrame; i != 0; --i ) {
 		mUpdateTimer.stop();
 		// Pick using the mouse if it's pressed
-		mUpdateGlsl->uniform( "elapsedSeconds", float(getElapsedSeconds()) );
+		mUpdateGlsl->uniform( "elapsedSeconds", .07f); // float(getElapsedSeconds()) );
 		mUpdateGlsl->uniform( "t", (float)mUpdateTimer.getSeconds() );
         mUpdateGlsl->uniform( "rest_length", mRestLength );
         mUpdateGlsl->uniform( "c", mGlobalDampening );
