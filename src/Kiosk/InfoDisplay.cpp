@@ -238,14 +238,6 @@ void InfoDisplay::renderToSvg()
 	
 	mCairoTex->update( surface.getSurface() );
 	mStateChanged = false;
-#if defined( DEBUG )
-	{
-		gl::ScopedColor scopeColor( ColorA(1, 0, 0, 1) );
-		for( auto & point : mPoints ) {
-			gl::drawSolidCircle( point, 30 );
-		}
-	}
-#endif
 }
 
 	
@@ -266,6 +258,27 @@ void InfoDisplay::draw()
 			renderToSvg();
 		}
 		gl::draw( mCairoTex );
+        
+        gl::ScopedModelMatrix scopeModel;
+		gl::setModelMatrix( getModelMatrix() );
+#if defined( DEBUG )
+        {
+            gl::ScopedColor scopeColor( ColorA(1, 0, 0, 1) );
+            
+            for( auto & point : mPoints ) {
+                gl::begin(GL_LINES );
+                gl::vertex( point );
+                gl::vertex( point.x, point.y + 15 );
+                gl::vertex( point );
+                gl::vertex( point.x, point.y - 15 );
+                gl::vertex( point );
+                gl::vertex( point.x + 15, point.y );
+                gl::vertex( point );
+                gl::vertex( point.x - 15, point.y );
+                gl::end();
+            }
+        }
+#endif
 	}
 	else {
 		renderToFbo();
@@ -411,6 +424,9 @@ void InfoDisplay::addOverlayPage( OverlayPageRef &page )
 	}
 	float minDistance = 100000.0f;
 	ButtonRef closestButton;
+#if defined( DEBUG )
+    mPoints.push_back( point );
+#endif
 	for( auto & button : *buttonSet ) {
 		auto buttonCenter = button->getCenter();
 		auto distance = ci::distance( point, buttonCenter );
@@ -456,7 +472,7 @@ void InfoDisplay::registerTouchMoved( EventDataRef eventData )
 	auto found = mPointMap.find( event->getTouchId() );
 	if( found != mPointMap.end() ) {
 		found->second++;
-		if( found->second == 5 ) {
+		if( found->second == 3 ) {
 			auto modelSpacePoint = getInverseMatrix() * vec4( event->getWorldCoordinate(), 0, 1 );
 			auto twoDimPoint = vec2( modelSpacePoint.x, modelSpacePoint.y );
 			checkInteraction( twoDimPoint );

@@ -221,17 +221,17 @@ void Engine::draw()
 	}
 	for( auto & point : mTouchesBegan ) {
 		gl::ScopedColor scopeColor( ColorA( 1.0, 0.0, 0.0, 1.0f ) );
-		gl::drawSolidCircle( point, 20 );
+		gl::drawSolidCircle( point, 15 );
 	}
 	mTouchesBegan.clear();
 	for ( auto & point : mTouchesMoved ) {
 		gl::ScopedColor scopeColor( ColorA( 0.0, 1.0, 1.0, 1.0f ) );
-		gl::drawSolidCircle( point, 20 );
+		gl::drawSolidCircle( point, 15 );
 	}
 	mTouchesMoved.clear();
 	for ( auto & point : mTouchesEnded ) {
 		gl::ScopedColor scopeColor( ColorA( 1.0, 1.0, 1.0, 1.0f ) );
-		gl::drawSolidCircle( point, 20 );
+		gl::drawSolidCircle( point, 15 );
 	}
 	mTouchesEnded.clear();
 #endif
