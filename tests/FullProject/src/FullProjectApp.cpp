@@ -100,6 +100,7 @@ class FullProjectApp : public AppNative {
 	std::array<float, 7>						mRotations;
 	std::array<float, 7>						mScales;
 	std::array<vec3, 7>							mTranslations;
+    std::array<float, 3>                        mPondUniforms;
 	params::InterfaceGlRef						mParams;
 	bool										mShowParams;
 #endif
@@ -147,7 +148,25 @@ void FullProjectApp::setup()
 	mDead = mInteractionZones->getZoneScalar( InteractionZones::Zone::DEAD );
 	mTable = mInteractionZones->getZoneScalar( InteractionZones::Zone::TABLE );
 	
+    mPondUniforms[0] = mPond->getSpringMesh()->getSpringConstant();
+    mPondUniforms[1] = mPond->getSpringMesh()->getRestLength();
+    mPondUniforms[2] = mPond->getSpringMesh()->getGlobalDampening();
+    
+    mParams->addSeparator();
+    mParams->addParam( "Set Global Dampening", &mPondUniforms[2] ).updateFn( [&](){
+        mPond->getSpringMesh()->setGlobalDampening( mPondUniforms[2] );
+    });
+    mParams->addParam( "Set Rest Length", &mPondUniforms[1] ).updateFn( [&](){
+        mPond->getSpringMesh()->setGlobalDampening( mPondUniforms[1] );
+    });
+    mParams->addParam( "Set Spring Constant", &mPondUniforms[0] ).updateFn( [&](){
+        mPond->getSpringMesh()->setGlobalDampening( mPondUniforms[0] );
+    });
+	
 	mParams->addSeparator();
+	mParams->addButton( "Reload SpringMesh Updater", [&](){  mPond->getSpringMesh()->loadShaders(); } );
+    
+    mParams->addSeparator();
 	mParams->addText("Teensy Settings");
 	mParams->addButton("Send Top Teensy Approach", [&](){
 		mEventManager->queueEvent( EventDataRef( new ApproachEvent( KioskId::TOP_KIOSK ) ) );
@@ -167,9 +186,6 @@ void FullProjectApp::setup()
 	mParams->addButton("Send Bottom Teensy Depart", [&](){
 		mEventManager->queueEvent( EventDataRef( new DepartEvent( KioskId::BOTTOM_KIOSK ) ) );
 	});
-	
-	mParams->addSeparator();
-	mParams->addButton( "Reload SpringMesh Updater", [&](){  mPond->getSpringMesh()->loadShaders(); } );
 	
 	mParams->addSeparator();
 	mParams->addButton( "Enable Bounding Boxes", [&](){ mKioskManager->toggleDebugBoundingBoxes(); } );

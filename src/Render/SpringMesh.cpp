@@ -32,7 +32,8 @@ const int TEXCOORD_INDEX	= 4;
 
 	
 SpringMesh::SpringMesh()
-: mIterationsPerFrame(1), mIterationIndex( 0 ), mLineIndices( 0 ), mTriangleIndices( 0 ), mDrawDebug( false ), mDrawTexture( true )
+: mIterationsPerFrame(1), mIterationIndex( 0 ), mLineIndices( 0 ), mTriangleIndices( 0 ), mDrawDebug( false ), mDrawTexture( true ),
+    mSpringConstant( 10. ), mRestLength( 0.88f ), mGlobalDampening( 2.8f )
 {
 	
 }
@@ -65,6 +66,10 @@ void SpringMesh::update()
 		// Pick using the mouse if it's pressed
 		mUpdateGlsl->uniform( "elapsedSeconds", float(getElapsedSeconds()) );
 		mUpdateGlsl->uniform( "t", (float)mUpdateTimer.getSeconds() );
+        mUpdateGlsl->uniform( "rest_length", mRestLength );
+        mUpdateGlsl->uniform( "c", mGlobalDampening );
+        mUpdateGlsl->uniform( "k", mSpringConstant );
+
 		mUpdateTimer.start();
 		
 		gl::ScopedVao			vaoScope( mVaos[mIterationIndex & 1] );
@@ -345,6 +350,17 @@ void SpringMesh::loadShaders()
 	mUpdateGlsl->uniform("touchBeganDistThreshold", mTouchesBeganDistThresh );
 	mUpdateGlsl->uniform("touchMovedDistThreshold", mTouchesMovedDistThresh );
 	
+    std::array<float, 8> amplitude{ 1, 1, .4, .03, .05, .1, .5, .3 };
+	std::array<float, 8> wavelength{ .8, .9, .1, .01, .1, .4, .5, .8 };
+	std::array<float, 8> speed{ 1, 1, .4, .01, .6, .9, .1, .4 };
+	std::array<vec2, 8> direction{ randVec2f(), randVec2f(), randVec2f(), randVec2f(), randVec2f(), randVec2f(), randVec2f(), randVec2f() };
+	
+	mUpdateGlsl->uniform( "amplitude", amplitude.data(), amplitude.size() );
+	mUpdateGlsl->uniform( "wavelength", wavelength.data(), wavelength.size() );
+	mUpdateGlsl->uniform( "speed", speed.data(), speed.size() );
+	mUpdateGlsl->uniform( "direction", direction.data(), direction.size() * 2 );
+	mUpdateGlsl->uniform( "mouse_pos", vec2(640, 480) );
+    
 	gl::GlslProg::Format debugRenderFormat;
 	debugRenderFormat.vertex( getFileContents( "SpringMeshDebugrender.vert" ) )
 	.fragment( getFileContents( "SpringMeshDebugrender.frag" ) )
@@ -377,16 +393,7 @@ void SpringMesh::loadShaders()
 		CI_LOG_E("Unknown Exception " << ex.what());
 	}
 	
-	std::array<float, 8> amplitude{ 1, 1, .4, .03, .05, .1, .5, .3 };
-	std::array<float, 8> wavelength{ .8, .2, .1, .01, .1, .4, .5, .8 };
-	std::array<float, 8> speed{ 1, 1, .4, .01, .6, .9, .1, .4 };
-	std::array<vec2, 8> direction{ randVec2f(), randVec2f(), randVec2f(), randVec2f(), randVec2f(), randVec2f(), randVec2f(), randVec2f() };
-	
-	mRenderGlsl->uniform( "amplitude", amplitude.data(), amplitude.size() );
-	mRenderGlsl->uniform( "wavelength", wavelength.data(), wavelength.size() );
-	mRenderGlsl->uniform( "speed", speed.data(), speed.size() );
-	mRenderGlsl->uniform( "direction", direction.data(), direction.size() * 2 );
-	mRenderGlsl->uniform( "mouse_pos", vec2(640, 480) );
+
 }
 	
 	
