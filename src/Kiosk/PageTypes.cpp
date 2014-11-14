@@ -224,9 +224,9 @@ bool OverlayPlus::initialize( const ci::JsonTree &root )
 		auto groups = root["images"].getChildren();
 		auto nonConstGroup = SvgManager::get()->getDoc();
 		
-		std::cout << "Group in Overlay" << endl;
+		CI_LOG_I("Group in Overlay");
 		for( auto & groupName : groups ) {
-			cout << groupName.getValue() << endl;
+			CI_LOG_I(groupName.getValue());
 			mOverlays.push_back(  nonConstGroup->findByIdContains<svg::Group>( groupName.getValue() ) );
 		}
 	}

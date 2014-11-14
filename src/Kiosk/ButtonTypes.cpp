@@ -128,7 +128,7 @@ bool DataPageButton::initialize( const ci::JsonTree &root )
 		auto svgManager = SvgManager::get();
 		if( svgManager ) {
 			mNavigation = svgManager->getData( mDataPageName );
-			cout << "Navigation: " << mNavigation->getGroupName() << endl;
+			CI_LOG_V("Navigation: " << mNavigation->getGroupName());
 		}
 		else {
 			CI_LOG_E("Trying to access svgManger but doesn't exist");
@@ -144,7 +144,7 @@ bool DataPageButton::initialize( const ci::JsonTree &root )
 	
 void DataPageButton::changeState( InfoDisplayRef &infoDisplay )
 {
-	cout << "DATA_PAGE_BUTTON: " << mName << endl;
+	CI_LOG_I("DATA_PAGE_BUTTON: " << mName);
 	ActivatableButton::changeState( infoDisplay );
 	auto buttons = infoDisplay->getDataButtons();
 	
@@ -153,7 +153,7 @@ void DataPageButton::changeState( InfoDisplayRef &infoDisplay )
 			auto cast = std::dynamic_pointer_cast<NavigableButton>( button );
 			if( cast ) {
 				if( cast->getNavigationStatus() == NavigableButton::NavigationStatus::PREV ) {
-					cout << "Changing state of " << cast->getGroupName() << " to none active because it's prev" << endl;
+					CI_LOG_I("Changing state of " << cast->getGroupName() << " to none active because it's prev");
 					if( mSection == 1 ) {
 						cast->setButtonStatus( ButtonStatus::NONACTIVE );
 					}
@@ -224,7 +224,7 @@ bool OverlayPageButton::initialize( const ci::JsonTree &root )
 
 void OverlayPageButton::changeState( InfoDisplayRef &display )
 {
-	cout << "Overlay_PAGE_BUTTON: " << mName << endl;
+	CI_LOG_I("Overlay_PAGE_BUTTON: " << mName);
 	
 	mStatus = ButtonStatus::ACTIVE;
 	auto overlayButtonMap = display->getOverlayButtons();
@@ -235,11 +235,11 @@ void OverlayPageButton::changeState( InfoDisplayRef &display )
 				auto cast = std::dynamic_pointer_cast<NavigableButton>( button );
 				if( cast ) {
 					if( cast->getNavigationStatus() == NavigableButton::NavigationStatus::PREV ) {
-						cout << "Changing state of " << cast->getGroupName() << " to none active because it's prev" << endl;
+						CI_LOG_I("Changing state of " << cast->getGroupName() << " to none active because it's prev");
 						cast->setButtonStatus( ButtonStatus::NONACTIVE );
 					}
 					else if( cast->getNavigationStatus() == NavigableButton::NavigationStatus::NEXT ) {
-						cout << "Changing state of " << cast->getGroupName() << " to active because it's next" << endl;
+						CI_LOG_I("Changing state of " << cast->getGroupName() << " to active because it's next");
 						cast->setButtonStatus( ButtonStatus::ACTIVE );
 					}
 				}
@@ -411,7 +411,7 @@ bool ReturnButton::initialize( const ci::JsonTree &root )
 
 void ReturnButton::changeState( InfoDisplayRef &display )
 {
-	cout << "Return_BUTTON: " << mName << endl;
+	CI_LOG_I("Return_BUTTON: " << mName);
 	switch ( mStatus ) {
 		case ReturnStatus::DATA_PAGE: {
 			auto pages = display->getPageCache();
@@ -432,7 +432,7 @@ void ReturnButton::changeState( InfoDisplayRef &display )
 					auto cast = std::dynamic_pointer_cast<NavigableButton>( button );
 					if( cast ) {
 						if( cast->getNavigationStatus() == NavigableButton::NavigationStatus::PREV ) {
-							cout << "Changing state of " << cast->getGroupName() << " to none active because it's prev" << endl;
+							CI_LOG_I("Changing state of " << cast->getGroupName() << " to none active because it's prev");
 							cast->setButtonStatus( ButtonStatus::NONACTIVE );
 						}
 					}
@@ -522,7 +522,7 @@ bool NavigableButton::initialize( const ci::JsonTree &root )
 
 void NavigableButton::changeState( InfoDisplayRef &display )
 {
-	cout << "Navigable_BUTTON: " << mName << endl;
+	CI_LOG_I("Navigable_BUTTON: " << mName);
 	
 	if( mButtonStatus == ButtonStatus::NONACTIVE ) return;
 	
@@ -557,20 +557,20 @@ void NavigableButton::changeState( InfoDisplayRef &display )
 			if( mNavigationStatus == NavigationStatus::NEXT ) {
 				auto next = dataPage->next();
 				// TODO: THis is a hack that I can't figure out.
-				cout << getGroupName() << " is going to the next page " << next << endl;
+				CI_LOG_I(getGroupName() << " is going to the next page " << next);
 				if( next ) {
-					cout << "There's a next datapage called " << next->getGroupName() << endl;
+					CI_LOG_I("There's a next datapage called " << next->getGroupName());
 					display->addDataPage( next, InfoDisplay::AnimateType::CUT );
-					cout << "Section of display: " << display->getSection() << " Next's section: " << next->getSection() << endl;
+					CI_LOG_I("Section of display: " << display->getSection() << " Next's section: " << next->getSection());
 					if( display->getSection() != next->getSection() ) {
 						auto buttons = display->getDataButtons();
 						for( auto & button : buttons ) {
-							cout << "Checking: " << button->getGroupName() << endl;
+							CI_LOG_I("Checking: " << button->getGroupName());
 							if( button->getType() == DataPageButton::TYPE ) {
 								auto cast = std::dynamic_pointer_cast<DataPageButton>(button);
-								cout << "Section: " << cast->getSection() << " Display: " << display->getSection() << endl;
+								CI_LOG_I("Section: " << cast->getSection() << " Display: " << display->getSection());
 								if( cast && cast->getSection() == display->getSection() + 1 ) {
-									cout << "Setting activated button " << endl;
+									CI_LOG_I("Setting activated button ");
 									display->getActivatedButton()->setStatus( ButtonStatus::NONACTIVE );
 									cast->setStatus( ButtonStatus::ACTIVE );
 									display->setActivatedButton( cast );
@@ -586,7 +586,7 @@ void NavigableButton::changeState( InfoDisplayRef &display )
 					}
 				}
 				else {
-					cout << "There wasn't a next button resetting to nonActive" << endl;
+					CI_LOG_I("There wasn't a next button resetting to nonActive");
 					mButtonStatus = ButtonStatus::NONACTIVE;
 				}
 				if( mOpposite->getButtonStatus() == ButtonStatus::NONACTIVE ) {
@@ -595,20 +595,20 @@ void NavigableButton::changeState( InfoDisplayRef &display )
 			}
 			else if( mNavigationStatus == NavigationStatus::PREV ) {
 				auto prev = dataPage->prev();
-				cout << getGroupName() << " is going to the next page " << prev << endl;
+				CI_LOG_I(getGroupName() << " is going to the next page " << prev);
 				if( prev ) {
-					cout << "There's a next button called " << prev->getGroupName() << endl;
+					CI_LOG_I("There's a next button called " << prev->getGroupName());
 					display->addDataPage( prev, InfoDisplay::AnimateType::CUT );
-					cout << "Section of display: " << display->getSection() << " Next's section: " << prev->getSection() << endl;
+					CI_LOG_I("Section of display: " << display->getSection() << " Next's section: " << prev->getSection());
 					if( display->getSection() != prev->getSection() ) {
 						auto buttons = display->getDataButtons();
 						for( auto & button : buttons ) {
-							cout << "Checking: " << button->getGroupName() << endl;
+							CI_LOG_I("Checking: " << button->getGroupName());
 							if( button->getType() == DataPageButton::TYPE ) {
 								auto cast = std::dynamic_pointer_cast<DataPageButton>(button);
-								cout << "Section: " << cast->getSection() << " Display: " << display->getSection() << endl;
+								CI_LOG_I("Section: " << cast->getSection() << " Display: " << display->getSection());
 								if( cast && cast->getSection() == display->getSection() - 1 ) {
-									cout << "Setting activated button " << endl;
+									CI_LOG_I("Setting activated button ");
 									display->getActivatedButton()->setStatus( ButtonStatus::NONACTIVE );
 									cast->setStatus( ButtonStatus::ACTIVE );
 									display->setActivatedButton( cast );
@@ -619,13 +619,13 @@ void NavigableButton::changeState( InfoDisplayRef &display )
 						}
 					}
 					auto another = prev->prev();
-					cout << "Going to see if it should be inactive" << another << endl;
+					CI_LOG_I("Going to see if it should be inactive" << another);
 					if( ! another ) {
 						mButtonStatus = ButtonStatus::NONACTIVE;
 					}
 				}
 				else {
-					cout << "There wasn't a next button resetting to nonActive" << endl;
+					CI_LOG_I("There wasn't a next button resetting to nonActive");
 					mButtonStatus = ButtonStatus::NONACTIVE;
 				}
 				if( mOpposite->getButtonStatus() == ButtonStatus::NONACTIVE ) {

@@ -184,7 +184,7 @@ void SpringMesh::loadBuffers( const ci::vec2 &size )
 	// We set all connections to -1, because these will only be updated
 	// if there are connection indices. Explanation below.
 	vector<ivec4> connections( mPointTotal, ivec4( -1 ) );
-	cout << "THE SIZE OF THE POND: " <<size << endl;
+	
 	for( int j = 0; j < POINTS_Y; j++ ) {
 		float fj = (float)j / (float)(POINTS_Y - 1);
 		for( int i = 0; i < POINTS_X; i++ ) {

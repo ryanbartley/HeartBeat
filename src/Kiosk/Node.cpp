@@ -27,11 +27,6 @@ Node::Node( const std::string &group )
 	else {
 		CI_LOG_V(mGroup->getId() << " was initialized correctly");
 	}
-	
-	if( mName == "BUTTON-STUDY-close" ) {
-		cout << "TopLines display is " << ! mGroup->isDisplayNone() << endl;
-		cout << "Absolute: " << mGroup->getBoundingBox() << endl;
-	}
 }
 	
 ci::gl::Texture2dRef Node::initializeGl( const ci::svg::Group *group )

@@ -314,7 +314,6 @@ void InfoDisplay::draw()
 		{
 			gl::ScopedColor scopeColor( ColorA(1, 0, 0, 1) );
 			for( auto & point : mPoints ) {
-				cout << "I should be drawing this point" << endl;
 				gl::drawSolidCircle( point, 20 );
 			}
 		}
@@ -366,13 +365,14 @@ void InfoDisplay::finished()
 		mOverlayActiveButton = nullptr;
 	}
 	mCurrentSection = 0;
-	cout << getKiosk( mId ) << " Reset the infoDisplay: " << app::getElapsedSeconds() << endl;
+	CI_LOG_I(getKiosk( mId ) << " Reset the infoDisplay: " << app::getElapsedSeconds());
 	renderToSvg();
 	mStateChanged = false;
 	mPointMap.clear();
 #if defined( DEBUG )
 	mPoints.clear();
 #endif
+	CI_LOG_I(getKiosk( mId ) << " Reset the infoDisplay: " << app::getElapsedSeconds());
 }
 	
 void InfoDisplay::addDataPage( DataPageRef &nextPage, AnimateType type )
@@ -457,11 +457,13 @@ void InfoDisplay::addOverlayPage( OverlayPageRef &page )
 			return;
 			break;
 	}
-	float minDistance = 100000.0f;
-	ButtonRef closestButton;
+	
 #if defined( DEBUG )
     mPoints.push_back( point );
 #endif
+	
+	float minDistance = 100000.0f;
+	ButtonRef closestButton;
 	for( auto & button : *buttonSet ) {
 		auto buttonCenter = button->getCenter();
 		auto distance = ci::distance( point, buttonCenter );
@@ -469,13 +471,16 @@ void InfoDisplay::addOverlayPage( OverlayPageRef &page )
 			closestButton = button;
 			minDistance = distance;
 		}
-		cout << "checking button: " << button->getGroupName() << " bounding:  " <<
-			button->getRootGroup()->getBoundingBox() << " point: " << point << " distance: " <<
-			distance << endl;
+		CI_LOG_I("checking button: " << button->getGroupName() << " bounding:  " << button->getRootGroup()->getBoundingBox() << " point: " << point << " distance: " << distance);
 	}
 	
+<<<<<<< HEAD
 	if( minDistance < 250 ) {
 		cout << "it's this button: " << closestButton->getGroupName() << endl;
+=======
+	if( minDistance < 150 ) {
+		CI_LOG_I("it's this button: " << closestButton->getGroupName() << " and closest is: " << minDistance);
+>>>>>>> Removed all instances of cout except for the main full app page
 		auto shared = shared_from_this();
 		closestButton->changeState( shared );
 		mStateChanged = true;
@@ -487,6 +492,7 @@ void InfoDisplay::registerTouchBegan( EventDataRef eventData )
 //    if( mMasterAlpha != 1.0f ) return;
     
     auto event = std::dynamic_pointer_cast<TouchBeganEvent>( eventData );
+
     if( ! event ) {
         CI_LOG_E("Couldn't cast touch event from " << eventData->getName() );
         return;
@@ -495,12 +501,22 @@ void InfoDisplay::registerTouchBegan( EventDataRef eventData )
 	auto eventWorldCoord = event->getWorldCoordinate();
 	
 	auto twoDimPoint = getCoordinateSpacePoint( eventWorldCoord );
+<<<<<<< HEAD
     cout << "About to check this point: " << twoDimPoint << endl;
     if( mTouchRect.contains( twoDimPoint ) ) {
         mPointMap.insert( make_pair( event->getTouchId(), TouchData( eventWorldCoord, twoDimPoint, true ) ) );
+=======
+	
+    CI_LOG_I("About to check this translated point: " << twoDimPoint);
+	
+    if( mPresentRect.contains( twoDimPoint ) ) {
+        mPointMap.insert( make_pair( event->getTouchId(),
+									TouchData( eventWorldCoord, twoDimPoint, true ) ) );
+>>>>>>> Removed all instances of cout except for the main full app page
     }
 	else {
-		mPointMap.insert( make_pair( event->getTouchId(), TouchData( eventWorldCoord, twoDimPoint, false ) ) );
+		mPointMap.insert( make_pair( event->getTouchId(),
+									TouchData( eventWorldCoord, twoDimPoint, false ) ) );
 	}
 }
 
@@ -513,10 +529,16 @@ void InfoDisplay::registerTouchMoved( EventDataRef eventData )
 		CI_LOG_E("Couldn't cast touch event from " << eventData->getName() );
 		return;
 	}
+<<<<<<< HEAD
     
 	cout << "Finding in point map" << endl;
 	auto world = event->getWorldCoordinate();
+=======
+>>>>>>> Removed all instances of cout except for the main full app page
 	
+	CI_LOG_I("Finding in point map");
+	
+	auto world = event->getWorldCoordinate();
 	auto found = mPointMap.find( event->getTouchId() );
 	if( found != mPointMap.end() ) {
 		auto twoDimPoint = getCoordinateSpacePoint( world );
@@ -550,11 +572,11 @@ void InfoDisplay::registerTouchEnded( EventDataRef eventData )
 	auto found = mPointMap.find( event->getTouchId() );
 	if( found != mPointMap.end() ) {
 		if( found->second.mContained ) {
-		found->second.mHistory.push_back( event->getWorldCoordinate() );
-		if( found->second.valid() ) {
-			checkInteraction( getCoordinateSpacePoint( found->second.getPointOfInterest() ) );
-		}
-		mPointMap.erase( found );
+			found->second.mHistory.push_back( event->getWorldCoordinate() );
+			if( found->second.valid() ) {
+				checkInteraction( getCoordinateSpacePoint( found->second.getPointOfInterest() ) );
+			}
+			mPointMap.erase( found );
 		}
 	}
 }
@@ -576,16 +598,16 @@ void InfoDisplay::initiaize(const ci::JsonTree &root)
 		mTouchRect = Rectf( mPresentRect.x1 - 1000.0f, mPresentRect.y1 - 1000.0f, mPresentRect.x2 + 1000.0f, mPresentRect.y2 + 1000.0f );
 		auto translated1 = getModelMatrix() * vec4(mPresentRect.x1, mPresentRect.y1, 0, 1);
 		auto translated2 = getModelMatrix() * vec4(mPresentRect.x2, mPresentRect.y2, 0, 1);
-		cout << "Original point1: " << vec4(mPresentRect.x1, mPresentRect.y1, 0, 1) << " Translated point 1: " << translated1 << endl << " Original point2: " << vec4(mPresentRect.x2, mPresentRect.y2, 0, 1) << " Translated point 2: " << translated2 << endl;
+		CI_LOG_I("Original point1: " << vec4(mPresentRect.x1, mPresentRect.y1, 0, 1) << " Translated point 1: " << translated1 << "\n" << " Original point2: " << vec4(mPresentRect.x2, mPresentRect.y2, 0, 1) << " Translated point 2: " << translated2);
 		mTranslatedPresentRect = Rectf( -1000, -1000, 1000, 1000 );
 		mTranslatedPresentRect.getCenteredFill( Rectf( translated1.x, translated1.y, translated2.x, translated2.y ), true );
-		cout << "Translated rect with include: " << mTranslatedPresentRect << " width: " << mTranslatedPresentRect.getWidth() << " height: " << mTranslatedPresentRect.getHeight() << endl;
+		CI_LOG_I("Translated rect with include: " << mTranslatedPresentRect << " width: " << mTranslatedPresentRect.getWidth() << " height: " << mTranslatedPresentRect.getHeight());
 
 		mCairoTex = gl::Texture2d::create( mTranslatedPresentRect.getWidth(), mTranslatedPresentRect.getHeight() );
 		auto & mM = getModelMatrix();
 		mCairoMat = MatrixAffine2<float>( mM[0][0], mM[0][1], mM[1][0], mM[1][1], mM[3][0], mM[3][1] );
 		
-		cout << "Context Matrix: " << endl << mCairoMat << " Model Matrix: " << endl << getModelMatrix() << endl;
+		CI_LOG_I("Context Matrix:\n" << mCairoMat << "\nModel Matrix:\n" << getModelMatrix());
 		
 		try {
 			mMinIndex = root["minIndex"].getValue<int>();
@@ -799,7 +821,7 @@ void InfoDisplay::initiaize(const ci::JsonTree &root)
 								// Now that I know page is a thing, I cast it
 								current = std::dynamic_pointer_cast<DataPage>(page);
 								// Acknowledging the start
-								cout << "Adding DataPages to InfoDisplay" << endl;
+								CI_LOG_I("Adding DataPages to InfoDisplay");
 								while ( current ) {
 									// now I clone current page and set it to the groupName
 									auto cached = mPageCache.insert( make_pair( current->getGroupName(), current->clone() ) );
@@ -813,15 +835,15 @@ void InfoDisplay::initiaize(const ci::JsonTree &root)
 									forwardDataPages.push_back( cachedPage );
 									// make last the cachedPage
 									last = cachedPage;
-									cout << "\t" << current->getGroupName() << endl;
+									CI_LOG_I("\t" << current->getGroupName());
 									// Since we're interested in the SvgManager map for the clones we make the next the current
 									current = current->next();
 								}
 								DataPageRef next;
-								cout << "Reversing" << endl;
+								CI_LOG_I("Reversing");
 								// Now reverse the above vector to set Previous
 								for( auto revIt = forwardDataPages.rbegin(); revIt != forwardDataPages.rend(); ++revIt ) {
-									cout << "\t" << (*revIt)->getGroupName() << endl;
+									CI_LOG_I("\t" << (*revIt)->getGroupName());
 									if( next ) {
 										next->setPrev( *revIt );
 									}

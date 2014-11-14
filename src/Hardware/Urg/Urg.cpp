@@ -117,7 +117,7 @@ bool Urg::initialize()
 				}
 				// If the devices name contains this fill out the rest of the
 				// address with it.
-				cout << "\t" << name << endl;
+				CI_LOG_I("\t" << name);
 			}
 		
 			if( found ) {
@@ -136,12 +136,12 @@ bool Urg::initialize()
 			CI_LOG_W("Device address not found, finding first usb address");
 			// Query the available serial Devices
 			auto devices = Serial::getDevices();
-			cout << "Available Devices: " << endl;
+			CI_LOG_I("Available Devices: ");
 			for( auto & device : devices ) {
 				auto & name = device.getName();
 				// If the devices name contains this fill out the rest of the
 				// address with it.
-				cout << "\t" << name << endl;
+				CI_LOG_I("\t" << name);
 			}
 			return false;
 		}

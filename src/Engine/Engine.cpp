@@ -245,7 +245,7 @@ void Engine::postDraw()
 	mRenderer->presentRender();
 	auto app = app::App::get();
 	mEndingFrame = app->getElapsedSeconds();
-	cout << "Time for this frame: " << mEndingFrame - mBeginningFrame << endl;
+	CI_LOG_I("Time for this frame: " << mEndingFrame - mBeginningFrame);
 	app->getWindow()->setTitle( to_string( app->getAverageFps() ) );
     
     auto window = mRenderer->getPrimaryWindow();
