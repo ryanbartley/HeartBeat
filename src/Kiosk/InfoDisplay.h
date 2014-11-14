@@ -92,12 +92,36 @@ public:
 	void enableBoundingBoxRender( bool enable ) { mShouldDrawBoundingBoxes = enable; }
 	bool getBoundingBoxRender() {return mShouldDrawBoundingBoxes; }
 	void removeFront();
-	
-	
-	
 	void checkInteraction( const ci::vec2 &point );
-	
 	ci::gl::FboRef& getPresentationFbo() { return mPresentationFbo; }
+	
+	struct TouchData {
+		
+		TouchData( ci::vec2 &point )
+		{
+			mHistory.push_back( point );
+		}
+		
+		inline bool valid()
+		{
+			return mHistory.size() > 2;
+		}
+		
+		inline ci::vec2 getPointOfInterest()
+		{
+			ci::vec2 ret;
+			int historySize = mHistory.size();
+			if( historySize < 6 ) {
+				ret = mHistory[3];
+			}
+			else {
+				ret = mHistory[(historySize - 1) - 3];
+			}
+			return ret;
+		}
+
+		std::vector<ci::vec2> mHistory;
+	};
 	
 private:
 	InfoDisplay( KioskId kioskId, bool shouldRenderSvgs );
@@ -124,7 +148,7 @@ private:
 #if defined( DEBUG )
     std::vector<ci::vec2>			mPoints;
 #endif
-	std::map<uint64_t,int>			mPointMap;
+	std::map<uint64_t,TouchData>	mPointMap;
 	
 	PageRef							mBackGround,
 									mLines;

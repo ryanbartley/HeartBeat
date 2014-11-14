@@ -434,7 +434,9 @@ void InfoDisplay::addOverlayPage( OverlayPageRef &page )
 			closestButton = button;
 			minDistance = distance;
 		}
-		cout << "checking button: " << button->getGroupName() << " bounding:  " << button->getRootGroup()->getBoundingBox() << " point: " << point << " distance: " << distance << endl;
+		cout << "checking button: " << button->getGroupName() << " bounding:  " <<
+			button->getRootGroup()->getBoundingBox() << " point: " << point << " distance: " <<
+			distance << endl;
 	}
 	
 	if( minDistance < 150 ) {
@@ -457,7 +459,7 @@ void InfoDisplay::registerTouchBegan( EventDataRef eventData )
     auto twoDimPoint = vec2( modelSpacePoint.x, modelSpacePoint.y );
     cout << "About to check this point: " << twoDimPoint << endl;
     if( mPresentRect.contains( twoDimPoint ) ) {
-        mPointMap.insert( make_pair( event->getTouchId(), 1 ) );
+        mPointMap.insert( make_pair( event->getTouchId(), TouchData( event->getWorldCoordinate() ) ) );
     }
 }
 
@@ -471,12 +473,7 @@ void InfoDisplay::registerTouchMoved( EventDataRef eventData )
 	cout << "Finding in point map" << endl;
 	auto found = mPointMap.find( event->getTouchId() );
 	if( found != mPointMap.end() ) {
-		found->second++;
-		if( found->second == 3 ) {
-			auto modelSpacePoint = getInverseMatrix() * vec4( event->getWorldCoordinate(), 0, 1 );
-			auto twoDimPoint = vec2( modelSpacePoint.x, modelSpacePoint.y );
-			checkInteraction( twoDimPoint );
-		}
+		found->second.mHistory.push_back( event->getWorldCoordinate() );
 	}
 }
 	
@@ -490,6 +487,12 @@ void InfoDisplay::registerTouchEnded( EventDataRef eventData )
 	
 	auto found = mPointMap.find( event->getTouchId() );
 	if( found != mPointMap.end() ) {
+		found->second.mHistory.push_back( event->getWorldCoordinate() );
+		if( found->second.valid() ) {
+			auto modelSpacePoint = getInverseMatrix() * vec4( found->second.getPointOfInterest(), 0, 1 );
+			auto twoDimPoint = vec2( modelSpacePoint.x, modelSpacePoint.y );
+			checkInteraction( twoDimPoint );
+		}
 		mPointMap.erase( found );
 	}
 }
