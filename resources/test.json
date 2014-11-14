@@ -4,14 +4,14 @@
 		// RENDERER
 		//////////////////////////////////////////////////////
 		"screenRender" : {
-			"imageStencil" : "tableoutline_110714-V2.1.png",
+			"imageStencil" : "tableoutline_110714-V2.2.png",
 			"individualProjectorSize" : [
 				1920,
 				1080
 			],
 			"numPixelOverlap" : 200,
-			"splitWindow" : false,
-			"halfSize" : true
+			"splitWindow" : true,
+			"halfSize" : false
 		},
 		//////////////////////////////////////////////////////
 		// HID ATTRIBUTES
@@ -38,7 +38,7 @@
 		//////////////////////////////////////////////////////
 		"interactionZones" : {
 			"barrierFile" : "tableData.bin",
-			"runUrg" : false,
+			"runUrg" : true,
 			"poleIndices" : [
 				0,
 				9, 10, 11, 12, 13, 14,
@@ -387,7 +387,7 @@
 		// SVG MANAGER SETTINGS
 		//////////////////////////////////////////////////////
 		"svgAttribs" : {
-			"fileName" : "ACTEMRA_PondCharts_111214-1TEST W PNG_current.svg",
+			"fileName" : "ACTEMRA_PondCharts_PattenLayout_fredA.svg",
 			"pageAttribs" : {
 				"staticPages" : {
 					"pages" : [

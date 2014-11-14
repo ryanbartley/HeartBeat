@@ -157,11 +157,10 @@ void InfoDisplay::renderHomeScreenSvg( ci::cairo::Context &context )
 		if( mOverlayActiveButton ) {
 			if( button == mOverlayActiveButton ) {
 				button->render( context, 1.0f );
+                continue;
 			}
 		}
-		else {
-			button->render( context, alpha );
-		}
+        button->render( context, alpha );
 	}
 }
 
@@ -194,7 +193,7 @@ void InfoDisplay::renderDataScreenSvg( ci::cairo::Context &context )
 			}
 			
 			if( button == mOverlayActiveButton ) {
-				button->render( context, alpha );
+				button->render( context, 1.0f );
 			}
 			else {
 				if( button->getType() != NavigableButton::TYPE ) {

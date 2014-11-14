@@ -43,7 +43,7 @@ struct Interactor {
 	
 const uint32_t NUM_UPDATES_TO_EMIT = 2;
 const uint32_t UPDATE_DISTANCE_THRESH = 300;
-const uint32_t UPDATE_INDEX_THRESH = 300;
+const uint32_t UPDATE_INDEX_THRESH = 16;
 	
 struct TouchData {
 public:
@@ -96,10 +96,10 @@ void TouchData::update( int index, long distance )
 {
 	static const float scalar = 1.0f / 2.0f;
 	if( index != mCurrentIndex || distance != mCurrentDistance ) {
-		if( distance < mCurrentDistance + 50 ) {
+//		if( distance < mCurrentDistance + 50 ) {
 			mCurrentIndex = (index + mCurrentIndex) * scalar;
 			mCurrentDistance = (distance + mCurrentDistance) * scalar;
-		}
+//		}
 		mEmitType = EventTypeToEmit::MOVED;
 	}
 	else {
