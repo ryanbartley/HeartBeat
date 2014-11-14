@@ -352,6 +352,15 @@ void FullProjectApp::mouseDrag( cinder::app::MouseEvent event )
 
 void FullProjectApp::mouseUp( cinder::app::MouseEvent event )
 {
+#if defined( DEBUG )
+	if( ! mShowParams ) {
+		ci::vec2 eventPosition = event.getPos();
+		auto renderer = mEngine->getRenderer();
+		
+		mEventManager->queueEvent( heartbeat::EventDataRef( new heartbeat::TouchEndedEvent( mCurrentId, 900, eventPosition ) ) );
+	}
+	
+#endif
 	mCurrentId++;
 }
 
