@@ -261,6 +261,7 @@ void InfoDisplay::draw()
         
         gl::ScopedModelMatrix scopeModel;
 		gl::setModelMatrix( getModelMatrix() );
+		
 #if defined( DEBUG )
         {
             gl::ScopedColor scopeColor( ColorA(1, 0, 0, 1) );
@@ -279,6 +280,13 @@ void InfoDisplay::draw()
             }
         }
 #endif
+		{
+			gl::ScopedColor scopeColor( ColorA( 1, 0, 0, .2 ) );
+			
+			for( auto & touch : mPointMap ) {
+				gl::drawSolidCircle( touch.second.getLastPoint(), 15 );
+			}
+		}
 	}
 	else {
 		renderToFbo();
@@ -458,10 +466,10 @@ void InfoDisplay::registerTouchBegan( EventDataRef eventData )
 	auto twoDimPoint = getCoordinateSpacePoint( eventWorldCoord );
     cout << "About to check this point: " << twoDimPoint << endl;
     if( mPresentRect.contains( twoDimPoint ) ) {
-        mPointMap.insert( make_pair( event->getTouchId(), TouchData( eventWorldCoord, true ) ) );
+        mPointMap.insert( make_pair( event->getTouchId(), TouchData( eventWorldCoord, twoDimPoint, true ) ) );
     }
 	else {
-		mPointMap.insert( make_pair( event->getTouchId(), TouchData( eventWorldCoord, false ) ) );
+		mPointMap.insert( make_pair( event->getTouchId(), TouchData( eventWorldCoord, twoDimPoint, false ) ) );
 	}
 }
 
@@ -475,10 +483,11 @@ void InfoDisplay::registerTouchMoved( EventDataRef eventData )
 	cout << "Finding in point map" << endl;
 	auto found = mPointMap.find( event->getTouchId() );
 	if( found != mPointMap.end() ) {
+		auto twoDimPoint = getCoordinateSpacePoint( event->getWorldCoordinate() );
 		if( ! found->second.mContained ) {
-			auto twoDimPoint = getCoordinateSpacePoint( event->getWorldCoordinate() );
 			if( mPresentRect.contains( twoDimPoint ) ) {
 				found->second.mContained = true;
+				found->second.mCachedCoordinateSpacePoint = twoDimPoint;
 			}
 			else {
 				mPointMap.erase( found );
@@ -486,6 +495,7 @@ void InfoDisplay::registerTouchMoved( EventDataRef eventData )
 		}
 		else {
 			found->second.mHistory.push_back( event->getWorldCoordinate() );
+			found->second.mCachedCoordinateSpacePoint = twoDimPoint;
 		}
 	}
 }
