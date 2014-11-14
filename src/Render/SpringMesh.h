@@ -41,6 +41,14 @@ public:
 	void setTouchesBeganDistThresh( float thresh ) { mTouchesBeganDistThresh = thresh; }
 	
 	void loadShaders();
+    
+    void setSpringConstant( float constant ) { mSpringConstant = constant; }
+    void setRestLength( float restLength ) { mRestLength = restLength; }
+    void setGlobalDampening( float globalDampening ) { mGlobalDampening = globalDampening; }
+    
+    float getSpringConstant() { return mSpringConstant; }
+    float getRestLength() { return mRestLength; }
+    float getGlobalDampening() { return mGlobalDampening; }
 	
 private:
 	SpringMesh();
@@ -61,6 +69,8 @@ private:
 									mLineIndices, mTriangleIndices, mPointTotal;
 	bool							mDrawDebug, mDrawTexture;
 	ci::Timer						mUpdateTimer;
+    
+    float                           mSpringConstant, mRestLength, mGlobalDampening;
 	
 	uint32_t						mNumRows, mNumColumns, mNumIterations;
 	float							mTouchesBeganDistThresh, mTouchesMovedDistThresh;

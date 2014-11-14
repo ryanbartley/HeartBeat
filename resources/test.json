@@ -10,8 +10,8 @@
 				1080
 			],
 			"numPixelOverlap" : 200,
-			"splitWindow" : true,
-			"halfSize" : false
+			"splitWindow" : false,
+			"halfSize" : true
 		},
 		//////////////////////////////////////////////////////
 		// HID ATTRIBUTES
@@ -179,12 +179,12 @@
 			// SPRING MESH SETTINGS
 			//////////////////////////////////////////////////////
 			"springMesh" : {
-				"numRows" : 150,
-				"numColumns" : 150,
-				"numIterations" : 32,
+				"numRows" : 120,
+				"numColumns" : 120,
+				"numIterations" : 16,
 				"threshes" : { 
-					"beganDist" : 80,
-					"movedDist" : 60
+					"beganDist" : 8,
+					"movedDist" : 7
 				}
 			}
 		},
