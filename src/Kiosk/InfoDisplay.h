@@ -124,8 +124,7 @@ private:
 #if defined( DEBUG )
     std::vector<ci::vec2>			mPoints;
 #endif
-	std::map<uint64_t,
-	std::deque<ci::vec2>>			mPointMap;
+	std::map<uint64_t,int>			mPointMap;
 	
 	PageRef							mBackGround,
 									mLines;

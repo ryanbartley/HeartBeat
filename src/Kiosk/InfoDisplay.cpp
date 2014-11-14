@@ -436,9 +436,7 @@ void InfoDisplay::registerTouchBegan( EventDataRef eventData )
     auto twoDimPoint = vec2( modelSpacePoint.x, modelSpacePoint.y );
     cout << "About to check this point: " << twoDimPoint << endl;
     if( mPresentRect.contains( twoDimPoint ) ) {
-        std::deque<ci::vec2> vec({vec2(event->getWorldCoordinate())});
-        mPointMap.insert( make_pair( event->getTouchId(), vec ) );
-		checkInteraction( twoDimPoint );
+        mPointMap.insert( make_pair( event->getTouchId(), 1 ) );
     }
 }
 
@@ -452,9 +450,11 @@ void InfoDisplay::registerTouchMoved( EventDataRef eventData )
 	
 	auto found = mPointMap.find( event->getTouchId() );
 	if( found != mPointMap.end() ) {
-		found->second.push_back( event->getWorldCoordinate() );
-		if( found->second.size() > 20 ) {
-			found->second.pop_front();
+		found->second++;
+		if( found->second == 5 ) {
+			auto modelSpacePoint = getInverseMatrix() * vec4( event->getWorldCoordinate(), 0, 1 );
+			auto twoDimPoint = vec2( modelSpacePoint.x, modelSpacePoint.y );
+			checkInteraction( twoDimPoint );
 		}
 	}
 }
@@ -469,17 +469,6 @@ void InfoDisplay::registerTouchEnded( EventDataRef eventData )
 	
 	auto found = mPointMap.find( event->getTouchId() );
 	if( found != mPointMap.end() ) {
-		auto & pointVec = found->second;
-		if( pointVec.size() > 5 ) {
-			vec2 accum( 0.0f );
-            auto middle = pointVec.size() / 2;
-            auto index = middle - 2;
-			while( index < middle + 2 ) {
-                accum += pointVec[index++];
-            }
-            auto average = accum / 5.0f;
-			checkInteraction( vec2( getInverseMatrix() * vec4( average.x, average.y, 0, 1 ) ) );
-		}
 		mPointMap.erase( found );
 	}
 }
