@@ -14,8 +14,8 @@ namespace heartbeat {
 	
 struct Interactor {
 	Interactor( int index, long distance )
-	: mCurrentDistance( distance ), mMinDistance( distance ), mMaxDistance( distance ),
-		mIndex( index ), mNumIndicesPast( 0 )
+	: mCurrentDistance( distance ), mMinDistance( distance ),
+		mMaxDistance( distance ), mIndex( index ), mNumIndicesPast( 0 )
 	{}
 	
 	inline void checkMinMax( long distance )
@@ -42,6 +42,8 @@ struct Interactor {
 };
 	
 const uint32_t NUM_UPDATES_TO_EMIT = 2;
+const uint32_t UPDATE_DISTANCE_THRESH = 300;
+const uint32_t UPDATE_INDEX_THRESH = 300;
 	
 struct TouchData {
 public:
@@ -64,11 +66,12 @@ public:
 	inline uint64_t getId() const { return mId; }
 	
 private:
+	
 	const uint64_t		mId;
 	long				mCurrentDistance;
-	int					mCurrentIndex, mNumUpdates;
+	int					mCurrentIndex;
 	EventTypeToEmit		mEmitType;
-	bool				mExistsThisFrame, mShouldEmit;
+	bool				mExistsThisFrame;
 	
 	static uint64_t sCurrentId;
 	inline static uint64_t idGenerator()	{ return sCurrentId++; }
@@ -76,8 +79,11 @@ private:
 	
 bool TouchData::contains( int index, long distance )
 {
-	if( ( index > mCurrentIndex - 16 && index < mCurrentIndex + 16 ) &&
-	   ( distance > mCurrentDistance - 200 && distance < mCurrentDistance + 200 ) ) {
+	if( ( index > mCurrentIndex - UPDATE_INDEX_THRESH &&
+		  index < mCurrentIndex + UPDATE_INDEX_THRESH ) &&
+		( distance > mCurrentDistance - UPDATE_DISTANCE_THRESH &&
+		  distance < mCurrentDistance + UPDATE_DISTANCE_THRESH ) )
+	{
 		mExistsThisFrame = true;
 		update( index, distance );
 		return true;
@@ -90,27 +96,24 @@ void TouchData::update( int index, long distance )
 {
 	static const float scalar = 1.0f / 2.0f;
 	if( index != mCurrentIndex || distance != mCurrentDistance ) {
-		mCurrentIndex = (index + mCurrentIndex) * scalar;
-		mCurrentDistance = (distance + mCurrentDistance) * scalar;
+		if( distance < mCurrentDistance + 50 ) {
+			mCurrentIndex = (index + mCurrentIndex) * scalar;
+			mCurrentDistance = (distance + mCurrentDistance) * scalar;
+		}
+		mEmitType = EventTypeToEmit::MOVED;
 	}
-	mNumUpdates++;
-	if( mNumUpdates > 1 ) {
-		mShouldEmit = true;
+	else {
+		mEmitType = EventTypeToEmit::NONE;
 	}
 }
 	
 bool TouchData::reset()
 {
 	if( mExistsThisFrame ) {
-		if( mShouldEmit ) {
-			mNumUpdates = 0;
-			mShouldEmit = false;
-		}
 		mExistsThisFrame = false;
 		return true;
 	}
 	else {
-		mShouldEmit = true;
 		mEmitType = EventTypeToEmit::ENDED;
 		return false;
 	}

@@ -17,15 +17,15 @@ namespace heartbeat {
 uint64_t TouchData::sCurrentId = 0;
 	
 TouchData::TouchData( int index, long distance )
-: mId( idGenerator() ), mCurrentDistance( distance ), mCurrentIndex( index ), mShouldEmit( false ),
-	mNumUpdates( 0 ), mEmitType( EventTypeToEmit::BEGAN ), mExistsThisFrame( true )
+: mId( idGenerator() ), mCurrentDistance( distance ), mCurrentIndex( index ),
+	mEmitType( EventTypeToEmit::BEGAN ), mExistsThisFrame( true )
 {
 }
 	
 void TouchData::createAndSendEvent()
 {
 	static auto eventManager = EventManagerBase::get();
-
+	
 	if( eventManager == nullptr ) {
 		static bool notified = false;
 		if( ! notified ) {
@@ -58,7 +58,6 @@ void TouchData::createAndSendEvent()
 	if( event ) {
 		eventManager->queueEvent( event );
 	}
-	mEmitType = EventTypeToEmit::MOVED;
 }
 
 void ApproachData::createAndSendEvent()

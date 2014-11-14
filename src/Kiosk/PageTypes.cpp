@@ -42,6 +42,13 @@ void SingleTexturePage::render()
 	gl::draw( mTexture );
 }
 	
+void SingleTexturePage::render( ci::cairo::Context &context, float alpha )
+{
+	auto style = const_cast<svg::Style*>(&mGroup->getStyle());
+	style->setOpacity( alpha );
+	context.render( *mGroup );
+}
+	
 PageRef SingleTexturePage::clone()
 {
 	auto ret = SingleTexturePage::create( mGroup->getId() );
@@ -102,15 +109,8 @@ PageRef DataPage::clone()
 	auto page = DataPage::create( mGroup->getId() );
 	page->mButton = mButton;
 	page->mTexture = mTexture;
+	page->mSection = mSection;
 	return page;
-}
-	
-void DataPage::render()
-{
-	gl::ScopedModelMatrix scopeModel;
-	gl::setModelMatrix( ci::translate( vec3( mCurrentPosition, 0.0f ) ) );
-	
-	gl::draw( mTexture );
 }
 	
 /////////////////////////////////////////////////////////////////////////
@@ -147,16 +147,6 @@ PageRef OverlayPage::clone()
 	page->mTexture = mTexture;
 	page->mButtonGroup = mButtonGroup;
 	return page;
-}
-	
-void OverlayPage::render()
-{
-	{
-		gl::ScopedModelMatrix scopeModel;
-		gl::setModelMatrix( ci::translate( vec3( mCurrentPosition, 0.0f ) ) );
-	
-		gl::draw( mTexture );
-	}
 }
 	
 /////////////////////////////////////////////////////////////////////////
@@ -280,6 +270,11 @@ void OverlayPlus::render()
 		
 		gl::draw( mTextures[mCurrentIndex] );
 	}
+}
+	
+void OverlayPlus::render( ci::cairo::Context &context, float alpha )
+{
+	context.render( *mOverlays[mCurrentIndex] );
 }
 
 }

@@ -37,6 +37,8 @@ public:
 	//! Render Final Gl component
 	virtual void render() override;
 	
+	virtual void render( ci::cairo::Context &context, float alpha ) override;
+	
 protected:
 	StaticButton( const std::string &buttonId );
 	
@@ -119,6 +121,8 @@ public:
 	
 	void render() override;
 	
+	void render( ci::cairo::Context &context, float alpha ) override;
+	
 private:
 	NavigableButton( const std::string &buttonId );
 
@@ -148,6 +152,8 @@ public:
 	void debugRender() override;
 	
 	void render() override;
+	
+	void render( ci::cairo::Context &context, float alpha ) override;
 	
 	void setStatus( ButtonStatus status ) { mStatus = status; }
 	ButtonStatus			getStatus() const { return mStatus; }
@@ -194,6 +200,8 @@ public:
 	const std::string& getDataPageName() { return mDataPageName; }
 	
 	void setDataPage( const DataPageRef &dataPage ) { mNavigation = dataPage; }
+	
+	uint32_t getSection() { return mSection; }
 	
 private:
 	DataPageButton( const std::string &buttonId );

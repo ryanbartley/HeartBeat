@@ -12,6 +12,7 @@
 #include "SvgManager.h"
 
 #include "cinder/svg/Svg.h"
+#include "Cairo.h"
 
 namespace heartbeat {
 	
@@ -33,6 +34,7 @@ public:
 	
 	virtual void debugRender() = 0;
 	virtual void render() = 0;
+	virtual void render( ci::cairo::Context &context, float alpha ) = 0;
 	
 	const ci::vec2& getScenePosition() { return mAbsolutePosition; }
 	bool			isAnimating() { return mIsAnimating; }
@@ -96,6 +98,8 @@ public:
 	virtual ButtonRef clone() = 0;
 	
 	void renderBoundingBox();
+	
+	void renderBoundingBox( ci::cairo::Context &context );
 	
 protected:
 	Button( const std::string &name );

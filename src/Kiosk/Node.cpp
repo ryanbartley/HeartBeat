@@ -61,4 +61,9 @@ void Button::renderBoundingBox()
 	gl::drawStrokedRect( mBoundingBox, 5 );
 }
 	
+void Button::renderBoundingBox( cairo::Context &context )
+{
+	context.rectangle( mBoundingBox.x1, mBoundingBox.y1, mBoundingBox.x2, mBoundingBox.y2 );
+}
+	
 }

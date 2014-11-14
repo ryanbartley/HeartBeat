@@ -80,6 +80,20 @@ void ActivatableButton::render()
 	}
 }
 	
+void ActivatableButton::render( cairo::Context &context, float alpha )
+{
+	if( mStatus == ButtonStatus::ACTIVE ) {
+		auto style = const_cast<svg::Style*>(&mActive->getStyle());
+		style->setOpacity( alpha );
+		context.render( *mActive );
+	}
+	else if( mStatus == ButtonStatus::NONACTIVE ) {
+		auto style = const_cast<svg::Style*>(&mNonActive->getStyle());
+		style->setOpacity( alpha );
+		context.render( *mNonActive );
+	}
+}
+	
 void ActivatableButton::changeState( InfoDisplayRef &display )
 {
 	auto activatedButton = display->getActivatedButton();
@@ -339,6 +353,13 @@ void StaticButton::render()
 	gl::draw( mTexture );
 }
 	
+void StaticButton::render( ci::cairo::Context &context, float alpha )
+{
+	auto style = const_cast<svg::Style*>(&mGroup->getStyle());
+	style->setOpacity( alpha );
+	context.render( *mGroup );
+}
+	
 ///////////////////////////////////////////////////////////////////////////////////////
 // Close Button
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -434,6 +455,13 @@ void ReturnButton::changeState( InfoDisplayRef &display )
 		break;
 		case ReturnStatus::CLOSE_OVERLAY: {
 			auto null = OverlayPageRef();
+			auto overlay = display->getOverlayPage();
+			if( overlay->getType() == OverlayPlus::TYPE ) {
+				auto cast = std::dynamic_pointer_cast<OverlayPlus>(overlay);
+				if( cast ) {
+					cast->reset();
+				}
+			}
 			auto overlayButton = display->getOverlayActivatedButton();
 			overlayButton->setStatus(ButtonStatus::NONACTIVE);
 			display->setOverlayActivatedButton( nullptr );
@@ -531,8 +559,27 @@ void NavigableButton::changeState( InfoDisplayRef &display )
 				// TODO: THis is a hack that I can't figure out.
 				cout << getGroupName() << " is going to the next page " << next << endl;
 				if( next ) {
-					cout << "There's a next button called " << next->getGroupName() << endl;
+					cout << "There's a next datapage called " << next->getGroupName() << endl;
 					display->addDataPage( next, InfoDisplay::AnimateType::CUT );
+					cout << "Section of display: " << display->getSection() << " Next's section: " << next->getSection() << endl;
+					if( display->getSection() != next->getSection() ) {
+						auto buttons = display->getDataButtons();
+						for( auto & button : buttons ) {
+							cout << "Checking: " << button->getGroupName() << endl;
+							if( button->getType() == DataPageButton::TYPE ) {
+								auto cast = std::dynamic_pointer_cast<DataPageButton>(button);
+								cout << "Section: " << cast->getSection() << " Display: " << display->getSection() << endl;
+								if( cast && cast->getSection() == display->getSection() + 1 ) {
+									cout << "Setting activated button " << endl;
+									display->getActivatedButton()->setStatus( ButtonStatus::NONACTIVE );
+									cast->setStatus( ButtonStatus::ACTIVE );
+									display->setActivatedButton( cast );
+									display->setSection( cast->getSection() );
+									break;
+								}
+							}
+						}
+					}
 					auto another = next->next();
 					if( ! another ) {
 						mButtonStatus = ButtonStatus::NONACTIVE;
@@ -552,6 +599,25 @@ void NavigableButton::changeState( InfoDisplayRef &display )
 				if( prev ) {
 					cout << "There's a next button called " << prev->getGroupName() << endl;
 					display->addDataPage( prev, InfoDisplay::AnimateType::CUT );
+					cout << "Section of display: " << display->getSection() << " Next's section: " << prev->getSection() << endl;
+					if( display->getSection() != prev->getSection() ) {
+						auto buttons = display->getDataButtons();
+						for( auto & button : buttons ) {
+							cout << "Checking: " << button->getGroupName() << endl;
+							if( button->getType() == DataPageButton::TYPE ) {
+								auto cast = std::dynamic_pointer_cast<DataPageButton>(button);
+								cout << "Section: " << cast->getSection() << " Display: " << display->getSection() << endl;
+								if( cast && cast->getSection() == display->getSection() - 1 ) {
+									cout << "Setting activated button " << endl;
+									display->getActivatedButton()->setStatus( ButtonStatus::NONACTIVE );
+									cast->setStatus( ButtonStatus::ACTIVE );
+									display->setActivatedButton( cast );
+									display->setSection( cast->getSection() );
+									break;
+								}
+							}
+						}
+					}
 					auto another = prev->prev();
 					cout << "Going to see if it should be inactive" << another << endl;
 					if( ! another ) {
@@ -578,6 +644,13 @@ void NavigableButton::render()
 	gl::setModelMatrix( ci::translate( vec3( mAbsolutePosition, 0 ) ) );
 	
 	gl::draw( mTexture );
+}
+	
+void NavigableButton::render( ci::cairo::Context &context, float alpha )
+{
+	if( mButtonStatus == ButtonStatus::NONACTIVE ) return;
+	
+	context.render( *mGroup );
 }
 	
 ButtonRef NavigableButton::clone()

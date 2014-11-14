@@ -128,31 +128,37 @@ void SvgManager::initializeDataPages( const ci::JsonTree &root )
 	try {
 		auto connections = root.getChildren();
 		
+		std::vector<DataPageRef> mDataPages;
+		DataPageRef prev;
+		
+		int i = 1;
 		for( auto & connectionList : connections ) {
 			for( auto & connection : connectionList ) {
-				std::vector<DataPageRef> mDataPages;
 				auto connectedPages = connection.getChildren();
-				DataPageRef prev;
 				for( auto & page : connectedPages ) {
 					auto pageName = page.getValue();
 					auto dataPage = DataPage::create( pageName );
 					mPages.insert( make_pair( pageName, dataPage ) );
-					mDataPages.push_back( dataPage );
-					if( prev ) {
-						prev->setNext( dataPage );
-					}
+					dataPage->setSection( i );
+					if( dataPage->getGroupName() != "HOME" ) {
+						mDataPages.push_back( dataPage );
+						if( prev ) {
+							prev->setNext( dataPage );
+						}
 					
-					prev = dataPage;
-				}
-				DataPageRef next;
-				for( auto dataIt = mDataPages.rbegin(); dataIt != mDataPages.rend(); ++dataIt ) {
-					if( next ) {
-						next->setPrev( *dataIt );
+						prev = dataPage;
 					}
-					
-					next = *dataIt;
 				}
+				++i;
 			}
+		}
+		DataPageRef next;
+		for( auto dataIt = mDataPages.rbegin(); dataIt != mDataPages.rend(); ++dataIt ) {
+			if( next ) {
+				next->setPrev( *dataIt );
+			}
+			
+			next = *dataIt;
 		}
 	}
 	catch (const JsonTree::ExcChildNotFound &ex ) {

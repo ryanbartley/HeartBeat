@@ -37,6 +37,8 @@ public:
 	
 	virtual void render() override;
 	
+	virtual void render( ci::cairo::Context &context, float alpha ) override;
+	
 	virtual PageRef clone() override;
 	
 protected:
@@ -77,14 +79,14 @@ public:
 	//! Clones the current DataPage copying the inner references
 	PageRef clone() override;
 	
-	//! Renders the current state of the DataPage
-	void render() override;
+	void setSection( uint32_t section ) { mSection = section; }
+	uint32_t getSection() { return mSection; }
 	
 protected:
 	DataPage( const std::string &name );
 	
 	DataPageRef mNext, mPrev;
-	
+	uint32_t mSection;
 };
 
 /////////////////////////////////////////////////////////////////////////
@@ -108,9 +110,6 @@ public:
 	
 	//! Clones the current OverlayPage copying the inner references
 	virtual PageRef clone() override;
-	
-	//! Renders the current state of the DataPage
-	void render() override;
 	
 	const std::string& getButtonGroup() const { return mButtonGroup; }
 	
@@ -183,6 +182,8 @@ public:
 		}
 		return true;
 	}
+	
+	void reset() { mCurrentIndex = 0; }
     
     const ci::svg::Group* getCurrentGroup() { return mOverlays[mCurrentIndex]; }
 	
@@ -194,6 +195,8 @@ public:
 	PageRef clone() override;
 	
 	void render() override;
+	
+	void render( ci::cairo::Context &context, float alpha ) override;
 	
 private:
 	OverlayPlus( const std::string &name );
