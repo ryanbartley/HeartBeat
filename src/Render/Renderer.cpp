@@ -143,10 +143,10 @@ void Renderer::setupPresentation()
         mWindows[BOTTOM_PRESENT_TARGET] = app->getWindow();
 		app->setWindowSize( ivec2( mIndividualProjectorSize.x, mIndividualProjectorSize.y * 2 ) );
 		auto engine = Engine::get();
-		mDrawSignals.push_back( app->getWindow()->connectDraw( &Engine::preDraw, engine.get() ) );
-		mDrawSignals.push_back( app->getWindow()->connectDraw( &Engine::draw, engine.get() ) );
-		mDrawSignals.push_back( app->getWindow()->connectDraw( &Engine::postDraw, engine.get() ) );
-		mDrawSignals.push_back( app->getWindow()->connectPostDraw( &Renderer::renderToSingleWindow, this ) );
+		app->getWindow()->connectDraw( &Engine::preDraw, engine.get() );
+		app->getWindow()->connectDraw( &Engine::draw, engine.get() );
+		app->getWindow()->connectDraw( &Engine::postDraw, engine.get() );
+		app->getWindow()->connectPostDraw( &Renderer::renderToSingleWindow, this );
 	}
 	else {
 		auto app = app::AppBasic::get();
@@ -161,10 +161,10 @@ void Renderer::setupPresentation()
 		
 		// Hook up the engine draw methods to the "main window"
 		auto engine = Engine::get();
-		mDrawSignals.push_back( window->connectDraw( &Engine::preDraw, engine.get() ) );
-		mDrawSignals.push_back( window->connectDraw( &Engine::draw, engine.get() ) );
-		mDrawSignals.push_back( window->connectDraw( &Engine::postDraw, engine.get() ) );
-		mDrawSignals.push_back( window->connectPostDraw( &Renderer::renderToBottomWindow, this ) );
+		window->connectDraw( &Engine::preDraw, engine.get() );
+		window->connectDraw( &Engine::draw, engine.get() );
+		window->connectDraw( &Engine::postDraw, engine.get() );
+		window->connectPostDraw( &Renderer::renderToBottomWindow, this );
 		window->setUserData( this );
 		mWindows[BOTTOM_PRESENT_TARGET] = window;
 		
@@ -182,7 +182,7 @@ void Renderer::setupPresentation()
 		format.size( mIndividualProjectorSize ).title( "TOP_PRESENT_TARGET" ).display( secondDisplay ? secondDisplay : window->getDisplay() );//.alwaysOnTop();
 		window = app->createWindow( format );
 		
-		mDrawSignals.push_back( window->connectPostDraw( &Renderer::renderToTopWindow, this ) );
+		window->connectPostDraw( &Renderer::renderToTopWindow, this );
 		window->setUserData( this );
 		mWindows[TOP_PRESENT_TARGET] = window;
 		

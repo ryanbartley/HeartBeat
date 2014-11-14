@@ -248,7 +248,7 @@ public:
 	
 	ButtonRef clone() override;
 	
-	ButtonId getType() { return TYPE; }
+	ButtonId getType() const override { return TYPE; }
 	
 	bool initialize( const ci::JsonTree &root ) override;
 	

@@ -74,8 +74,6 @@ private:
 	std::vector<ci::vec2>			mTouchesEnded;
 	std::vector<ci::vec2>			mTouchesMoved;
 #endif
-	
-	std::vector<boost::signals2::connection> mConnections;
 
 };
 	

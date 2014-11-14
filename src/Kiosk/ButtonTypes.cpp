@@ -147,17 +147,20 @@ void DataPageButton::changeState( InfoDisplayRef &infoDisplay )
 	cout << "DATA_PAGE_BUTTON: " << mName << endl;
 	ActivatableButton::changeState( infoDisplay );
 	auto buttons = infoDisplay->getDataButtons();
+	
 	for( auto & button : buttons ) {
 		if( button->getType() == NavigableButton::TYPE ) {
-			auto cast = std::dynamic_pointer_cast<NavigableButton>(button);
+			auto cast = std::dynamic_pointer_cast<NavigableButton>( button );
 			if( cast ) {
 				if( cast->getNavigationStatus() == NavigableButton::NavigationStatus::PREV ) {
 					cout << "Changing state of " << cast->getGroupName() << " to none active because it's prev" << endl;
-					cast->setButtonStatus( ButtonStatus::NONACTIVE );
-				}
-				else if( cast->getNavigationStatus() == NavigableButton::NavigationStatus::NEXT ) {
-					cout << "Changing state of " << cast->getGroupName() << " to active because it's next" << endl;
-					cast->setButtonStatus( ButtonStatus::ACTIVE );
+					if( mSection == 1 ) {
+						cast->setButtonStatus( ButtonStatus::NONACTIVE );
+					}
+					else {
+						cast->setButtonStatus( ButtonStatus::ACTIVE );
+					}
+					break;
 				}
 			}
 		}
@@ -419,21 +422,18 @@ void ReturnButton::changeState( InfoDisplayRef &display )
 					display->addDataPage( dataPage, InfoDisplay::AnimateType::CUT );
 				}
 			}
+			bool check = mSection == 1;
 			DataPageButtonRef foundButton;
 			for( auto & button : display->getDataButtons() ) {
 				if( button->getGroupName() == mActiveButtonName ) {
 					foundButton = std::dynamic_pointer_cast<DataPageButton>( button );
 				}
-				if( button->getType() == NavigableButton::TYPE ) {
+				if( check && button->getType() == NavigableButton::TYPE ) {
 					auto cast = std::dynamic_pointer_cast<NavigableButton>( button );
 					if( cast ) {
 						if( cast->getNavigationStatus() == NavigableButton::NavigationStatus::PREV ) {
 							cout << "Changing state of " << cast->getGroupName() << " to none active because it's prev" << endl;
 							cast->setButtonStatus( ButtonStatus::NONACTIVE );
-						}
-						else if( cast->getNavigationStatus() == NavigableButton::NavigationStatus::NEXT ) {
-							cout << "Changing state of " << cast->getGroupName() << " to active because it's next" << endl;
-							cast->setButtonStatus( ButtonStatus::ACTIVE );
 						}
 					}
 				}

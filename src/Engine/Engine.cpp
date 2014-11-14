@@ -137,9 +137,9 @@ void Engine::initialize()
 	
 	auto app = app::App::get();
 	
-	mConnections.push_back( app->getSignalUpdate().connect( std::bind( &Engine::update, this ) ) );
-	mConnections.push_back( app->getWindow()->connectKeyDown( &Engine::keyDown, this ) );
-	mConnections.push_back( app->getSignalShutdown().connect( std::bind( &Engine::cleanup, this ) ) );
+	app->getSignalUpdate().connect( std::bind( &Engine::update, this ) );
+	app->getWindow()->connectKeyDown( &Engine::keyDown, this );
+	app->getSignalShutdown().connect( std::bind( &Engine::cleanup, this ) );
 }
 	
 void Engine::cleanup()
