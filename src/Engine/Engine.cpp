@@ -103,9 +103,9 @@ void Engine::initialize()
 {
 	mEventManager = heartbeat::EventManager::create( "Global", true );
 	
-	mEventManager->addListener( std::bind( &Engine::touchBeganDelegate, this, std::placeholders::_1 ), TouchBeganEvent::TYPE );
-	mEventManager->addListener( std::bind( &Engine::touchMovedDelegate, this, std::placeholders::_1 ), TouchMoveEvent::TYPE );
-	mEventManager->addListener( std::bind( &Engine::touchEndedDelegate, this, std::placeholders::_1 ), TouchEndedEvent::TYPE );
+//	mEventManager->addListener( std::bind( &Engine::touchBeganDelegate, this, std::placeholders::_1 ), TouchBeganEvent::TYPE );
+//	mEventManager->addListener( std::bind( &Engine::touchMovedDelegate, this, std::placeholders::_1 ), TouchMoveEvent::TYPE );
+//	mEventManager->addListener( std::bind( &Engine::touchEndedDelegate, this, std::placeholders::_1 ), TouchEndedEvent::TYPE );
 	
 	mJsonManager = heartbeat::JsonManager::create( "test.json" );
 	
@@ -219,21 +219,21 @@ void Engine::draw()
 		gl::setMatricesWindow( getWindowSize() );
 		mParams->draw();
 	}
-	for( auto & point : mTouchesBegan ) {
-		gl::ScopedColor scopeColor( ColorA( 1.0, 0.0, 0.0, 1.0f ) );
-		gl::drawSolidCircle( point, 15 );
-	}
-	mTouchesBegan.clear();
-	for ( auto & point : mTouchesMoved ) {
-		gl::ScopedColor scopeColor( ColorA( 0.0, 1.0, 1.0, 1.0f ) );
-		gl::drawSolidCircle( point, 15 );
-	}
-	mTouchesMoved.clear();
-	for ( auto & point : mTouchesEnded ) {
-		gl::ScopedColor scopeColor( ColorA( 1.0, 1.0, 1.0, 1.0f ) );
-		gl::drawSolidCircle( point, 15 );
-	}
-	mTouchesEnded.clear();
+//	for( auto & point : mTouchesBegan ) {
+//		gl::ScopedColor scopeColor( ColorA( 1.0, 0.0, 0.0, 1.0f ) );
+//		gl::drawSolidCircle( point, 15 );
+//	}
+//	mTouchesBegan.clear();
+//	for ( auto & point : mTouchesMoved ) {
+//		gl::ScopedColor scopeColor( ColorA( 0.0, 1.0, 1.0, 1.0f ) );
+//		gl::drawSolidCircle( point, 15 );
+//	}
+//	mTouchesMoved.clear();
+//	for ( auto & point : mTouchesEnded ) {
+//		gl::ScopedColor scopeColor( ColorA( 1.0, 1.0, 1.0, 1.0f ) );
+//		gl::drawSolidCircle( point, 15 );
+//	}
+//	mTouchesEnded.clear();
 #endif
 
 
