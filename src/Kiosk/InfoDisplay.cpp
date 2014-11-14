@@ -238,14 +238,6 @@ void InfoDisplay::renderToSvg()
 	
 	mCairoTex->update( surface.getSurface() );
 	mStateChanged = false;
-#if defined( DEBUG )
-	{
-		gl::ScopedColor scopeColor( ColorA(1, 0, 0, 1) );
-		for( auto & point : mPoints ) {
-			gl::drawSolidCircle( point, 30 );
-		}
-	}
-#endif
 }
 
 	
@@ -266,6 +258,27 @@ void InfoDisplay::draw()
 			renderToSvg();
 		}
 		gl::draw( mCairoTex );
+        
+        gl::ScopedModelMatrix scopeModel;
+		gl::setModelMatrix( getModelMatrix() );
+#if defined( DEBUG )
+        {
+            gl::ScopedColor scopeColor( ColorA(1, 0, 0, 1) );
+            
+            for( auto & point : mPoints ) {
+                gl::begin(GL_LINES );
+                gl::vertex( point );
+                gl::vertex( point.x, point.y + 15 );
+                gl::vertex( point );
+                gl::vertex( point.x, point.y - 15 );
+                gl::vertex( point );
+                gl::vertex( point.x + 15, point.y );
+                gl::vertex( point );
+                gl::vertex( point.x - 15, point.y );
+                gl::end();
+            }
+        }
+#endif
 	}
 	else {
 		renderToFbo();
@@ -409,6 +422,7 @@ void InfoDisplay::addOverlayPage( OverlayPageRef &page )
 			return;
 			break;
 	}
+    mPoints.push_back( point );
 	for( auto & button : *buttonSet ) {
 		cout << "checking button: " << button->getGroupName() << " bounding:  " << button->getRootGroup()->getBoundingBox() << " point: " << point << endl;
 		if( button->contains( point ) ) {
