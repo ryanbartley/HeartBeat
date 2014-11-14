@@ -281,10 +281,9 @@ void InfoDisplay::draw()
         }
 #endif
 		{
-			gl::ScopedColor scopeColor( ColorA( 1, 0, 0, .2 ) );
-			
+			gl::ScopedColor scopeColor( ColorA( 1, 1, 1, .2 ) );
 			for( auto & touch : mPointMap ) {
-				gl::drawSolidCircle( touch.second.getLastPoint(), 15 );
+				gl::drawSolidCircle( touch.second.getLastPoint(), 45 );
 			}
 		}
 	}
@@ -512,9 +511,7 @@ void InfoDisplay::registerTouchEnded( EventDataRef eventData )
 	if( found != mPointMap.end() ) {
 		found->second.mHistory.push_back( event->getWorldCoordinate() );
 		if( found->second.valid() ) {
-			auto modelSpacePoint = getInverseMatrix() * vec4( found->second.getPointOfInterest(), 0, 1 );
-			auto twoDimPoint = vec2( modelSpacePoint.x, modelSpacePoint.y );
-			checkInteraction( twoDimPoint );
+			checkInteraction( getCoordinateSpacePoint( found->second.getLastPoint() ) );
 		}
 		mPointMap.erase( found );
 	}
