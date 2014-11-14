@@ -168,8 +168,8 @@ private:
 ci::vec2 InfoDisplay::getCoordinateSpacePoint( const ci::vec2 &point )
 {
 	ci::vec2 ret;
-	auto modelSpacePoint = getInverseMatrix() * vec4( point, 0, 1 );
-	ret = vec2( modelSpacePoint.x, modelSpacePoint.y );
+	auto modelSpacePoint = getInverseMatrix() * ci::vec4( point, 0, 1 );
+	ret = ci::vec2( modelSpacePoint.x, modelSpacePoint.y );
 	return ret;
 }
 	
