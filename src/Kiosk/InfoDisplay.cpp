@@ -283,7 +283,7 @@ void InfoDisplay::draw()
 		{
 			gl::ScopedColor scopeColor( ColorA( 1, 1, 1, .2 ) );
 			for( auto & touch : mPointMap ) {
-				gl::drawSolidCircle( touch.second.getLastPoint(), 45 );
+				gl::drawSolidCircle( touch.second.getCachedCoordinateSpacePoint(), 45 );
 			}
 		}
 	}
@@ -512,11 +512,13 @@ void InfoDisplay::registerTouchEnded( EventDataRef eventData )
 	
 	auto found = mPointMap.find( event->getTouchId() );
 	if( found != mPointMap.end() ) {
+		if( found->second.mContained ) {
 		found->second.mHistory.push_back( event->getWorldCoordinate() );
 		if( found->second.valid() ) {
 			checkInteraction( getCoordinateSpacePoint( found->second.getPointOfInterest() ) );
 		}
 		mPointMap.erase( found );
+		}
 	}
 }
 	
