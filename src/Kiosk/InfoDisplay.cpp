@@ -480,20 +480,23 @@ void InfoDisplay::registerTouchMoved( EventDataRef eventData )
 		return;
 	}
 	cout << "Finding in point map" << endl;
+	auto world = event->getWorldCoordinate();
+	
 	auto found = mPointMap.find( event->getTouchId() );
 	if( found != mPointMap.end() ) {
-		auto twoDimPoint = getCoordinateSpacePoint( event->getWorldCoordinate() );
+		auto twoDimPoint = getCoordinateSpacePoint( world );
 		if( ! found->second.mContained ) {
 			if( mPresentRect.contains( twoDimPoint ) ) {
 				found->second.mContained = true;
 				found->second.mCachedCoordinateSpacePoint = twoDimPoint;
+				found->second.mHistory.push_back( world );
 			}
 			else {
 				mPointMap.erase( found );
 			}
 		}
 		else {
-			found->second.mHistory.push_back( event->getWorldCoordinate() );
+			found->second.mHistory.push_back( world );
 			found->second.mCachedCoordinateSpacePoint = twoDimPoint;
 		}
 	}
@@ -511,7 +514,7 @@ void InfoDisplay::registerTouchEnded( EventDataRef eventData )
 	if( found != mPointMap.end() ) {
 		found->second.mHistory.push_back( event->getWorldCoordinate() );
 		if( found->second.valid() ) {
-			checkInteraction( getCoordinateSpacePoint( found->second.getLastPoint() ) );
+			checkInteraction( getCoordinateSpacePoint( found->second.getPointOfInterest() ) );
 		}
 		mPointMap.erase( found );
 	}
