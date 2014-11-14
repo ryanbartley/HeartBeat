@@ -464,7 +464,7 @@ void InfoDisplay::registerTouchMoved( EventDataRef eventData )
 	auto found = mPointMap.find( event->getTouchId() );
 	if( found != mPointMap.end() ) {
 		found->second++;
-		if( found->second == 5 ) {
+		if( found->second == 3 ) {
 			auto modelSpacePoint = getInverseMatrix() * vec4( event->getWorldCoordinate(), 0, 1 );
 			auto twoDimPoint = vec2( modelSpacePoint.x, modelSpacePoint.y );
 			checkInteraction( twoDimPoint );
