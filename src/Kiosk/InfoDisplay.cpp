@@ -461,7 +461,11 @@ void InfoDisplay::registerTouchBegan( EventDataRef eventData )
         CI_LOG_E("Couldn't cast touch event from " << eventData->getName() );
         return;
     }
+	
 	auto eventWorldCoord = event->getWorldCoordinate();
+	if( eventWorldCoord.y < -100000 )
+		return;
+	
 	auto twoDimPoint = getCoordinateSpacePoint( eventWorldCoord );
     cout << "About to check this point: " << twoDimPoint << endl;
     if( mPresentRect.contains( twoDimPoint ) ) {
