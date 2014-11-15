@@ -34,6 +34,7 @@ public:
 	
 	//! returns a reference to the Barrier vector.
 	const std::vector<long>& getBarrier() { return mBarrier; }
+	long getBarrierAtIndex( int index ) { return mBarrier[index]; }
 	//! Returns a reference to the zone and scalar map.
 	const std::map<Zone, float>& getZones() { return mZones; }
 	//! Returns true or false whether the zone scalar floats have been
@@ -167,13 +168,13 @@ void InteractionZones::processTouch( int index, long distance )
 		addEvent( mTouchInteractors, index, distance );
 	}
 	else {
-//		auto found = std::find( mIgnoreIndices.begin(), mIgnoreIndices.end(), index );
-//		if ( found == mIgnoreIndices.end() ) {
-//			mIgnoreIndices.push_back( index );
-//			std::sort( mIgnoreIndices.begin(), mIgnoreIndices.end(), []( int i, int j ) {
-//				return i < j;
-//			});
-//		}
+		auto found = std::find( mIgnoreIndices.begin(), mIgnoreIndices.end(), index );
+		if ( found == mIgnoreIndices.end() ) {
+			mIgnoreIndices.push_back( index );
+			std::sort( mIgnoreIndices.begin(), mIgnoreIndices.end(), []( int i, int j ) {
+				return i < j;
+			});
+		}
 	}
 }
 	
@@ -214,7 +215,7 @@ void InteractionZones::processApproaches()
 	for( auto & event : mApproachInteractors ) {
 		for( auto & approachZone : mApproachZones ) {
 			if( approachZone.second.contains( event.mIndex ) ) {
-				approachZone.second.addEvent();
+				approachZone.second.addEvent( event.mMinIndex, event.mMinDistance );
 			}
 		}
 	}
@@ -224,10 +225,10 @@ void InteractionZones::processApproaches()
 		auto activated = approachZone.getIsActivated();
 		auto numDistances = approachZone.getNumDistances();
 		if( activated && numDistances == 0 ) {
-			approachZone.activate( false );
+			approachZone.checkDistanceForSend();
 		}
 		else if( !activated && numDistances > 0 ) {
-			approachZone.activate( true );
+			approachZone.checkDistanceForSend();
 		}
 		approachZone.reset();
 	}

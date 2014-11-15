@@ -9,6 +9,8 @@
 #include "InteractionData.h"
 #include "InteractionEvents.h"
 #include "EventManager.h"
+#include "Engine.h"
+#include "InteractionZones.h"
 
 #include "cinder/Log.h"
 
@@ -60,6 +62,23 @@ void TouchData::createAndSendEvent()
 		eventManager->queueEvent( event );
 	}
 }
+	
+ApproachData::ApproachData( InteractionZonesRef interZones, KioskId kiosk, int lowestIndex, int highestIndex )
+: mKiosk( kiosk ), mLowestIndex( lowestIndex ), mHighestIndex( highestIndex ),
+mIsActivated( false ), mNumEvents( 0 ), mInteractionZone( interZones ),
+	mCurrentClosestDistance( 100000 ), mCurrentClosestIndex( 1082 )
+{
+	auto shared = mInteractionZone.lock();
+	float approach = 1.4f, dead = 1.1f ;
+	if( shared ) {
+	 approach = shared->getZoneScalar( InteractionZones::Zone::APPROACH );
+	 dead = shared->getZoneScalar( InteractionZones::Zone::DEAD );
+	}
+	float mid = approach + dead / 2.0f;
+	float total = approach - dead;
+	mDepartThresh = mid + .4 * total;
+	mApproachThresh = mid;
+}
 
 void ApproachData::createAndSendEvent()
 {
@@ -94,6 +113,29 @@ void ApproachData::createAndSendEvent()
 		eventManager->queueEvent( event );
 	}
 	mEmitType = EventTypeToEmit::NONE;
+}
+	
+void ApproachData::checkDistanceForSend()
+{
+	auto shared = mInteractionZone.lock();
+	auto barrierDistance = shared->getBarrierAtIndex( mCurrentClosestIndex );
+	
+	if( mIsActivated ) {
+		if( mCurrentClosestDistance > barrierDistance * mDepartThresh ) {
+			mEmitType = EventTypeToEmit::DEPART;
+		}
+		else {
+			mEmitType = EventTypeToEmit::NONE;
+		}
+	}
+	else {
+		if ( mCurrentClosestDistance < barrierDistance * mApproachThresh ) {
+			mEmitType = EventTypeToEmit::APPROACH;
+		}
+		else {
+			mEmitType = EventTypeToEmit::NONE;
+		}
+	}
 }
 	
 
