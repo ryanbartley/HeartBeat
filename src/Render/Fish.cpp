@@ -21,6 +21,7 @@ namespace heartbeat {
 
 const float Fish::MAX_SPEED = 0.5f;
 const float Fish::MAX_FORCE = 5.0f;
+const float Fish::NEAR_DISTANCE = 10.0f;
 	
 PondElementId Fish::TYPE = Hash::HASHER("Fish");
 	
@@ -42,7 +43,7 @@ void Fish::update()
 	glm::clamp( mVelocity, ci::vec3( 0, 0, 0 ), ci::vec3( 5, 5, 5 ) );
 	mCalcLocation += mVelocity;
 	mAcceleration = ci::vec3( 0, 0, 0 );
-	if( ! pondBounds.contained( mCalcLocation ) ) {
+	if( ! pondBounds.contained( mCalcLocation ) || isNearTarget() ) {
 		updateTarget( pondBounds.getRandomPointWithin() );
 	}
 	calcAndSetUpdatedTranform();

@@ -19,6 +19,7 @@ public:
 	
 	static const float MAX_SPEED;
 	static const float MAX_FORCE;
+	static const float NEAR_DISTANCE;
 	
 	static FishRef create();
 	
@@ -43,6 +44,7 @@ private:
 	inline ci::vec3 seek( const ci::vec3 &target );
 	inline ci::vec3 separate( std::vector<PondElementRef> &pondElements );
 	inline ci::vec3 cohesion( std::vector<PondElementRef> &pondElements );
+	inline bool	isNearTarget();
 	
 	inline void calcAndSetUpdatedTranform();
 	
@@ -55,6 +57,12 @@ private:
 	
 	friend class Pond;
 };
+	
+bool Fish::isNearTarget()
+{
+	auto dist = glm::distance( mCalcLocation, mCurrentTarget );
+	return dist > NEAR_DISTANCE;
+}
 	
 void Fish::applyBehaviors( std::vector<PondElementRef> &pondElements )
 {
