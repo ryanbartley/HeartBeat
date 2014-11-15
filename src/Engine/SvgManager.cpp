@@ -115,7 +115,7 @@ void SvgManager::initialize()
 			CI_LOG_E(ex.what());
 		}
 	
-		initializeGl();
+//		initializeGl();
 		
 	}
 	catch( const JsonTree::ExcChildNotFound &ex ) {
@@ -310,14 +310,14 @@ void SvgManager::initializeButtons( const ci::JsonTree &root )
 	}
 }
 	
-void SvgManager::initializeGl()
-{
-	for( auto & page : mPages ) {
-		page.second->initializeGl();
-	}
-	for( auto & button : mButtons ) {
-		button.second->initializeGl();
-	}
-}
+//void SvgManager::initializeGl()
+//{
+//	for( auto & page : mPages ) {
+//		page.second->initializeGl();
+//	}
+//	for( auto & button : mButtons ) {
+//		button.second->initializeGl();
+//	}
+//}
 	
 }

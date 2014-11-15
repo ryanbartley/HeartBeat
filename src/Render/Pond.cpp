@@ -90,6 +90,28 @@ void Pond::initialize()
 		}
 		
 		try {
+			auto pondBounds = pondAttribs["pondBounds"];
+			auto mins = pondBounds["min"].getChildren();
+			ci::vec3 min;
+			int i = 0;
+			for( auto & minDim : mins ) {
+				min[i++] = minDim.getValue<float>();
+			}
+			
+			auto maxs = pondBounds["min"].getChildren();
+			ci::vec3 max;
+			i = 0;
+			for( auto & maxDim : maxs ) {
+				max[i++] = maxDim.getValue<float>();
+			}
+			
+			mPondBounds = PondBounds( min, max );
+		}
+		catch( const JsonTree::ExcChildNotFound &ex ) {
+			CI_LOG_E(ex.what());
+		}
+		
+		try {
 			auto cameraAttribs = pondAttribs["camera"];
 			
 			auto fov = cameraAttribs["fov"].getValue<float>();
@@ -124,6 +146,8 @@ void Pond::initialize()
 	catch ( const JsonTree::ExcChildNotFound &ex ) {
 		CI_LOG_E("Couldn't Find " << ex.what() );
 	}
+	
+	mPondBottom = gl::Texture::create( loadImage( getFileContents( "pondRocks.jpeg" ) ) );
 
 }
 	
@@ -174,6 +198,10 @@ void Pond::update()
 	mSpringMesh->update();
 	
 	for( auto & element : mPondElements ) {
+		if( element->getType() == Fish::TYPE ) {
+			auto cast = std::dynamic_pointer_cast<Fish>(element);
+			cast->applyBehaviors( mPondElements );
+		}
 		element->update();
 	}
 }
@@ -190,7 +218,7 @@ void Pond::renderPondElements()
 	
 void Pond::projectPondElements( const gl::Texture2dRef &pond )
 {
-	static float rot = 0.0f;
+//	static float rot = 0.0f;
 	gl::ScopedMatrices scopeMat;
 	gl::setMatricesWindowPersp( mPondSize, 40.0f, .01f, 10000.0f );
 //	gl::multModelMatrix( ci::rotate( rot -= .01f, vec3( 0, 1, 0 ) ) );

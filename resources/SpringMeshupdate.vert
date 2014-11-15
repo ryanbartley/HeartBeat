@@ -136,6 +136,7 @@ out vec3 tf_normal;
 
 // A uniform to hold the timestep. The application can update this
 uniform float t; //= 0.07;
+uniform float elapsedSeconds;
 
 // The global spring constant
 uniform float k;
@@ -152,7 +153,7 @@ uniform float rest_length;
 
 const float pi = 3.14159;
 uniform float waterHeight = 10;
-uniform int numWaves = 2;
+uniform int numWaves = 3;
 uniform float amplitude[8];
 uniform float wavelength[8];
 uniform float speed[8];
@@ -162,7 +163,7 @@ float wave(int i, float x, float y) {
 	float frequency = 2*pi/wavelength[i];
 	float phase = speed[i] * frequency;
 	float theta = dot(direction[i], vec2(x, y));
-	return amplitude[i] * sin(theta * frequency + t * phase);
+	return amplitude[i] * sin(theta * frequency + elapsedSeconds * phase);
 }
 
 float waveHeight(float x, float y) {
@@ -181,24 +182,20 @@ vec3 calcNormal( vec3 v0, vec3 v1, vec3 v2 )
 
 bool containsPoint( vec2 touch, vec3 point, float range )
 {
-	return touch.x > point.x - range && touch.x < point.x + range && touch.y > point.y - range && touch.y < point.y + range;
+	return touch.x > point.x - range && 
+			touch.x < point.x + range && 
+			touch.y > point.y - range && 
+			touch.y < point.y + range;
 }
 
 vec3 calcTouchAccel( vec3 pos,float m, vec3 touch, float dist, float maxAccel )
 {
 	vec3 diff = pos - touch;
-	
 	diff = normalize( diff );
-
 	diff *=  pow( dist, 4.0 );
-//	return clamp( diff, vec3(), vec3(maxAccel) );
 	diff *= -1.;
-
 	return diff;
-//	return diff;
 }
-
-
 
 void main(void)
 {
@@ -247,7 +244,7 @@ void main(void)
 	normal = normalize( normal );
 	
 	vec3 touchAccel = vec3( 0 );
-	
+	bool touched = false;
 	// If this is a fixed node, reset force to zero
 	if(fixed_node) {
 		F = vec3(0.0);
@@ -259,24 +256,30 @@ void main(void)
 		for( int i = 0; i < MAX_TOUCHES && i < localNumTouchesBegan; i++ ) {
 			float dist = distance( vec3(touchesBegan[i], 0), p);
 			if( dist < touchBeganDistThreshold ) {
-				touchAccel += calcTouchAccel( p, m, vec3(touchesBegan[i], 100), dist, 600.0 );
+				touchAccel += calcTouchAccel( p, m, vec3(touchesBegan[i], 200), dist, 800.0 );
+				touched = true;
 				break;
 			}
 		}
 		for( int i = 0; i < MAX_TOUCHES && i < localNumTouchesMoved; i++ ) {
 			float dist = distance(vec3(touchesMoved[i], 0), p);
 			if( dist < touchMovedDistThreshold) {
-				touchAccel += calcTouchAccel( p, m, vec3(touchesMoved[i], 100), dist, 600.0 );
+				touchAccel += calcTouchAccel( p, m, vec3(touchesMoved[i], 200), dist, 800.0 );
+				touched = true;
 				break;
 			}
 		}
 	}
 	
-	float wHeight = waveHeight( p.x, p.y )*.2;
+	float wHeight = 0;
+
+	if( ! touched ) {
+		wHeight = waveHeight( p.x, p.y );
+	}
 	//vec3  wNorm   = waveNormal( p.x, p.y );
 
 	// Accelleration due to force
-	vec3 a = (F + touchAccel ) / m;
+	vec3 a = (F + touchAccel + vec3( 0, wHeight*2, wHeight*2 ) ) / m;
 	
 	// Displacement
 	vec3 s = u * t + 0.5 * a * t * t;
@@ -284,9 +287,9 @@ void main(void)
 	// Final velocity
 	vec3 v = u + a * t;
 	
-	//v = clamp( v, vec3(-30.), vec3(30.) );
+	v = clamp( v, vec3(-20.0), vec3(20.0) );
 	// Constrain the absolute value of the displacement per step
-	s = clamp( s, vec3(-.5), vec3(.5) );
+	s = clamp( s, vec3(-0.5), vec3(0.5) );
 	
 	// Write the outputs
 	tf_position_mass = vec4((p + s), m );

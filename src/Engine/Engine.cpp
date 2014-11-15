@@ -199,6 +199,7 @@ void Engine::draw()
         gl::clearColor( ColorA( 0.11f, 0.32, 0.58f, 1.0f ) );
 		gl::clear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 		gl::clearColor( ColorA( 1, 1, 1, 1 ) );
+		mPond->renderPondElements();
 	}
 	mPond->projectPondElements( pondRenderer->getColorTexture() );
 	

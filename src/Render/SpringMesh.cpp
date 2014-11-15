@@ -71,7 +71,7 @@ void SpringMesh::update()
 	for( int i = mIterationsPerFrame; i != 0; --i ) {
 		mUpdateTimer.stop();
 		// Pick using the mouse if it's pressed
-		mUpdateGlsl->uniform( "elapsedSeconds", .07f); // float(getElapsedSeconds()) );
+		mUpdateGlsl->uniform( "elapsedSeconds", (float)app::getElapsedSeconds()); // float(getElapsedSeconds()) );
 		mUpdateGlsl->uniform( "t", (float)mUpdateTimer.getSeconds() );
         mUpdateGlsl->uniform( "rest_length", mRestLength );
         mUpdateGlsl->uniform( "c", mGlobalDampening );
@@ -366,7 +366,6 @@ void SpringMesh::loadShaders()
 	mUpdateGlsl->uniform( "wavelength", wavelength.data(), wavelength.size() );
 	mUpdateGlsl->uniform( "speed", speed.data(), speed.size() );
 	mUpdateGlsl->uniform( "direction", direction.data(), direction.size() * 2 );
-	mUpdateGlsl->uniform( "mouse_pos", vec2(640, 480) );
     
 	gl::GlslProg::Format debugRenderFormat;
 	debugRenderFormat.vertex( getFileContents( "SpringMeshDebugrender.vert" ) )

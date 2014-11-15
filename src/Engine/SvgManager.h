@@ -63,7 +63,7 @@ private:
 	void initializeButtons( const ci::JsonTree &root );
 	void initializeStaticPages( const ci::JsonTree &root );
 	
-	void initializeGl();
+//	void initializeGl();
 	
 	ci::svg::DocRef mDoc;
 	std::string		mFileName;

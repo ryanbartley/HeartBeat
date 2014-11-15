@@ -19,9 +19,12 @@ using namespace std;
 
 namespace heartbeat {
 	
+uint64_t PondElement::globalId = 0;
+	
 PondElementId PondElement::TYPE = Hash::HASHER("PondElement");
 	
 PondElement::PondElement()
+: mId( getNextId() )
 {
 }
 

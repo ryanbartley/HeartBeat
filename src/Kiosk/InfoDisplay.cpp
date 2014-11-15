@@ -258,8 +258,8 @@ void InfoDisplay::draw()
 			renderToSvg();
 		}
 		{
-			gl::ScopedColor scopeColor( ColorA( 1, 1, 1, mMasterAlpha ) );
-            gl::draw( mCairoTex );
+			gl::ScopedColor scopeColor( ColorA( 1, 1, 1, mMasterAlpha) );
+			gl::draw( mCairoTex );
 		}
         gl::ScopedModelMatrix scopeModel;
 		gl::setModelMatrix( getModelMatrix() );

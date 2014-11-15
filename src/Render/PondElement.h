@@ -32,12 +32,19 @@ public:
 	virtual void update() override {}
 	virtual void draw() override;
 	
+	uint64_t getId() const { return mId; }
+	
 protected:
 	PondElement();
 	
 	void initialize( const ci::JsonTree &root ) override;
 	
-	ci::gl::BatchRef mBatch;
+	ci::gl::TextureRef	mTexture;
+	ci::gl::BatchRef	mBatch;
+	const uint64_t		mId;
+	
+	static uint64_t globalId;
+	static uint64_t getNextId() { return globalId++; }
 	
 	friend class Pond;
 };
