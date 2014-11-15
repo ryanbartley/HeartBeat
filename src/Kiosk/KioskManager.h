@@ -43,6 +43,7 @@ private:
 	std::array<InfoDisplayRef, 3>	mDisplays;
 	std::array<LilyPadRef, 3>		mLilyPads;
 	HidCommManagerRef				mHidCommManager;
+    ci::Rectf                       mContainer;
 	
 #if defined( DEBUG )
 	bool							mDebugRenderInfoDisplay;

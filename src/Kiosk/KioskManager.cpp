@@ -20,6 +20,7 @@
 
 #include "cinder/gl/Fbo.h"
 #include "cinder/Log.h"
+#include "cinder/Rect.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -28,9 +29,11 @@ using namespace std;
 namespace heartbeat {
 	
 KioskManager::KioskManager()
+: mContainer( -15000.0f, -15000.0f, 15000.0f, 15000.0f )
 #if defined( DEBUG )
-: mDebugRenderInfoDisplay( false )
+, mDebugRenderInfoDisplay( false )
 #endif
+
 {
 	auto eventManager = EventManagerBase::get();
 	if( eventManager ) {
@@ -102,7 +105,7 @@ void KioskManager::touchBeganDelegate( EventDataRef touchEvent )
 	}
 	
 	for( auto & kiosk : mDisplays ) {
-		if( kiosk->insideAngle( event->getIndex() ) ) {
+		if( kiosk->insideAngle( event->getIndex() ) && mContainer.contains( event->getWorldCoordinate() ) ) {
 			kiosk->registerTouchBegan( event );
 		}
 	}
@@ -118,7 +121,7 @@ void KioskManager::touchMovedDelegate( EventDataRef touchEvent )
 	}
 	
 	for( auto & kiosk : mDisplays ) {
-		if( kiosk->insideAngle( event->getIndex() ) ) {
+		if( kiosk->insideAngle( event->getIndex() ) && mContainer.contains( event->getWorldCoordinate() ) ) {
 			kiosk->registerTouchMoved( event );
 		}
 	}
@@ -134,7 +137,7 @@ void KioskManager::touchEndedDelegate( EventDataRef touchEvent )
 	}
 	
 	for( auto & kiosk : mDisplays ) {
-		if( kiosk->insideAngle( event->getIndex() ) ) {
+		if( kiosk->insideAngle( event->getIndex() ) && mContainer.contains( event->getWorldCoordinate() ) ) {
 			kiosk->registerTouchEnded( event );
 		}
 	}

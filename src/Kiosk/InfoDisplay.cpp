@@ -282,8 +282,18 @@ void InfoDisplay::draw()
 #endif
 		{
 			gl::ScopedColor scopeColor( ColorA( 1, 1, 1, .2 ) );
-			for( auto & touch : mPointMap ) {
-				gl::drawSolidCircle( touch.second.getCachedCoordinateSpacePoint(), 45 );
+			for( auto touchIt = mPointMap.begin(); touchIt != mPointMap.end();  ) {
+                if( touchIt->second.mContained )
+                    gl::drawSolidCircle( touchIt->second.getCachedCoordinateSpacePoint(), 45 );
+                else {
+                    touchIt->second.mNumNotContained++;
+                }
+                if( touchIt->second.mNumNotContained > 2 ) {
+                    touchIt = mPointMap.erase( touchIt );
+                }
+                else {
+                    ++touchIt;
+                }
 			}
 		}
 	}
@@ -463,8 +473,6 @@ void InfoDisplay::registerTouchBegan( EventDataRef eventData )
     }
 	
 	auto eventWorldCoord = event->getWorldCoordinate();
-	if( eventWorldCoord.y < -100000 )
-		return;
 	
 	auto twoDimPoint = getCoordinateSpacePoint( eventWorldCoord );
     cout << "About to check this point: " << twoDimPoint << endl;

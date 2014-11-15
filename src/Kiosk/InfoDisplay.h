@@ -100,7 +100,8 @@ public:
 	struct TouchData {
 		
 		TouchData( ci::vec2 &point, ci::vec2 &cached, bool contained )
-		: mContained( contained ), mCachedCoordinateSpacePoint( cached )
+		: mContained( contained ), mCachedCoordinateSpacePoint( cached ),
+            mNumNotContained( contained ? 0 : 1 )
 		{
 			mHistory.push_back( point );
 		}
@@ -128,6 +129,7 @@ public:
 			return mCachedCoordinateSpacePoint;
 		}
 		
+        int mNumNotContained;
 		bool mContained;
 		ci::vec2 mCachedCoordinateSpacePoint;
 		std::vector<ci::vec2> mHistory;

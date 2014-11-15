@@ -53,7 +53,7 @@
 		// INTERACTION ZONE ATTRIBUTES
 		//////////////////////////////////////////////////////
 		"interactionZones" : {
-			"barrierFile" : "tableData.bin",
+			"barrierFile" : "finalTableData.bin",
 			"runUrg" : true,
 			"poleIndices" : [
 				0,
@@ -301,12 +301,12 @@
 					"lilyPad" : {
 						"fullSize" : { 
 							"transformation" : {
-								"scales" : [ 0.0449, 0.0449 ],
+								"scales" : [ 0.08, 0.08 ],
 								"translations" : {
-									"coordinates" : [ 1332.65, 882.59 ] 
+									"coordinates" : [ 1266.20, 946.15 ] 
 								},
 								"rotations" : {
-									"angle" : 0
+									"angle" : -10
 								}
 							}
 						},
