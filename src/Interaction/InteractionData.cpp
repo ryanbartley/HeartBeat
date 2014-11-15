@@ -136,6 +136,8 @@ void ApproachData::checkDistanceForSend()
 			mEmitType = EventTypeToEmit::NONE;
 		}
 	}
+	
+	createAndSendEvent();
 }
 	
 
