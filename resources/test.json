@@ -93,18 +93,18 @@
 			// "fullSize" : {
 			"transforms" : {
 				"scales" : [
-					1.0, 1.0
+					1.06, 1.06
 				],
 				"rotations" : {
 					// This can either contain "quaternion" : []
 					// or "angle" : degree, axis is vec3( 0, 0, 1 )
-					"angle" : 294
+					"angle" : 304.5
 				},
 				"translations" : {
 					// This can either contain "coordinates" : []
 					// or "center" : boolean
 					// "center" : true //,
-					"coordinates" : [ 577.01, 935.36 ]
+					"coordinates" : [ 540.32, 882.61 ]
 				}
 			}
 			// }
