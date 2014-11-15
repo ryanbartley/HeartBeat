@@ -39,11 +39,14 @@ Renderer::~Renderer()
 	
 void Renderer::cleanup()
 {
-//	mWindows[0] = nullptr;
-//	mWindows[1] = nullptr;
-//	for( auto & connection : mDrawSignals ) {
-//		connection.disconnect();
-//	}
+	if( mWindows[0] ) mWindows[0] = nullptr;
+	if( mWindows[1] ) mWindows[1] = nullptr;
+	if( ! mConnections.empty() ) {
+		for( auto & connection : mConnections ) {
+			connection.disconnect();
+		}
+		mConnections.clear();
+	}
 	CI_LOG_V("Renderer being cleanedup");
 }
 	
@@ -138,15 +141,15 @@ void Renderer::initialize()
 	
 void Renderer::setupPresentation()
 {
+	auto engine = Engine::get();
 	if( ! mIsSplitWindow ) {
 		auto app = app::App::get();
         mWindows[BOTTOM_PRESENT_TARGET] = app->getWindow();
 		app->setWindowSize( ivec2( mIndividualProjectorSize.x, mIndividualProjectorSize.y * 2 ) );
-		auto engine = Engine::get();
-		app->getWindow()->connectDraw( &Engine::preDraw, engine.get() );
-		app->getWindow()->connectDraw( &Engine::draw, engine.get() );
-		app->getWindow()->connectDraw( &Engine::postDraw, engine.get() );
-		app->getWindow()->connectPostDraw( &Renderer::renderToSingleWindow, this );
+		mConnections.push_back( app->getWindow()->connectDraw( &Engine::preDraw, engine.get() ) );
+		mConnections.push_back( app->getWindow()->connectDraw( &Engine::draw, engine.get() ) );
+		mConnections.push_back( app->getWindow()->connectDraw( &Engine::postDraw, engine.get() ) );
+		mConnections.push_back( app->getWindow()->connectPostDraw( &Renderer::renderToSingleWindow, this ) );
 	}
 	else {
 		auto app = app::AppBasic::get();
@@ -161,13 +164,13 @@ void Renderer::setupPresentation()
 		
 		// Hook up the engine draw methods to the "main window"
 		auto engine = Engine::get();
-		window->connectDraw( &Engine::preDraw, engine.get() );
-		window->connectDraw( &Engine::draw, engine.get() );
-		window->connectDraw( &Engine::postDraw, engine.get() );
-		window->connectPostDraw( &Renderer::renderToBottomWindow, this );
+		mConnections.push_back( window->connectDraw( &Engine::preDraw, engine.get() ) );
+		mConnections.push_back( window->connectDraw( &Engine::draw, engine.get() ) );
+		mConnections.push_back( window->connectDraw( &Engine::postDraw, engine.get() ) );
+		mConnections.push_back( window->connectPostDraw( &Renderer::renderToBottomWindow, this ) );
+		mConnections.push_back( window->getSignalClose().connect( std::bind( &Renderer::cleanup, this ) ) );
 		window->setUserData( this );
 		mWindows[BOTTOM_PRESENT_TARGET] = window;
-		
 		// now create another from scratch.
 		
 		// TODO: Fix this. It's a hack. Need something better like
@@ -182,7 +185,7 @@ void Renderer::setupPresentation()
 		format.size( mIndividualProjectorSize ).title( "TOP_PRESENT_TARGET" ).display( secondDisplay ? secondDisplay : window->getDisplay() );//.alwaysOnTop();
 		window = app->createWindow( format );
 		
-		window->connectPostDraw( &Renderer::renderToTopWindow, this );
+		mConnections.push_back( window->connectPostDraw( &Renderer::renderToTopWindow, this ) );
 		window->setUserData( this );
 		mWindows[TOP_PRESENT_TARGET] = window;
 		

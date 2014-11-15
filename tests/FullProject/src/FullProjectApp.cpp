@@ -397,7 +397,6 @@ void FullProjectApp::mouseUp( cinder::app::MouseEvent event )
 	}
 	mCurrentId++;
 #endif
-	
 }
 
 void FullProjectApp::update()

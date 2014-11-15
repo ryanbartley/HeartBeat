@@ -32,12 +32,6 @@ public:
 	void preDraw();
 	void draw();
 	void postDraw();
-#if defined( DEBUG )
-	void touchBeganDelegate( EventDataRef event );
-	void touchMovedDelegate( EventDataRef event );
-	void touchEndedDelegate( EventDataRef event );
-#endif
-	void keyDown( ci::app::KeyEvent event );
 	
 	const RendererRef& getRenderer() { return mRenderer; }
 	const JsonManagerRef& getJsonManager() { return mJsonManager; }
@@ -48,6 +42,9 @@ public:
     PondRef& getPond() { return mPond; }
 	
 #if defined( DEBUG )
+	void touchBeganDelegate( EventDataRef event );
+	void touchMovedDelegate( EventDataRef event );
+	void touchEndedDelegate( EventDataRef event );
 	InteractionDebugRenderableRef& getInteractionDebug() { return mInteractionDebug; }
 	void setParams( const ci::params::InterfaceGlRef &params ) { mParams = params; }
 #endif

@@ -63,6 +63,10 @@ void Engine::destroy()
 	sEngine = nullptr;
 	sEngineInitialized = false;
 }
+<<<<<<< HEAD
+=======
+	
+>>>>>>> A few debug tweaks also a non-working macro define for allowing large allocations
 #if defined( DEBUG )
 void Engine::touchBeganDelegate( EventDataRef event )
 {
@@ -98,6 +102,7 @@ void Engine::touchEndedDelegate( EventDataRef event )
 	
 	mTouchesEnded.push_back( touchEnded->getWorldCoordinate() );
 }
+<<<<<<< HEAD
 #endif
 void Engine::initialize()
 {
@@ -106,6 +111,20 @@ void Engine::initialize()
 //	mEventManager->addListener( std::bind( &Engine::touchBeganDelegate, this, std::placeholders::_1 ), TouchBeganEvent::TYPE );
 //	mEventManager->addListener( std::bind( &Engine::touchMovedDelegate, this, std::placeholders::_1 ), TouchMoveEvent::TYPE );
 //	mEventManager->addListener( std::bind( &Engine::touchEndedDelegate, this, std::placeholders::_1 ), TouchEndedEvent::TYPE );
+=======
+
+#endif
+	
+void Engine::initialize()
+{
+	mEventManager = heartbeat::EventManager::create( "Global", true );
+	
+#if defined( DEBUG )
+	mEventManager->addListener( std::bind( &Engine::touchBeganDelegate, this, std::placeholders::_1 ), TouchBeganEvent::TYPE );
+	mEventManager->addListener( std::bind( &Engine::touchMovedDelegate, this, std::placeholders::_1 ), TouchMoveEvent::TYPE );
+	mEventManager->addListener( std::bind( &Engine::touchEndedDelegate, this, std::placeholders::_1 ), TouchEndedEvent::TYPE );
+#endif
+>>>>>>> A few debug tweaks also a non-working macro define for allowing large allocations
 	
 	mJsonManager = heartbeat::JsonManager::create( "test.json" );
 	
@@ -116,6 +135,7 @@ void Engine::initialize()
     window->getRenderer()->makeCurrentContext();
     
 	mInteractionManager = heartbeat::InteractionZones::create();
+	
 #if defined( DEBUG )
 	mInteractionDebug = heartbeat::InteractionDebugRenderable::create( mInteractionManager );
 #endif
@@ -138,37 +158,14 @@ void Engine::initialize()
 	auto app = app::App::get();
 	
 	app->getSignalUpdate().connect( std::bind( &Engine::update, this ) );
-	app->getWindow()->connectKeyDown( &Engine::keyDown, this );
 	app->getSignalShutdown().connect( std::bind( &Engine::cleanup, this ) );
 }
 	
 void Engine::cleanup()
 {
-//	for( auto & connection : mConnections ) {
-//		connection.disconnect();
-//	}
-//	mRenderer.reset();
-//	mJsonManager.reset();
-//	mEventManager.reset();
-}
-	
-void Engine::keyDown( ci::app::KeyEvent event )
-{
-	if( ! event.isShiftDown() ) return;
-	
-	if( event.getChar() == 's' )
-		mRenderer->setupGlsl();
-	
-	if( event.getChar() == ' ') {
-		
-	}
-	
-	if( event.getChar() == 'c' )
-		mInteractionManager->captureBarrier();
-	
-	if( event.getChar() == 'b' )
-		mInteractionManager->writeInteractionZone();
-		
+	mRenderer.reset();
+	mJsonManager.reset();
+	mEventManager.reset();
 }
 	
 void Engine::update()
@@ -199,10 +196,8 @@ void Engine::draw()
 	auto pondRenderer = getRenderer()->getPondTarget();
 	{
 		gl::ScopedFramebuffer scopeFBO( pondRenderer );
-//		gl::clearColor( ColorA( 0.30196f, 0.49019f, 0.72941f, 1.0f ) );
         gl::clearColor( ColorA( 0.11f, 0.32, 0.58f, 1.0f ) );
 		gl::clear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-//		mPond->renderPondElements();
 		gl::clearColor( ColorA( 1, 1, 1, 1 ) );
 	}
 	mPond->projectPondElements( pondRenderer->getColorTexture() );
@@ -219,21 +214,22 @@ void Engine::draw()
 		gl::setMatricesWindow( getWindowSize() );
 		mParams->draw();
 	}
-//	for( auto & point : mTouchesBegan ) {
-//		gl::ScopedColor scopeColor( ColorA( 1.0, 0.0, 0.0, 1.0f ) );
-//		gl::drawSolidCircle( point, 15 );
-//	}
-//	mTouchesBegan.clear();
-//	for ( auto & point : mTouchesMoved ) {
-//		gl::ScopedColor scopeColor( ColorA( 0.0, 1.0, 1.0, 1.0f ) );
-//		gl::drawSolidCircle( point, 15 );
-//	}
-//	mTouchesMoved.clear();
-//	for ( auto & point : mTouchesEnded ) {
-//		gl::ScopedColor scopeColor( ColorA( 1.0, 1.0, 1.0, 1.0f ) );
-//		gl::drawSolidCircle( point, 15 );
-//	}
-//	mTouchesEnded.clear();
+	
+	for( auto & point : mTouchesBegan ) {
+		gl::ScopedColor scopeColor( ColorA( 1.0, 0.0, 0.0, 1.0f ) );
+		gl::drawSolidCircle( point, 15 );
+	}
+	mTouchesBegan.clear();
+	for ( auto & point : mTouchesMoved ) {
+		gl::ScopedColor scopeColor( ColorA( 0.0, 1.0, 1.0, 1.0f ) );
+		gl::drawSolidCircle( point, 15 );
+	}
+	mTouchesMoved.clear();
+	for ( auto & point : mTouchesEnded ) {
+		gl::ScopedColor scopeColor( ColorA( 1.0, 1.0, 1.0, 1.0f ) );
+		gl::drawSolidCircle( point, 15 );
+	}
+	mTouchesEnded.clear();
 #endif
 
 

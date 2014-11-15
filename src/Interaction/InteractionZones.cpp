@@ -449,8 +449,8 @@ void InteractionZones::processData()
 		mZoneScalarsUpdated = false;
 	}
 	
-	bool checkPoleIndices = mSendEvents;
-	int i = 0, k = 0;
+//	bool checkPoleIndices = mSendEvents;
+	int i = 0;//, k = 0;
 	for( auto barrierIt = mBarrier.cbegin(); barrierIt != mBarrier.cend(); ++barrierIt, ++i ) {
 		bool emitEvents = true;
 //		if( checkPoleIndices ) {
