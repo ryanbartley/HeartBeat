@@ -15,6 +15,7 @@
 #include "LilyPadOverlay.h"
 #include "Pond.h"
 #include "SpringMesh.h"
+#include "Urg.h"
 #endif
 
 using namespace ci;
@@ -97,6 +98,7 @@ class FullProjectApp : public AppNative {
 	heartbeat::EventManagerRef					mEventManager;
 	heartbeat::KioskManagerRef					mKioskManager;
 	heartbeat::PondRef							mPond;
+	heartbeat::UrgRef							mUrg;
 	std::array<int, 2>							mThreshes;
 	std::array<float, 7>						mRotations;
 	std::array<float, 7>						mScales;
@@ -105,6 +107,7 @@ class FullProjectApp : public AppNative {
 	params::InterfaceGlRef						mParams;
 	bool										mShowParams;
 	int											mCurrentId;
+	std::array<ci::vec2, 4>						mOffsetAndScales;
 #endif
 };
 
@@ -119,6 +122,7 @@ void FullProjectApp::setup()
 	mInteractionZones = mEngine->getInteractionZones();
 	mEventManager = mEngine->getEventManager();
 	mPond = mEngine->getPond();
+	mUrg = mInteractionZones->getUrg();
 	
 	mScales.fill( 1.0f );
 	mRotations.fill( 0 );
@@ -145,6 +149,8 @@ void FullProjectApp::setup()
 	mThreshes[1] = mInteractionZones->getNumIndicesThreshTouch();
 	mScales[3] = mInteractionDebug->getScale().x;
 	mTranslations[3] = mInteractionDebug->getTranslation();
+	
+	
 	
 	
 	mFar = mInteractionZones->getZoneScalar( InteractionZones::Zone::FAR );
@@ -189,6 +195,36 @@ void FullProjectApp::setup()
 	});
 	mParams->addButton("Send Bottom Teensy Depart", [&](){
 		mEventManager->queueEvent( EventDataRef( new DepartEvent( KioskId::BOTTOM_KIOSK ) ) );
+	});
+	
+	mParams->addSeparator();
+	mParams->addText("PROJECTOR 1");
+	mParams->addParam( "Projector 1 Offset X", &mOffsetAndScales[Urg::PROJ_1_OFFSET].x ).updateFn( [&](){
+		mUrg->setProj1OffsetX( mOffsetAndScales[Urg::PROJ_1_OFFSET].x );
+	});
+	mParams->addParam( "Projector 1 Offset Y", &mOffsetAndScales[Urg::PROJ_1_OFFSET].y ).updateFn( [&](){
+		mUrg->setProj1OffsetX( mOffsetAndScales[Urg::PROJ_1_OFFSET].y );
+	});
+	mParams->addParam( "Projector 1 Scale X", &mOffsetAndScales[Urg::PROJ_1_SCALE].x ).updateFn( [&](){
+		mUrg->setProj1OffsetX( mOffsetAndScales[Urg::PROJ_1_SCALE].x );
+	});
+	mParams->addParam( "Projector 1 Scale Y", &mOffsetAndScales[Urg::PROJ_1_SCALE].y ).updateFn( [&](){
+		mUrg->setProj1OffsetX( mOffsetAndScales[Urg::PROJ_1_OFFSET].y );
+	});
+	
+	mParams->addSeparator();
+	mParams->addText("PROJECTOR 2");
+	mParams->addParam( "Projector 2 Offset X", &mOffsetAndScales[Urg::PROJ_2_OFFSET].x ).updateFn( [&](){
+		mUrg->setProj1OffsetX( mOffsetAndScales[Urg::PROJ_2_OFFSET].x );
+	});
+	mParams->addParam( "Projector 2 Offset Y", &mOffsetAndScales[Urg::PROJ_2_OFFSET].y ).updateFn( [&](){
+		mUrg->setProj1OffsetX( mOffsetAndScales[Urg::PROJ_2_OFFSET].y );
+	});
+	mParams->addParam( "Projector 2 Scale X", &mOffsetAndScales[Urg::PROJ_2_SCALE].x ).updateFn( [&](){
+		mUrg->setProj1OffsetX( mOffsetAndScales[Urg::PROJ_2_SCALE].x );
+	});
+	mParams->addParam( "Projector 2 Scale Y", &mOffsetAndScales[Urg::PROJ_2_SCALE].y ).updateFn( [&](){
+		mUrg->setProj1OffsetX( mOffsetAndScales[Urg::PROJ_2_OFFSET].y );
 	});
 	
 	mParams->addSeparator();

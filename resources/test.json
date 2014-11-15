@@ -31,7 +31,23 @@
 		// URG ATTRIBUTES
 		//////////////////////////////////////////////////////
 		"urg" : {
-			"address" : "/dev/tty.usbmodem1d11"
+			"address" : "/dev/tty.usbmodem1d11",
+			"proj1" : {
+				"scale" : [
+					1, 1
+				],
+				"offset" : [
+					0, 0
+				]
+			},
+			"proj2" : {
+				"scale" : [
+					1, 1
+				],
+				"offset" : [
+					0, 0
+				]
+			}
 		},
 		//////////////////////////////////////////////////////
 		// INTERACTION ZONE ATTRIBUTES
