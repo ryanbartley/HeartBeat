@@ -257,8 +257,10 @@ void InfoDisplay::draw()
 		if( mStateChanged ) {
 			renderToSvg();
 		}
+		{
+			gl::ScopedColor scopeColor( ColorA( 1, 1, 1, mMasterAlpha ) );
 		gl::draw( mCairoTex );
-        
+		}
         gl::ScopedModelMatrix scopeModel;
 		gl::setModelMatrix( getModelMatrix() );
 		
@@ -341,7 +343,6 @@ void InfoDisplay::activate( bool activate )
 void InfoDisplay::finished()
 {
 	mStatus = Status::HOME_SCREEN;
-	mIsActivated = false;
 	mMasterAlpha = 0.0f;
 	mDataPages.clear();
 	mOverlay = nullptr;
@@ -350,11 +351,15 @@ void InfoDisplay::finished()
 		mActivatedButton = nullptr;
 	}
 	if( mOverlayActiveButton ) {
-		mOverlayActiveButton->setStatus( ButtonStatus::ACTIVE );
+		mOverlayActiveButton->setStatus( ButtonStatus::NONACTIVE );
 		mOverlayActiveButton = nullptr;
 	}
 	mCurrentSection = 0;
 	cout << getKiosk( mId ) << " Reset the infoDisplay: " << app::getElapsedSeconds() << endl;
+	renderToSvg();
+	mStateChanged = false;
+	mPointMap.clear();
+	mPoints.clear();
 }
 	
 void InfoDisplay::addDataPage( DataPageRef &nextPage, AnimateType type )
@@ -471,6 +476,8 @@ void InfoDisplay::registerTouchBegan( EventDataRef eventData )
         CI_LOG_E("Couldn't cast touch event from " << eventData->getName() );
         return;
     }
+	
+	if( mMasterAlpha != 1.0f ) return;
 	
 	auto eventWorldCoord = event->getWorldCoordinate();
 	

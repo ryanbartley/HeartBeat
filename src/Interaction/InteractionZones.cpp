@@ -102,61 +102,6 @@ void InteractionZones::initialize()
 			CI_LOG_W("runUrg child not found, defaulting to false");
 		}
 		
-		try {
-			auto approachZones = interactionAttribs["approachZones"];
-		
-			auto topZone = approachZones["top"];
-			mApproachZones.insert( make_pair( KioskId::TOP_KIOSK, ApproachData( KioskId::TOP_KIOSK, topZone.getChild(0).getValue<int>(), topZone.getChild(1).getValue<int>() ) ) );
-			auto middleZone = approachZones["middle"];
-			mApproachZones.insert( make_pair( KioskId::MIDDLE_KIOSK, ApproachData( KioskId::MIDDLE_KIOSK, middleZone.getChild(0).getValue<int>(), middleZone.getChild(1).getValue<int>() ) ) );
-			auto bottomZone = approachZones["bottom"];
-			mApproachZones.insert( make_pair( KioskId::BOTTOM_KIOSK, ApproachData( KioskId::BOTTOM_KIOSK, bottomZone.getChild(0).getValue<int>(), bottomZone.getChild(1).getValue<int>() ) ) );
-		}
-		catch( const JsonTree::ExcChildNotFound &ex ) {
-			CI_LOG_E("Approach Divisions problem, using default top - 330, middle - 660, bottom - 1080 " << ex.what());
-			mApproachZones.insert( make_pair( KioskId::TOP_KIOSK, ApproachData( KioskId::TOP_KIOSK, 0, 330 ) ) );
-			mApproachZones.insert( make_pair( KioskId::MIDDLE_KIOSK, ApproachData( KioskId::MIDDLE_KIOSK, 331, 660 ) ) );
-			mApproachZones.insert( make_pair( KioskId::BOTTOM_KIOSK, ApproachData( KioskId::BOTTOM_KIOSK, 661, 1080 ) ) );
-		}
-		
-		try {
-			auto poleIndices = interactionAttribs["poleIndices"];
-			
-			for( auto & index : poleIndices ) {
-//				mIgnoreIndices.push_back( index.getValue<uint32_t>() );
-			}
-		}
-		catch( const JsonTree::ExcChildNotFound &ex ) {
-			CI_LOG_E("PoleIndices not found, using default");
-			mSendEvents = false;
-		}
-		
-		auto threshes = interactionAttribs["threshes"];
-		
-		try {
-			mNumIndicesThreshTouches = threshes["touches"].getValue<int>();
-		}
-		catch( const JsonTree::ExcChildNotFound &ex ) {
-			CI_LOG_E(ex.what() << ", setting to default 5");
-			mNumIndicesThreshTouches = 5;
-		}
-		
-		try {
-			mNumIndicesThreshApproach = threshes["approaches"].getValue<int>();
-		}
-		catch( const JsonTree::ExcChildNotFound &ex ) {
-			CI_LOG_E(ex.what() << ", setting to default 20");
-			mNumIndicesThreshTouches = 20;
-		}
-		
-		try {
-			mAveragesThresh = threshes["averages"].getValue<int>();
-		}
-		catch( const JsonTree::ExcChildNotFound &ex ) {
-			CI_LOG_E(ex.what() << ", setting to default 20");
-			mAveragesThresh = 10;
-		}
-		
 		// Now cache scales for barrier zones
 		try {
 			auto scales = interactionAttribs["scales"];
@@ -208,6 +153,63 @@ void InteractionZones::initialize()
 			mZones.insert( make_pair( Zone::DEAD, 1.0f ) );
 			mZones.insert( make_pair( Zone::APPROACH, 1.5f ) );
 			mZones.insert( make_pair( Zone::FAR, 1.8f ) );
+		}
+		
+		try {
+			auto approachZones = interactionAttribs["approachZones"];
+		
+			auto topZone = approachZones["top"];
+			auto shared = shared_from_this();
+			mApproachZones.insert( make_pair( KioskId::TOP_KIOSK, ApproachData( shared, KioskId::TOP_KIOSK, topZone.getChild(0).getValue<int>(), topZone.getChild(1).getValue<int>() ) ) );
+			auto middleZone = approachZones["middle"];
+			mApproachZones.insert( make_pair( KioskId::MIDDLE_KIOSK, ApproachData( shared, KioskId::MIDDLE_KIOSK, middleZone.getChild(0).getValue<int>(), middleZone.getChild(1).getValue<int>() ) ) );
+			auto bottomZone = approachZones["bottom"];
+			mApproachZones.insert( make_pair( KioskId::BOTTOM_KIOSK, ApproachData( shared, KioskId::BOTTOM_KIOSK, bottomZone.getChild(0).getValue<int>(), bottomZone.getChild(1).getValue<int>() ) ) );
+		}
+		catch( const JsonTree::ExcChildNotFound &ex ) {
+			CI_LOG_E("Approach Divisions problem, using default top - 330, middle - 660, bottom - 1080 " << ex.what());
+			auto shared = shared_from_this();
+			mApproachZones.insert( make_pair( KioskId::TOP_KIOSK, ApproachData( shared, KioskId::TOP_KIOSK, 0, 330 ) ) );
+			mApproachZones.insert( make_pair( KioskId::MIDDLE_KIOSK, ApproachData( shared, KioskId::MIDDLE_KIOSK, 331, 660 ) ) );
+			mApproachZones.insert( make_pair( KioskId::BOTTOM_KIOSK, ApproachData( shared, KioskId::BOTTOM_KIOSK, 661, 1080 ) ) );
+		}
+		
+		try {
+			auto poleIndices = interactionAttribs["poleIndices"];
+			
+			for( auto & index : poleIndices ) {
+//				mIgnoreIndices.push_back( index.getValue<uint32_t>() );
+			}
+		}
+		catch( const JsonTree::ExcChildNotFound &ex ) {
+			CI_LOG_E("PoleIndices not found, using default");
+			mSendEvents = false;
+		}
+		
+		auto threshes = interactionAttribs["threshes"];
+		
+		try {
+			mNumIndicesThreshTouches = threshes["touches"].getValue<int>();
+		}
+		catch( const JsonTree::ExcChildNotFound &ex ) {
+			CI_LOG_E(ex.what() << ", setting to default 5");
+			mNumIndicesThreshTouches = 5;
+		}
+		
+		try {
+			mNumIndicesThreshApproach = threshes["approaches"].getValue<int>();
+		}
+		catch( const JsonTree::ExcChildNotFound &ex ) {
+			CI_LOG_E(ex.what() << ", setting to default 20");
+			mNumIndicesThreshTouches = 20;
+		}
+		
+		try {
+			mAveragesThresh = threshes["averages"].getValue<int>();
+		}
+		catch( const JsonTree::ExcChildNotFound &ex ) {
+			CI_LOG_E(ex.what() << ", setting to default 20");
+			mAveragesThresh = 10;
 		}
 		
 		try {

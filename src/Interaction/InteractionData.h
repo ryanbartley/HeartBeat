@@ -135,10 +135,7 @@ bool TouchData::reset()
 struct ApproachData {
 public:
 	
-	ApproachData( KioskId kiosk, int lowestIndex, int highestIndex )
-	: mKiosk( kiosk ), mLowestIndex( lowestIndex ), mHighestIndex( highestIndex ),
-	mIsActivated( false ), mNumEvents( 0 )
-	{}
+	ApproachData( InteractionZonesRef interZones, KioskId kiosk, int lowestIndex, int highestIndex );
 	~ApproachData() = default;
 	
 	enum class EventTypeToEmit {
@@ -148,39 +145,35 @@ public:
 	};
 	
 	inline bool contains( int index ) { return mLowestIndex < index && mHighestIndex > index; }
-	inline void addEvent() { mNumEvents++; }
+	inline void addEvent( int index, long distance )
+	{
+		if( distance < mCurrentClosestDistance ) {
+			mCurrentClosestDistance = distance;
+			mCurrentClosestIndex = index;
+		}
+		mNumEvents++;
+	}
 	inline bool	getIsActivated() const { return mIsActivated; }
-	inline void	activate( bool enable );
 	inline size_t	getNumDistances() const { return mNumEvents; }
 	inline KioskId getKiosk() const { return mKiosk; }
 	inline void	reset() { mNumEvents = 0; mEmitType = EventTypeToEmit::NONE; }
 	inline const int getLowest() const { return mLowestIndex; }
 	inline const int getHighest() const { return mHighestIndex; }
+	void checkDistanceForSend();
 	void createAndSendEvent();
 	void endFrame();
 	
 private:
 	
+	std::weak_ptr<InteractionZones>	mInteractionZone;
 	EventTypeToEmit		mEmitType;
 	const KioskId		mKiosk;
 	const int			mLowestIndex, mHighestIndex;
+	long				mCurrentClosestDistance, mCurrentClosestIndex;
+	float				mApproachThresh, mDepartThresh;
 	int					mNumEvents;
 	bool				mIsActivated;
 	
 };
-	
-void ApproachData::activate( bool enable )
-{
-	mIsActivated = enable;
-	if( mIsActivated ) {
-		mEmitType = EventTypeToEmit::APPROACH;
-		createAndSendEvent();
-	}
-	else {
-		mEmitType = EventTypeToEmit::DEPART;
-		createAndSendEvent();
-	}
-}
-	
 	
 }
