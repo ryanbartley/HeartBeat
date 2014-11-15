@@ -63,7 +63,7 @@ void Engine::destroy()
 	sEngine = nullptr;
 	sEngineInitialized = false;
 }
-	
+#if defined( DEBUG )
 void Engine::touchBeganDelegate( EventDataRef event )
 {
 	
@@ -98,11 +98,11 @@ void Engine::touchEndedDelegate( EventDataRef event )
 	
 	mTouchesEnded.push_back( touchEnded->getWorldCoordinate() );
 }
-	
+#endif
 void Engine::initialize()
 {
 	mEventManager = heartbeat::EventManager::create( "Global", true );
-	
+
 //	mEventManager->addListener( std::bind( &Engine::touchBeganDelegate, this, std::placeholders::_1 ), TouchBeganEvent::TYPE );
 //	mEventManager->addListener( std::bind( &Engine::touchMovedDelegate, this, std::placeholders::_1 ), TouchMoveEvent::TYPE );
 //	mEventManager->addListener( std::bind( &Engine::touchEndedDelegate, this, std::placeholders::_1 ), TouchEndedEvent::TYPE );

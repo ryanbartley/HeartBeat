@@ -395,9 +395,9 @@ void FullProjectApp::mouseUp( cinder::app::MouseEvent event )
 		
 		mEventManager->queueEvent( heartbeat::EventDataRef( new heartbeat::TouchEndedEvent( mCurrentId, 900, eventPosition ) ) );
 	}
-	
-#endif
 	mCurrentId++;
+#endif
+	
 }
 
 void FullProjectApp::update()

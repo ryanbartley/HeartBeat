@@ -32,11 +32,11 @@ public:
 	void preDraw();
 	void draw();
 	void postDraw();
-	
+#if defined( DEBUG )
 	void touchBeganDelegate( EventDataRef event );
 	void touchMovedDelegate( EventDataRef event );
 	void touchEndedDelegate( EventDataRef event );
-	
+#endif
 	void keyDown( ci::app::KeyEvent event );
 	
 	const RendererRef& getRenderer() { return mRenderer; }

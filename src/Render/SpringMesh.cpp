@@ -47,16 +47,23 @@ void SpringMesh::update()
 {
 	gl::ScopedGlslProg	updateScope( mUpdateGlsl );
 	gl::ScopedState		stateScope( GL_RASTERIZER_DISCARD, true );
-	
+    
 	if( ! mTouchesBegan.empty() ) {
-		mUpdateGlsl->uniform( "touchesBegan", mTouchesBegan.data(), mTouchesBegan.size() );
+        int numTouchesBegan = mTouchesBegan.size() <= 4 ? mTouchesBegan.size() : 4;
+        mUpdateGlsl->uniform( "touchesBegan", mTouchesBegan.data(), numTouchesBegan );
+        mUpdateGlsl->uniform( "numTouchesBegan", numTouchesBegan );
 	}
+    else {
+        mUpdateGlsl->uniform( "numTouchesBegan", (float)0.0 );
+    }
 	if( ! mTouchesMoved.empty() ) {
-		mUpdateGlsl->uniform( "touchesMoved", mTouchesMoved.data(), mTouchesMoved.size() );
+        int numTouchesMoved = mTouchesMoved.size() <= 4 ? mTouchesMoved.size() : 4;
+        mUpdateGlsl->uniform( "touchesBegan", mTouchesMoved.data(), numTouchesMoved );
+        mUpdateGlsl->uniform( "numTouchesBegan", numTouchesMoved );
 	}
-	
-	mUpdateGlsl->uniform( "numTouchesBegan", (float)mTouchesBegan.size() );
-	mUpdateGlsl->uniform( "numTouchesMoved", (float)mTouchesMoved.size() );
+    else {
+        mUpdateGlsl->uniform( "numTouchesBegan", (float)0 );
+    }
 	
 	// This for loop allows iteration on the gpu of solving the
 	// physics of the cloth.
