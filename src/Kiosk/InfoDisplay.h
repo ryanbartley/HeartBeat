@@ -40,6 +40,7 @@ public:
 	const ci::Rectf getPresentationRect() { return mPresentRect; }
 	
 	void activate( bool activate );
+    void started();
 	void finished();
 	
 	bool isActivated() { return mIsActivated; }

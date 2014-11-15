@@ -15,7 +15,8 @@ namespace heartbeat {
 struct Interactor {
 	Interactor( int index, long distance )
 	: mCurrentDistance( distance ), mMinDistance( distance ),
-		mMaxDistance( distance ), mIndex( index ), mNumIndicesPast( 0 )
+		mMaxDistance( distance ), mIndex( index ), mNumIndicesPast( 0 ),
+        mMinIndex( index )
 	{}
 	
 	inline void checkMinMax( long distance )

@@ -74,9 +74,10 @@ mIsActivated( false ), mNumEvents( 0 ), mInteractionZone( interZones ),
 	 approach = shared->getZoneScalar( InteractionZones::Zone::APPROACH );
 	 dead = shared->getZoneScalar( InteractionZones::Zone::DEAD );
 	}
-	float mid = approach + dead / 2.0f;
+	float mid = (approach + dead) / 2.0f;
 	float total = approach - dead;
-	mDepartThresh = mid + .4 * total;
+	mDepartThresh = mid + .2 * total;
+    CI_LOG_V("approach: " << approach << " dead: " << dead << " mid: " << mid);
 	mApproachThresh = mid;
 }
 
@@ -97,6 +98,7 @@ void ApproachData::createAndSendEvent()
 	switch ( mEmitType ) {
 		case EventTypeToEmit::APPROACH: {
 			event.reset( new ApproachEvent( mKiosk ) );
+            
 		}
 		break;
 		case EventTypeToEmit::DEPART: {
@@ -119,21 +121,27 @@ void ApproachData::checkDistanceForSend()
 {
 	auto shared = mInteractionZone.lock();
 	auto barrierDistance = shared->getBarrierAtIndex( mCurrentClosestIndex );
-	
+	CI_LOG_V("barrierWithDepartThresh " << (barrierDistance * mDepartThresh) << " barrierWithApproachThresh " << (barrierDistance * mApproachThresh) << " CurrendtClosestDistance " << mCurrentClosestDistance << " activated " << mIsActivated );
 	if( mIsActivated ) {
 		if( mCurrentClosestDistance > barrierDistance * mDepartThresh ) {
 			mEmitType = EventTypeToEmit::DEPART;
+            mIsActivated = false;
+            CI_LOG_V("I'm emitting depart");
 		}
 		else {
 			mEmitType = EventTypeToEmit::NONE;
+            CI_LOG_V("I'm emitting none");
 		}
 	}
 	else {
 		if ( mCurrentClosestDistance < barrierDistance * mApproachThresh ) {
 			mEmitType = EventTypeToEmit::APPROACH;
+            mIsActivated = true;
+            CI_LOG_V("I'm emitting approach");
 		}
 		else {
 			mEmitType = EventTypeToEmit::NONE;
+            CI_LOG_V("I'm emitting none");
 		}
 	}
 	

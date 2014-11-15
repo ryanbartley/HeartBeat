@@ -325,25 +325,35 @@ void InfoDisplay::draw()
 	
 void InfoDisplay::activate( bool activate )
 {
+    CI_LOG_V("activate: " << activate << " mIsActivated; " << mIsActivated);
 	if( mIsActivated == activate ) return;
 
 	auto app = App::get();
 	auto shared = shared_from_this();
 	
 	if( activate ) {
-		app->timeline().applyPtr( &mMasterAlpha, 1.0f, mFadeTime ).easeFn( EaseInCubic() );
-		mIsActivated = true;
+        CI_LOG_V("activating");
+		app->timeline().applyPtr( &mMasterAlpha, 1.0f, mFadeTime ).easeFn( EaseInCubic() ).finishFn( std::bind( &InfoDisplay::started, shared ) );
 	}
 	else {
 		app->timeline().applyPtr( &mMasterAlpha, 0.0f, mFadeTime ).easeFn( EaseInCubic() ).finishFn( std::bind( &InfoDisplay::finished, shared ) );
-		mIsActivated = false;
+		CI_LOG_V("deactivating");
 	}
 }
+    
+    void InfoDisplay::started()
+    {
+        CI_LOG_V("started");
+        mMasterAlpha = 1.0f;
+        mIsActivated = true;
+    }
 	
 void InfoDisplay::finished()
 {
+    CI_LOG_V("finished");
 	mStatus = Status::HOME_SCREEN;
 	mMasterAlpha = 0.0f;
+    mIsActivated = false;
 	mDataPages.clear();
 	mOverlay = nullptr;
 	if( mActivatedButton ) {
@@ -359,7 +369,9 @@ void InfoDisplay::finished()
 	renderToSvg();
 	mStateChanged = false;
 	mPointMap.clear();
+#if defined( DEBUG )
 	mPoints.clear();
+#endif
 }
 	
 void InfoDisplay::addDataPage( DataPageRef &nextPage, AnimateType type )
@@ -471,13 +483,13 @@ void InfoDisplay::addOverlayPage( OverlayPageRef &page )
     
 void InfoDisplay::registerTouchBegan( EventDataRef eventData )
 {
+//    if( mMasterAlpha != 1.0f ) return;
+    
     auto event = std::dynamic_pointer_cast<TouchBeganEvent>( eventData );
     if( ! event ) {
         CI_LOG_E("Couldn't cast touch event from " << eventData->getName() );
         return;
     }
-	
-	if( mMasterAlpha != 1.0f ) return;
 	
 	auto eventWorldCoord = event->getWorldCoordinate();
 	
@@ -493,11 +505,14 @@ void InfoDisplay::registerTouchBegan( EventDataRef eventData )
 
 void InfoDisplay::registerTouchMoved( EventDataRef eventData )
 {
+//    if( mMasterAlpha != 1.0f ) return;
+    
 	auto event = std::dynamic_pointer_cast<TouchMoveEvent>( eventData );
 	if( ! event ) {
 		CI_LOG_E("Couldn't cast touch event from " << eventData->getName() );
 		return;
 	}
+    
 	cout << "Finding in point map" << endl;
 	auto world = event->getWorldCoordinate();
 	
@@ -523,6 +538,8 @@ void InfoDisplay::registerTouchMoved( EventDataRef eventData )
 	
 void InfoDisplay::registerTouchEnded( EventDataRef eventData )
 {
+//    if( mMasterAlpha != 1.0f ) return;
+    
 	auto event = std::dynamic_pointer_cast<TouchEndedEvent>( eventData );
 	if( ! event ) {
 		CI_LOG_E("Couldn't cast touch event from " << eventData->getName() );
