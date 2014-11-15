@@ -143,6 +143,52 @@ bool Urg::initialize()
 			}
 			return false;
 		}
+		
+		try {
+			auto proj1Scales = urgAttribs["proj1"]["scale"].getChildren();
+			ci::vec2 proj1Scale;
+			int i = 0;
+			for( auto & scaleDim : proj1Scales ) {
+				proj1Scale[i++] = scaleDim.getValue<float>();
+			}
+			
+			mOffsetScales[PROJ_1_SCALE] = proj1Scale;
+			
+			auto proj1Offsets = urgAttribs["proj1"]["offset"].getChildren();
+			ci::vec2 proj1Offset;
+			i = 0;
+			for( auto & offsetDim : proj1Offsets ) {
+				proj1Offset[i++] = offsetDim.getValue<float>();
+			}
+			
+			mOffsetScales[PROJ_1_OFFSET] = proj1Offset;
+			
+			auto proj2Scales = urgAttribs["proj2"]["scale"].getChildren();
+			ci::vec2 proj2Scale;
+			i = 0;
+			for( auto & scaleDim : proj2Scales ) {
+				proj2Scale[i++] = scaleDim.getValue<float>();
+			}
+			
+			mOffsetScales[PROJ_2_SCALE] = proj1Scale;
+			
+			auto proj2Offsets = urgAttribs["proj2"]["offset"].getChildren();
+			ci::vec2 proj2Offset;
+			i = 0;
+			for( auto & offsetDim : proj2Offsets ) {
+				proj2Offset[i++] = offsetDim.getValue<float>();
+			}
+			
+			mOffsetScales[PROJ_2_OFFSET] = proj2Offset;
+		}
+		catch( const JsonTree::ExcChildNotFound &ex ) {
+			CI_LOG_E(ex.what());
+			mOffsetScales[PROJ_1_OFFSET] = vec2( 0.0f );
+			mOffsetScales[PROJ_1_SCALE] = vec2( 1.0f );
+			mOffsetScales[PROJ_2_OFFSET] = vec2( 0.0f );
+			mOffsetScales[PROJ_2_SCALE] = vec2( 1.0f );
+		}
+		
 		return true;
 	}
 	catch( JsonTree::ExcChildNotFound &ex ) {

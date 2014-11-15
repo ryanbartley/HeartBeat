@@ -20,6 +20,13 @@ namespace heartbeat {
 class Urg {
 public:
 	
+	enum ScaleOffsets {
+		PROJ_1_OFFSET = 0,
+		PROJ_1_SCALE = 1,
+		PROJ_2_OFFSET = 2,
+		PROJ_2_SCALE = 3
+	};
+	
 	static UrgRef create();
 	
 	~Urg();
@@ -52,6 +59,22 @@ public:
 	
 	void asyncReadMany();
 	
+	inline ci::vec2& getProj1Offset() { return mOffsetScales[PROJ_1_OFFSET]; }
+	inline ci::vec2& getProj1Scale() { return mOffsetScales[PROJ_1_SCALE]; }
+	inline ci::vec2& getProj2Offset() { return mOffsetScales[PROJ_2_OFFSET]; }
+	inline ci::vec2& getProj2Scale() { return mOffsetScales[PROJ_2_SCALE]; }
+	
+	inline void setProj1OffsetX( float x ) { mOffsetScales[PROJ_1_OFFSET].x = x; }
+	inline void setProj1OffsetY( float y ) { mOffsetScales[PROJ_1_OFFSET].y = y; }
+	inline void setProj2OffsetX( float x ) { mOffsetScales[PROJ_2_OFFSET].x = x; }
+	inline void setProj2OffsetY( float y ) { mOffsetScales[PROJ_2_OFFSET].y = y; }
+	inline void setProj1ScaleX( float x )  { mOffsetScales[PROJ_1_SCALE].x = x; }
+	inline void setProj1ScaleY( float y )  { mOffsetScales[PROJ_1_SCALE].y = y; }
+	inline void setProj2ScaleX( float x )  { mOffsetScales[PROJ_2_SCALE].x = x; }
+	inline void setProj2ScaleY( float y )  { mOffsetScales[PROJ_2_SCALE].y = y; }
+	
+	inline void offsetAndScaleIndexPoint( ci::vec2 &point, int index );
+	
 private:
 	Urg();
 	
@@ -67,6 +90,9 @@ private:
 	uint32_t			mSensorDataSize;
 	bool				mIsOpen;
 	bool				mIsMeasurmentStarted;
+	
+	int						mProjectorIndex;
+	std::array<ci::vec2, 4> mOffsetScales;
 	
 	friend class InteractionZones;
 };
@@ -85,18 +111,29 @@ std::vector<long> Urg::readOnce()
 ci::vec2 Urg::getPoint( int index, long length, float scalar )
 {
 	ci::vec2 ret;
-	double x;
-	double y;
 	double radian;
 	
 	radian = urg_index2rad( &(mSensor), index );
 	// \ Todo check length is valid
 	
-	x = ((length * scalar) * sin (radian)) ;
-	y = ((length * scalar) * cos (radian));
-	ret = ci::vec2( x, y );
+	ret.x = ((length * scalar) * sin (radian)) ;
+	ret.y = ((length * scalar) * cos (radian));
+	offsetAndScaleIndexPoint( ret, index );
 	return ret;
 }
-	
+
+void Urg::offsetAndScaleIndexPoint( ci::vec2 &point, int index )
+{
+	if( index <= mProjectorIndex ) {
+		auto & scale = mOffsetScales[PROJ_1_SCALE];
+		auto & offset = mOffsetScales[PROJ_1_OFFSET];
+		point = point + offset * scale;
+	}
+	else {
+		auto & scale = mOffsetScales[PROJ_2_SCALE];
+		auto & offset = mOffsetScales[PROJ_2_OFFSET];
+		point = point + offset * scale;
+	}
+}
 
 }

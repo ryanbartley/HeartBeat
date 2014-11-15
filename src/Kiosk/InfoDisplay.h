@@ -123,7 +123,7 @@ public:
 			return ret;
 		}
 		
-		inline ci::vec2& getLastPoint()
+		inline ci::vec2& getCachedCoordinateSpacePoint()
 		{
 			return mCachedCoordinateSpacePoint;
 		}
