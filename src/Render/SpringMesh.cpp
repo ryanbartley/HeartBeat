@@ -31,16 +31,16 @@ const int CONNECTION_INDEX	= 3;
 const int TEXCOORD_INDEX	= 4;
 
 	
-SpringMesh::SpringMesh()
-: mIterationsPerFrame(1), mIterationIndex( 0 ), mLineIndices( 0 ), mTriangleIndices( 0 ), mDrawDebug( false ), mDrawTexture( true ),
-    mSpringConstant( 10. ), mRestLength( 0.88f ), mGlobalDampening( 2.8f )
+SpringMesh::SpringMesh( const ci::gl::GlslProgRef &shader )
+: mIterationsPerFrame(1), mIterationIndex( 0 ), mLineIndices( 0 ), mTriangleIndices( 0 ), mDrawDebug( false ),
+	mDrawTexture( true ), mSpringConstant( 10. ), mRestLength( 0.88f ), mGlobalDampening( 2.8f ), mRenderGlsl( shader )
 {
 	
 }
 	
-SpringMeshRef SpringMesh::create()
+SpringMeshRef SpringMesh::create( const ci::gl::GlslProgRef &shader )
 {
-	return SpringMeshRef( new SpringMesh );
+	return SpringMeshRef( new SpringMesh( shader ) );
 }
 	
 void SpringMesh::update()
@@ -381,25 +381,6 @@ void SpringMesh::loadShaders()
 	catch( const ci::Exception &ex ) {
 		CI_LOG_E("Unknown exception " << ex.what() );
 	}
-	
-	gl::GlslProg::Format renderFormat;
-	renderFormat.vertex( getFileContents( "SpringMeshrender.vert" ) )
-	.fragment( getFileContents( "SpringMeshrender.frag" ) )
-	.attribLocation( "position",	POSITION_INDEX )
-	.attribLocation( "normal",		NORMAL_INDEX )
-	.attribLocation( "texCoord",	TEXCOORD_INDEX );
-	
-	try {
-		mRenderGlsl = gl::GlslProg::create( renderFormat );
-	}
-	catch ( const gl::GlslProgCompileExc &ex ) {
-		CI_LOG_E("Render Shader Compile Exc " << ex.what());
-	}
-	catch ( const ci::Exception &ex ) {
-		CI_LOG_E("Unknown Exception " << ex.what());
-	}
-	
-
 }
 	
 	

@@ -12,6 +12,8 @@
 #include "cinder/Log.h"
 #include "cinder/gl/Shader.h"
 #include "cinder/ObjLoader.h"
+#include "Engine.h"
+#include "Pond.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -23,14 +25,14 @@ uint64_t PondElement::globalId = 0;
 	
 PondElementId PondElement::TYPE = Hash::HASHER("PondElement");
 	
-PondElement::PondElement()
-: mId( getNextId() )
+PondElement::PondElement( const ci::gl::GlslProgRef &shader )
+: mId( getNextId() ), mRenderShader( shader )
 {
 }
 
-PondElementRef PondElement::create()
+PondElementRef PondElement::create( const ci::gl::GlslProgRef &shader )
 {
-	return PondElementRef( new PondElement() );
+	return PondElementRef( new PondElement( shader ) );
 }
 	
 void PondElement::initialize( const ci::JsonTree &root )
@@ -44,12 +46,21 @@ void PondElement::initialize( const ci::JsonTree &root )
 		
 		auto obj = ObjLoader( getFileContents( objName ) );
 		
-		mBatch = gl::Batch::create( obj, gl::getStockShader( gl::ShaderDef() ) );
+		mBatch = gl::Batch::create( obj, mRenderShader );
 	}
 	catch ( const JsonTree::ExcChildNotFound &ex ) {
 		CI_LOG_E( "ObjName Not found " << ex.what() << " using default cube" );
 		
-		mBatch = gl::Batch::create( geom::Cube(), gl::getStockShader( gl::ShaderDef().color() ) );
+		mBatch = gl::Batch::create( geom::Cube(), mRenderShader );
+	}
+	
+	try {
+		auto diffuse = root["diffuse"].getValue();
+		
+		mDiffuseTexture = gl::Texture2d::create( loadImage( getFileContents( diffuse ) ) );
+	}
+	catch ( const JsonTree::ExcChildNotFound &ex ) {
+		CI_LOG_E(ex.what());
 	}
 }
 	

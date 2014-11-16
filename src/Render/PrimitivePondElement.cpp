@@ -20,14 +20,15 @@ using namespace std;
 
 namespace heartbeat {
 	
-PrimitivePondElement::PrimitivePondElement()
+PrimitivePondElement::PrimitivePondElement( const ci::gl::GlslProgRef &shader )
+: PondElement( shader )
 {
 	
 }
 	
-PrimitivePondElementRef PrimitivePondElement::create()
+PrimitivePondElementRef PrimitivePondElement::create( const ci::gl::GlslProgRef &shader )
 {
-	return PrimitivePondElementRef( new PrimitivePondElement );
+	return PrimitivePondElementRef( new PrimitivePondElement( shader ) );
 }
 	
 void PrimitivePondElement::initialize( const ci::JsonTree &root )

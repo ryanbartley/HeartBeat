@@ -17,12 +17,12 @@ using PrimitivePondElementRef = std::shared_ptr<class PrimitivePondElement>;
 class PrimitivePondElement : public PondElement {
 public:
 	
-	static PrimitivePondElementRef create();
+	static PrimitivePondElementRef create( const ci::gl::GlslProgRef &shader );
 	
 	void update() override;
 	
 private:
-	PrimitivePondElement();
+	PrimitivePondElement( const ci::gl::GlslProgRef &shader );
 	
 	void initialize( const ci::JsonTree &root );
 	

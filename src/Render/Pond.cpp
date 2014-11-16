@@ -19,17 +19,24 @@
 #include "Engine.h"
 
 #include "cinder/Log.h"
+#include "cinder/gl/GlslProg.h"
 
 using namespace ci;
 using namespace std;
 using namespace ci::app;
 
 namespace heartbeat {
+
+const int POSITION_INDEX	= 0;
+const int VELOCITY_INDEX	= 1;
+const int NORMAL_INDEX		= 2;
+const int CONNECTION_INDEX	= 3;
+const int TEXCOORD_INDEX	= 4;
 	
 PondElementFactoryMap Pond::PondElementCreators = {
-	make_pair( "PondElement", std::bind( &PondElement::create ) ),
-	make_pair( "Fish", std::bind( &Fish::create ) ),
-	make_pair( "PrimitivePondElement", std::bind( &PrimitivePondElement::create  ) )
+	make_pair( "PondElement", std::bind( &PondElement::create, std::placeholders::_1 ) ),
+	make_pair( "Fish", std::bind( &Fish::create, std::placeholders::_1 ) ),
+	make_pair( "PrimitivePondElement", std::bind( &PrimitivePondElement::create, std::placeholders::_1  ) )
 };
 	
 Pond::Pond( const ci::vec2 &pondSize )
@@ -50,8 +57,32 @@ PondRef Pond::create( const ci::vec2 &pondSize )
 	
 void Pond::initialize()
 {
+	loadShaders();
+	
 	try {
 		auto pondAttribs = JsonManager::get()->getRoot()["pondAttribs"];
+		
+		try {
+			auto pondBounds = pondAttribs["pondBounds"];
+			auto mins = pondBounds["min"].getChildren();
+			ci::vec3 min;
+			int i = 0;
+			for( auto & minDim : mins ) {
+				min[i++] = minDim.getValue<float>();
+			}
+			
+			auto maxs = pondBounds["max"].getChildren();
+			ci::vec3 max;
+			i = 0;
+			for( auto & maxDim : maxs ) {
+				max[i++] = maxDim.getValue<float>();
+			}
+			
+			mPondBounds = PondBounds( min, max );
+		}
+		catch( const JsonTree::ExcChildNotFound &ex ) {
+			CI_LOG_E(ex.what());
+		}
 		
 		try {
 			auto pondElements = pondAttribs["pondElements"].getChildren();
@@ -63,7 +94,8 @@ void Pond::initialize()
 				auto found = PondElementCreators.find( type );
 				
 				if( found != PondElementCreators.end() ) {
-					auto pondElement = found->second();
+					CI_LOG_V("Pond Elements: type: " << type << " element: " << element);
+					auto pondElement = found->second( mRenderGlsl );
 					pondElement->initialize( element );
 					mPondElements.push_back( pondElement );
 				}
@@ -77,7 +109,7 @@ void Pond::initialize()
 			CI_LOG_W("No Pond Elements Found " << ex.what() );
 		}
 		
-		mSpringMesh = SpringMesh::create();
+		mSpringMesh = SpringMesh::create( mRenderGlsl );
 		
 		try {
 			auto springMeshAttribs = pondAttribs["springMesh"];
@@ -87,28 +119,6 @@ void Pond::initialize()
 		catch ( JsonTree::ExcChildNotFound &ex ) {
 			CI_LOG_E("Spring Mesh attribs not found, using defaults" << ex.what());
 			mSpringMesh->initialize( JsonTree(), mPondSize );
-		}
-		
-		try {
-			auto pondBounds = pondAttribs["pondBounds"];
-			auto mins = pondBounds["min"].getChildren();
-			ci::vec3 min;
-			int i = 0;
-			for( auto & minDim : mins ) {
-				min[i++] = minDim.getValue<float>();
-			}
-			
-			auto maxs = pondBounds["min"].getChildren();
-			ci::vec3 max;
-			i = 0;
-			for( auto & maxDim : maxs ) {
-				max[i++] = maxDim.getValue<float>();
-			}
-			
-			mPondBounds = PondBounds( min, max );
-		}
-		catch( const JsonTree::ExcChildNotFound &ex ) {
-			CI_LOG_E(ex.what());
 		}
 		
 		try {
@@ -146,9 +156,29 @@ void Pond::initialize()
 	catch ( const JsonTree::ExcChildNotFound &ex ) {
 		CI_LOG_E("Couldn't Find " << ex.what() );
 	}
+}
 	
-	mPondBottom = gl::Texture::create( loadImage( getFileContents( "pondRocks.jpeg" ) ) );
-
+void Pond::loadShaders()
+{
+	gl::GlslProg::Format renderFormat;
+	renderFormat.vertex( getFileContents( "SpringMeshrender.vert" ) )
+	.fragment( getFileContents( "SpringMeshrender.frag" ) )
+	.attrib( geom::Attrib::NORMAL, "normal" )
+	.attrib( geom::Attrib::POSITION, "position" )
+	.attrib( geom::Attrib::TEX_COORD_0, "texCoord" )
+	.attribLocation( "position",	POSITION_INDEX )
+	.attribLocation( "normal",		NORMAL_INDEX )
+	.attribLocation( "texCoord",	TEXCOORD_INDEX );
+	
+	try {
+		mRenderGlsl = gl::GlslProg::create( renderFormat );
+	}
+	catch ( const gl::GlslProgCompileExc &ex ) {
+		CI_LOG_E("Render Shader Compile Exc " << ex.what());
+	}
+	catch ( const ci::Exception &ex ) {
+		CI_LOG_E("Unknown Exception " << ex.what());
+	}
 }
 	
 void Pond::touchBeganDelegate( EventDataRef touchEvent )
@@ -210,6 +240,7 @@ void Pond::renderPondElements()
 {
 	gl::ScopedMatrices scopeMat;
 	gl::setMatrices( mCam );
+
 	// Need to surround this with the renderers Fbo
 	for( auto & element : mPondElements ) {
 		element->draw();

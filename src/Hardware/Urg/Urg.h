@@ -118,7 +118,7 @@ ci::vec2 Urg::getPoint( int index, long length, float scalar )
 	
 	ret.x = ((length * scalar) * sin (radian)) ;
 	ret.y = ((length * scalar) * cos (radian));
-	offsetAndScaleIndexPoint( ret, index );
+//	offsetAndScaleIndexPoint( ret, index );
 	return ret;
 }
 

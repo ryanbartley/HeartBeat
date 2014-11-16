@@ -33,10 +33,11 @@ void Renderable::initialize( const ci::JsonTree &root )
 			CI_LOG_V("Using coordinate version of translation");
 			auto translations = translationRoot["coordinates"].getChildren();
 			int i = 0;
-			vec2 translation;
+			vec3 translation;
 			for( auto & position : translations ) {
 				translation[i++] = position.getValue<float>();
 			}
+			if( i != 3 ) translation.z = 0;
 			setTranslation( translation );
 		}
 		else if( translationRoot.hasChild( "center" ) ) {
@@ -55,10 +56,11 @@ void Renderable::initialize( const ci::JsonTree &root )
 	try {
 		auto scales = root["scales"].getChildren();
 		int i = 0;
-		vec2 scale;
+		vec3 scale;
 		for( auto & scalar : scales ) {
 			scale[i++] = scalar.getValue<float>();
 		}
+		if( i != 3 ) scale.z = 1.0f;
 		setScale( scale );
 		CI_LOG_V(scale);
 	}

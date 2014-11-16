@@ -63,10 +63,7 @@ void Engine::destroy()
 	sEngine = nullptr;
 	sEngineInitialized = false;
 }
-<<<<<<< HEAD
-=======
 	
->>>>>>> A few debug tweaks also a non-working macro define for allowing large allocations
 #if defined( DEBUG )
 void Engine::touchBeganDelegate( EventDataRef event )
 {
@@ -102,17 +99,6 @@ void Engine::touchEndedDelegate( EventDataRef event )
 	
 	mTouchesEnded.push_back( touchEnded->getWorldCoordinate() );
 }
-<<<<<<< HEAD
-#endif
-void Engine::initialize()
-{
-	mEventManager = heartbeat::EventManager::create( "Global", true );
-
-//	mEventManager->addListener( std::bind( &Engine::touchBeganDelegate, this, std::placeholders::_1 ), TouchBeganEvent::TYPE );
-//	mEventManager->addListener( std::bind( &Engine::touchMovedDelegate, this, std::placeholders::_1 ), TouchMoveEvent::TYPE );
-//	mEventManager->addListener( std::bind( &Engine::touchEndedDelegate, this, std::placeholders::_1 ), TouchEndedEvent::TYPE );
-=======
-
 #endif
 	
 void Engine::initialize()
@@ -124,7 +110,6 @@ void Engine::initialize()
 	mEventManager->addListener( std::bind( &Engine::touchMovedDelegate, this, std::placeholders::_1 ), TouchMoveEvent::TYPE );
 	mEventManager->addListener( std::bind( &Engine::touchEndedDelegate, this, std::placeholders::_1 ), TouchEndedEvent::TYPE );
 #endif
->>>>>>> A few debug tweaks also a non-working macro define for allowing large allocations
 	
 	mJsonManager = heartbeat::JsonManager::create( "test.json" );
 	
@@ -194,6 +179,8 @@ void Engine::draw()
     
 	gl::setMatricesWindow( getRenderer()->getTotalRenderSize() );
 	auto pondRenderer = getRenderer()->getPondTarget();
+	gl::enableDepthRead();
+	gl::enableDepthWrite();
 	{
 		gl::ScopedFramebuffer scopeFBO( pondRenderer );
         gl::clearColor( ColorA( 0.11f, 0.32, 0.58f, 1.0f ) );
@@ -202,7 +189,8 @@ void Engine::draw()
 		mPond->renderPondElements();
 	}
 	mPond->projectPondElements( pondRenderer->getColorTexture() );
-	
+	gl::disableDepthWrite();
+	gl::disableDepthRead();
 	mKioskManager->render();
 	
 #if defined( DEBUG )

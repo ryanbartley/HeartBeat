@@ -19,7 +19,7 @@ namespace heartbeat {
 class SpringMesh {
 public:
 	
-	static SpringMeshRef create();
+	static SpringMeshRef create( const ci::gl::GlslProgRef &shader );
 	
 	void update();
 	//! This may need to ping pong.
@@ -51,7 +51,7 @@ public:
     float getGlobalDampening() { return mGlobalDampening; }
 	
 private:
-	SpringMesh();
+	SpringMesh( const ci::gl::GlslProgRef &shader );
 	
 	void initialize( const ci::JsonTree &root, const ci::vec2 &size );
 	

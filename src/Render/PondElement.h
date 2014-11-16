@@ -25,7 +25,7 @@ public:
 	
 	virtual PondElementId getType() const { return TYPE; }
 	
-	static PondElementRef create();
+	static PondElementRef create( const ci::gl::GlslProgRef &shader );
 	
 	~PondElement() {}
 	
@@ -35,12 +35,13 @@ public:
 	uint64_t getId() const { return mId; }
 	
 protected:
-	PondElement();
+	PondElement( const ci::gl::GlslProgRef &shader );
 	
 	void initialize( const ci::JsonTree &root ) override;
 	
-	ci::gl::TextureRef	mTexture;
+	ci::gl::TextureRef	mDiffuseTexture;
 	ci::gl::BatchRef	mBatch;
+	ci::gl::GlslProgRef	mRenderShader;
 	const uint64_t		mId;
 	
 	static uint64_t globalId;

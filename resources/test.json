@@ -148,7 +148,7 @@
 			},
 			"pondBounds" : {
 				"min" : [
-					-5, -10, -5 
+					-5, -2, -5 
 				],
 				"max" : [
 					5, 0, 5
@@ -158,43 +158,56 @@
 			// POND ELEMENTS
 			//////////////////////////////////////////////////////
 			"pondElements" : {
-				"cube1" : {
-					"type" : "PrimitivePondElement",
-					"primitive" : "cube",
+				// "cube1" : {
+				// 	"type" : "PrimitivePondElement",
+				// 	"primitive" : "cube",
+				// 	"transformation" : {
+				// 		"scales" : [
+				// 			2.51, 2.51
+				// 		],
+				// 		"rotations" : {
+				// 			// This can either contain "quaternion" : []
+				// 			// or "angle" : degree, axis is vec3( 0, 0, 1 )
+				// 			//"angle" : 0
+				// 		},
+				// 		"translations" : {
+				// 			// This can either contain "coordinates" : []
+				// 			// or "center" : boolean
+				// 			// "center" : true //,
+				// 			"coordinates" : [ 0, 0 ]
+				// 		}
+				// 	}
+				// },
+				// "cube2" : {
+				// 	"type" : "PrimitivePondElement",
+				// 	"primitive" : "cube",
+				// 	"transformation" : {
+				// 		"scales" : [
+				// 			0.51, 0.51
+				// 		],
+				// 		"rotations" : {
+				// 			// This can either contain "quaternion" : []
+				// 			// or "angle" : degree, axis is vec3( 0, 0, 1 )
+				// 			//"angle" : 0
+				// 		},
+				// 		"translations" : {
+				// 			// This can either contain "coordinates" : []
+				// 			// or "center" : boolean
+				// 			// "center" : true //,
+				// 			"coordinates" : [ 0, 0 ]
+				// 		}
+				// 	}
+				// },
+				"fish" : {
+					"type" : "Fish",
+					"objName" : "Koi_Fish.obj",
+					"mtl" : "Koi_Fish.mtl",
+					"diffuse" : "koi_diffuse.jpg",
 					"transformation" : {
-						"scales" : [
-							2.51, 2.51
-						],
-						"rotations" : {
-							// This can either contain "quaternion" : []
-							// or "angle" : degree, axis is vec3( 0, 0, 1 )
-							//"angle" : 0
-						},
+						"scales" : [ 0.1, 0.1, 0.1 ],
+						"rotations" :  {},
 						"translations" : {
-							// This can either contain "coordinates" : []
-							// or "center" : boolean
-							// "center" : true //,
-							"coordinates" : [ 0, 0 ]
-						}
-					}
-				},
-				"cube2" : {
-					"type" : "PrimitivePondElement",
-					"primitive" : "cube",
-					"transformation" : {
-						"scales" : [
-							0.51, 0.51
-						],
-						"rotations" : {
-							// This can either contain "quaternion" : []
-							// or "angle" : degree, axis is vec3( 0, 0, 1 )
-							//"angle" : 0
-						},
-						"translations" : {
-							// This can either contain "coordinates" : []
-							// or "center" : boolean
-							// "center" : true //,
-							"coordinates" : [ 0, 0 ]
+							"coordinates" : [0, -1, 0]
 						}
 					}
 				}

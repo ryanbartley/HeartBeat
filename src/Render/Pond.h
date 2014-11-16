@@ -18,7 +18,7 @@
 namespace heartbeat {
 	
 using PondRef = std::shared_ptr<class Pond>;
-using PondElementFactoryMap = std::map<std::string, std::function<PondElementRef()>>;
+using PondElementFactoryMap = std::map<std::string, std::function<PondElementRef( const ci::gl::GlslProgRef &)>>;
 	
 class Pond {
 public:
@@ -32,6 +32,7 @@ public:
 	void update();
 	void renderPondElements();
 	void projectPondElements( const ci::gl::Texture2dRef &pond );
+	ci::gl::GlslProgRef& getRenderShader() { return mRenderGlsl; }
 	
 	void touchBeganDelegate( EventDataRef touchEvent );
 	void touchMovedDelegate( EventDataRef touchEvent );
@@ -68,12 +69,15 @@ public:
 	
 	PondBounds& getPondBounds() { return mPondBounds; }
 	
+	
 private:
 	Pond( const ci::vec2 &pondSize );
 	
+	void loadShaders();
+	
 	SpringMeshRef				mSpringMesh;
 	std::vector<PondElementRef> mPondElements;
-	ci::gl::TextureRef			mPondBottom;
+	ci::gl::GlslProgRef			mRenderGlsl;
 	PondBounds					mPondBounds;
 	ci::CameraPersp				mCam;
 	ci::vec2					mPondSize;

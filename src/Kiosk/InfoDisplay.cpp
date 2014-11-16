@@ -474,13 +474,8 @@ void InfoDisplay::addOverlayPage( OverlayPageRef &page )
 		CI_LOG_I("checking button: " << button->getGroupName() << " bounding:  " << button->getRootGroup()->getBoundingBox() << " point: " << point << " distance: " << distance);
 	}
 	
-<<<<<<< HEAD
 	if( minDistance < 250 ) {
-		cout << "it's this button: " << closestButton->getGroupName() << endl;
-=======
-	if( minDistance < 150 ) {
-		CI_LOG_I("it's this button: " << closestButton->getGroupName() << " and closest is: " << minDistance);
->>>>>>> Removed all instances of cout except for the main full app page
+		CI_LOG_I( "it's this button: " << closestButton->getGroupName() << " and closest is: " << minDistance);
 		auto shared = shared_from_this();
 		closestButton->changeState( shared );
 		mStateChanged = true;
@@ -501,18 +496,9 @@ void InfoDisplay::registerTouchBegan( EventDataRef eventData )
 	auto eventWorldCoord = event->getWorldCoordinate();
 	
 	auto twoDimPoint = getCoordinateSpacePoint( eventWorldCoord );
-<<<<<<< HEAD
     cout << "About to check this point: " << twoDimPoint << endl;
     if( mTouchRect.contains( twoDimPoint ) ) {
         mPointMap.insert( make_pair( event->getTouchId(), TouchData( eventWorldCoord, twoDimPoint, true ) ) );
-=======
-	
-    CI_LOG_I("About to check this translated point: " << twoDimPoint);
-	
-    if( mPresentRect.contains( twoDimPoint ) ) {
-        mPointMap.insert( make_pair( event->getTouchId(),
-									TouchData( eventWorldCoord, twoDimPoint, true ) ) );
->>>>>>> Removed all instances of cout except for the main full app page
     }
 	else {
 		mPointMap.insert( make_pair( event->getTouchId(),
@@ -529,12 +515,6 @@ void InfoDisplay::registerTouchMoved( EventDataRef eventData )
 		CI_LOG_E("Couldn't cast touch event from " << eventData->getName() );
 		return;
 	}
-<<<<<<< HEAD
-    
-	cout << "Finding in point map" << endl;
-	auto world = event->getWorldCoordinate();
-=======
->>>>>>> Removed all instances of cout except for the main full app page
 	
 	CI_LOG_I("Finding in point map");
 	

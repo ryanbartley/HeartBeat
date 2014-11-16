@@ -51,7 +51,9 @@ bool Urg::open()
 	// If errorVal is less than
 	if( errorVal < 0 ) {
 		CI_LOG_E( urg_error(&mSensor) );
+#if ! defined( DEBUG )
         app::App::get()->quit();
+#endif
 		return false;
 	}
 	
@@ -63,7 +65,9 @@ bool Urg::open()
 	
 	if( mSensorDataSize > 1081 ) {
 		CI_LOG_E("Sensor Data Size is larger than 1081, actual number: " << mSensorDataSize);
-        app::App::get()->quit();
+#if ! defined( DEBUG )
+		app::App::get()->quit();
+#endif
 		return false;
 	}
 	
