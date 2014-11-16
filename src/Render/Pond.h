@@ -55,12 +55,15 @@ public:
 					point.z > mMin.z && point.z < mMax.z;
 		}
 		
-		ci::vec3 getRandomPointWithin()
+		ci::vec3 getRandomPointWithin(ci::vec3 currentPosition)
 		{
-			ci::vec3 ret;
-			ret.x = ci::randFloat( mMin.x, mMax.x );
-			ret.y = ci::randFloat( mMin.y, mMax.y );
-			ret.z = ci::randFloat( mMin.z, mMax.z );
+			ci::vec3 ret = currentPosition;
+			
+			while (cinder::distance(ret, currentPosition) < 2) {
+				ret.x = ci::randFloat( mMin.x, mMax.x );
+				ret.y = ci::randFloat( mMin.y, mMax.y );
+				ret.z = ci::randFloat( mMin.z, mMax.z );
+			}	
 			return ret;
 		}
 		

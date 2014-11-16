@@ -104,6 +104,7 @@ void SpringMesh::project( const ci::gl::Texture2dRef &tex )
 	gl::ScopedTextureBind scopeTexture( tex, 0 );
 	
 	mRenderGlsl->uniform( "tex", 0 );
+	mRenderGlsl->uniform( "shininess", 128.0f );
 	
 	gl::setDefaultShaderVars();
 	

@@ -21,7 +21,7 @@ using namespace std;
 
 namespace heartbeat {
 
-const float Fish::MAX_SPEED = 0.5f;
+const float Fish::MAX_SPEED = 0.15f;
 const float Fish::MAX_FORCE = 4.0f;
 const float Fish::NEAR_DISTANCE = 0.50f;
 	
@@ -45,14 +45,15 @@ void Fish::update()
 	mVelocity += mAcceleration*0.01f;
 	mVelocity *= 0.99;
 	CI_LOG_V("velocity " << mVelocity);
-	mVelocity = glm::clamp( mVelocity, ci::vec3( -.02f, -.02f, -.02f), ci::vec3( .02f, .02f, .02f ) );
+	mVelocity = glm::clamp( mVelocity, ci::vec3( -.005f, -.005f, -.005f), ci::vec3( .005f, .005f, .005f ) );
 	CI_LOG_V("pre velocity location" << mCalcLocation);
 	mCalcLocation += mVelocity;
 	CI_LOG_V("post velocity location" << mCalcLocation);
 	mAcceleration = ci::vec3( 0, 0, 0 );
 	if( ! pondBounds.contained( mCalcLocation ) || isNearTarget() ) {
 		cout << "Updating Target" << endl;
-		updateTarget( pondBounds.getRandomPointWithin() );
+		ci::randSeed(mId+ci::app::getElapsedFrames());
+		updateTarget( pondBounds.getRandomPointWithin(mCalcLocation) );
 	}
 	calcAndSetUpdatedTranform();
 }
@@ -61,7 +62,7 @@ void Fish::initialize( const ci::JsonTree &root )
 {
 	PondElement::initialize( root );
 	mCalcLocation = getTranslation();
-	mCurrentTarget = Engine::get()->getPond()->getPondBounds().getRandomPointWithin();
+	mCurrentTarget = Engine::get()->getPond()->getPondBounds().getRandomPointWithin(mCalcLocation);
 	CI_LOG_V( "mCurrentTarget: " << mCurrentTarget );
 }
 
@@ -75,9 +76,12 @@ void Fish::draw()
 	static float rot = 0.0f;
 	gl::ScopedModelMatrix scopeMatrix;
 	gl::setModelMatrix( getModelMatrix() );
-	gl::multModelMatrix( ci::scale( vec3( .1, .1, .1 ) ) );
+	gl::multModelMatrix( ci::scale( vec3( .075, .075, .075 ) ) );
+//	ci::rotate( ci::toRadians( mTheta ), mAxis );
+	//gl::multModelMatrix( ci::rotate( toRadians( 180.0f ), vec3( 0, 1, 0 ) ) );
+	gl::multModelMatrix( ci::rotate( toRadians( -90.0f ), vec3( 1, 0, 0 ) ) );
 	
-	
+	mRenderShader->uniform( "shininess", 30.0f );
 	gl::ScopedTextureBind scopeTexture( mDiffuseTexture, 0 );
 	
 	mBatch->draw();

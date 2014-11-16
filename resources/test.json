@@ -148,10 +148,10 @@
 			},
 			"pondBounds" : {
 				"min" : [
-					-5, -2, -5 
+					-2, -2, -3 
 				],
 				"max" : [
-					5, 0, 5
+					2, 0, 3
 				]
 			},
 			//////////////////////////////////////////////////////
@@ -198,7 +198,33 @@
 				// 		}
 				// 	}
 				// },
-				"fish" : {
+				"fish1" : {
+					"type" : "Fish",
+					"objName" : "Koi_Fish.obj",
+					"mtl" : "Koi_Fish.mtl",
+					"diffuse" : "koi_diffuse.jpg",
+					"transformation" : {
+						"scales" : [ 0.1, 0.1, 0.1 ],
+						"rotations" :  {},
+						"translations" : {
+							"coordinates" : [0, -1, 0]
+						}
+					}
+				},
+				"fish2" : {
+					"type" : "Fish",
+					"objName" : "Koi_Fish.obj",
+					"mtl" : "Koi_Fish.mtl",
+					"diffuse" : "koi_diffuse.jpg",
+					"transformation" : {
+						"scales" : [ 0.1, 0.1, 0.1 ],
+						"rotations" :  {},
+						"translations" : {
+							"coordinates" : [0, -1, 0]
+						}
+					}
+				},
+				"fish3" : {
 					"type" : "Fish",
 					"objName" : "Koi_Fish.obj",
 					"mtl" : "Koi_Fish.mtl",

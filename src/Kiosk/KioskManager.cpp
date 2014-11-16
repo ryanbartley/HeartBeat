@@ -224,17 +224,7 @@ void KioskManager::initialize()
 			catch( const JsonTree::ExcChildNotFound &ex ) {
 				CI_LOG_E(ex.what());
 			}
-			
-			gl::Fbo::Format format;
-			format.colorTexture( gl::Texture2d::Format()
-								.mipmap()
-								.minFilter( GL_LINEAR_MIPMAP_LINEAR ) 
-            .maxAnisotropy( gl::Texture2d::getMaxMaxAnisotropy() ) );
-			
-			
-			auto size = svgManager->getDoc()->getSize();
-			CI_LOG_V("Size of doc is: " << size);
-			auto globalFbo = gl::Fbo::create( size.x, size.y, format );
+
             bool shouldRenderSvgs = false;
             
             try {
@@ -249,7 +239,6 @@ void KioskManager::initialize()
 				try {
 					auto topDisplay = InfoDisplay::create( KioskId::TOP_KIOSK, shouldRenderSvgs );
 					topDisplay->initiaize( top );
-					topDisplay->setPresentFbo( globalFbo );
 					mDisplays[topIndex] = topDisplay;
 				}
 				catch ( const JsonTree::ExcChildNotFound &ex ) {
@@ -276,7 +265,6 @@ void KioskManager::initialize()
 				try {
 					auto middleDisplay = InfoDisplay::create( KioskId::TOP_KIOSK, shouldRenderSvgs );
 					middleDisplay->initiaize( middle );
-					middleDisplay->setPresentFbo( globalFbo );
 					middleDisplay->setRotationDegree( 0.0f );
 					mDisplays[middleIndex] = middleDisplay;
 				}
@@ -303,7 +291,6 @@ void KioskManager::initialize()
 				try {
 					auto bottomDisplay = InfoDisplay::create( KioskId::TOP_KIOSK, shouldRenderSvgs );
 					bottomDisplay->initiaize( bottom );
-					bottomDisplay->setPresentFbo( globalFbo );
 					
 					mDisplays[bottomIndex] = bottomDisplay;
 				}

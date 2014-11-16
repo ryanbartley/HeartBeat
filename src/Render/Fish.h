@@ -54,6 +54,8 @@ private:
 	ci::vec3	mAcceleration;
 	ci::vec3	mVelocity;
 	ci::vec3	mCurrentTarget;
+	ci::vec3	mAxis;
+	float		mTheta;
 	float		mInverseMass;
 	
 	friend class Pond;
@@ -75,18 +77,12 @@ void Fish::applyBehaviors( std::vector<PondElementRef> &pondElements )
 }
 	
 ci::vec3 Fish::seek( const ci::vec3& target ) {
-	CI_LOG_V("mCalcLocation: " << mCalcLocation);
-	CI_LOG_V("target: " << target);
 	ci::vec3 desired = ci::normalize(target - mCalcLocation);
-	CI_LOG_V("desired: " << desired);
 	desired *= .5;
-	CI_LOG_V("desired * .5: " << desired);
 	ci::vec3 steer = desired - mVelocity;
-	CI_LOG_V("Steer: " << steer);
 	auto clampedSteering = glm::clamp(steer,
 									  ci::vec3( -MAX_FORCE ),
 									  ci::vec3( MAX_FORCE ) );
-	CI_LOG_V("clampedSteering: " << clampedSteering);
 	
 	return clampedSteering;
 }
@@ -124,10 +120,16 @@ ci::vec3 Fish::separate( std::vector<PondElementRef>& pondElements ) {
 	
 void Fish::calcAndSetUpdatedTranform()
 {
-	auto axis = glm::normalize( glm::cross( mCalcLocation, mCurrentTarget ) );
-	float theta = acos( glm::dot( mCalcLocation, mCurrentTarget ) /
-					   ( glm::length2( mCalcLocation ) * glm::length2( mCurrentTarget ) ) );
-//	setRotation( glm::angleAxis( ci::toRadians( theta ), axis ) );
+	mAxis = ci::vec3(0,1,0);//glm::normalize( glm::cross( mVelocity, mCurrentTarget ) );
+	float a = (mCurrentTarget.x - mCalcLocation.x) ;
+	float b = (mCurrentTarget.z - mCalcLocation.z+0.0001);
+	float c = a / b;
+	mTheta = atan2f(a,b) + 0.025*sin(10*ci::app::getElapsedSeconds());
+	//acos( glm::dot( mCalcLocation, mCurrentTarget ) /
+			//		   ( glm::length2( mCalcLocation ) * glm::length2( mCurrentTarget ) ) );
+//	if (fabs(b) > 1.01) {
+	setRotation( glm::toQuat(ci::rotate( mTheta , mAxis ) ) );
+//	}
 	setTranslation( mCalcLocation );
 }
 
