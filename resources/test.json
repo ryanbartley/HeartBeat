@@ -54,7 +54,7 @@
 		//////////////////////////////////////////////////////
 		"interactionZones" : {
 			"barrierFile" : "tableData.bin",
-			"runUrg" : true,
+			"runUrg" : false,
 			"poleIndices" : [
 				0,
 				9, 10, 11, 12, 13, 14,
@@ -72,8 +72,8 @@
 			// Right Pole
 			// Edge
 			"approachZones" : {
-				"top" : [ 661, 1080 ],
-				"middle" : [ 451, 660 ],
+				"top" : [ 738, 1080 ],
+				"middle" : [ 451, 670 ],
 				"bottom" : [ 0 , 450 ]
 			},
 			"scales" : {
@@ -400,7 +400,7 @@
 							"transformation" : {
 								"scales" : [ 0.0893, 0.0893 ],
 								"translations" : {
-									"coordinates" : [ 559.62, 1200.00 ] 
+									"coordinates" : [ 546.13, 1176.25 ] 
 								},
 								"rotations" : {
 									"angle" : -40
