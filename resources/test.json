@@ -73,8 +73,8 @@
 			// Edge
 			"approachZones" : {
 				"top" : [ 661, 1080 ],
-				"middle" : [ 331, 660 ],
-				"bottom" : [ 0 ,330 ]
+				"middle" : [ 451, 660 ],
+				"bottom" : [ 0 , 450 ]
 			},
 			"scales" : {
 				"table" : 1.0,
@@ -322,7 +322,7 @@
 							}
 						}
 					},
-					"minIndex" : 331, 
+					"minIndex" : 411, 
 					"maxIndex" : 660,
 					"fullSize" : {
 						"transformation" : {
@@ -373,7 +373,7 @@
 						}
 					},
 					"minIndex" : 0, 
-					"maxIndex" : 330,
+					"maxIndex" : 410,
 					"fullSize" : { 
 						"transformation" : {
 							"scales" : [ 0.355, 0.355 ],
