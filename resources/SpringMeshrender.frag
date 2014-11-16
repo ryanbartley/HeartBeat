@@ -16,16 +16,17 @@ uniform vec3 lightPosition1 = vec3( 2000, 2000, 2000 );
 uniform vec3 lightPosition2 = vec3( -2000, -2000, 2000 );
 uniform vec3 lightPosition3 = vec3( 0,0, 2000 );
 
-uniform vec3 lcolor1 = vec3( .5,.7,.6 );
-uniform vec3 lcolor2 = vec3( .5,.8,.5 );
+uniform vec3 lcolor1 = vec3( 1.,.7,.6 );
+uniform vec3 lcolor2 = vec3( 1.,.8,.7 );
 uniform vec3 lcolor3 = vec3( 1.,1.,1. );
 
-uniform vec3 lightIntensity = vec3( .2 );
+uniform vec3 lightIntensity;
 uniform vec3 Kd = vec3( 0.6, 0.6, 0.6 );	// Diffuse reflectivity
 uniform vec3 Ka = vec3( 0.2, 0.2, 0.2 );	// Ambient reflectivity
 uniform vec3 Ks = vec3( 1.0, 1.0, 1.0 );	// Specular reflectivity
 
-uniform float shininess;    // Specular shininess factor
+uniform float shininess = 128.0;    // Specular shininess factor
+
 
 out vec4 color;
 
@@ -45,5 +46,5 @@ void main() {
 	vec3 v = normalize(vec3(-fs_in.position));
 
 	vec3 texColor = texture( tex, fs_in.texCoord ).xyz;
-	color = vec4(mix(vec3(0.5,.7,1.),(ads(lightPosition1, lcolor1 )+ads(lightPosition2, lcolor2) + ads(lightPosition3, lcolor3)) * texColor, max( dot( n, v ),0.0 )), 1.0);
+	color = vec4(mix(vec3(0.5,.7,1.),(ads(lightPosition1, lcolor1 )+ads(lightPosition2, lcolor2)+ads(lightPosition3, lcolor3)) * texColor, max( dot( n, v ),0.0 )), 1.0);
 }

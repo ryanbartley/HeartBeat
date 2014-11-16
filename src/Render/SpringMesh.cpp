@@ -58,11 +58,11 @@ void SpringMesh::update()
     }
 	if( ! mTouchesMoved.empty() ) {
         int numTouchesMoved = mTouchesMoved.size() <= 4 ? mTouchesMoved.size() : 4;
-        mUpdateGlsl->uniform( "touchesBegan", mTouchesMoved.data(), numTouchesMoved );
-        mUpdateGlsl->uniform( "numTouchesBegan", numTouchesMoved );
+        mUpdateGlsl->uniform( "touchesMoved", mTouchesMoved.data(), numTouchesMoved );
+        mUpdateGlsl->uniform( "numTouchesMoved", numTouchesMoved );
 	}
     else {
-        mUpdateGlsl->uniform( "numTouchesBegan", (float)0 );
+        mUpdateGlsl->uniform( "numTouchesMoved", (float)0 );
     }
 	
 	// This for loop allows iteration on the gpu of solving the
@@ -105,7 +105,7 @@ void SpringMesh::project( const ci::gl::Texture2dRef &tex )
 	
 	mRenderGlsl->uniform( "tex", 0 );
 	mRenderGlsl->uniform( "shininess", 128.0f );
-	
+	mRenderGlsl->uniform( "lightIntensity", vec3( 0.5 ) );
 	gl::setDefaultShaderVars();
 	
 	gl::drawElements( GL_TRIANGLES, mTriangleIndices, GL_UNSIGNED_INT, 0 );

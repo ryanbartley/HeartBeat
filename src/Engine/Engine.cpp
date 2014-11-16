@@ -179,21 +179,22 @@ void Engine::draw()
     
 	gl::setMatricesWindow( getRenderer()->getTotalRenderSize() );
 	auto pondRenderer = getRenderer()->getPondTarget();
-	gl::enableDepthRead();
-	gl::enableDepthWrite();
+//	gl::enableDepthRead();
+//	gl::enableDepthWrite();
 	getRenderer()->getRenderTarget()->unbindFramebuffer();
 	pondRenderer->bindFramebuffer();
 	{
         gl::clearColor( ColorA( 0.11f, 0.32, 0.58f, 1.0f ) );
 		gl::clear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 		gl::clearColor( ColorA( 1, 1, 1, 1 ) );
-		mPond->renderPondElements();
+		
 	}
 	pondRenderer->unbindFramebuffer();
 	getRenderer()->getRenderTarget()->bindFramebuffer();
 	mPond->projectPondElements( pondRenderer->getColorTexture() );
-	gl::disableDepthWrite();
-	gl::disableDepthRead();
+    mPond->renderPondElements();
+//	gl::disableDepthWrite();
+//	gl::disableDepthRead();
 	mKioskManager->render();
 	
 #if defined( DEBUG )

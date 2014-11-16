@@ -81,9 +81,10 @@ void Fish::draw()
 	//gl::multModelMatrix( ci::rotate( toRadians( 180.0f ), vec3( 0, 1, 0 ) ) );
 	gl::multModelMatrix( ci::rotate( toRadians( -90.0f ), vec3( 1, 0, 0 ) ) );
 	
-	mRenderShader->uniform( "shininess", 30.0f );
-	gl::ScopedTextureBind scopeTexture( mDiffuseTexture, 0 );
-	
+//	mRenderShader->uniform( "shininess", 30.0f );
+//    mRenderShader->uniform( "lightIntensity", vec3( 0 ) );
+//	gl::ScopedTextureBind scopeTexture( mDiffuseTexture, 0 );
+    gl::ScopedColor scopeColor( ColorA( 0, 0, 0, 1 ) );
 	mBatch->draw();
 }
 	

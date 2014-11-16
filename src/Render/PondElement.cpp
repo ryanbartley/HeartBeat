@@ -46,7 +46,7 @@ void PondElement::initialize( const ci::JsonTree &root )
 		
 		auto obj = ObjLoader( getFileContents( objName ) );
 		
-		mBatch = gl::Batch::create( obj, mRenderShader );
+		mBatch = gl::Batch::create( obj, gl::getStockShader( gl::ShaderDef().color() ) );
 	}
 	catch ( const JsonTree::ExcChildNotFound &ex ) {
 		CI_LOG_E( "ObjName Not found " << ex.what() << " using default cube" );
