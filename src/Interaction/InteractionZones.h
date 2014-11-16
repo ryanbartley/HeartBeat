@@ -215,21 +215,14 @@ void InteractionZones::processApproaches()
 	for( auto & event : mApproachInteractors ) {
 		for( auto & approachZone : mApproachZones ) {
 			if( approachZone.second.contains( event.mIndex ) ) {
-				approachZone.second.addEvent( event.mMinIndex, event.mMinDistance );
+				approachZone.second.addEvent( event.mIndex, event.mCurrentDistance );
 			}
 		}
 	}
 	
 	for( auto & zone : mApproachZones ) {
 		auto & approachZone = zone.second;
-		auto activated = approachZone.getIsActivated();
-		auto numDistances = approachZone.getNumDistances();
-		if( activated && numDistances == 0 ) {
-			approachZone.checkDistanceForSend();
-		}
-		else if( !activated && numDistances > 0 ) {
-			approachZone.checkDistanceForSend();
-		}
+		approachZone.checkDistanceForSend();
 		approachZone.reset();
 	}
 	
