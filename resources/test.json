@@ -53,7 +53,7 @@
 		// INTERACTION ZONE ATTRIBUTES
 		//////////////////////////////////////////////////////
 		"interactionZones" : {
-			"barrierFile" : "finalTableData.bin",
+			"barrierFile" : "tableData.bin",
 			"runUrg" : true,
 			"poleIndices" : [
 				0,
