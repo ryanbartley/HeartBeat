@@ -474,7 +474,7 @@ void InfoDisplay::addOverlayPage( OverlayPageRef &page )
 			distance << endl;
 	}
 	
-	if( minDistance < 150 ) {
+	if( minDistance < 250 ) {
 		cout << "it's this button: " << closestButton->getGroupName() << endl;
 		auto shared = shared_from_this();
 		closestButton->changeState( shared );
@@ -496,7 +496,7 @@ void InfoDisplay::registerTouchBegan( EventDataRef eventData )
 	
 	auto twoDimPoint = getCoordinateSpacePoint( eventWorldCoord );
     cout << "About to check this point: " << twoDimPoint << endl;
-    if( mPresentRect.contains( twoDimPoint ) ) {
+    if( mTouchRect.contains( twoDimPoint ) ) {
         mPointMap.insert( make_pair( event->getTouchId(), TouchData( eventWorldCoord, twoDimPoint, true ) ) );
     }
 	else {
@@ -573,7 +573,7 @@ void InfoDisplay::initiaize(const ci::JsonTree &root)
 		}
 		
 		mPresentRect = svgManager->getDoc()->getBoundingBox();
-		
+		mTouchRect = Rectf( mPresentRect.x1 - 1000.0f, mPresentRect.y1 - 1000.0f, mPresentRect.x2 + 1000.0f, mPresentRect.y2 + 1000.0f );
 		auto translated1 = getModelMatrix() * vec4(mPresentRect.x1, mPresentRect.y1, 0, 1);
 		auto translated2 = getModelMatrix() * vec4(mPresentRect.x2, mPresentRect.y2, 0, 1);
 		cout << "Original point1: " << vec4(mPresentRect.x1, mPresentRect.y1, 0, 1) << " Translated point 1: " << translated1 << endl << " Original point2: " << vec4(mPresentRect.x2, mPresentRect.y2, 0, 1) << " Translated point 2: " << translated2 << endl;

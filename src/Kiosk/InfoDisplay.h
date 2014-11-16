@@ -144,7 +144,7 @@ private:
 	uint32_t						mCurrentSection;
 	
 	ci::gl::TextureRef				mCairoTex;
-	ci::Rectf						mTranslatedPresentRect;
+	ci::Rectf						mTranslatedPresentRect, mTouchRect;
 	ci::MatrixAffine2<float>		mCairoMat;
 	bool							mRenderWithCairo, mStateChanged;
 	

@@ -473,7 +473,7 @@ void InteractionZones::processData()
 			// I did something weird here. I care about the events below the
 			// table scalar value. If it gets to this place and it's lower than
 			// the scalar then I know someone's touching the table.
-			else if( mCurrentFrameData[i] < *barrierIt * TABLE_SCALAR ) {
+			else if( mCurrentFrameData[i] < (*barrierIt * TABLE_SCALAR) + 1000 ) {
 				processTouch( i, mCurrentFrameData[i] );
 			}
 		}
