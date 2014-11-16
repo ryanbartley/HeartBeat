@@ -41,17 +41,12 @@ FishRef Fish::create( const ci::gl::GlslProgRef &shader )
 void Fish::update()
 {
 	static auto pondBounds = Engine::get()->getPond()->getPondBounds();
-	CI_LOG_V("velocity " << mAcceleration);
 	mVelocity += mAcceleration*0.01f;
 	mVelocity *= 0.99;
-	CI_LOG_V("velocity " << mVelocity);
 	mVelocity = glm::clamp( mVelocity, ci::vec3( -.005f, -.005f, -.005f), ci::vec3( .005f, .005f, .005f ) );
-	CI_LOG_V("pre velocity location" << mCalcLocation);
 	mCalcLocation += mVelocity;
-	CI_LOG_V("post velocity location" << mCalcLocation);
 	mAcceleration = ci::vec3( 0, 0, 0 );
 	if( ! pondBounds.contained( mCalcLocation ) || isNearTarget() ) {
-		cout << "Updating Target" << endl;
 		ci::randSeed(mId+ci::app::getElapsedFrames());
 		updateTarget( pondBounds.getRandomPointWithin(mCalcLocation) );
 	}
@@ -63,7 +58,6 @@ void Fish::initialize( const ci::JsonTree &root )
 	PondElement::initialize( root );
 	mCalcLocation = getTranslation();
 	mCurrentTarget = Engine::get()->getPond()->getPondBounds().getRandomPointWithin(mCalcLocation);
-	CI_LOG_V( "mCurrentTarget: " << mCurrentTarget );
 }
 
 void Fish::registerTouch( EventDataRef touchEvent )

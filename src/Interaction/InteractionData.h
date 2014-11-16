@@ -56,6 +56,14 @@ struct Interactor {
 	int			mIndex, mMinIndex;
 	long		mCurrentDistance, mMinDistance, mMaxDistance;
 };
+    
+    struct ApproachInteractor {
+        ApproachInteractor( int index, long distance )
+        : mIndex( index ), mDistance( distance ) {}
+        
+        int mIndex;
+        long mDistance;
+    };
 	
 const uint32_t NUM_UPDATES_TO_EMIT = 2;
 const uint32_t UPDATE_DISTANCE_THRESH = 300;
@@ -148,16 +156,11 @@ public:
 	inline bool contains( int index ) { return mLowestIndex < index && mHighestIndex > index; }
 	inline void addEvent( int index, long distance )
 	{
-		if( distance < mCurrentClosestDistance ) {
-			mCurrentClosestDistance = distance;
-			mCurrentClosestIndex = index;
-		}
-		mNumEvents++;
+		mInteractors.push_back( ApproachInteractor( index, distance ) );
 	}
 	inline bool	getIsActivated() const { return mIsActivated; }
-	inline size_t	getNumDistances() const { return mNumEvents; }
 	inline KioskId getKiosk() const { return mKiosk; }
-	inline void	reset() { mNumEvents = 0; mEmitType = EventTypeToEmit::NONE; mCurrentClosestDistance = 100000; mCurrentClosestIndex = -1; }
+	inline void	reset() { mEmitType = EventTypeToEmit::NONE; mInteractors.clear(); }
 	inline const int getLowest() const { return mLowestIndex; }
 	inline const int getHighest() const { return mHighestIndex; }
 	void checkDistanceForSend();
@@ -166,12 +169,11 @@ public:
 private:
 	
 	std::weak_ptr<InteractionZones>	mInteractionZone;
+    std::vector<ApproachInteractor> mInteractors;
 	EventTypeToEmit		mEmitType;
 	const KioskId		mKiosk;
 	const int			mLowestIndex, mHighestIndex;
-	long				mCurrentClosestDistance, mCurrentClosestIndex;
 	float				mApproachThresh, mDepartThresh;
-	int					mNumEvents;
 	bool				mIsActivated;
 	
 };

@@ -64,7 +64,6 @@ private:
 bool Fish::isNearTarget()
 {
 	auto dist = glm::distance( mCalcLocation, mCurrentTarget );
-	CI_LOG_V("distance: " << dist << " NEAR_DISTANCE: " << NEAR_DISTANCE );
 	return dist < NEAR_DISTANCE;
 }
 	
@@ -114,8 +113,7 @@ ci::vec3 Fish::separate( std::vector<PondElementRef>& pondElements ) {
 					   ci::vec3( 0.0f ),
 					   ci::vec3( MAX_FORCE ) );
 	}
-		CI_LOG_V("Sum: " << sum << " Velocity: " << mVelocity << " Translation: " << getTranslation() << " Rotation: " << getRotation() );
-	return sum;
+			return sum;
 }
 	
 void Fish::calcAndSetUpdatedTranform()

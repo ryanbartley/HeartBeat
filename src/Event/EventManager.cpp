@@ -98,7 +98,7 @@ bool EventManager::queueEvent( const EventDataRef &event )
 		CI_LOG_E("Invalid event in queueEvent");
 	}
 	
-	CI_LOG_V("Attempting to queue event: " + std::string( event->getName() ) );
+//	CI_LOG_V("Attempting to queue event: " + std::string( event->getName() ) );
 	
 	auto found = mEventListeners.find( event->getEventType() );
 	if( found != mEventListeners.end() ) {

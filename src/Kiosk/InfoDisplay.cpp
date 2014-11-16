@@ -575,7 +575,7 @@ void InfoDisplay::initiaize(const ci::JsonTree &root)
 		}
 		
 		mPresentRect = svgManager->getDoc()->getBoundingBox();
-		mTouchRect = Rectf( mPresentRect.x1 - 1000.0f, mPresentRect.y1 - 1000.0f, mPresentRect.x2 + 1000.0f, mPresentRect.y2 + 1000.0f );
+		mTouchRect = Rectf( mPresentRect.x1 - 150.0f, mPresentRect.y1 - 150.0f, mPresentRect.x2 + 150.0f, mPresentRect.y2 + 150.0f );
 		auto translated1 = getModelMatrix() * vec4(mPresentRect.x1, mPresentRect.y1, 0, 1);
 		auto translated2 = getModelMatrix() * vec4(mPresentRect.x2, mPresentRect.y2, 0, 1);
 		CI_LOG_I("Original point1: " << vec4(mPresentRect.x1, mPresentRect.y1, 0, 1) << " Translated point 1: " << translated1 << "\n" << " Original point2: " << vec4(mPresentRect.x2, mPresentRect.y2, 0, 1) << " Translated point 2: " << translated2);
