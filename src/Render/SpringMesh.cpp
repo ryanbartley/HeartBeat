@@ -49,7 +49,7 @@ void SpringMesh::update()
 	gl::ScopedState		stateScope( GL_RASTERIZER_DISCARD, true );
     
 	if( ! mTouchesBegan.empty() ) {
-        int numTouchesBegan = mTouchesBegan.size() <= 4 ? mTouchesBegan.size() : 4;
+        int numTouchesBegan = mTouchesBegan.size() <= 8 ? mTouchesBegan.size() : 8;
         mUpdateGlsl->uniform( "touchesBegan", mTouchesBegan.data(), numTouchesBegan );
         mUpdateGlsl->uniform( "numTouchesBegan", numTouchesBegan );
 	}
@@ -57,7 +57,7 @@ void SpringMesh::update()
         mUpdateGlsl->uniform( "numTouchesBegan", (float)0.0 );
     }
 	if( ! mTouchesMoved.empty() ) {
-        int numTouchesMoved = mTouchesMoved.size() <= 4 ? mTouchesMoved.size() : 4;
+        int numTouchesMoved = mTouchesMoved.size() <= 8 ? mTouchesMoved.size() : 8;
         mUpdateGlsl->uniform( "touchesMoved", mTouchesMoved.data(), numTouchesMoved );
         mUpdateGlsl->uniform( "numTouchesMoved", numTouchesMoved );
 	}

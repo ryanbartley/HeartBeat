@@ -165,9 +165,9 @@ public:
 	bool nextIndex()
 	{
 		mCurrentIndex++;
-		if( mCurrentIndex + 1 >= mTextures.size() ) {
-			if( mCurrentIndex == mTextures.size() )
-				mCurrentIndex = mTextures.size() - 1;
+		if( mCurrentIndex + 1 >= mOverlays.size() ) {
+			if( mCurrentIndex == mOverlays.size() )
+				mCurrentIndex = mOverlays.size() - 1;
 			return false;
 		}
 		return true;

@@ -129,11 +129,14 @@ void ApproachData::checkDistanceForSend()
  	auto shared = mInteractionZone.lock();
     for( auto & interactor : mInteractors ) {
         auto barrierDistance = shared->getBarrierAtIndex( interactor.mIndex );
-        if (( interactor.mDistance < (barrierDistance * mApproachThresh)) && ! mIsActivated ) {
-            numInApproach++;
-        }
-        if (( interactor.mDistance > (barrierDistance * mDepartThresh)) && mIsActivated ) {
-            numInDepart++;
+        if (!mIsActivated) {
+            if ( interactor.mDistance < (barrierDistance * mApproachThresh)) {
+                numInApproach++;
+            }
+        } else {
+            if ( interactor.mDistance < (barrierDistance * mDepartThresh)) {
+                numInApproach++;
+            }
         }
     }
     
@@ -141,7 +144,7 @@ void ApproachData::checkDistanceForSend()
         mEmitType = EventTypeToEmit::APPROACH;
         emitEvent = true;
     }
-    else if( (numInDepart > 0 && mIsActivated) || (mIsActivated && mInteractors.empty()) ) {
+    else if( (numInApproach == 0) && mIsActivated ) {
         mEmitType = EventTypeToEmit::DEPART;
         emitEvent = true;
     }

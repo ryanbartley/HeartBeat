@@ -532,12 +532,16 @@ void NavigableButton::changeState( InfoDisplayRef &display )
 		if( overlay->getType() == OverlayPlus::TYPE ) {
 			auto plus = std::dynamic_pointer_cast<OverlayPlus>(overlay);
 			if( mNavigationStatus == NavigationStatus::NEXT ) {
+                CI_LOG_V("Found NEXT Navigation button");
 				if( ! plus->nextIndex() ) {
+                    CI_LOG_V("It doesn't have a next one, setting to nonactive");
 					mButtonStatus = ButtonStatus::NONACTIVE;
 				}
 			}
 			else if( mNavigationStatus == NavigationStatus::PREV ) {
+                CI_LOG_V("Found NEXT Navigation button");
 				if( ! plus->prevIndex() ) {
+                    CI_LOG_V("It doesn't have a next one, setting to nonactive");
 					mButtonStatus = ButtonStatus::NONACTIVE;
 				}
 			}

@@ -78,7 +78,7 @@
 			},
 			"scales" : {
 				"table" : 1.0,
-				"dead" : 1.1,
+				"dead" : 1.0,
 				"approach" : 1.4,
 				"far" : 1.8
 			},
@@ -450,7 +450,7 @@
 		// SVG MANAGER SETTINGS
 		//////////////////////////////////////////////////////
 		"svgAttribs" : {
-			"fileName" : "ACTEMRA_PondCharts_PattenLayout_fredA.svg",
+			"fileName" : "ACTEMRA_PondCharts_PattenLayout_fredC.svg",
 			"pageAttribs" : {
 				"staticPages" : {
 					"pages" : [
