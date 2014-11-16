@@ -28,7 +28,7 @@ using namespace std;
 namespace heartbeat {
 	
 InfoDisplay::InfoDisplay( KioskId kioskId, bool shouldRenderSvgs )
-: mId( kioskId ), mMasterAlpha( 0.0f ), mFadeTime( 3.0f ), mStatus( Status::HOME_SCREEN ), mIsActivated( false ),
+: mId( kioskId ), mMasterAlpha( 0.0f ), mFadeTime( 1.0f ), mStatus( Status::HOME_SCREEN ), mIsActivated( false ),
 	mCurrentSection( 0 ), mIsHalfSized( Engine::get()->getRenderer()->isHalfSize() ),
 	mShouldDrawBoundingBoxes( false ), mRenderWithCairo( shouldRenderSvgs ), mStateChanged( true )
 {
@@ -259,7 +259,7 @@ void InfoDisplay::draw()
 		}
 		{
 			gl::ScopedColor scopeColor( ColorA( 1, 1, 1, mMasterAlpha ) );
-		gl::draw( mCairoTex );
+            gl::draw( mCairoTex );
 		}
         gl::ScopedModelMatrix scopeModel;
 		gl::setModelMatrix( getModelMatrix() );
@@ -333,11 +333,11 @@ void InfoDisplay::activate( bool activate )
 	
 	if( activate ) {
         CI_LOG_V("activating");
-		app->timeline().applyPtr( &mMasterAlpha, 1.0f, mFadeTime ).easeFn( EaseInCubic() ).finishFn( std::bind( &InfoDisplay::started, shared ) );
+		app->timeline().applyPtr( &mMasterAlpha, 1.0f, 1.0f ).easeFn( EaseInCubic() ).finishFn( std::bind( &InfoDisplay::started, shared ) );
         mIsActivated = true;
 	}
 	else {
-		app->timeline().applyPtr( &mMasterAlpha, 0.0f, mFadeTime ).easeFn( EaseInCubic() ).finishFn( std::bind( &InfoDisplay::finished, shared ) );
+		app->timeline().applyPtr( &mMasterAlpha, 0.0f, 5.0f ).easeFn( EaseInCubic() ).finishFn( std::bind( &InfoDisplay::finished, shared ) );
 		CI_LOG_V("deactivating");
         mIsActivated = false;
 	}
