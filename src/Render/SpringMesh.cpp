@@ -49,17 +49,15 @@ void SpringMesh::update()
 	gl::ScopedState		stateScope( GL_RASTERIZER_DISCARD, true );
     
 	if( ! mTouchesBegan.empty() ) {
-        int numTouchesBegan = mTouchesBegan.size() <= 8 ? mTouchesBegan.size() : 8;
-        mUpdateGlsl->uniform( "touchesBegan", mTouchesBegan.data(), numTouchesBegan );
-        mUpdateGlsl->uniform( "numTouchesBegan", numTouchesBegan );
+        mUpdateGlsl->uniform( "touchesBegan", mTouchesBegan.data(), mTouchesBegan.size() );
+        mUpdateGlsl->uniform( "numTouchesBegan", (float)mTouchesBegan.size() );
 	}
     else {
-        mUpdateGlsl->uniform( "numTouchesBegan", (float)0.0 );
+        mUpdateGlsl->uniform( "numTouchesBegan", (float)0.0 );	
     }
 	if( ! mTouchesMoved.empty() ) {
-        int numTouchesMoved = mTouchesMoved.size() <= 8 ? mTouchesMoved.size() : 8;
-        mUpdateGlsl->uniform( "touchesMoved", mTouchesMoved.data(), numTouchesMoved );
-        mUpdateGlsl->uniform( "numTouchesMoved", numTouchesMoved );
+        mUpdateGlsl->uniform( "touchesMoved", mTouchesMoved.data(), mTouchesMoved.size() );
+        mUpdateGlsl->uniform( "numTouchesMoved", (float) mTouchesMoved.size() );
 	}
     else {
         mUpdateGlsl->uniform( "numTouchesMoved", (float)0 );
@@ -155,11 +153,13 @@ void SpringMesh::initialize( const ci::JsonTree &root, const ci::vec2 &size )
 	
 void SpringMesh::registerTouchBegan( ci::vec2 currentTouch )
 {
+	cout << "Just received a touch" << endl;
 	mTouchesBegan.push_back( currentTouch );
 }
 	
 void SpringMesh::registerTouchMoved( ci::vec2 touch )
 {
+	cout << "Just received a touch" << endl;
 	mTouchesMoved.push_back( touch );
 }
 
