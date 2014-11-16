@@ -340,13 +340,13 @@ void InfoDisplay::activate( bool activate )
 		CI_LOG_V("deactivating");
 	}
 }
-    
-    void InfoDisplay::started()
-    {
-        CI_LOG_V("started");
-        mMasterAlpha = 1.0f;
-        mIsActivated = true;
-    }
+	
+void InfoDisplay::started()
+{
+    CI_LOG_V("started");
+    mMasterAlpha = 1.0f;
+    mIsActivated = true;
+}
 	
 void InfoDisplay::finished()
 {

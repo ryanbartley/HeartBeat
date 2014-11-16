@@ -76,9 +76,9 @@ mIsActivated( false ), mNumEvents( 0 ), mInteractionZone( interZones ),
 	}
 	float mid = (approach + dead) / 2.0f;
 	float total = approach - dead;
-	mDepartThresh = mid + .2 * total;
+	mDepartThresh = mid + .1 * total;
     CI_LOG_V("approach: " << approach << " dead: " << dead << " mid: " << mid);
-	mApproachThresh = mid;
+	mApproachThresh = mid - .1 * total;
 }
 
 void ApproachData::createAndSendEvent()
