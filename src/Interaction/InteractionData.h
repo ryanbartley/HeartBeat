@@ -157,12 +157,11 @@ public:
 	inline bool	getIsActivated() const { return mIsActivated; }
 	inline size_t	getNumDistances() const { return mNumEvents; }
 	inline KioskId getKiosk() const { return mKiosk; }
-	inline void	reset() { mNumEvents = 0; mEmitType = EventTypeToEmit::NONE; }
+	inline void	reset() { mNumEvents = 0; mEmitType = EventTypeToEmit::NONE; mCurrentClosestDistance = 100000; }
 	inline const int getLowest() const { return mLowestIndex; }
 	inline const int getHighest() const { return mHighestIndex; }
 	void checkDistanceForSend();
 	void createAndSendEvent();
-	void endFrame();
 	
 private:
 	

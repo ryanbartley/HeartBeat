@@ -28,7 +28,7 @@ using namespace std;
 namespace heartbeat {
 	
 InfoDisplay::InfoDisplay( KioskId kioskId, bool shouldRenderSvgs )
-: mId( kioskId ), mMasterAlpha( 0.0f ), mFadeTime( 5.0f ), mStatus( Status::HOME_SCREEN ), mIsActivated( false ),
+: mId( kioskId ), mMasterAlpha( 0.0f ), mFadeTime( 3.0f ), mStatus( Status::HOME_SCREEN ), mIsActivated( false ),
 	mCurrentSection( 0 ), mIsHalfSized( Engine::get()->getRenderer()->isHalfSize() ),
 	mShouldDrawBoundingBoxes( false ), mRenderWithCairo( shouldRenderSvgs ), mStateChanged( true )
 {
@@ -326,7 +326,7 @@ void InfoDisplay::draw()
 void InfoDisplay::activate( bool activate )
 {
     CI_LOG_V("activate: " << activate << " mIsActivated; " << mIsActivated);
-	if( mIsActivated == activate ) return;
+//	if( mIsActivated == activate ) return;
 
 	auto app = App::get();
 	auto shared = shared_from_this();
@@ -334,10 +334,12 @@ void InfoDisplay::activate( bool activate )
 	if( activate ) {
         CI_LOG_V("activating");
 		app->timeline().applyPtr( &mMasterAlpha, 1.0f, mFadeTime ).easeFn( EaseInCubic() ).finishFn( std::bind( &InfoDisplay::started, shared ) );
+        mIsActivated = true;
 	}
 	else {
 		app->timeline().applyPtr( &mMasterAlpha, 0.0f, mFadeTime ).easeFn( EaseInCubic() ).finishFn( std::bind( &InfoDisplay::finished, shared ) );
 		CI_LOG_V("deactivating");
+        mIsActivated = false;
 	}
 }
 	
@@ -345,7 +347,7 @@ void InfoDisplay::started()
 {
     CI_LOG_V("started");
     mMasterAlpha = 1.0f;
-    mIsActivated = true;
+    
 }
 	
 void InfoDisplay::finished()
@@ -353,7 +355,6 @@ void InfoDisplay::finished()
     CI_LOG_V("finished");
 	mStatus = Status::HOME_SCREEN;
 	mMasterAlpha = 0.0f;
-    mIsActivated = false;
 	mDataPages.clear();
 	mOverlay = nullptr;
 	if( mActivatedButton ) {

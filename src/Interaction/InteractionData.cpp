@@ -98,11 +98,13 @@ void ApproachData::createAndSendEvent()
 	switch ( mEmitType ) {
 		case EventTypeToEmit::APPROACH: {
 			event.reset( new ApproachEvent( mKiosk ) );
+            CI_LOG_I("emitting approachEvent");
             
 		}
 		break;
 		case EventTypeToEmit::DEPART: {
 			event.reset( new DepartEvent( mKiosk ) );
+            CI_LOG_I("emitting departEvent");
 		}
 		break;
 		case EventTypeToEmit::NONE: {
@@ -121,27 +123,27 @@ void ApproachData::checkDistanceForSend()
 {
 	auto shared = mInteractionZone.lock();
 	auto barrierDistance = shared->getBarrierAtIndex( mCurrentClosestIndex );
-	CI_LOG_V("barrierWithDepartThresh " << (barrierDistance * mDepartThresh) << " barrierWithApproachThresh " << (barrierDistance * mApproachThresh) << " CurrendtClosestDistance " << mCurrentClosestDistance << " activated " << mIsActivated );
+	CI_LOG_I("barrierWithDepartThresh " << (barrierDistance * mDepartThresh) << " barrierWithApproachThresh " << (barrierDistance * mApproachThresh) << " CurrendtClosestDistance " << mCurrentClosestDistance << " activated " << mIsActivated );
 	if( mIsActivated ) {
 		if( mCurrentClosestDistance > barrierDistance * mDepartThresh ) {
 			mEmitType = EventTypeToEmit::DEPART;
             mIsActivated = false;
-            CI_LOG_V("I'm emitting depart");
+            CI_LOG_I("I'm emitting depart");
 		}
 		else {
 			mEmitType = EventTypeToEmit::NONE;
-            CI_LOG_V("I'm emitting none");
+            CI_LOG_I("I'm emitting none");
 		}
 	}
 	else {
 		if ( mCurrentClosestDistance < barrierDistance * mApproachThresh ) {
 			mEmitType = EventTypeToEmit::APPROACH;
             mIsActivated = true;
-            CI_LOG_V("I'm emitting approach");
+            CI_LOG_I("I'm emitting approach");
 		}
 		else {
 			mEmitType = EventTypeToEmit::NONE;
-            CI_LOG_V("I'm emitting none");
+            CI_LOG_I("I'm emitting none");
 		}
 	}
 	
