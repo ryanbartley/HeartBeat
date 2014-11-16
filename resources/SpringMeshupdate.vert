@@ -119,7 +119,7 @@ float snoise(vec3 v)
 // position_mass input attribute
 uniform samplerBuffer tex_position;
 
-#define MAX_TOUCHES 5
+#define MAX_TOUCHES 8
 #define M_PI 3.1415926535897932384626433832795
 
 uniform vec2	touchesBegan[MAX_TOUCHES];
@@ -244,7 +244,7 @@ void main(void)
 	normal = normalize( normal );
 	
 	vec3 touchAccel = vec3( 0 );
-	bool touched = false;
+	//bool touched = false;
 	// If this is a fixed node, reset force to zero
 	if(fixed_node) {
 		F = vec3(0.0);
@@ -257,7 +257,7 @@ void main(void)
 			float dist = distance( vec3(touchesBegan[i], 0), p);
 			if( dist < touchBeganDistThreshold ) {
 				touchAccel += calcTouchAccel( p, m, vec3(touchesBegan[i], 200), dist, 800.0 );
-				touched = true;
+				// touched = true;
 				break;
 			}
 		}
@@ -265,7 +265,7 @@ void main(void)
 			float dist = distance(vec3(touchesMoved[i], 0), p);
 			if( dist < touchMovedDistThreshold) {
 				touchAccel += calcTouchAccel( p, m, vec3(touchesMoved[i], 200), dist, 800.0 );
-				touched = true;
+				// touched = true;
 				break;
 			}
 		}
@@ -273,13 +273,13 @@ void main(void)
 	
 	float wHeight = 0;
 
-	if( ! touched ) {
-		wHeight = waveHeight( p.x, p.y );
-	}
+	// if( ! touched ) {
+		// wHeight = waveHeight( p.x, p.y );
+	// }
 	//vec3  wNorm   = waveNormal( p.x, p.y );
 
 	// Accelleration due to force
-	vec3 a = (F + touchAccel + vec3( 0, wHeight*2, wHeight*2 ) ) / m;
+	vec3 a = (F + touchAccel ) / m;
 	
 	// Displacement
 	vec3 s = u * t + 0.5 * a * t * t;
@@ -287,7 +287,7 @@ void main(void)
 	// Final velocity
 	vec3 v = u + a * t;
 	
-	v = clamp( v, vec3(-20.0), vec3(20.0) );
+	v = clamp( v, vec3(-40.0), vec3(40.0) );
 	// Constrain the absolute value of the displacement per step
 	s = clamp( s, vec3(-0.5), vec3(0.5) );
 	
