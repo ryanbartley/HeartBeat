@@ -27,6 +27,8 @@ public:
 	void debugRender();
 	
 	~SpringMesh() {}
+    
+    void sendGhostTouches();
 	
 	void registerTouchBegan( ci::vec2 touch );
 	void registerTouchMoved( ci::vec2 touch );

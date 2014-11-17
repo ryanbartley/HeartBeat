@@ -11,14 +11,17 @@ uniform sampler2D tex;
 
 uniform mat4 ciModelView;
 
-uniform vec3 lightPosition1 = vec3( 2000, 2000, 2000 );
+uniform vec3 lightPosition1 = vec3( 1500, -1500, 2000 );
 
-uniform vec3 lightPosition2 = vec3( -2000, -2000, 2000 );
+uniform vec3 lightPosition2 = vec3( -1500, -1500, 2000 );
 uniform vec3 lightPosition3 = vec3( 0,0, 2000 );
+uniform vec3 lightPosition4 = vec3( 0, 1500, 2000 );
 
-uniform vec3 lcolor1 = vec3( 1.,.7,.6 );
-uniform vec3 lcolor2 = vec3( 1.,.8,.7 );
-uniform vec3 lcolor3 = vec3( 1.,1.,1. );
+uniform vec3 lcolor1 = vec3( .6,.6,.6 );
+uniform vec3 lcolor2 = vec3( .6,.6,.6 );
+uniform vec3 lcolor3 = vec3( .6,.6,.6 );
+uniform vec3 lcolor4 = vec3( .6,.6,.6 );
+
 
 uniform vec3 lightIntensity;
 uniform vec3 Kd = vec3( 0.6, 0.6, 0.6 );	// Diffuse reflectivity
@@ -46,5 +49,10 @@ void main() {
 	vec3 v = normalize(vec3(-fs_in.position));
 
 	vec3 texColor = texture( tex, fs_in.texCoord ).xyz;
-	color = vec4(mix(vec3(0.5,.7,1.),(ads(lightPosition1, lcolor1 )+ads(lightPosition2, lcolor2)+ads(lightPosition3, lcolor3)) * texColor, max( dot( n, v ),0.0 )), 1.0);
+	color = vec4( mix( vec3( 0.5, .7, 1. ), 
+				 	( ads( lightPosition1, lcolor1 ) + 
+				 	  ads( lightPosition2, lcolor2 ) +
+				 	  ads( lightPosition3, lcolor3 ) +
+				 	  ads( lightPosition4, lcolor4 ) ) * texColor, 
+				 	max( dot( n, v ), 0.0 ) ), 1.0);
 }

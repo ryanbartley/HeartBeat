@@ -240,8 +240,8 @@
 				"numColumns" : 120,
 				"numIterations" : 16,
 				"threshes" : { 
-					"beganDist" : 50,
-					"movedDist" : 30
+					"beganDist" : 90,
+					"movedDist" : 60
 				}
 			}
 		},

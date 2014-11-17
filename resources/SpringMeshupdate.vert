@@ -161,7 +161,7 @@ uniform vec2 direction[8];
 
 float wave(int i, float x, float y) {
 	float frequency = 2*pi/wavelength[i];
-	float phase = speed[i] * frequency;
+	float phase = (speed[i] * 0.7) * frequency;
 	float theta = dot(direction[i], vec2(x, y));
 	return amplitude[i] * sin(theta * frequency + elapsedSeconds * phase);
 }
@@ -272,7 +272,7 @@ void main(void)
 		if( touched ) F += touchAccel;
 		else {
 			float wHeight = waveHeight( p.x, p.y );
-			F += vec3( 0, wHeight*2, wHeight*3 );
+			F += vec3( 0, wHeight*2.0, wHeight*1.5 );
 		}
 	}
 

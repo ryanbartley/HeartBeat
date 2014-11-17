@@ -422,18 +422,24 @@ void ReturnButton::changeState( InfoDisplayRef &display )
 					display->addDataPage( dataPage, InfoDisplay::AnimateType::CUT );
 				}
 			}
-			bool check = mSection == 1;
+            bool makeActive = mSection != 1;
 			DataPageButtonRef foundButton;
 			for( auto & button : display->getDataButtons() ) {
 				if( button->getGroupName() == mActiveButtonName ) {
 					foundButton = std::dynamic_pointer_cast<DataPageButton>( button );
 				}
-				if( check && button->getType() == NavigableButton::TYPE ) {
+				if( button->getType() == NavigableButton::TYPE ) {
 					auto cast = std::dynamic_pointer_cast<NavigableButton>( button );
 					if( cast ) {
 						if( cast->getNavigationStatus() == NavigableButton::NavigationStatus::PREV ) {
 							CI_LOG_I("Changing state of " << cast->getGroupName() << " to none active because it's prev");
-							cast->setButtonStatus( ButtonStatus::NONACTIVE );
+                            if( makeActive ) {
+                                cast->setButtonStatus( ButtonStatus::ACTIVE );
+                            }
+                            else {
+                                cast->setButtonStatus( ButtonStatus::NONACTIVE );
+                            }
+							
 						}
 					}
 				}

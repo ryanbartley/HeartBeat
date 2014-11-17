@@ -192,7 +192,7 @@ void Engine::draw()
 	pondRenderer->unbindFramebuffer();
 	getRenderer()->getRenderTarget()->bindFramebuffer();
 	mPond->projectPondElements( pondRenderer->getColorTexture() );
-    mPond->renderPondElements();
+//    mPond->renderPondElements();
 //	gl::disableDepthWrite();
 //	gl::disableDepthRead();
 	mKioskManager->render();

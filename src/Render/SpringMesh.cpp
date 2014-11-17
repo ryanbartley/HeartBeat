@@ -48,6 +48,8 @@ void SpringMesh::update()
 	gl::ScopedGlslProg	updateScope( mUpdateGlsl );
 	gl::ScopedState		stateScope( GL_RASTERIZER_DISCARD, true );
     
+    sendGhostTouches();
+    
 	if( ! mTouchesBegan.empty() ) {
         mUpdateGlsl->uniform( "touchesBegan", mTouchesBegan.data(), mTouchesBegan.size() );
         mUpdateGlsl->uniform( "numTouchesBegan", (float)mTouchesBegan.size() );
@@ -153,15 +155,30 @@ void SpringMesh::initialize( const ci::JsonTree &root, const ci::vec2 &size )
 	
 void SpringMesh::registerTouchBegan( ci::vec2 currentTouch )
 {
-	cout << "Just received a touch" << endl;
-	mTouchesBegan.push_back( currentTouch );
+    if( mTouchesBegan.size() < 9 )
+        mTouchesBegan.push_back( currentTouch );
 }
 	
 void SpringMesh::registerTouchMoved( ci::vec2 touch )
 {
-	cout << "Just received a touch" << endl;
-	mTouchesMoved.push_back( touch );
+	if( mTouchesMoved.size() < 9 )
+        mTouchesMoved.push_back( touch );
 }
+    
+void SpringMesh::sendGhostTouches()
+ {
+     static std::array<vec2, 3> sLilyPadPoints = {
+        vec2( 723.268, 1212.656 ),
+        vec2(1359.356, 1071.699 ),
+        vec2(1121.189,  662.539 )
+     };
+     if( mTouchesBegan.size() < 8 ) {
+         if( ci::app::getElapsedFrames() % 47 == 0 ) {
+             int num = rand() % 3;
+             mTouchesBegan.push_back( sLilyPadPoints[num] );
+         }
+     }
+ }
 
 void SpringMesh::loadBuffers( const ci::vec2 &size )
 {
