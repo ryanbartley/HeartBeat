@@ -20,13 +20,17 @@ uint64_t TouchData::sCurrentId = 0;
 	
 TouchData::TouchData( int index, long distance )
 : mId( idGenerator() ), mCurrentIndex( index ), mCurrentDistance( distance ),
-	mClosestDistance( distance ), mEmitType( EventTypeToEmit::BEGAN ),
+	mEmitType( EventTypeToEmit::BEGAN ),
 	mExistsThisFrame( true )
 {
 }
 	
 void TouchData::createAndSendEvent()
 {
+    if ( mCurrentDistance < 0 ) {
+        return;
+    }
+    
 	static auto eventManager = EventManagerBase::get();
 	
 	if( eventManager == nullptr ) {

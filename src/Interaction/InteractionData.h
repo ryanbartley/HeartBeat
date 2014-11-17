@@ -92,7 +92,7 @@ public:
 private:
 	
 	const uint64_t		mId;
-	long				mClosestDistance, mCurrentDistance;
+	long				mCurrentDistance;
 	int					mCurrentIndex;
 	EventTypeToEmit		mEmitType;
 	bool				mExistsThisFrame;
@@ -122,6 +122,9 @@ void TouchData::update( int index, long distance )
 	if( distance < mCurrentDistance + 50 ) {
 		mCurrentIndex = (index + mCurrentIndex) * scalar;
 		mCurrentDistance = (distance + mCurrentDistance) * scalar;
+        if( mCurrentDistance < 500 ) {
+            std::cout << "This index " << mCurrentIndex << " is less than 500 " << mCurrentDistance << std::endl;
+        }
 		mEmitType = EventTypeToEmit::MOVED;
 	}
 	else {
@@ -131,6 +134,10 @@ void TouchData::update( int index, long distance )
 	
 bool TouchData::reset()
 {
+    if( mCurrentDistance < 0 ) {
+        mEmitType = EventTypeToEmit::NONE;
+        return false;
+    }
 	if( mExistsThisFrame ) {
 		mExistsThisFrame = false;
 		return true;

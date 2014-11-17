@@ -98,7 +98,10 @@ void TouchEvent::calcWorldCoord()
 	}
 	
 	auto temp = sInteractionZones->getTransform().getModelMatrix() * vec4( sUrg->getPoint( mIndex, mDist ), 0, 1 );
-	CI_LOG_V("temp: " << temp << " original point: " << sUrg->getPoint( mIndex, mDist ));
+    if( temp.x > -11411493191680.000 ) {
+        cout << "This is wrong";
+    }
+	CI_LOG_V("index: " << mIndex << " distance: " << mDist << " temp: " << temp << " original point: " << sUrg->getPoint( mIndex, mDist ));
 	mWorldCoord = vec2( temp.x, temp.y );
 }
 	

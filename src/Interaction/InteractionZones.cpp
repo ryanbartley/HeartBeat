@@ -24,7 +24,7 @@ using namespace std;
 namespace heartbeat {
 
 InteractionZones::InteractionZones()
-: mZoneScalarsUpdated( false ), mInBetweenThreshold( 0 ), mSendEvents( false ), mAverageBuffer( 1081, 0 )
+: mZoneScalarsUpdated( false ), mInBetweenThreshold( 0 ), mSendEvents( true ), mAverageBuffer( 1081, 0 )
 {
 	
 }
@@ -178,7 +178,7 @@ void InteractionZones::initialize()
 			auto poleIndices = interactionAttribs["poleIndices"];
 			
 			for( auto & index : poleIndices ) {
-//				mIgnoreIndices.push_back( index.getValue<uint32_t>() );
+				mIgnoreIndices.push_back( index.getValue<uint32_t>() );
 			}
 		}
 		catch( const JsonTree::ExcChildNotFound &ex ) {
@@ -449,18 +449,18 @@ void InteractionZones::processData()
 		mZoneScalarsUpdated = false;
 	}
 	
-//	bool checkPoleIndices = mSendEvents;
-	int i = 0;//, k = 0;
+	bool checkPoleIndices = mSendEvents;
+	int i = 0, k = 0;
 	for( auto barrierIt = mBarrier.cbegin(); barrierIt != mBarrier.cend(); ++barrierIt, ++i ) {
 		bool emitEvents = true;
-//		if( checkPoleIndices ) {
-//			if( mIgnoreIndices[k] == i ) {
-//				emitEvents = false;
-//				++k;
-//				if( mIgnoreIndices.size() - 1 < k )
-//					checkPoleIndices = false;
-//			}
-//		}
+		if( checkPoleIndices ) {
+			if( mIgnoreIndices[k] == i ) {
+				emitEvents = false;
+				++k;
+				if( mIgnoreIndices.size() - 1 < k )
+					checkPoleIndices = false;
+			}
+		}
 		if( emitEvents ) {
 			if( mCurrentFrameData[i] == 1 ) mCurrentFrameData[i] = 100000;
 			

@@ -33,7 +33,7 @@ const int TEXCOORD_INDEX	= 4;
 	
 SpringMesh::SpringMesh( const ci::gl::GlslProgRef &shader )
 : mIterationsPerFrame(1), mIterationIndex( 0 ), mLineIndices( 0 ), mTriangleIndices( 0 ), mDrawDebug( false ),
-	mDrawTexture( true ), mSpringConstant( 10. ), mRestLength( 0.88f ), mGlobalDampening( 2.8f ), mRenderGlsl( shader )
+	mDrawTexture( true ), mSpringConstant( 10. ), mRestLength( 0.88f ), mGlobalDampening( 4.0f ), mRenderGlsl( shader )
 {
 	
 }
@@ -70,7 +70,7 @@ void SpringMesh::update()
 		mUpdateTimer.stop();
 		// Pick using the mouse if it's pressed
 		mUpdateGlsl->uniform( "elapsedSeconds", (float)app::getElapsedSeconds()); // float(getElapsedSeconds()) );
-		mUpdateGlsl->uniform( "t", (float)mUpdateTimer.getSeconds() );
+		mUpdateGlsl->uniform( "t", (float).10);//mUpdateTimer.getSeconds() );
         mUpdateGlsl->uniform( "rest_length", mRestLength );
         mUpdateGlsl->uniform( "c", mGlobalDampening );
         mUpdateGlsl->uniform( "k", mSpringConstant );
